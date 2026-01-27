@@ -7,6 +7,7 @@
 | Antonio Martín Carrizosa | a.martinca.2023@alumnos.urjc.es | fishmanaym |
 | Javier Cai Lin | j.cail.2016@alumnos.urjc.es | jcl4332 |
 | Jaime Esteban García | j.esteban.2023@alumnos.urjc.es | jaimeeg5 |
+| Anthony Lattanzi Salas | a.lattanzi.2023@alumnos.urjc.es | Ttnnyy04 |
 
 ---
 
