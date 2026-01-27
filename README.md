@@ -14,7 +14,7 @@
 ## 🎭 **Preparación 1: Definición del Proyecto**
 
 ### **Descripción del Tema**
-[Escribe aquí una descripción breve y concisa de qué trata tu aplicación, el sector al que pertenece y qué valor aporta al usuario].
+Página informativa de la asociación de estudiantes La Caverna del Dragón, donde se explica las noticias y eventos de la asociación, juegos y el equipamiento disponible dentro de este.
 
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
