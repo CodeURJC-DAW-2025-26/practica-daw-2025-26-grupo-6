@@ -20,8 +20,8 @@ Página informativa de la asociación de estudiantes La Caverna del Dragón, don
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
 1. **Usuario**: puede ser usuario anónimo, usuario registrado o administrador.
-2. **Evento**: evento creado por un usuario registrado al que se pueden apuntar los usuarios.
-3. **Noticia**: noticia tipo blog que puede tener asignado un evento o no, pueden ser creadas por los usuarios registrados pero los administradores tienen que aceptarlas previamente.
+2. **Evento**: evento creado por un usuario registrado al que se pueden apuntar los usuarios, cuenta con tags de categoría de evento, etc.
+3. **Noticia**: noticia tipo blog que puede tener asignado un evento o no, pueden ser creadas por los usuarios registrados pero los administradores tienen que aceptarlas previamente, cuenta con tags de categoría de noticia, etc.
 4. **Juego**: añadidos por los administradores. Los usuarios registrados pueden marcarlos como favoritos. 
 
 **Relaciones entre entidades:**
