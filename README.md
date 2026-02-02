@@ -14,16 +14,15 @@
 ## 🎭 **Preparación 1: Definición del Proyecto**
 
 ### **Descripción del Tema**
-Página informativa de la asociación de estudiantes La Caverna del Dragón, donde se explica las noticias y eventos de la asociación, juegos y el equipamiento disponible dentro de este.
+Página informativa de la asociación de estudiantes La Caverna del Dragón, donde se explica las noticias, eventos y juegos de la asociación.
 
 ### **Entidades**
 Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
 
-1. **Usuario**
-2. **Evento**
-3. **Noticia**
-4. **Juego**
-5. **Equipamiento**
+1. **Usuario**: puede ser usuario anónimo, usuario registrado o administrador.
+2. **Evento**: evento creado por un usuario registrado al que se pueden apuntar los usuarios.
+3. **Noticia**: noticia tipo blog que puede tener asignado un evento o no, pueden ser creadas por los usuarios registrados pero los administradores tienen que aceptarlas previamente.
+4. **Juego**: añadidos por los administradores. Los usuarios registrados pueden marcarlos como favoritos. 
 
 **Relaciones entre entidades:**
 - Evento - Usuario: Un evento puede tener apuntados múltiples usuarios y un usuario puede estar apuntado en múltiples eventos (N:M)
@@ -38,13 +37,13 @@ Describir los permisos de cada tipo de usuario e indicar de qué entidades es du
   - Permisos: Visualización de noticias, eventos y juegos, apuntarte a eventos, registro, búsqueda de juegos, visualización de estadísticas
   - No es dueño de ninguna entidad
 
-* **Usuario Registrado**: 
-  - Permisos: Gestión de perfil, ver eventos para usuarios registrados, marcar juego como favorito, gestión completa de sus eventos (CRUD)
+* **Usuario Registrado**: puede hacer todo lo que hace el usuario anónimo
+  - Permisos: Gestión de perfil, ver eventos para usuarios registrados, marcar juego como favorito, gestión completa de sus eventos y noticias (CRUD)
   - Es dueño de: sus propios eventos, su perfil de usuario, sus juegos favoritos
 
-* **Administrador**: 
-  - Permisos: Gestión completa de noticias y juegos (CRUD), moderación de contenido
-  - Es dueño de: Puede gestionar todos los Eventos, Noticias, Juegos y Usuarios
+* **Administrador**: puede hacer todo lo que hace el usuario registrado
+  - Permisos: Gestión completa de todas las noticias, eventos y juegos (CRUD), moderación de contenido.
+  - Es dueño de: Puede gestionar todos los Eventos, Noticias, Juegos y Usuarios.
 
 ### **Imágenes**
 Indicar qué entidades tendrán asociadas una o varias imágenes:
@@ -57,22 +56,22 @@ Indicar qué entidades tendrán asociadas una o varias imágenes:
 ### **Gráficos**
 Indicar qué información se mostrará usando gráficos y de qué tipo serán:
 
-- **Gráfico 1**: Juegos más votados - Gráfico de tarta/circular
+- **Gráfico 1**: Juegos con más favoritos - Gráfico de barras
 - **Gráfico 2**: Número de participantes en eventos - Gráfico de barras
 
 ### **Tecnología Complementaria**
 Indicar qué tecnología complementaria se empleará:
 
-- Envío de correos electrónicos automáticos mediante JavaMailSender
+- Envío de correos electrónicos automáticos mediante JavaMailSender. Se mandarán correos al registrarse, apuntarse en un evento, o al crearse un evento que le pueda interesar.
 
 ### **Algoritmo o Consulta Avanzada**
 Indicar cuál será el algoritmo o consulta avanzada que se implementará:
 
 - **Algoritmo/Consulta**: Sistema de recomendaciones basado en el historial de eventos apuntados
-- **Descripción**: Analiza los eventos apuntados previamente y sugiere eventos similares mediante correo
+- **Descripción**: Analiza los eventos apuntados previamente y sugiere eventos con el mismo tag mediante correo
 
-- **Algoritmo/Consulta**: Algoritmo de búsqueda por tipo, tags, etc.
-- **Descripción**: Permite buscar 
+- **Algoritmo/Consulta**: Algoritmo de búsqueda 
+- **Descripción**: Permite buscar eventos o noticias por tags y otros atributos como el nombre.
 
 ---
 
