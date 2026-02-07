@@ -1721,7 +1721,7 @@ section,
 }
 
 .projects .project-status.completed {
-  background: color-mix(in srgb, #28a745, transparent 20%);
+  background: color-mix(in srgb, #890f00, transparent 20%);
   color: #ffffff;
 }
 
@@ -1749,6 +1749,14 @@ section,
   font-size: 14px;
   transition: all 0.3s ease;
   display: inline-block;
+}
+
+.btn_lcdd {
+  background-color: #890f00;
+  border-color: #890f00;
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 5px 5px 5px 5px;
 }
 
 .projects .btn-project:hover {
@@ -1782,7 +1790,8 @@ section,
   color: color-mix(in srgb, var(--default-color), transparent 30%);
   font-size: 14px;
   line-height: 1.6;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
+  text-align: justify;
 }
 
 .projects .project-meta {
@@ -3064,8 +3073,21 @@ section,
 .project-details .project-info .project-description {
   font-size: 16px;
   line-height: 1.7;
+  text-align: justify;
   color: color-mix(in srgb, var(--default-color), transparent 20%);
   margin-bottom: 40px;
+}
+
+.project-status .heart-fill {
+  display: none;
+}
+
+.project-hero button:hover .heart-outline {
+  display: none;
+}
+
+.project-hero button:hover .heart-fill {
+  display: inline-block;
 }
 
 .project-details .project-info .project-details .detail-item {
