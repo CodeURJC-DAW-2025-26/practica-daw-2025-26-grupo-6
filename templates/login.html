@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Game Form</title>
+  <title>Login</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -53,7 +53,7 @@
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-      <a class="btn-getstarted d-none d-sm-block" href="login.html">
+      <a class="btn-getstarted d-none d-sm-block" href="register_login.html">
         Registro / Iniciar Sesión
         <i class="bi bi-person"></i></a>
     </div>
@@ -66,66 +66,39 @@
           <div class="col-lg-10" data-aos="fade-left" data-aos-delay="300">
             <div class="quote-form">
               <div class="form-intro">
-                <h3>Añadir o modificar juego</h3>
-                <p>Rellena los campos para añadir o modificar un juego.</p>
+                <h3>Iniciar sesión</h3>
+                <p>Introduzca sus credenciales para acceder.</p>
               </div>
               <form method="post" class="php-email-form">
                 <div class="form">
                   <div class="form-field">
-                    <label for="name">Nombre:</label>
-                    <input type="text" name="name" id="name" placeholder="" required="">
-                  </div>
-                  <br>
-                  <div class="form-field full-width">
-                    <label for="description">Descripción:</label>
-                    <textarea name="message" id="description" rows="8" placeholder="" required=""></textarea>
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" name="email" id="email" placeholder="" required="">
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="players-min">Jugadores mínimos:</label>
-                    <input type="number" min="1" id="players-min" required>
-                  </div>
-                  <div class="form-field">
-                    <label for="players-max">Jugadores máximos:</label>
-                    <input type="number" min="1" id="players-max" required>
+                    <label for="password">Contraseña:</label>
+                    <input type="password" name="password" id="password" placeholder="" required="">
                   </div>
                   <br>
-                  <div class="form-field">
-                    <label for="duration-min">Duración mínima:</label>
-                    <input type="number" min="1" id="duration-min" required>
-                  </div>
-                  <div class="form-field">
-                    <label for="duration-max">Duración máxima:</label>
-                    <input type="number" min="1" id="duration-max" required>
-                  </div>
-                  <br>
-                  <div class="form-field">
-                    <label for="genre">Género:</label>
-                    <input type="text" name="genre" id="genre" placeholder="" required="">
-                  </div>
-                  <br>
-                  <div class="form-field">
-                    <label for="image" class="form-label">Adjunta una imagen:</label>
-                    <input class="form-control" type="file" id="image" required>
-                  </div>
                   <div class="row">
-                    <div class="col-lg-3">
-                      <a href="games.html" class="submit-btn">Volver sin guardar</a>
+                    <div class="col-lg-2">
+                      <a href="index.html" class="btn btn-danger">Volver</a>
                     </div>
                     <div class="col-lg-3">
-                      <a href="games.html" type="submit" class="submit-btn">
-                        <span>Añadir</span>
+                      <a href="index.html" type="submit" class="btn btn-secondary">
+                        <span>Iniciar sesión</span>
                         <i class="bi bi-arrow-right"></i>
                       </a>
                     </div>
                   </div>
+                  <br>
+                  <h4>¿No tienes cuenta en La Caverna Del Dragón?</h4>
+                  <a href="register.html" class="submit">Click aquí para crear una</a>
               </form>
             </div>
           </div>
         </div>
-      </div>
-      </div>
-      </div>
       </div>
     </section><!-- /Quote Section -->
   </main>
