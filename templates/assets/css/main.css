@@ -32,7 +32,7 @@
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
   --nav-color: #ffffff;  /* The default color of the main navmenu links */
-  --nav-hover-color: #890f00; /* Applied to main navmenu links when they are hovered over or active */
+  --nav-hover-color: rgb(137, 15, 0); /* Applied to main navmenu links when they are hovered over or active */
   --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
   --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
   --nav-dropdown-color: #342c26; /* Used for navigation links of the dropdown items in the navigation menu. */
@@ -167,6 +167,7 @@ h6 {
 .header .logo h1 {
   font-size: 30px;
   margin: 0;
+  padding: 10px 0;
   font-weight: 700;
   color: var(--heading-color);
 }
@@ -211,7 +212,7 @@ h6 {
 /* Global Header on Scroll
 ------------------------------*/
 .scrolled .header {
-  --background-color: #000000;
+  padding: 0;
 }
 
 /*--------------------------------------------------------------
@@ -746,6 +747,41 @@ h6 {
   opacity: 1;
 }
 
+.next-events .next-event-timer {
+  margin-top: 2rem;
+  padding: 3rem 2rem;
+  background: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.03);
+}
+
+.next-events .next-event-timer .timer-item h3 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.next-events .next-event-timer .timer-item p {
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .next-events .next-event-timer {
+    padding: 2rem 1rem;
+  }
+
+  .next-events .next-event-timer .timer-item h3 {
+    font-size: 2rem;
+  }
+}
+
 /*--------------------------------------------------------------
 # Disable aos animation delay on mobile devices
 --------------------------------------------------------------*/
@@ -829,7 +865,6 @@ section,
 --------------------------------------------------------------*/
 .section-title {
   text-align: center;
-  padding-bottom: 60px;
   position: relative;
 }
 
@@ -1096,6 +1131,29 @@ section,
   color: var(--heading-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.next-events .more-information-section .more-information-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent-color);
+  font-weight: 400;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.next-events .more-information-section .more-information-link:hover {
+  color: var(--heading-color);
+  transform: translateX(5px);
+}
+
+.next-events .more-information-section .more-information-link i {
+  transition: transform 0.3s ease;
+}
+
+.next-events .more-information-section .more-information-link:hover i {
+  transform: translateX(5px);
 }
 
 .about .cta-section .cta-link {
@@ -3080,6 +3138,17 @@ section,
 
 .project-status .heart-fill {
   display: none;
+}
+
+.tag-display {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .project-hero button:hover .heart-outline {
