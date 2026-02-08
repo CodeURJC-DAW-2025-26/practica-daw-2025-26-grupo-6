@@ -53,10 +53,17 @@
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-      <a class="btn-getstarted d-none d-sm-block" href="login.html">
-         Registro / Iniciar Sesión
-         <i class="bi bi-person"></i>
-      </a>
+      <div class="col-lg-1"></div>
+      <div class="dropdown">
+        <button class="submit-btn" type="button" id="dropdownUserButton" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <i class="bi bi-person"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownUserButton">
+          <li><a class="dropdown-item" href="profile.html">Mi perfil</a></li>
+          <li><a class="dropdown-item" href="index.html">Cerrar sesión</a></li>
+        </ul>
+      </div>
     </div>
   </header>
 

@@ -53,10 +53,16 @@
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-      <a class="btn-getstarted d-none d-sm-block" href="login.html">
-        <i class="bi bi-person"></i>
-        Registro / Iniciar Sesión
-      </a>
+      <div class="col-lg-1"></div>
+      <div class="dropdown">
+        <button class="submit-btn" type="button" id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownUserButton">
+          <li><a class="dropdown-item" href="profile.html">Mi perfil</a></li>
+          <li><a class="dropdown-item" href="index.html">Cerrar sesión</a></li>
+        </ul>
+      </div>
     </div>
   </header>
 
@@ -67,15 +73,12 @@
           <div class="col-lg-5">
             <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
               <img src="assets/img/news/newsImg.jpg" class="img-fluid">
-              <button>
-                <div class="project-hero-overlay">
-                  <div class="project-status">
-                    <i class="bi bi-heart heart-outline"></i>
-                    <i class="bi bi-heart-fill heart-fill"></i>
-                    Rol
-                  </div>
+              <div class="project-hero-overlay">
+                <div class="project-status">
+                  <i class="bi bi-tag"></i>
+                  Rol
                 </div>
-              </button>
+              </div>
             </div>
           </div>
           <div class="col-lg-7">
