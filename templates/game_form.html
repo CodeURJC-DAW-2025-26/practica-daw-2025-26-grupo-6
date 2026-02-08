@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Detail New Page</title>
+  <title>Game Form</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -38,7 +38,7 @@
   ======================================================== -->
 </head>
 
-<body class="project-details-page">
+<body class="projects-page">
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
       <a href="index.html" class="logo d-flex align-items-center me-auto">
@@ -54,57 +54,80 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
       <a class="btn-getstarted d-none d-sm-block" href="register_login.html">
-        <i class="bi bi-person"></i>
         Registro / Iniciar Sesión
-      </a>
+        <i class="bi bi-person"></i></a>
     </div>
   </header>
 
   <main class="main">
-    <section id="project-details" class="project-details section">
+    <section id="quote" class="quote section">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row">
-          <div class="col-lg-5">
-            <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <img src="assets/img/news/newsImg.jpg" class="img-fluid">
-              <button>
-                <div class="project-hero-overlay">
-                  <div class="project-status">
-                    <i class="bi bi-heart heart-outline"></i>
-                    <i class="bi bi-heart-fill heart-fill"></i>
-                    Rol
-                  </div>
-                </div>
-              </button>
-            </div>
-          </div>
-          <div class="col-lg-7">
-            <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">Regresan las jornadas de rol a la URJC</h1>
-              <p class="project-description">El próximo viernes 21 de marzo de 2025, el campus de Móstoles acogerá la
-                cuarta edición de 'Dangers & Dragons | Jornadas de Rol', un evento pensado tanto para aquellos que
-                desean descubrir el emocionante mundo del rol como para los jugadores experimentados. Las jornadas, que
-                se celebrarán este viernes en el Aulario I, ofrecerán una amplia gama de actividades en las que los
-                asistentes podrán participar en talleres interactivos, disfrutar de ponencias de expertos y vivir
-                partidas completas dirigidas por ‘másters’ especializados que asesorarán a los participantes.</p>
-              <div class="row">
-                <div class="col-lg-4">
-                  <a class="btn btn-danger rounded-pill px-3" href="news.html">
-                    <i class="bi bi-trash"></i>
-                    Eliminar noticia
-                  </a>
-                </div>
-                <div class="col -lg-8">
-                  <a class="btn btn-secondary rounded-pill px-3" href="new_form.html">
-                    <i class="bi bi-pencil-square"></i>
-                    Modificar noticia
-                  </a>
-                </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-10" data-aos="fade-left" data-aos-delay="300">
+            <div class="quote-form">
+              <div class="form-intro">
+                <h3>Añadir o modificar juego</h3>
+                <p>Rellena los campos para añadir o modificar un juego.</p>
               </div>
+              <form method="post" class="php-email-form">
+                <div class="form">
+                  <div class="form-field">
+                    <label for="name">Nombre:</label>
+                    <input type="text" name="name" id="name" placeholder="" required="">
+                  </div>
+                  <br>
+                  <div class="form-field full-width">
+                    <label for="description">Descripción:</label>
+                    <textarea name="message" id="description" rows="8" placeholder="" required=""></textarea>
+                  </div>
+                  <br>
+                  <div class="form-field">
+                    <label for="players-min">Jugadores mínimos:</label>
+                    <input type="number" min="1" id="players-min" required>
+                  </div>
+                  <div class="form-field">
+                    <label for="players-max">Jugadores máximos:</label>
+                    <input type="number" min="1" id="players-max" required>
+                  </div>
+                  <br>
+                  <div class="form-field">
+                    <label for="duration-min">Duración mínima:</label>
+                    <input type="number" min="1" id="duration-min" required>
+                  </div>
+                  <div class="form-field">
+                    <label for="duration-max">Duración máxima:</label>
+                    <input type="number" min="1" id="duration-max" required>
+                  </div>
+                  <br>
+                  <div class="form-field">
+                    <label for="genre">Género:</label>
+                    <input type="text" name="genre" id="genre" placeholder="" required="">
+                  </div>
+                  <br>
+                  <div class="form-field">
+                    <label for="image" class="form-label">Adjunta una imagen:</label>
+                    <input class="form-control" type="file" id="image" required>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <a href="games.html" class="submit-btn">Volver sin guardar</a>
+                    </div>
+                    <div class="col-lg-3">
+                      <a href="games.html" type="submit" class="submit-btn">
+                        <span>Añadir</span>
+                        <i class="bi bi-arrow-right"></i>
+                      </a>
+                    </div>
+                  </div>
+              </form>
             </div>
           </div>
         </div>
-    </section>
+      </div>
+      </div>
+      </div>
+      </div>
+    </section><!-- /Quote Section -->
   </main>
 
   <footer id="footer" class="footer dark-background">
