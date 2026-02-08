@@ -78,7 +78,7 @@ Indicar cuál será el algoritmo o consulta avanzada que se implementará:
 ## 🛠 **Preparación 2: Maquetación de páginas con HTML y CSS**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
+📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=Y9yXVcRtgFs)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Diagrama de Navegación**
@@ -86,18 +86,95 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 ![Diagrama de Navegación](images/navigation-diagram.png)
 
-> [Descripción opcional del flujo de navegación: Ej: "El usuario puede acceder desde la página principal a todas las secciones mediante el menú de navegación. Los usuarios anónimos solo tienen acceso a las páginas públicas, mientras que los registrados pueden acceder a su perfil y panel de usuario."]
+> El usuario puede acceder desde la página principal a todas las secciones mediante el menú de navegación. Los usuarios anónimos solo tienen acceso a las páginas públicas, mientras que los registrados pueden acceder a su perfil y panel de usuario y los administradores pueden aceptar o denegar las solicitudesde eventos y/o noticias desde el perfil."]
 
 ### **Capturas de Pantalla y Descripción de Páginas**
 
 #### **1. Página Principal / Home**
 ![Página Principal](images/home-page.png)
 
-> [Descripción breve: Ej: "Página de inicio que muestra los productos destacados, categorías principales y un banner promocional. Incluye barra de navegación y acceso a registro/login para usuarios no autenticados."]
 
-#### **AQUÍ AÑADIR EL RESTO DE PÁGINAS**
+> Página de inicio que muestra el evento destacado, categorías principales y un banner promocional. Incluye barra de navegación y acceso a registro/login para usuarios no autenticados.
 
----
+#### **2. Página Inicio de sesión / Login**
+![Página Inicio de sesión](images/sign-in-page.png)
+
+
+> Página de inicio de sesión en el cual el usuario anónimo podrá introducir sus credenciales para poder iniciar sesión y si no tiene una cuenta lo puede crear redirigiendolo
+
+#### **3. Página Resgistro / Resgister**
+![Página Resgistro](images/register-page.png)
+
+
+> Página de registro en el cual el usuario anónimo podrá introducir sus datos para poder crear una cuenta y si ya tiene cuenta puede redirigirse a iniciar sesión
+
+#### **4. Página Perfil / Profile**
+![Página Perfil](images/profile-page.png)
+
+
+> Página del perfil del usuario registrado en el cual el usuario podrá modificar sus datos, ver sus eventos y noticias creadas y sus juegos favoritos
+
+#### **5. Página Admninistrador / Admin**
+![Página Admninistrador](images/admin-page.png)
+
+
+> Página del administrador en el cual un usuario administrador puede ver todas las solicitudes de eventos y noticias pendientes de validar junto a varias gráficas como las de los juegos favoritos y la de los eventos con mas inscripciones
+
+#### **6. Página Principal Eventos / Main Events**
+![Página Principal Eventos](images/event-main-page.png)
+
+
+> Página principal de los eventos en el cual el usuario anónimo podrá ver todos los eventos realizados y a realizar de la asociación, junto con un buscador para filtrar eventos
+
+#### **7. Página Principal Noticias / Main News**
+![Página Principal Noticias](images/news-main-page.png)
+
+
+> Página principal de las noticias en el cual el usuario anónimo podrá ver todas las noticias publicadas, junto con un buscador para filtrar noticias
+
+#### **8. Página Principal Juegos / Main Game**
+![Página Principal Juegos](images/game-main-page.png)
+
+
+> Página principal de juegos donde el usuario anónimo podrá ver todos los juegos disponibles junto a un buscador para filtrar juegos
+
+#### **9. Página Evento / Event**
+![Página Evento](images/event-page.png)
+
+
+> Página de un evento en concreto en el cual el usuario anónimo o registrado podrá apuntarse
+
+#### **10. Página Noticia / News**
+![Página Noticia](images/news-page.png)
+
+
+> Página de una noticia en concreto en el cual el usuario anónimo o registrado podrá leer su contenido
+
+#### **11. Página Juego / Game**
+![Página Juego](images/game-page.png)
+
+
+> Página de un juego en concreto en el cual el usuario anónimo podrá ver su descripción y el usuario registrado podrá añadirlo como juego favorito
+
+#### **12. Página Modificación Eventos / Modify Events**
+![Página Modificación Eventos](images/event-modify-page.png)
+
+
+> Página de modificación o creación de eventos en el cual el usuario administrador o creador de dicho evento puede modificar o crear eventos
+
+#### **13. Página Modificación Noticias / Modify News**
+![Página Modificación Noticias](images/news-modify-page.png)
+
+
+> Página de modificación o creación de noticias en el cual el usuario administrador o creador de dicha noticia puede modificar o crear noticias
+
+#### **14. Página Modificación Juegos / Modify Game**
+![Página Modificación Juegos](images/game-modify-page.png)
+
+
+> Página de modificación o creación de juegos en el cual el usuario administrador puede modificar o añadir juegos
+
+
 
 ## 🛠 **Práctica 1: Web con HTML generado en servidor y AJAX**
 
