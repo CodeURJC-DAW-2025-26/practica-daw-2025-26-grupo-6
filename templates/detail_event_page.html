@@ -42,7 +42,7 @@
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
       <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <img src="assets/img/logo.jpg">
+        <img src="assets/img/logo.jpg" width="64" height="64">
         <h1 class="sitename">La Caverna Del Dragón</h1>
       </a>
       <nav id="navmenu" class="navmenu">
@@ -50,14 +50,16 @@
           <li><a href="games.html">Juegos</a></li>
           <li><a href="events.html">Eventos</a></li>
           <li><a href="news.html">Noticias</a></li>
+          <li><a class="d-xl-none" href="profile.html">Mi perfil</a></li>
+          <li><a class="d-xl-none" href="index.html">Cerrar sesión</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
       <div class="col-lg-1"></div>
-      <div class="dropdown">
-        <button class="submit-btn" type="button" id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-person"></i>
-        </button>
+      <div class="dropdown d-none d-xl-block">
+        <a class="submit-btn rounded-circle p-0" type="button" id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://avatars.githubusercontent.com/u/69584761?v=4&size=64" class="rounded-circle" />
+        </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownUserButton">
           <li><a class="dropdown-item" href="profile.html">Mi perfil</a></li>
           <li><a class="dropdown-item" href="index.html">Cerrar sesión</a></li>
