@@ -70,25 +70,29 @@
   <main class="main">
     <section id="projects" class="projects section">
       <h1 style="text-align: center;">NOTICIAS</h1>
-      <form class="row g-2 justify-content-center mb-4">
-        <div class="col-lg-8">
-          <input class="form-control" type="search" placeholder="Buscar noticias..." aria-label="Search">
-        </div>
-        <div class="col-lg-2">
-          <button class="btn_lcdd w-100" type="submit">
-            <i class="bi bi-search"></i> Buscar
-          </button>
-        </div>
-      </form>
-      <div class="row g-2 justify-content-center mb-4">
-        <div class="col-lg-4">
-          <div class="col-lg-4">
-            <select class="form-select" aria-label="Filter by topic">
+      <div class="container mb-4">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-5 col-lg-6">
+            <input class="form-control" type="search" placeholder="Buscar noticias..." aria-label="Search">
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <select class="form-select" aria-label="Filtrar por tema">
               <option selected value="">Filtrar por tema</option>
               <option value="changes">Cambios</option>
               <option value="event">Evento</option>
             </select>
           </div>
+          <div class="col-6 col-md-2 col-lg-2">
+            <button class="btn_lcdd w-100" type="submit">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
+          <div class="col-12 col-md-2 col-lg-2">
+            <a href="new_form.html" class="btn_lcdd_black w-100">
+              <i class="bi bi-plus-circle me-2"></i> Crear noticia
+            </a>
+          </div>
+
         </div>
       </div>
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -175,18 +179,6 @@
                     se celebrarán este viernes en el Aulario I, ofrecerán una amplia gama de actividades en las que los
                     asistentes podrán participar en talleres interactivos, disfrutar de ponencias de expertos y vivir
                     partidas completas dirigidas por ‘másters’ especializados que asesorarán a los participantes..</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a href="new_form.html">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="assets/img/mas.jpg" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <h4>Añadir noticia</h4>
                 </div>
               </div>
             </a>
