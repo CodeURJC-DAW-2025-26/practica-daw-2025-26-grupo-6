@@ -22,17 +22,18 @@
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root {
   --background-color: #ffffff;
-  /* Background color for the entire website, including individual sections */
   --default-color: #342c26;
-  /* Default color used for the majority of the text content across the entire website */
   --heading-color: #2c1607;
-  /* Color for headings, subheadings and title throughout the website */
+
   --accent-color: #890f00;
-  /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+
+  --bs-primary: #890f00;
+  --bs-primary-rgb: 137, 15, 0;
+  --bs-link-color: #890f00;
+  --bs-link-hover-color: #a31000;
+
   --surface-color: #ffffff;
-  /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
   --contrast-color: #ffffff;
-  /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
 }
 
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
@@ -182,14 +183,14 @@ h6 {
 }
 
 .header .dropdown img {
-  width:48px; 
-  height:48px;
+  width: 48px;
+  height: 48px;
   transition: all 0.5s;
 }
 
 .scrolled .header .dropdown img {
-  width:42px; 
-  height:42px
+  width: 42px;
+  height: 42px
 }
 
 .header .logo h1 {
@@ -4594,4 +4595,62 @@ section,
 --------------------------------------------------------------*/
 .starter-section {
   /* Add your styles here */
+}
+
+/* =======================================================
+   ARREGLO PARA CARTELES VERTICALES EN EL CARRUSEL
+   ======================================================= */
+
+/* 1. Definimos el contenedor de la imagen */
+.next-events .project-hero {
+  /* Establecemos una altura fija para que todo el carrusel sea estable. */
+  height: 600px;
+
+  /* Centramos el póster en el medio del espacio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Opcional: un fondo sutil por si el póster es muy estrecho y sobra espacio a los lados. */
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  /* Un pequeño borde redondeado */
+  overflow: hidden;
+  /* Asegura que nada se salga del contenedor */
+}
+
+/* 2. Modificamos cómo se comporta la imagen dentro del contenedor */
+.next-events .project-hero img {
+
+  object-fit: contain;
+  /* Aseguramos que ocupe el máximo de alto posible dentro del contenedor de 500px */
+  height: 100%;
+  width: auto;
+  /* El ancho se ajusta automáticamente */
+
+  /* Por si acaso alguna regla de bootstrap molesta */
+  max-width: 100%;
+}
+
+/* Badge flotante para categorías */
+.category-badge {
+  position: relative;
+  display: inline-block;
+  margin-top: 5px;
+  background-color: #ffffff;
+  color: var(--accent-color);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  z-index: 10;
+  pointer-events: none;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Importante para el carrusel: que el contenedor sea la referencia */
+.project-hero {
+  position: relative;
 }
