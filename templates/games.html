@@ -55,7 +55,8 @@
       </nav>
       <div class="col-lg-1"></div>
       <div class="dropdown">
-        <button class="submit-btn" type="button" id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="submit-btn" type="button" id="dropdownUserButton" data-bs-toggle="dropdown"
+          aria-expanded="false">
           <i class="bi bi-person"></i>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownUserButton">
@@ -69,41 +70,42 @@
   <main class="main">
     <section id="projects" class="projects section">
       <h1 style="text-align: center;">JUEGOS</h1>
-      <form class="row g-2 justify-content-center mb-4">
-        <div class="col-lg-8">
-          <input class="form-control" type="search" placeholder="Buscar juegos..." aria-label="Search">
-        </div>
-        <div class="col-lg-2">
-          <button class="btn_lcdd w-100" type="submit">
-            <i class="bi bi-search"></i> Buscar
-          </button>
-        </div>
-      </form>
-      <div class="row g-2 justify-content-center mb-4">
-        <div class="col-lg-4">
-          <div class="row g-2 justify-content-center mb-4">
-            <div class="col-lg-4">
-              <select class="form-select" aria-label="Filter by category">
-                <option selected value="">Filtrar por categoría</option>
-                <option value="cards">Cartas</option>
-                <option value="strategy">Estrategia</option>
-              </select>
-            </div>
-            <div class="col-lg-4">
-              <select class="form-select" aria-label="Filter by players">
-                <option selected value="">Filtrar por jugadores</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-              </select>
-            </div>
-            <div class="col-lg-4">
-              <select class="form-select" aria-label="Filter by duration">
-                <option selected value="">Filtrar por duración</option>
-                <option value="20 min">20 min</option>
-                <option value="30 min">30 min</option>
-              </select>
-            </div>
+      <div class="container mb-4">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-4 col-lg-3">
+            <input class="form-control" type="search" placeholder="Buscar juegos..." aria-label="Search">
+          </div>
+          <div class="col-6 col-md-2 col-lg-2">
+            <select class="form-select" aria-label="Filtrar por categoría">
+              <option selected value="">Categoría</option>
+              <option value="cards">Cartas</option>
+              <option value="strategy">Estrategia</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-2 col-lg-1">
+            <select class="form-select" aria-label="Filtrar por jugadores">
+              <option selected value="">Jug.</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-2 col-lg-2">
+            <select class="form-select" aria-label="Filtrar por duración">
+              <option selected value="">Duración</option>
+              <option value="20 min">20 min</option>
+              <option value="30 min">30 min</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-2 col-lg-2">
+            <button class="btn_lcdd w-100" type="submit">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
+          <div class="col-12 col-md-2 col-lg-2">
+            <a href="game_form.html" class="btn_lcdd_black w-100">
+              <i class="bi bi-plus-circle me-2"></i> Crear juego
+            </a>
           </div>
         </div>
       </div>
