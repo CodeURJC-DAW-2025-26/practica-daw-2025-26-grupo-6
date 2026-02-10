@@ -135,4 +135,41 @@
 
   window.addEventListener("load", initSwiper);
 
+  /**
+   * Timer
+   */
+  const timers = document.querySelectorAll(".next-event-timer");
+  let date = new Date("2026-10-10 10:10:10");
+  timers.forEach(timer => {
+    
+    setInterval(function() {
+      // Get the current date and time
+      let now = new Date().getTime();
+      
+      // Calculate the distance between now and the countdown date
+      let distance = date - now;
+      
+      // Calculate days, hours, minutes and seconds
+      let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      // Display the result
+      timer.querySelector(".days").innerHTML = days.
+          toString().padStart(2, '0');
+      timer.querySelector(".hours").innerHTML = hours.
+          toString().padStart(2, '0');
+      timer.querySelector(".minutes").innerHTML = minutes.
+          toString().padStart(2, '0');
+      timer.querySelector(".seconds").innerHTML = seconds.
+          toString().padStart(2, '0');
+      
+      // If the countdown is over, display a message
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("countdown").innerHTML = "EXPIRED";
+      }
+    }, 1000);
+  })
 })();
