@@ -1753,43 +1753,24 @@ section,
   transition: transform 0.3s ease;
 }
 
-
-/* =======================================================
-   ARREGLO PARA CARTELES VERTICALES EN EL CARRUSEL
-   ======================================================= */
-
-/* 1. Definimos el contenedor de la imagen */
 .next-events .project-hero {
-  /* Establecemos una altura fija para que todo el carrusel sea estable. */
   height: 600px;
-
-  /* Centramos el póster en el medio del espacio */
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* Opcional: un fondo sutil por si el póster es muy estrecho y sobra espacio a los lados. */
   background-color: #f8f9fa;
   border-radius: 8px;
-  /* Un pequeño borde redondeado */
   overflow: hidden;
-  /* Asegura que nada se salga del contenedor */
 }
 
-/* 2. Modificamos cómo se comporta la imagen dentro del contenedor */
 .next-events .project-hero img {
 
   object-fit: contain;
-  /* Aseguramos que ocupe el máximo de alto posible dentro del contenedor de 500px */
   height: 100%;
   width: auto;
-  /* El ancho se ajusta automáticamente */
-
-  /* Por si acaso alguna regla de bootstrap molesta */
   max-width: 100%;
 }
 
-/* Badge flotante para categorías */
 .category-badge {
   position: relative;
   display: inline-block;
@@ -1807,7 +1788,6 @@ section,
   border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Importante para el carrusel: que el contenedor sea la referencia */
 .project-hero {
   position: relative;
 }
