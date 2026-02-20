@@ -3,7 +3,9 @@ package com.grupo6daw.lcdd_daw.model;
 import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,12 +46,14 @@ public class User {
   @OneToOne
   private Image userImage;
 
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<String> userRoles;
 
   public User() {
   }
 
   public User(String userName, String userSurname, String userNickname, String userInterests, String userEmail,
-      String userEncodedPassword) {
+      String userEncodedPassword, String... roles) {
     super();
     this.userName = userName;
     this.userSurname = userSurname;
@@ -57,6 +61,7 @@ public class User {
     this.userInterests = userInterests;
     this.userEmail = userEmail;
     this.userEncodedPassword = userEncodedPassword;
+    this.userRoles = List.of(roles);
   }
 
   public Long getUserId() {
@@ -153,5 +158,13 @@ public class User {
 
   public void setUserNews(List<New> userNews) {
     this.userNews = userNews;
+  }
+
+  public List<String> getUserRoles() {
+    return userRoles;
+  }
+
+  public void setUserRoles(List<String> userRoles) {
+    this.userRoles = userRoles;
   }
 }

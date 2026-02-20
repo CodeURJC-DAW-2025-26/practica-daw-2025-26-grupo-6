@@ -21,8 +21,8 @@ public class New {
   @Column(columnDefinition = "TEXT")
   private String newDescription;
 
-  @OneToMany
-  private List<Image> newImages;
+  @OneToOne
+  private Image newImage;
 
   private String newTag;
 
@@ -66,19 +66,19 @@ public class New {
     this.newDescription = newDescription;
   }
 
-  public List<Image> getNewImages() {
-    return newImages;
+  public Image getNewImage() {
+    return newImage;
   }
 
-  public void setNewImages(List<Image> newImages) {
-    this.newImages = newImages;
+  public void setNewImage(Image newImage) {
+    this.newImage = newImage;
   }
 
-  public String getnewTag() {
+  public String getNewTag() {
     return newTag;
   }
 
-  public void setnewTag(String newTag) {
+  public void setNewTag(String newTag) {
     this.newTag = newTag;
   }
 
