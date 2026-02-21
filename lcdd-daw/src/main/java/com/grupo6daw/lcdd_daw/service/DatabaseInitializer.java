@@ -8,7 +8,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-// import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.grupo6daw.lcdd_daw.model.Image;
@@ -36,10 +36,8 @@ public class DatabaseInitializer {
 	@Autowired
 	private UserRepository userRepository;
 
-	/*
 		@Autowired
 	private PasswordEncoder passwordEncoder;
-	*/
 
 
 	@PostConstruct
@@ -65,9 +63,9 @@ public class DatabaseInitializer {
 		setEventImage(event1, "/sample_images/events/event.jpg");
 		eventService.save(event1);
 
-		// Sample users TODO: passwordEncoder.encode("pass")
-		userRepository.save(new User("user", "user", "user", "interests", "user@user.com", "pass", "REGISTERED_USER"));
-		userRepository.save(new User("admin", "admin", "admin", "interests", "admin@admin.com", "adminpass", "REGISTERED_USER", "ADMIN"));
+		// Sample users
+		userRepository.save(new User("user", "user", "user", "interests", "user@user.com", passwordEncoder.encode("pass"), "REGISTERED_USER"));
+		userRepository.save(new User("admin", "admin", "admin", "interests", "admin@admin.com", passwordEncoder.encode("adminpass"), "REGISTERED_USER", "ADMIN"));
 	}
 
 	public void setNewImage(New sampleNew, String classpathResource) throws IOException {

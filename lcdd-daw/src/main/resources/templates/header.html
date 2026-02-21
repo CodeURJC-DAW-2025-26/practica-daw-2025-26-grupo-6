@@ -63,7 +63,12 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownUserButton">
           <li><a class="dropdown-item" href="profile">Mi perfil</a></li>
           <li><a class="dropdown-item" href="admin">Administración</a></li>
-          <li><a class="dropdown-item" href="index">Cerrar sesión</a></li>
+          <li>
+            <form action="/logout" method="post" class="dropdown-item">
+            Log Out
+            <input type="hidden" name="_csrf" value="{{token}}" />
+          </form>
+          </li>
         </ul>
       </div>
     </div>

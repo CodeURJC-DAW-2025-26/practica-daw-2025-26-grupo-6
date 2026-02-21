@@ -10,4 +10,9 @@ public class LoginWebController {
 	public String login() {
 		return "login";
 	}
+
+	@GetMapping("/loginerror")
+	public String loginerror() {
+		return "/";
+	}
 }
