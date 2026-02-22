@@ -102,10 +102,10 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <a class="submit-btn" href="games">
-                    <i class="bi bi-trash"></i>
-                    Eliminar juego
-                  </a>
+                  <form action="/removeGame/{{game.id}}" method="post">
+                    <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
+                    <input type="hidden" name="_csrf" value="{{token}}" />
+                  </form>
                 </div>
                 <div class="col">
                   <a class="submit-btn" href="game_form">

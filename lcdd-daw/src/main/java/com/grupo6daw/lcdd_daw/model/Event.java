@@ -77,11 +77,11 @@ public class Event {
     this.eventImage = eventImage;
   }
 
-  public String geteventTag() {
+  public String getEventTag() {
     return eventTag;
   }
 
-  public void seteventTag(String eventTag) {
+  public void setEventTag(String eventTag) {
     this.eventTag = eventTag;
   }
 

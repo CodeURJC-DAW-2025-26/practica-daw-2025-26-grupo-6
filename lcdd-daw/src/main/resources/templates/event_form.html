@@ -72,26 +72,26 @@
                 <h3>Añadir o modificar evento</h3>
                 <p>Rellena los campos para añadir o modificar un evento.</p>
               </div>
-              <form method="post" class="php-email-form">
+              <form method="post" action="/event_form" enctype="multipart/form-data" class="php-email-form">
                 <div class="form">
                   <div class="form-field">
-                    <label for="name">Nombre:</label>
-                    <input type="text" name="name" id="name" placeholder="" required="">
+                    <label for="eventName">Nombre:</label>
+                    <input type="text" name="eventName" id="eventName" placeholder="" required="">
                   </div>
                   <br>
                   <div class="form-field full-width">
-                    <label for="description">Descripción:</label>
-                    <textarea name="message" id="description" rows="8" placeholder="" required=""></textarea>
+                    <label for="eventDescription">Descripción:</label>
+                    <textarea name="eventDescription" id="eventDescription" rows="8" placeholder="" required=""></textarea>
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="tag">Tag:</label>
-                    <input type="text" name="tag" id="tag" placeholder="" required="">
+                    <label for="eventTag">Tag:</label>
+                    <input type="text" name="eventTag" id="eventTag" placeholder="" required="">
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="image" class="form-label">Adjunta una imagen:</label>
-                    <input class="form-control" type="file" id="image" required>
+                    <label for="imageField" class="form-label">Adjunta una imagen:</label>
+                    <input class="form-control" type="file" name="imageField" id="imageField" required>
                   </div>
                   <br>
                   <div class="form-field">
@@ -104,12 +104,13 @@
                     </div>
                     <div class="col-lg-2"></div>
                     <div class="col-lg-3">
-                      <a href="events" type="submit" class="submit-btn">
+                      <button type="submit" class="submit-btn">
                         <span>Añadir</span>
                         <i class="bi bi-arrow-right"></i>
-                      </a>
+                      </button>
                     </div>
                   </div>
+                  <input type="hidden" name="_csrf" value="{{token}}" />
               </form>
             </div>
           </div>
@@ -145,7 +146,6 @@
 
   <!-- Bootstrap JS Files -->
   <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="/vendor/php-email-form/validate.js"></script>
   <script src="/vendor/aos/aos.js"></script>
   <script src="/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="/vendor/glightbox/js/glightbox.min.js"></script>

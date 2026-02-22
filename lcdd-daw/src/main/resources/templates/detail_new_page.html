@@ -88,10 +88,10 @@
                 partidas completas dirigidas por ‘másters’ especializados que asesorarán a los participantes.</p>
               <div class="row">
                 <div class="col-lg-4">
-                  <a class="submit-btn" href="news">
-                    <i class="bi bi-trash"></i>
-                    Eliminar noticia
-                  </a>
+                  <form action="/removeNew/{{new.id}}" method="post">
+                    <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
+                    <input type="hidden" name="_csrf" value="{{token}}" />
+                  </form>
                 </div>
                 <div class="col -lg-8">
                   <a class="submit-btn" href="new_form">

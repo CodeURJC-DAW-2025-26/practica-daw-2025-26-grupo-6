@@ -101,18 +101,18 @@
               </div>
               <div class="row">
                 <div class="col-lg-3">
-          <button class="btn btn-outline-dark rounded-pill px-4" type="submit">
-             Apuntarse
-          </button>
-        </div>
+                  <button class="btn btn-outline-dark rounded-pill px-4" type="submit">
+                    Apuntarse
+                  </button>
+                </div>
               </div>
               <br>
               <div class="row">
                 <div class="col-lg-4">
-                  <a class="submit-btn" href="events">
-                    <i class="bi bi-trash"></i>
-                    Eliminar evento
-                  </a>
+                  <form action="/removeEvent/{{event.id}}" method="post">
+                    <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
+                    <input type="hidden" name="_csrf" value="{{token}}" />
+                  </form>
                 </div>
                 <div class="col -lg-8">
                   <a class="submit-btn" href="event_form">
