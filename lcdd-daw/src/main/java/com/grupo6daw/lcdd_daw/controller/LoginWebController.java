@@ -15,4 +15,9 @@ public class LoginWebController {
 	public String loginerror() {
 		return "/";
 	}
+
+	@GetMapping("/logout")
+	public String logout() {
+		return "/";
+	}
 }
