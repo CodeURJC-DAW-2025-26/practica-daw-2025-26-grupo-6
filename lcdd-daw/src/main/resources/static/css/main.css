@@ -1663,6 +1663,7 @@ section,
 
 .quote .php-email-form input[type=text],
 .quote .php-email-form input[type=email],
+.quote .php-email-form input[type=password],
 .quote .php-email-form input[type=tel],
 .quote .php-email-form select,
 .quote .php-email-form textarea {
@@ -1679,6 +1680,7 @@ section,
 
 .quote .php-email-form input[type=text]:focus,
 .quote .php-email-form input[type=email]:focus,
+.quote .php-email-form input[type=password]:focus,
 .quote .php-email-form input[type=tel]:focus,
 .quote .php-email-form select:focus,
 .quote .php-email-form textarea:focus {
@@ -1689,6 +1691,7 @@ section,
 
 .quote .php-email-form input[type=text]::placeholder,
 .quote .php-email-form input[type=email]::placeholder,
+.quote .php-email-form input[type=password]::placeholder,
 .quote .php-email-form input[type=tel]::placeholder,
 .quote .php-email-form select::placeholder,
 .quote .php-email-form textarea::placeholder {
