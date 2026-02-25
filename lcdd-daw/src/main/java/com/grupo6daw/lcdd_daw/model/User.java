@@ -1,6 +1,8 @@
 package com.grupo6daw.lcdd_daw.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -9,162 +11,183 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity(name = "UserTable")
 public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long userId = null;
 
-  private String userName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId = null;
 
-  private String userSurname;
+    private String userName;
 
-  private String userNickname;
+    private String userSurname;
 
-  @Column(columnDefinition = "TEXT")
-  private String userInterests;
+    private String userNickname;
 
-  private String userEmail;
+    @Column(columnDefinition = "TEXT")
+    private String userInterests;
 
-  private String userEncodedPassword;
+    private String userEmail;
 
-  @OneToMany
-  private List<Game> userFavGames;
+    private String userEncodedPassword;
 
-  @OneToMany
-  private List<Event> userOwnEvents;
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_games",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "game_id", referencedColumnName = "gameId")
+    )
+    private Set<Game> userFavGames = new HashSet<>();
 
-  @OneToMany
-  private List<Event> userRegisteredEvents;
+    public void addFavoriteGame(Game game) {
+        if (this.userFavGames.add(game)) {
+            game.getFavoritedByUsers().add(this);
+        }
+    }
 
-  @OneToMany
-  private List<New> userNews;
+    public void removeFavoriteGame(Game game) {
+        if (this.userFavGames.remove(game)) {
+            game.getFavoritedByUsers().remove(this);
+        }
+    }
 
-  @OneToOne
-  private Image userImage;
+    @OneToMany
+    private List<Event> userOwnEvents;
 
-  @ElementCollection(fetch = FetchType.EAGER)
-  private List<String> userRoles;
+    @OneToMany
+    private List<Event> userRegisteredEvents;
 
-  public User() {
-  }
+    @OneToMany
+    private List<New> userNews;
 
-  public User(String userName, String userSurname, String userNickname, String userInterests, String userEmail,
-      String userEncodedPassword, String... roles) {
-    super();
-    this.userName = userName;
-    this.userSurname = userSurname;
-    this.userNickname = userNickname;
-    this.userInterests = userInterests;
-    this.userEmail = userEmail;
-    this.userEncodedPassword = userEncodedPassword;
-    this.userRoles = List.of(roles);
-  }
+    @OneToOne
+    private Image userImage;
 
-  public Long getUserId() {
-    return userId;
-  }
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> userRoles;
 
-  public void setUserId(Long userId) {
-    this.userId = userId;
-  }
+    public User() {
+    }
 
-  public String getUserName() {
-    return userName;
-  }
+    public User(String userName, String userSurname, String userNickname, String userInterests, String userEmail,
+            String userEncodedPassword, String... roles) {
+        super();
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.userNickname = userNickname;
+        this.userInterests = userInterests;
+        this.userEmail = userEmail;
+        this.userEncodedPassword = userEncodedPassword;
+        this.userRoles = List.of(roles);
+    }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
+    public Long getUserId() {
+        return userId;
+    }
 
-  public String getUserSurname() {
-    return userSurname;
-  }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-  public void setUserSurname(String userSurname) {
-    this.userSurname = userSurname;
-  }
+    public String getUserName() {
+        return userName;
+    }
 
-  public String getUserNickname() {
-    return userNickname;
-  }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-  public void setUserNickname(String userNickname) {
-    this.userNickname = userNickname;
-  }
+    public String getUserSurname() {
+        return userSurname;
+    }
 
-  public String getUserInterests() {
-    return userInterests;
-  }
+    public void setUserSurname(String userSurname) {
+        this.userSurname = userSurname;
+    }
 
-  public void setUserInterests(String userInterests) {
-    this.userInterests = userInterests;
-  }
+    public String getUserNickname() {
+        return userNickname;
+    }
 
-  public String getUserEmail() {
-    return userEmail;
-  }
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
+    }
 
-  public void setUserEmail(String userEmail) {
-    this.userEmail = userEmail;
-  }
+    public String getUserInterests() {
+        return userInterests;
+    }
 
-  public String getUserEncodedPassword() {
-    return userEncodedPassword;
-  }
+    public void setUserInterests(String userInterests) {
+        this.userInterests = userInterests;
+    }
 
-  public void setUserEncodedPassword(String userEncodedPassword) {
-    this.userEncodedPassword = userEncodedPassword;
-  }
+    public String getUserEmail() {
+        return userEmail;
+    }
 
-  public Image getUserImage() {
-    return userImage;
-  }
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
 
-  public void setUserImage(Image userImage) {
-    this.userImage = userImage;
-  }
+    public String getUserEncodedPassword() {
+        return userEncodedPassword;
+    }
 
-  public List<Game> getUserFavGames() {
-    return userFavGames;
-  }
+    public void setUserEncodedPassword(String userEncodedPassword) {
+        this.userEncodedPassword = userEncodedPassword;
+    }
 
-  public void setUserFavGames(List<Game> userFavGames) {
-    this.userFavGames = userFavGames;
-  }
+    public Image getUserImage() {
+        return userImage;
+    }
 
-  public List<Event> getUserOwnEvents() {
-    return userOwnEvents;
-  }
+    public void setUserImage(Image userImage) {
+        this.userImage = userImage;
+    }
 
-  public void setUserOwnEvents(List<Event> userOwnEvents) {
-    this.userOwnEvents = userOwnEvents;
-  }
+    public Set<Game> getUserFavGames() {
+        return userFavGames;
+    }
 
-  public List<Event> getUserRegisteredEvents() {
-    return userRegisteredEvents;
-  }
+    public void setUserFavGames(Set<Game> userFavGames) {
+        this.userFavGames = userFavGames;
+    }
 
-  public void setUserRegisteredEvents(List<Event> userRegisteredEvents) {
-    this.userRegisteredEvents = userRegisteredEvents;
-  }
+    public List<Event> getUserOwnEvents() {
+        return userOwnEvents;
+    }
 
-  public List<New> getUserNews() {
-    return userNews;
-  }
+    public void setUserOwnEvents(List<Event> userOwnEvents) {
+        this.userOwnEvents = userOwnEvents;
+    }
 
-  public void setUserNews(List<New> userNews) {
-    this.userNews = userNews;
-  }
+    public List<Event> getUserRegisteredEvents() {
+        return userRegisteredEvents;
+    }
 
-  public List<String> getUserRoles() {
-    return userRoles;
-  }
+    public void setUserRegisteredEvents(List<Event> userRegisteredEvents) {
+        this.userRegisteredEvents = userRegisteredEvents;
+    }
 
-  public void setUserRoles(List<String> userRoles) {
-    this.userRoles = userRoles;
-  }
+    public List<New> getUserNews() {
+        return userNews;
+    }
+
+    public void setUserNews(List<New> userNews) {
+        this.userNews = userNews;
+    }
+
+    public List<String> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<String> userRoles) {
+        this.userRoles = userRoles;
+    }
 }

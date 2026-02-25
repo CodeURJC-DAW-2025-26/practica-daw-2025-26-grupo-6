@@ -1,134 +1,137 @@
 package com.grupo6daw.lcdd_daw.model;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Game {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long gameId = null;
 
-  private String gameName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long gameId = null;
 
-  @Column(columnDefinition = "TEXT")
-  private String gameDescription;
+    private String gameName;
 
-  @OneToOne
-  private Image gameImage;
+    @Column(columnDefinition = "TEXT")
+    private String gameDescription;
 
-  private Long minPlayers;
+    @OneToOne
+    private Image gameImage;
 
-  private Long maxPlayers;
+    private Long minPlayers;
 
-  private Long minDuration;
+    private Long maxPlayers;
 
-  private Long maxDuration;
+    private Long minDuration;
 
-  private String genre;
+    private Long maxDuration;
 
-  @OneToMany
-  private List<User> gameUsers;
+    private String genre;
 
-  public Game() {
-  }
+    @ManyToMany(mappedBy = "userFavGames")
+    private Set<User> favoritedByUsers = new HashSet<>();
 
-  public Game(String gameName, String gameDescription, Long minPlayers, Long maxPlayers, Long minDuration,
-      Long maxDuration, String genre) {
-    super();
-    this.gameName = gameName;
-    this.gameDescription = gameDescription;
-    this.minPlayers = minPlayers;
-    this.maxPlayers = maxPlayers;
-    this.minDuration = minDuration;
-    this.maxDuration = maxDuration;
-    this.genre = genre;
-  }
+    public Game() {
+    }
 
-  public Long getGameId() {
-    return gameId;
-  }
+    public Game(String gameName, String gameDescription, Long minPlayers, Long maxPlayers, Long minDuration,
+            Long maxDuration, String genre) {
+        super();
+        this.gameName = gameName;
+        this.gameDescription = gameDescription;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
+        this.minDuration = minDuration;
+        this.maxDuration = maxDuration;
+        this.genre = genre;
+    }
 
-  public void setGameId(Long gameId) {
-    this.gameId = gameId;
-  }
+    public Long getGameId() {
+        return gameId;
+    }
 
-  public String getGameName() {
-    return gameName;
-  }
+    public void setGameId(Long gameId) {
+        this.gameId = gameId;
+    }
 
-  public void setGameName(String gameName) {
-    this.gameName = gameName;
-  }
+    public String getGameName() {
+        return gameName;
+    }
 
-  public String getGameDescription() {
-    return gameDescription;
-  }
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
 
-  public void setGameDescription(String gameDescription) {
-    this.gameDescription = gameDescription;
-  }
+    public String getGameDescription() {
+        return gameDescription;
+    }
 
-  public Image getGameImage() {
-    return gameImage;
-  }
+    public void setGameDescription(String gameDescription) {
+        this.gameDescription = gameDescription;
+    }
 
-  public void setGameImage(Image gameImage) {
-    this.gameImage = gameImage;
-  }
+    public Image getGameImage() {
+        return gameImage;
+    }
 
-  public Long getMinPlayers() {
-    return minPlayers;
-  }
+    public void setGameImage(Image gameImage) {
+        this.gameImage = gameImage;
+    }
 
-  public void setMinPlayers(Long minPlayers) {
-    this.minPlayers = minPlayers;
-  }
+    public Long getMinPlayers() {
+        return minPlayers;
+    }
 
-  public Long getMaxPlayers() {
-    return maxPlayers;
-  }
+    public void setMinPlayers(Long minPlayers) {
+        this.minPlayers = minPlayers;
+    }
 
-  public void setMaxPlayers(Long maxPlayers) {
-    this.maxPlayers = maxPlayers;
-  }
+    public Long getMaxPlayers() {
+        return maxPlayers;
+    }
 
-  public Long getMinDuration() {
-    return minDuration;
-  }
+    public void setMaxPlayers(Long maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
 
-  public void setMinDuration(Long minDuration) {
-    this.minDuration = minDuration;
-  }
+    public Long getMinDuration() {
+        return minDuration;
+    }
 
-  public Long getMaxDuration() {
-    return maxDuration;
-  }
+    public void setMinDuration(Long minDuration) {
+        this.minDuration = minDuration;
+    }
 
-  public void setMaxDuration(Long maxDuration) {
-    this.maxDuration = maxDuration;
-  }
+    public Long getMaxDuration() {
+        return maxDuration;
+    }
 
-  public String getGenre() {
-    return genre;
-  }
+    public void setMaxDuration(Long maxDuration) {
+        this.maxDuration = maxDuration;
+    }
 
-  public void setGenre(String genre) {
-    this.genre = genre;
-  }
+    public String getGenre() {
+        return genre;
+    }
 
-  public List<User> getGameUsers() {
-    return gameUsers;
-  }
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
 
-  public void setGameUsers(List<User> gameUsers) {
-    this.gameUsers = gameUsers;
-  }
+    public Set<User> getFavoritedByUsers() {
+        return favoritedByUsers;
+    }
+
+    public void setFavoritedByUsers(Set<User> favoritedByUsers) {
+        this.favoritedByUsers = favoritedByUsers;
+    }
+
 }

@@ -6,49 +6,30 @@
         <div class="row justify-content-center">
           <h4>Solicitudes pendientes:</h4>
           <div class="row gy-4">
+            {{#event}}
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <a class="project-card" href="detail_event_page">
+              <a class="project-card" href="/detail_event_page/{{eventId}}">
                 <div class="project-image">
-                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
+                  <img src="/event/{{eventId}}/{{eventImage}}" alt="Project" class="img-fluid">
                 </div>
                 <div class="project-info">
-                  <div class="project-category">Juegos de mesa</div>
-                  <h4 class="project-title">Evento juegos de mesa</h4>
+                  <div class="project-category">{{eventTag}}</div>
+                  <h4 class="project-title">{{eventName}}</h4>
                   <button class="btn btn-success rounded-pill px-3">Aceptar</button>
                   <button class="btn btn-danger rounded-pill px-3">Rechazar</button>
                 </div>
               </a>
             </div>
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <a class="project-card" href="detail_event_page">
-                <div class="project-image">
-                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Juegos de mesa</div>
-                  <h4 class="project-title">Evento juegos de mesa</h4>
-                  <button class="btn btn-success rounded-pill px-3">Aceptar</button>
-                  <button class="btn btn-danger rounded-pill px-3">Rechazar</button>
-                </div>
-              </a>
-            </div>
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <a class="project-card" href="detail_event_page">
-                <div class="project-image">
-                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Juegos de mesa</div>
-                  <h4 class="project-title">Evento juegos de mesa</h4>
-                  <button class="btn btn-success rounded-pill px-3">Aceptar</button>
-                  <button class="btn btn-danger rounded-pill px-3">Rechazar</button>
-                </div>
-              </a>
-            </div>
+            {{/event}}
+            <!--Falta darle diseño a este mensaje-->
+            {{^event}}
+            <div>No hay Solicitudes</div>
+            {{/event}}
           </div>
         </div>
         <br>
         <br>
+        <!--No se que quereis de mustache aqui, luego se mira-->
         <div class="row justify-content-center">
           <h3>Estadísticas:</h3>
           <div class="row gy-4">

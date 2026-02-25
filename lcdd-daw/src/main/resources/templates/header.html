@@ -20,7 +20,8 @@
     rel="stylesheet">
 
   <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
 
   <!-- AOS -->
@@ -51,12 +52,34 @@
           <li><a href="games">Juegos</a></li>
           <li><a href="events">Eventos</a></li>
           <li><a href="news">Noticias</a></li>
+          <!--Boton de perfil temporal-->
           <li><a class="d-xl-none" href="profile">Mi perfil</a></li>
+          <!--Boton temporal de administracion-->
+          <li><a href="admin">Administración</a></li>
+          <!--Boton temporal de logout-->
+          <li>
+            <form action="/logout" method="post">
+              <button type="submit" class="dropdown-item">Log Out</button>
+              <input type="hidden" name="_csrf" value="{{token}}" />
+            </form>
+          </li>
+          {{#logged}}
+          <li><a class="d-xl-none" href="profile">Mi perfil</a></li>
+          {{#admin}}
           <li><a class="d-xl-none" href="admin">Administración</a></li>
+          {{/admin}}
           <li><a class="d-xl-none" href="index">Cerrar sesión</a></li>
+          {{/logged}}
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
+      {{^logged}}
+      <a class="btn-getstarted d-none d-sm-block" href="login">
+        Registro / Iniciar Sesión
+        <i class="bi bi-person"></i>
+      </a>
+      {{/logged}}
+      {{#logged}}
       <div class="col-lg-1"></div>
       <div class="dropdown d-none d-xl-block">
         <a class="submit-btn rounded-circle p-0" type="button" id="dropdownUserButton" data-bs-toggle="dropdown"
@@ -65,7 +88,9 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownUserButton">
           <li><a class="dropdown-item" href="profile">Mi perfil</a></li>
+          {{#admin}}
           <li><a class="dropdown-item" href="admin">Administración</a></li>
+          {{/admin}}
           <li>
             <form action="/logout" method="post">
               <button type="submit" class="dropdown-item">Log Out</button>
@@ -74,5 +99,6 @@
           </li>
         </ul>
       </div>
+      {{/logged}}
     </div>
   </header>
