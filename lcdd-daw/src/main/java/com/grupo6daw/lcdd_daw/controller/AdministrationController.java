@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.grupo6daw.lcdd_daw.dto.EventParticipantsStatDTO;
 import com.grupo6daw.lcdd_daw.dto.GameFavStatDTO;
 import com.grupo6daw.lcdd_daw.service.StatsService;
 
@@ -30,9 +31,16 @@ public class AdministrationController {
     @GetMapping("/api/top-favorite-games")
     @ResponseBody
     public ResponseEntity<List<GameFavStatDTO>> topFavoriteGames(
-            @RequestParam(defaultValue = "10") int limit) {
+            @RequestParam(defaultValue = "5") int limit) {
 
         List<GameFavStatDTO> data = statsService.topGamesByFavorites(limit);
         return ResponseEntity.ok(data);
+    }
+
+    @GetMapping("/api/top-events-participants")
+    @ResponseBody
+    public ResponseEntity<List<EventParticipantsStatDTO>> topEventsParticipants(
+            @RequestParam(defaultValue = "5") int limit) {
+        return ResponseEntity.ok(statsService.topEventsByParticipants(limit));
     }
 }

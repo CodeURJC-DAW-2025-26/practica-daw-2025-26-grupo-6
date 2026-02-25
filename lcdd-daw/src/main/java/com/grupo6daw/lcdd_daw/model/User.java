@@ -176,6 +176,14 @@ public class User {
         this.userFavGames = userFavGames;
     }
 
+    public Set<Event> getUserRegisteredEvents() {
+        return userRegisteredEvents;
+    }
+
+    public void setUserRegisteredEvents(Set<Event> userRegisteredEvents) {
+        this.userRegisteredEvents = userRegisteredEvents;
+    }
+
     public List<Event> getUserOwnEvents() {
         return userOwnEvents;
     }

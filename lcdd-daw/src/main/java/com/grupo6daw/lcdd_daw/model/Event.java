@@ -17,7 +17,7 @@ import jakarta.persistence.OneToOne;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId = null;
 
     private String eventName;

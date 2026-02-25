@@ -29,7 +29,7 @@
       </div>
       <br>
       <br>
-        <!--No se que quereis de mustache aqui, luego se mira-->
+      <!--No se que quereis de mustache aqui, luego se mira-->
       <div class="row justify-content-center">
         <h3>Estadísticas:</h3>
         <div class="row gy-4">
@@ -39,40 +39,93 @@
             <canvas id="gamesFavChart" height="120" aria-label="Gráfica de juegos con más favoritos"></canvas>
           </div>
         </div>
-        <div class="row gy-4">
-          <h5>Participantes en eventos:</h5>
-          <img src="/img/stats/events_stats.png" class="img-fluid w-50 h-20" alt="Project">
+        <div class="row gy-4 mt-4">
+          <h5>Eventos con más participantes:</h5>
+          <div class="col-12 col-lg-8" style="min-height: 320px;">
+            <canvas id="eventsParticipantsChart" height="120"></canvas>
+          </div>
         </div>
-      </div>
 
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-      <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-          const canvas = document.getElementById("gamesFavChart");
-          if (!canvas) return;
+        <script>
+          document.addEventListener("DOMContentLoaded", async () => {
+            const canvas = document.getElementById("gamesFavChart");
+            if (!canvas) return;
 
-          try {
-            const response = await fetch("/admin/api/top-favorite-games", {
-              headers: { "Accept": "application/json" }
-            });
+            try {
+              const response = await fetch("/admin/api/top-favorite-games", {
+                headers: { "Accept": "application/json" }
+              });
 
-            if (!response.ok) throw new Error("Error HTTP " + response.status);
+              if (!response.ok) throw new Error("Error HTTP " + response.status);
 
-            const data = await response.json();
+              const data = await response.json();
 
-            const labels = data.map(d => d.gameName);
-            const values = data.map(d => d.favCount);
+              const labels = data.map(d => d.gameName);
+              const values = data.map(d => d.favCount);
+
+              new Chart(canvas, {
+                type: "bar",
+                data: {
+                  labels: labels,
+                  datasets: [{
+                    label: "Nº de usuarios que lo tienen en favoritos",
+                    data: values,
+                    backgroundColor: "rgba(54, 162, 235, 0.45)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                    borderRadius: 6
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  aspectRatio: 2.4,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: { precision: 0 },
+                      title: { display: true, text: "Usuarios" }
+                    },
+                    x: {
+                      ticks: { autoSkip: false, maxRotation: 30, minRotation: 0 }
+                    }
+                  }
+                }
+              });
+
+            } catch (error) {
+              console.error("Error cargando gráfica:", error);
+              canvas.parentElement.innerHTML =
+                '<div class="alert alert-warning">No se pudo cargar la gráfica.</div>';
+            }
+          });
+        </script>
+        <script>
+          document.addEventListener("DOMContentLoaded", async () => {
+            const canvas = document.getElementById("eventsParticipantsChart");
+            if (!canvas) return;
+
+            const res = await fetch("/admin/api/top-events-participants", { headers: { "Accept": "application/json" } });
+            if (!res.ok) {
+              canvas.parentElement.innerHTML = '<div class="alert alert-warning">No se pudo cargar la gráfica de eventos.</div>';
+              return;
+            }
+
+            const data = await res.json();
+            const labels = data.map(d => d.eventName);
+            const values = data.map(d => d.participantCount);
 
             new Chart(canvas, {
               type: "bar",
               data: {
-                labels: labels,
+                labels,
                 datasets: [{
-                  label: "Nº de usuarios que lo tienen en favoritos",
+                  label: "Nº de participantes",
                   data: values,
-                  backgroundColor: "rgba(54, 162, 235, 0.45)",
-                  borderColor: "rgba(54, 162, 235, 1)",
+                  backgroundColor: "rgba(255, 159, 64, 0.45)",
+                  borderColor: "rgba(255, 159, 64, 1)",
                   borderWidth: 1,
                   borderRadius: 6
                 }]
@@ -82,26 +135,14 @@
                 maintainAspectRatio: false,
                 aspectRatio: 2.4,
                 scales: {
-                  y: {
-                    beginAtZero: true,
-                    ticks: { precision: 0 },
-                    title: { display: true, text: "Usuarios" }
-                  },
-                  x: {
-                    ticks: { autoSkip: false, maxRotation: 30, minRotation: 0 }
-                  }
+                  y: { beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: "Usuarios" } },
+                  x: { ticks: { autoSkip: false, maxRotation: 30, minRotation: 0 } }
                 }
               }
             });
-
-          } catch (error) {
-            console.error("Error cargando gráfica:", error);
-            canvas.parentElement.innerHTML =
-              '<div class="alert alert-warning">No se pudo cargar la gráfica.</div>';
-          }
-        });
-      </script>
-    </div>
+          });
+        </script>
+      </div>
   </section>
 </main>
 
