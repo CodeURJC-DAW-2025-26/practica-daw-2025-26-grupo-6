@@ -141,4 +141,47 @@
       }
     }, 1000);
   })
+
+  const form = document.getElementById('registerForm');
+  if (form) {
+    form.addEventListener('submit', async function(event) {
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      const confirmPassword = document.getElementById('confirm-password');
+
+      event.preventDefault();
+
+      try {
+        const response = await fetch(`/userExists?email=${encodeURIComponent(email.value)}`);
+        const exists = await response.json();
+        console.log(exists);
+
+        if (exists) {
+          // Show error
+          email.classList.add('is-invalid');
+          return;
+        } else {
+          // Clean error
+          email.classList.remove('is-invalid');
+        }
+      } catch (error) {
+        console.error("Error al verificar el usuario:", error);
+        return;
+      }
+      
+      if (password.value !== confirmPassword.value) {
+          // Show error
+          confirmPassword.classList.add('is-invalid');
+          password.classList.add('is-invalid');
+          return;
+          
+      } else {
+          // Clean error
+          confirmPassword.classList.remove('is-invalid');
+          password.classList.remove('is-invalid');
+      }
+
+      form.submit();
+    });
+  }
 })();

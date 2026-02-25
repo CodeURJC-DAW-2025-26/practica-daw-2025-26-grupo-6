@@ -1661,10 +1661,7 @@ section,
   margin-bottom: 8px;
 }
 
-.quote .php-email-form input[type=text],
-.quote .php-email-form input[type=email],
-.quote .php-email-form input[type=password],
-.quote .php-email-form input[type=tel],
+.quote .php-email-form input,
 .quote .php-email-form select,
 .quote .php-email-form textarea {
   width: 100%;
@@ -1678,10 +1675,7 @@ section,
   background-color: var(--surface-color);
 }
 
-.quote .php-email-form input[type=text]:focus,
-.quote .php-email-form input[type=email]:focus,
-.quote .php-email-form input[type=password]:focus,
-.quote .php-email-form input[type=tel]:focus,
+.quote .php-email-form input:focus,
 .quote .php-email-form select:focus,
 .quote .php-email-form textarea:focus {
   outline: none;
@@ -1689,10 +1683,7 @@ section,
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 88%);
 }
 
-.quote .php-email-form input[type=text]::placeholder,
-.quote .php-email-form input[type=email]::placeholder,
-.quote .php-email-form input[type=password]::placeholder,
-.quote .php-email-form input[type=tel]::placeholder,
+.quote .php-email-form input::placeholder,
 .quote .php-email-form select::placeholder,
 .quote .php-email-form textarea::placeholder {
   color: color-mix(in srgb, var(--default-color), transparent 55%);

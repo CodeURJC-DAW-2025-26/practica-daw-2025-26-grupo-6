@@ -10,21 +10,42 @@
                 <h3>Registrarse</h3>
                 <p>Introduzca los siguientes datos para crear su cuenta</p>
               </div>
-              <form method="post" class="php-email-form">
+              <form method="post" id="registerForm" action="/register" method="post"  class="php-email-form">
                 <div class="form">
                   <div class="form-field">
                     <label for="email">Correo electrónico:</label>
-                    <input type="email" name="email" id="email" placeholder="" required="">
+                    <input type="email" name="email" id="email" value="{{email}}" {{#invalidEmail}}class="is-invalid"{{/invalidEmail}} required>
+                    <div class="invalid-feedback">
+                      Ya existe un usuario con este email.
+                    </div>
                   </div>
                   <br>
                   <div class="form-field">
                     <label for="password">Contraseña:</label>
-                    <input type="password" name="password" id="password" placeholder="" required="">
+                    <input type="password" name="password" id="password" value="{{password}}" minlength="4" required>
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="password">Confirmar contraseña:</label>
-                    <input type="password" name="password" id="password" placeholder="" required="">
+                    <label for="confirm-password">Confirmar contraseña:</label>
+                    <input type="password" name="confirm-password" id="confirm-password" value="{{password}}" minlength="4" required>
+                    <div class="invalid-feedback">
+                      Las contraseñas deben ser iguales.
+                    </div>
+                  </div>
+                  <br>
+                  <div class="form-field">
+                    <label for="name">Nombre:</label>
+                    <input type="name" name="name" id="name" value="{{name}}" required>
+                  </div>
+                  <br>
+                  <div class="form-field">
+                    <label for="surnames">Apellidos:</label>
+                    <input type="surnames" name="surnames" id="surnames" value="{{surnames}}" required>
+                  </div>
+                  <br>
+                  <div class="form-field">
+                    <label for="nickname">Nickname:</label>
+                    <input type="nickname" name="nickname" id="nickname" value="{{nickname}}" required>
                   </div>
                   <br>
                   <div class="row">
@@ -33,21 +54,22 @@
                     </div>
                     <div class="col-lg-1"></div>
                     <div class="col-lg-3">
-                      <a href="index" type="submit" class="submit-btn">
+                      <button type="submit" class="submit-btn">
                         <span>Registrarse</span>
                         <i class="bi bi-arrow-right"></i>
-                      </a>
+                      </button>
                     </div>
                   </div>
                   <br>
                   <h4>¿Ya tienes cuenta en La Caverna del Dragón?</h4>
                   <a href="login" class="submit">Click aquí para ir a login</a>
+                  <input type="hidden" name="_csrf" value="{{token}}" />
               </form>
             </div>
           </div>
         </div>
       </div>
-    </section><!-- /Quote Section -->
+    </section>
   </main>
 
 {{>footer}}

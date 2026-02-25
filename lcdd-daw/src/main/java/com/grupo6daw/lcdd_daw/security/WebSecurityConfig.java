@@ -50,6 +50,7 @@ public class WebSecurityConfig {
 						.requestMatchers("/detail_game_page").permitAll()
 						.requestMatchers("/login").permitAll()
 						.requestMatchers("/register").permitAll()
+						.requestMatchers("/userExists").permitAll()
 						// PRIVATE PAGES
 						.requestMatchers("/profile").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/event_form").hasAnyRole("REGISTERED_USER")
