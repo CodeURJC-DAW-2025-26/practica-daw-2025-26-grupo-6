@@ -20,79 +20,38 @@
               <i class="bi bi-search"></i> Buscar
             </button>
           </div>
+          {{#logged}}
           <div class="col-12 col-md-2 col-lg-2">
             <a href="event_form" class="btn_lcdd_black w-100">
               <i class="bi bi-plus-circle me-2"></i> Crear evento
             </a>
           </div>
-
+          {{/logged}}
         </div>
       </div>
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4">
+          {{#event}}
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_event_page">
+            <a class="project-card" href="/event/{{eventId}}">
               <div class="project-card">
                 <div class="project-image">
-                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
+                  <img src="/event/{{eventId}}/{{eventImage}}" alt="Project" class="img-fluid">
                 </div>
                 <div class="project-info">
-                  <div class="project-category">Juegos de mesa</div>
-                  <h4 class="project-title">Evento juegos de mesa</h4>
+                  <div class="project-category">{{eventTag}}</div>
+                  <h4 class="project-title">{{eventName}}</h4>
                   <p class="project-description">
-                    🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟</p>
+                    🎲🧩♟ {{eventDescription}}</p>
                 </div>
               </div>
             </a>
           </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_event_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Juegos de mesa</div>
-                  <h4 class="project-title">Evento juegos de mesa</h4>
-                  <p class="project-description">
-                    🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_event_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Juegos de mesa</div>
-                  <h4 class="project-title">Evento juegos de mesa</h4>
-                  <p class="project-description">
-                    🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row gy-4">
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_event_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Juegos de mesa</div>
-                  <h4 class="project-title">Evento juegos de mesa</h4>
-                  <p class="project-description">
-                    🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟</p>
-                </div>
-              </div>
-            </a>
-          </div>
+          {{/event}}
+          {{^event}}
+          <div>No hay eventos</div>
+          {{/event}}
         </div>
       </div>
     </section>

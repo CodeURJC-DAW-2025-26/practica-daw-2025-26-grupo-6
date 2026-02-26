@@ -6,24 +6,20 @@
         <div class="row">
           <div class="col-lg-5">
             <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <img src="/img/news/newsImg.jpg" class="img-fluid">
+              <!--Corregir dimagen mustache-->
+              <img src="/detail_new_page/{{newId}}/{{newImage}}" class="img-fluid">
               <div class="project-hero-overlay">
                 <div class="project-status">
                   <i class="bi bi-tag"></i>
-                  Rol
+                  {{newTag}}
                 </div>
               </div>
             </div>
           </div>
           <div class="col-lg-7">
             <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">Regresan las jornadas de rol a la URJC</h1>
-              <p class="project-description">El próximo viernes 21 de marzo de 2025, el campus de Móstoles acogerá la
-                cuarta edición de 'Dangers & Dragons | Jornadas de Rol', un evento pensado tanto para aquellos que
-                desean descubrir el emocionante mundo del rol como para los jugadores experimentados. Las jornadas, que
-                se celebrarán este viernes en el Aulario I, ofrecerán una amplia gama de actividades en las que los
-                asistentes podrán participar en talleres interactivos, disfrutar de ponencias de expertos y vivir
-                partidas completas dirigidas por ‘másters’ especializados que asesorarán a los participantes.</p>
+              <h1 class="project-title">{{newName}}</h1>
+              <p class="project-description">{{newDescription}}</p>
               <div class="row">
                 <div class="col-lg-4">
                   <form action="/removeNew/{{new.id}}" method="post">

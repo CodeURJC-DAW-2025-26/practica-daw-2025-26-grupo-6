@@ -1,111 +1,115 @@
 package com.grupo6daw.lcdd_daw.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Event {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long eventId = null;
 
-  private String eventName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long eventId = null;
 
-  @Column(columnDefinition = "TEXT")
-  private String eventDescription;
+    private String eventName;
 
-  @OneToOne
-  private Image eventImage;
+    @Column(columnDefinition = "TEXT")
+    private String eventDescription;
 
-  private String eventTag;
+    @OneToOne
+    private Image eventImage;
 
-  @OneToMany
-  private List<User> eventRegisteredUsers;
+    private String eventTag;
 
-  @OneToOne
-  private User eventCreator;
+    @ManyToMany(mappedBy = "userRegisteredEvents")
+    private Set<User> eventRegisteredUsers = new HashSet<>();
 
-  @OneToMany
-  private List<New> eventNews;
+    @OneToOne
+    private User eventCreator;
 
-  public Event() {
-  }
+    @OneToMany
+    private List<New> eventNews;
 
-  public Event(String eventName, String eventDescription, String eventTag) {
-    super();
-    this.eventName = eventName;
-    this.eventDescription = eventDescription;
-    this.eventTag = eventTag;
-  }
+    public Event() {
+    }
 
-  public Long getEventId() {
-    return eventId;
-  }
+    public Event(String eventName, String eventDescription, String eventTag) {
+        super();
+        this.eventName = eventName;
+        this.eventDescription = eventDescription;
+        this.eventTag = eventTag;
+    }
 
-  public void setEventId(Long eventId) {
-    this.eventId = eventId;
-  }
+    public Long getEventId() {
+        return eventId;
+    }
 
-  public String getEventName() {
-    return eventName;
-  }
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
 
-  public void setEventName(String eventName) {
-    this.eventName = eventName;
-  }
+    public String getEventName() {
+        return eventName;
+    }
 
-  public String getEventDescription() {
-    return eventDescription;
-  }
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
 
-  public void setEventDescription(String eventDescription) {
-    this.eventDescription = eventDescription;
-  }
+    public String getEventDescription() {
+        return eventDescription;
+    }
 
-  public Image getEventImage() {
-    return eventImage;
-  }
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
 
-  public void setEventImage(Image eventImage) {
-    this.eventImage = eventImage;
-  }
+    public Image getEventImage() {
+        return eventImage;
+    }
 
-  public String getEventTag() {
-    return eventTag;
-  }
+    public void setEventImage(Image eventImage) {
+        this.eventImage = eventImage;
+    }
 
-  public void setEventTag(String eventTag) {
-    this.eventTag = eventTag;
-  }
+    public String getEventTag() {
+        return eventTag;
+    }
 
-  public List<User> getEventRegisteredUsers() {
-    return eventRegisteredUsers;
-  }
+    public void setEventTag(String eventTag) {
+        this.eventTag = eventTag;
+    }
 
-  public void setEventRegisteredUsers(List<User> eventRegisteredUsers) {
-    this.eventRegisteredUsers = eventRegisteredUsers;
-  }
+    public Set<User> getEventRegisteredUsers() {
+        return eventRegisteredUsers;
+    }
 
-  public User getEventCreator() {
-    return eventCreator;
-  }
+    public void setEventRegisteredUsers(Set<User> eventRegisteredUsers) {
+        this.eventRegisteredUsers = eventRegisteredUsers;
+    }
 
-  public void setEventCreator(User eventCreator) {
-    this.eventCreator = eventCreator;
-  }
+    public User getEventCreator() {
+        return eventCreator;
+    }
 
-  public List<New> getEventNews() {
-    return eventNews;
-  }
-  
-  public void setEventNews(List<New> eventNews) {
-    this.eventNews = eventNews;
-  }
+    public void setEventCreator(User eventCreator) {
+        this.eventCreator = eventCreator;
+    }
+
+    public List<New> getEventNews() {
+        return eventNews;
+    }
+
+    public void setEventNews(List<New> eventNews) {
+        this.eventNews = eventNews;
+    }
 }

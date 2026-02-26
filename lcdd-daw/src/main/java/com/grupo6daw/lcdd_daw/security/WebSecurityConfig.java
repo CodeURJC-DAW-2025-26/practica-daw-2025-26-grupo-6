@@ -59,7 +59,7 @@ public class WebSecurityConfig {
 						.requestMatchers("/removeEvent/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/removeGame/*").hasAnyRole("ADMIN")
 						.requestMatchers("/game_form").hasAnyRole("ADMIN")
-						.requestMatchers("/admin").hasAnyRole("ADMIN"))
+						.requestMatchers("/admin/**").hasAnyRole("ADMIN"))
 				.formLogin(formLogin -> formLogin
 						.loginPage("/login")
 						.usernameParameter("email")

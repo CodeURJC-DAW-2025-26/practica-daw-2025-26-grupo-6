@@ -35,128 +35,36 @@
               <i class="bi bi-search"></i> Buscar
             </button>
           </div>
+          {{#admin}}
           <div class="col-12 col-md-2 col-lg-2">
             <a href="game_form" class="btn_lcdd_black w-100">
               <i class="bi bi-plus-circle me-2"></i> Crear juego
             </a>
           </div>
+          {{/admin}}
         </div>
       </div>
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4">
+          {{#game}}
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_game_page">
+            <a class="project-card" href="/game/{{gameId}}">
               <div class="project-card">
                 <div class="project-image">
-                  <img src="/img/games/magic.jpg" alt="Project" class="img-fluid">
+                  <img src="/game/{{gameId}}/{{gameImage}}" alt="Project" class="img-fluid">
                 </div>
                 <div class="project-info">
-                  <div class="project-category">Cartas</div>
-                  <h4 class="project-title">MAGIC</h4>
-                  <p class="project-description">Juego de cartas coleccionables en el que cada jugador debe derrotar a
-                    su
-                    enemigo usando sus poderes: criaturas mágicas, artefactos, y encantamientos, extrayendo el poder o
-                    maná
-                    de sus tierras, algunas también con sus propios poderes.</p>
+                  <div class="project-category">{{genre}}</div>
+                  <h4 class="project-title">{{gameName}}</h4>
+                  <p class="project-description">{{gameDescription}}</p>
                 </div>
               </div>
             </a>
           </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_game_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/games/carcassonne.png" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Estrategia</div>
-                  <h4 class="project-title">Carcassonne</h4>
-                  <p class="project-description">Crea un mapa de juego donde los jugadores compiten por hacer el máximo
-                    número de puntos con las mejores posesiones (ciudades, praderas, caminos y monasterios) del mapa. La
-                    estrategia individual es básica para ganar cada partida.</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_game_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/games/virus.jpg" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Cartas</div>
-                  <h4 class="project-title">Virus</h4>
-                  <p class="project-description">El objetivo es conseguir aislar un cuerpo sano y erradicar el virus
-                    antes
-                    de
-                    que cualquier otra persona lo consiga. Este juego no entiende de ética y todo es válido para
-                    conseguir
-                    la victoria.</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="row gy-4">
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_game_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/games/bang.jpg " alt="Project" class="img-fluid">
-
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Cartas</div>
-                  <h4 class="project-title">BANG!</h4>
-                  <p class="project-description">En Bang! todos miran con ansiedad al pistolero, pensando que ya está
-                    muerto, que no tiene nada que hacer ante el rifle... ¡Pero lo que no saben es que su pistola es una
-                    Volcanic! En el Salvaje Oeste, los Forajidos dan caza al Sheriff, el Sheriff da caza a los
-                    Forajidos,
-                    y el Renegado urde su plan en secreto, listo para unirse a cualquiera de los bandos. Dentro de poco,
-                    ¡las balas comenzarán a zumbar!</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_game_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/games/zombies.jpg" alt="Project" class="img-fluid">
-
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Cartas</div>
-                  <h4 class="project-title">Silenze: Zombie City</h4>
-                  <p class="project-description">¡La ciudad está invadida de zombis! La única esperanza de la humanidad
-                    es
-                    crear grandes refugios de supervivientes para aguantar los ataques zombis. Rescata a los
-                    supervivientes de Zombie City y atráelos a tu refugio para poder protegerte de la amenaza zombi y de
-                    los refugios rivales.</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="detail_game_page">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/img/games/taco-gato-pizza-queso.jpg" alt="Project" class="img-fluid">
-
-                </div>
-                <div class="project-info">
-                  <div class="project-category">Cartas</div>
-                  <h4 class="project-title">Taco Gato Cabra Queso Pizza</h4>
-                  <p class="project-description">Taco Gato Cabra Queso Pizza… Apréndete bien esta cantinela, porque cada
-                    vez que pronuncias una palabra de este mantra tienes que descartarte de una carta de tu mano. Y si
-                    la
-                    carta descartada coincide con la palabra pronunciada, tienes que colocar tu mano sobre el montón
-                    central. Sé rápido, porque el último en hacerlo..., ¡se lleva todas las cartas en juego!</p>
-                </div>
-              </div>
-            </a>
-          </div>
+          {{/game}}
+          {{^game}}
+          <div>No hay juegos</div>
+          {{/game}}
         </div>
       </div>
     </section>

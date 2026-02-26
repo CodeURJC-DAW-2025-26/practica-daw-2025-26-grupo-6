@@ -14,6 +14,7 @@ import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.User;
+import com.grupo6daw.lcdd_daw.repository.EventRepository;
 import com.grupo6daw.lcdd_daw.repository.GameRepository;
 import com.grupo6daw.lcdd_daw.repository.UserRepository;
 
@@ -21,6 +22,9 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 public class DatabaseInitializer {
+
+    @Autowired
+    private EventRepository eventRepository;
 
     @Autowired
     private NewService newService;
@@ -63,10 +67,12 @@ public class DatabaseInitializer {
         }
 
         // Sample Events
-        Event event1 = new Event("Evento de juegos de mesa",
-                "🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟\nLa asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de juegos de mesa para que venga a jugar y divertirse todo el mundo.", "Cartas");
-        setEventImage(event1, "/sample_images/events/event.jpg");
-        eventService.save(event1);
+        if (eventRepository.findByEventName("Evento de juegos de mesa Octubre 2026").isEmpty()) {
+            Event event1 = new Event("Evento de juegos de mesa Octubre 2026",
+                    "🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟\nLa asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de juegos de mesa para que venga a jugar y divertirse todo el mundo.", "Cartas");
+            setEventImage(event1, "/sample_images/events/event.jpg");
+            eventService.save(event1);
+        }
 
         // Sample users
         userRepository.save(new User("user", "user", "user", "interests", "user@user.com", passwordEncoder.encode("pass"), "REGISTERED_USER"));

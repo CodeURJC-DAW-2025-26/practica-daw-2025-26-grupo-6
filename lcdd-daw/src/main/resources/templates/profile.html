@@ -11,7 +11,7 @@
                   <div class="form">
                     <div class="row">
                       <div class="col-lg-3">
-                        <img src="/img/person/person-m-8.webp" class="img-fluid">
+                        <img src="/user/{{userId}}/{{userImage}}" class="img-fluid">
                         <br>
                         <br>
                         <div class="form-field">
@@ -22,23 +22,23 @@
                       <div class="col-lg-9">
                         <div class="form-field">
                           <label for="name">Nickname:</label>
-                          <input type="text" name="name" id="name" value="HombrePez" placeholder="" required="">
+                          <input type="text" name="name" id="name" value="{{userNickname}}" placeholder="" required="">
                         </div>
                         <br>
                         <div class="form-field">
                           <label for="name">Nombre:</label>
-                          <input type="text" name="name" id="name" value="John" placeholder="" required="">
+                          <input type="text" name="name" id="name" value="{{userName}}" placeholder="" required="">
                         </div>
                         <br>
                         <div class="form-field">
                           <label for="surname">Apellidos:</label>
-                          <input type="text" name="surname" id="surname" value="Smith Smith" placeholder="" required="">
+                          <input type="text" name="surname" id="surname" value="{{userSurname}}" placeholder="" required="">
                         </div>
                         <br>
                         <div class="form-field full-width">
                           <label for="interests">Intereses:</label>
                           <textarea name="interests" id="interests" rows="4" placeholder=""
-                            required="">Rol - Cartas</textarea>
+                            required="">{{userInterests}}</textarea>
                         </div>
                         <div class="row-buttons">
                           <div class="col-lg-2">
@@ -60,72 +60,58 @@
                         <br>
                         <h4>Juegos favoritos</h4>
                         <div class="row gy-4">
+                          {{#userFavGames}}
                           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                            <a class="project-card" href="detail_game_page">
+                            <a class="project-card" href="/game/{{gameId}}">
                               <div class="project-image">
-                                <img src="/img/games/magic.jpg" alt="Project" class="img-fluid">
+                                <img src="/game/{{gameId}}/{{gameImage}}" alt="Project" class="img-fluid">
                               </div>
                               <div class="project-info">
-                                <div class="project-category">Cartas</div>
-                                <h4 class="project-title">MAGIC</h4>
+                                <div class="project-category">{{genre}}</div>
+                                <h4 class="project-title">{{gameName}}</h4>
                               </div>
                             </a>
                           </div>
-                          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                            <a class="project-card" href="detail_game_page">
-                              <div class="project-image">
-                                <img src="/img/games/magic.jpg" alt="Project" class="img-fluid">
-                              </div>
-                              <div class="project-info">
-                                <div class="project-category">Cartas</div>
-                                <h4 class="project-title">MAGIC</h4>
-                              </div>
-                            </a>
-                          </div>
-                          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                            <a class="project-card" href="detail_game_page">
-                              <div class="project-image">
-                                <img src="/img/games/magic.jpg" alt="Project" class="img-fluid">
-                              </div>
-                              <div class="project-info">
-                                <div class="project-category">Cartas</div>
-                                <h4 class="project-title">MAGIC</h4>
-                              </div>
-                            </a>
-                          </div>
+                          {{/userFavGames}}
                         </div>
                         <br>
                         <h4>Mis eventos</h4>
+                        <!--Aqui hay dos row gy-4, porque?-->
                         <div class="row gy-4">
                           <div class="row gy-4">
+                            {{#userOwnEvents}}
                             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                              <a class="project-card" href="detail_event_page">
+                              <a class="project-card" href="/event/{{eventId}}">
                                 <div class="project-image">
-                                  <img src="/img/events/event.jpg" alt="Project" class="img-fluid">
+                                  <img src="/event/{{eventId}}/{{eventImage}}" alt="Project" class="img-fluid">
                                 </div>
                                 <div class="project-info">
-                                  <div class="project-category">Juegos de mesa</div>
-                                  <h4 class="project-title">Evento juegos de mesa</h4>
+                                  <div class="project-category">{{eventTag}}</div>
+                                  <h4 class="project-title">{{eventName}}</h4>
                                 </div>
                               </a>
                             </div>
+                            {{/userOwnEvents}}
                           </div>
                         </div>
                         <br>
                         <h4>Mis noticias</h4>
+                        <!--Aqui tambien hay dos row gy-4-->
                         <div class="row gy-4">
                           <div class="row gy-4">
+                            {{#userNews}}
                             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                              <a class="project-card" href="detail_new_page">
+                              <a class="project-card" href="/new/{{newId}}">
                                 <div class="project-image">
-                                  <img src="/img/news/newsImg.jpg" alt="Project" class="img-fluid">
+                                  <img src="/new/{{newId}}/{{newImage}}" alt="Project" class="img-fluid">
                                 </div>
                                 <div class="project-info">
-                                  <div class="project-category">Evento</div>
-                                  <h4 class="project-title">Regresan las jornadas de rol a la URJC</h4>
+                                  <div class="project-category">{{newTag}}</div>
+                                  <h4 class="project-title">{{newName}}</h4>
                                 </div>
                               </a>
                             </div>
+                            {{/userNews}}
                           </div>
                         </div>
                       </div>

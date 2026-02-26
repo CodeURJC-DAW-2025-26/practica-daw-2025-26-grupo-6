@@ -60,8 +60,25 @@ public class User {
     @OneToMany
     private List<Event> userOwnEvents;
 
-    @OneToMany
-    private List<Event> userRegisteredEvents;
+    @ManyToMany
+    @JoinTable(
+            name = "user_registered_events",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "eventId")
+    )
+    private Set<Event> userRegisteredEvents = new HashSet<>();
+
+    public void registerToEvent(Event event) {
+        if (this.userRegisteredEvents.add(event)) {
+            event.getEventRegisteredUsers().add(this);
+        }
+    }
+
+    public void unregisterFromEvent(Event event) {
+        if (this.userRegisteredEvents.remove(event)) {
+            event.getEventRegisteredUsers().remove(this);
+        }
+    }
 
     @OneToMany
     private List<New> userNews;
@@ -159,20 +176,20 @@ public class User {
         this.userFavGames = userFavGames;
     }
 
+    public Set<Event> getUserRegisteredEvents() {
+        return userRegisteredEvents;
+    }
+
+    public void setUserRegisteredEvents(Set<Event> userRegisteredEvents) {
+        this.userRegisteredEvents = userRegisteredEvents;
+    }
+
     public List<Event> getUserOwnEvents() {
         return userOwnEvents;
     }
 
     public void setUserOwnEvents(List<Event> userOwnEvents) {
         this.userOwnEvents = userOwnEvents;
-    }
-
-    public List<Event> getUserRegisteredEvents() {
-        return userRegisteredEvents;
-    }
-
-    public void setUserRegisteredEvents(List<Event> userRegisteredEvents) {
-        this.userRegisteredEvents = userRegisteredEvents;
     }
 
     public List<New> getUserNews() {
