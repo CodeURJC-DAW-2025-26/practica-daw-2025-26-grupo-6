@@ -9,9 +9,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Event {
@@ -20,20 +24,28 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId = null;
 
+    @NotBlank(message = "El nombre del evento es obligatorio")
+    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
     private String eventName;
 
+    @NotBlank(message = "La descripción no puede estar vacía")
     @Column(columnDefinition = "TEXT")
     private String eventDescription;
 
     @OneToOne
+    @JoinColumn(name = "fk_image") // Forcing column to change name to 'fk_image'
     private Image eventImage;
 
     private String eventTag;
+
+    private boolean requiresRegistration;
+    private String link;
 
     @ManyToMany(mappedBy = "userRegisteredEvents")
     private Set<User> eventRegisteredUsers = new HashSet<>();
 
     @OneToOne
+    @JoinColumn(name = "fk_creator") // Forcing column to change name to 'fk_creator'
     private User eventCreator;
 
     @OneToMany
@@ -111,5 +123,21 @@ public class Event {
 
     public void setEventNews(List<New> eventNews) {
         this.eventNews = eventNews;
+    }
+
+    public boolean isRequiresRegistration() {
+        return requiresRegistration;
+    }
+
+    public void setRequiresRegistration(boolean requiresRegistration) {
+        this.requiresRegistration = requiresRegistration;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

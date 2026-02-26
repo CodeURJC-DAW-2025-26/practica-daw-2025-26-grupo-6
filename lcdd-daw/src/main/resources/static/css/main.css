@@ -1787,3 +1787,15 @@ section,
 .project-hero {
   position: relative;
 }
+
+/* Asterisks for mandatory fields */
+.required-label::after {
+  content: " *";
+  color: #890f00;
+  font-weight: bold;
+}
+
+/* Better spacing for radio buttons group */
+.btn-group .btn {
+  padding: 10px 20px;
+}
