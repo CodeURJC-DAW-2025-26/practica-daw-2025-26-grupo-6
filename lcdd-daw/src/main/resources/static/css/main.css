@@ -331,6 +331,7 @@ h6 {
   }
 
   .navmenu a,
+  .navmenu button,
   .navmenu a:focus {
     color: var(--nav-dropdown-color);
     padding: 10px 20px;
@@ -342,6 +343,7 @@ h6 {
     justify-content: space-between;
     white-space: nowrap;
     transition: 0.3s;
+    text-decoration: none;
   }
 
   .navmenu a i,

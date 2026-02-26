@@ -51,24 +51,18 @@
         <ul>
           <li><a href="games">Juegos</a></li>
           <li><a href="events">Eventos</a></li>
-          <li><a href="news">Noticias</a></li>
-          <!--Boton de perfil temporal-->
-          <li><a class="d-xl-none" href="profile">Mi perfil</a></li>
-          <!--Boton temporal de administracion-->
-          <li><a href="admin">Administración</a></li>
-          <!--Boton temporal de logout-->
-          <li>
-            <form action="/logout" method="post">
-              <button type="submit" class="dropdown-item">Log Out</button>
-              <input type="hidden" name="_csrf" value="{{token}}" />
-            </form>
-          </li>
+          <li><a href="news">Noticias  {{#username}}{{.}}{{/username}}</a></li>
           {{#logged}}
           <li><a class="d-xl-none" href="profile">Mi perfil</a></li>
           {{#admin}}
           <li><a class="d-xl-none" href="admin">Administración</a></li>
           {{/admin}}
-          <li><a class="d-xl-none" href="index">Cerrar sesión</a></li>
+          <li>
+            <form action="/logout" method="post">
+              <button type="submit" class="btn btn-link d-xl-none">Log Out</button>
+              <input type="hidden" name="_csrf" value="{{token}}" />
+            </form>
+          </li>
           {{/logged}}
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
