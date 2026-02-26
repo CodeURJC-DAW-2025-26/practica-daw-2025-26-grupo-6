@@ -6,7 +6,8 @@
         <div class="row">
           <div class="col-lg-8">
             <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <img src="/img/games/magic.jpg" class="img-fluid">
+              <!--Corregir direccion de mustache-->
+              <img src="/detail_game_page/{{gameId}}/{{gameImage}}" class="img-fluid">
               <button>
                 <div class="project-hero-overlay">
                   <div class="project-status">
@@ -19,22 +20,20 @@
           </div>
           <div class="col-lg-4">
             <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">MAGIC</h1>
-              <p class="project-description">Juego de cartas coleccionables en el que cada jugador debe derrotar a su
-                enemigo usando sus poderes: criaturas mágicas, artefactos, y encantamientos, extrayendo el poder o maná
-                de sus tierras, algunas también con sus propios poderes.</p>
+              <h1 class="project-title">{{gameName}}</h1>
+              <p class="project-description">{{gameDescription}}</p>
               <div class="project-details">
                 <div class="detail-item">
                   <span class="label">Jugadores</span>
-                  <span class="value">2 - 4</span>
+                  <span class="value">{{minPlayers}} - {{maxPlayers}}</span>
                 </div>
                 <div class="detail-item">
                   <span class="label">Duración</span>
-                  <span class="value">25' - 60'</span>
+                  <span class="value">{{minDuration}} - {{maxDuration}}</span>
                 </div>
                 <div class="detail-item">
                   <span class="label">Género</span>
-                  <span class="value">Cartas</span>
+                  <span class="value">{{genre}}</span>
                 </div>
               </div>
               <div class="row">

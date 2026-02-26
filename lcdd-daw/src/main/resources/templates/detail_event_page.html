@@ -6,34 +6,21 @@
         <div class="row">
           <div class="col-lg-5">
             <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <img src="/img/events/event.jpg" class="img-fluid">
+              <!--No estoy seguro de cual seria la direccion de la imagen con mustache-->
+              <img src="/detail_event_page/{{eventId}}/{{eventImage}}" class="img-fluid">
               <div class="project-hero-overlay">
                 <div class="project-status">
                   <i class="bi bi-tag"></i>
-                  Juegos de mesa
+                  {{eventTag}}
                 </div>
               </div>
             </div>
           </div>
           <div class="col-lg-7">
             <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">Evento juegos de mesa</h1>
+              <h1 class="project-title">{{eventName}}</h1>
               <div class="project-description">
-                <p>🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟</p>
-                <p>
-                  La asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de
-                  juegos de mesa para que venga a jugar y divertirse todo el mundo.
-                </p>
-                <p>
-                  La asociación pondrá sus propios juegos y los miembros llevaremos algunos nuestros propios.
-                  ¡Puedes probar los que quieras y también traer los tuyos si quieres jugarlos con los demás!
-                </p>
-                <p>
-                  📆 Viernes, 12 de Diciembre<br>
-                  ⏰ 10:00 a 20:00<br>
-                  📍 Aula 002 del Aulario I, Campus de Móstoles, URJC<br>
-                  ♟ Se conceden créditos ECTS y es totalmente gratuito participar.
-                </p>
+                {{eventDescription}}
               </div>
               <div class="row">
                 <div class="col-lg-3">
