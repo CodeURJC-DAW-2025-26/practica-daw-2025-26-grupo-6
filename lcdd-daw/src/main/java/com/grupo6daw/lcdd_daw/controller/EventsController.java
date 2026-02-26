@@ -26,12 +26,17 @@ public class EventsController {
 	private ImageService imageService;
 
 	@GetMapping("/events")
-	public String events() {
+	public String events(Model model) {
+		model.addAttribute("event", eventService.findAll());
 		return "events";
 	}
 
-	@GetMapping("/detail_event_page")
-	public String detail_event_page() {
+	@GetMapping("/event/{id}")
+	public String eventDetail(@PathVariable long id, Model model) {
+		Optional<Event> event = eventService.findById(id);
+		if (event.isPresent()) {
+			model.addAttribute("event", event.get());
+		}
 		return "detail_event_page";
 	}
 
@@ -49,7 +54,7 @@ public class EventsController {
 
 		eventService.save(event);
 
-		return "events";
+		return "redirect:/events";
 	}
 
 	@PostMapping("/removeEvent/{id}")

@@ -26,12 +26,17 @@ public class GamesController {
 	private ImageService imageService;
 
 	@GetMapping("/games")
-	public String games() {
+	public String games(Model model) {
+		model.addAttribute("game", gameService.findAll());
 		return "games";
 	}
 
-	@GetMapping("/detail_game_page")
-	public String detail_game_page() {
+	@GetMapping("/game/{id}")
+	public String gameDetail(@PathVariable long id, Model model) {
+		Optional<Game> game = gameService.findById(id);
+		if (game.isPresent()) {
+			model.addAttribute("game", game.get());
+		}
 		return "detail_game_page";
 	}
 
@@ -49,7 +54,7 @@ public class GamesController {
 
 		gameService.save(game);
 
-		return "games";
+		return "redirect:games";
 	}
 
 	@PostMapping("/removeGame/{id}")

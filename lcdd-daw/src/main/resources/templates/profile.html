@@ -11,7 +11,7 @@
                   <div class="form">
                     <div class="row">
                       <div class="col-lg-3">
-                        <img src="/user/{{userId}}/{{userImage}}" class="img-fluid">
+                        <img src="/images/{{user.userImage.id}}" class="img-fluid">
                         <br>
                         <br>
                         <div class="form-field">
@@ -22,36 +22,36 @@
                       <div class="col-lg-9">
                         <div class="form-field">
                           <label for="name">Nickname:</label>
-                          <input type="text" name="name" id="name" value="{{userNickname}}" placeholder="" required="">
+                          <input type="text" name="name" id="name" value="{{user.userNickname}}" placeholder="" required="">
                         </div>
                         <br>
                         <div class="form-field">
                           <label for="name">Nombre:</label>
-                          <input type="text" name="name" id="name" value="{{userName}}" placeholder="" required="">
+                          <input type="text" name="name" id="name" value="{{user.userName}}" placeholder="" required="">
                         </div>
                         <br>
                         <div class="form-field">
                           <label for="surname">Apellidos:</label>
-                          <input type="text" name="surname" id="surname" value="{{userSurname}}" placeholder="" required="">
+                          <input type="text" name="surname" id="surname" value="{{user.userSurname}}" placeholder="" required="">
                         </div>
                         <br>
                         <div class="form-field full-width">
                           <label for="interests">Intereses:</label>
                           <textarea name="interests" id="interests" rows="4" placeholder=""
-                            required="">{{userInterests}}</textarea>
+                            required="">{{user.userInterests}}</textarea>
                         </div>
                         <div class="row-buttons">
                           <div class="col-lg-2">
-                            <a href="index" class="submit-btn">Volver sin guardar</a>
+                            <a href="/index" class="submit-btn">Volver sin guardar</a>
                           </div>
                           <div class="col-lg-2">
-                            <a href="index" type="submit" class="submit-btn">
+                            <a href="/index" type="submit" class="submit-btn">
                               <span>Guardar cambios</span>
                               <i class="bi bi-arrow-right"></i>
                             </a>
                           </div>
                           <div class="col-lg-2">
-                            <a href="index" type="submit" class="submit-btn">
+                            <a href="/index" type="submit" class="submit-btn">
                               <span>Eliminar cuenta</span>
                               <i class="bi bi-exclamation-octagon"></i>
                             </a>
@@ -64,7 +64,7 @@
                           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                             <a class="project-card" href="/game/{{gameId}}">
                               <div class="project-image">
-                                <img src="/game/{{gameId}}/{{gameImage}}" alt="Project" class="img-fluid">
+                                <img src="/images/{{gameImage.id}}" alt="Project" class="img-fluid">
                               </div>
                               <div class="project-info">
                                 <div class="project-category">{{genre}}</div>
@@ -83,7 +83,7 @@
                             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                               <a class="project-card" href="/event/{{eventId}}">
                                 <div class="project-image">
-                                  <img src="/event/{{eventId}}/{{eventImage}}" alt="Project" class="img-fluid">
+                                  <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
                                 </div>
                                 <div class="project-info">
                                   <div class="project-category">{{eventTag}}</div>
@@ -103,7 +103,7 @@
                             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                               <a class="project-card" href="/new/{{newId}}">
                                 <div class="project-image">
-                                  <img src="/new/{{newId}}/{{newImage}}" alt="Project" class="img-fluid">
+                                  <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
                                 </div>
                                 <div class="project-info">
                                   <div class="project-category">{{newTag}}</div>
