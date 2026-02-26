@@ -184,4 +184,31 @@
       form.submit();
     });
   }
+
+// --- Event form logic (Show/Hide link container) ---
+  const radioSi = document.getElementById('req-si');
+  const radioNo = document.getElementById('req-no');
+  const linkContainer = document.getElementById('link-container');
+
+  // Only execute this code if the elements exist on the current page
+  if (radioSi && radioNo && linkContainer) {
+    function toggleLinkVisibility() {
+      if (radioSi.checked) {
+        linkContainer.style.display = 'block';
+      } else {
+        linkContainer.style.display = 'none';
+        
+        // Clear the input value if changed to "No"
+        const linkInput = document.getElementById('link');
+        if (linkInput) {
+          linkInput.value = ''; 
+        }
+      }
+    }
+
+    // Add event listeners to the radio buttons
+    radioSi.addEventListener('change', toggleLinkVisibility);
+    radioNo.addEventListener('change', toggleLinkVisibility);
+  }
+
 })();
