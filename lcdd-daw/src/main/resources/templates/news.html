@@ -33,15 +33,15 @@
         <div class="row gy-4">
           {{#new}}
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="event/{{eventId}}">
+            <a class="project-card" href="/new/{{newId}}">
               <div class="project-card">
                 <div class="project-image">
-                  <img src="/event/{{eventId}}/{{eventImage}}" alt="Project" class="img-fluid">
+                  <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
                 </div>
                 <div class="project-info">
-                  <div class="project-category">{{eventTag}}</div>
-                  <h4 class="project-title">{{eventName}}</h4>
-                  <p class="project-description">{{eventDescription}}</p>
+                  <div class="project-category">{{newTag}}</div>
+                  <h4 class="project-title">{{newName}}</h4>
+                  <p class="project-description">{{newDescription}}</p>
                 </div>
               </div>
             </a>

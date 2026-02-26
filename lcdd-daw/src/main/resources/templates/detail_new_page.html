@@ -6,23 +6,22 @@
         <div class="row">
           <div class="col-lg-5">
             <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <!--Corregir dimagen mustache-->
-              <img src="/detail_new_page/{{newId}}/{{newImage}}" class="img-fluid">
+              <img src="/images/{{new.newImage.id}}" class="img-fluid">
               <div class="project-hero-overlay">
                 <div class="project-status">
                   <i class="bi bi-tag"></i>
-                  {{newTag}}
+                  {{new.newTag}}
                 </div>
               </div>
             </div>
           </div>
           <div class="col-lg-7">
             <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">{{newName}}</h1>
-              <p class="project-description">{{newDescription}}</p>
+              <h1 class="project-title">{{new.newName}}</h1>
+              <p class="project-description">{{new.newDescription}}</p>
               <div class="row">
                 <div class="col-lg-4">
-                  <form action="/removeNew/{{new.id}}" method="post">
+                  <form action="/removeNew/{{new.newId}}" method="post">
                     <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
                     <input type="hidden" name="_csrf" value="{{token}}" />
                   </form>

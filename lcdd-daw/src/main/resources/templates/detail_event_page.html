@@ -6,21 +6,20 @@
         <div class="row">
           <div class="col-lg-5">
             <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <!--No estoy seguro de cual seria la direccion de la imagen con mustache-->
-              <img src="/detail_event_page/{{eventId}}/{{eventImage}}" class="img-fluid">
+              <img src="/images/{{event.eventImage.id}}" class="img-fluid">
               <div class="project-hero-overlay">
                 <div class="project-status">
                   <i class="bi bi-tag"></i>
-                  {{eventTag}}
+                  {{event.eventTag}}
                 </div>
               </div>
             </div>
           </div>
           <div class="col-lg-7">
             <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">{{eventName}}</h1>
+              <h1 class="project-title">{{event.eventName}}</h1>
               <div class="project-description">
-                {{eventDescription}}
+                {{event.eventDescription}}
               </div>
               <div class="row">
                 <div class="col-lg-3">
@@ -32,7 +31,7 @@
               <br>
               <div class="row">
                 <div class="col-lg-4">
-                  <form action="/removeEvent/{{event.id}}" method="post">
+                  <form action="/removeEvent/{{event.eventId}}" method="post">
                     <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
                     <input type="hidden" name="_csrf" value="{{token}}" />
                   </form>

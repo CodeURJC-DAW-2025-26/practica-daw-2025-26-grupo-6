@@ -26,12 +26,17 @@ public class NewsController {
 	private ImageService imageService;
 	
 	@GetMapping("/news")
-	public String news() {
+	public String news(Model model) {
+		model.addAttribute("new", newService.findAll());
 		return "news";
 	}
 
-  @GetMapping("/detail_new_page")
-	public String detail_new_page() {
+  @GetMapping("/new/{id}")
+	public String newDetail(@PathVariable long id, Model model) {
+		Optional<New> newPost = newService.findById(id);
+		if (newPost.isPresent()) {
+			model.addAttribute("new", newPost.get());
+		}
 		return "detail_new_page";
 	}
 
@@ -49,7 +54,7 @@ public class NewsController {
 
 		newService.save(newPost);
 
-		return "news";
+		return "redirect:news";
 	}
 
 	@PostMapping("/removeNew/{id}")

@@ -6,8 +6,7 @@
         <div class="row">
           <div class="col-lg-8">
             <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <!--Corregir direccion de mustache-->
-              <img src="/detail_game_page/{{gameId}}/{{gameImage}}" class="img-fluid">
+              <img src="/images/{{game.gameImage.id}}" class="img-fluid">
               <button>
                 <div class="project-hero-overlay">
                   <div class="project-status">
@@ -20,25 +19,25 @@
           </div>
           <div class="col-lg-4">
             <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">{{gameName}}</h1>
-              <p class="project-description">{{gameDescription}}</p>
+              <h1 class="project-title">{{game.gameName}}</h1>
+              <p class="project-description">{{game.gameDescription}}</p>
               <div class="project-details">
                 <div class="detail-item">
                   <span class="label">Jugadores</span>
-                  <span class="value">{{minPlayers}} - {{maxPlayers}}</span>
+                  <span class="value">{{game.minPlayers}} - {{game.maxPlayers}}</span>
                 </div>
                 <div class="detail-item">
                   <span class="label">Duración</span>
-                  <span class="value">{{minDuration}} - {{maxDuration}}</span>
+                  <span class="value">{{game.minDuration}} - {{game.maxDuration}}</span>
                 </div>
                 <div class="detail-item">
                   <span class="label">Género</span>
-                  <span class="value">{{genre}}</span>
-                </div>
+                  <span class="value">{{game.genre}}</span>
+                </div> 
               </div>
               <div class="row">
                 <div class="col">
-                  <form action="/removeGame/{{game.id}}" method="post">
+                  <form action="/removeGame/{{game.gameId}}" method="post">
                     <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
                     <input type="hidden" name="_csrf" value="{{token}}" />
                   </form>
