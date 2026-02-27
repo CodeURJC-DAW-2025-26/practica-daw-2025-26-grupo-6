@@ -151,6 +151,13 @@ public class GamesController {
 			return "game_form";
 		}
 ;
+        Image image = imageService.createImage(imageField.getInputStream());
+        
+      
+        game.setGameImage(image);
+        
+    
+        gameService.save(game); 
 
 		return "redirect:/games";
 	}
