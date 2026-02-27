@@ -55,10 +55,13 @@ public class WebSecurityConfig {
 						// PRIVATE PAGES
 						.requestMatchers("/profile").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/event_form").hasAnyRole("REGISTERED_USER")
+						.requestMatchers("/event_form/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/new_form").hasAnyRole("REGISTERED_USER")
+						.requestMatchers("/new_form/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/removeNew/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/removeEvent/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/removeGame/*").hasAnyRole("ADMIN")
+						.requestMatchers("/game_form/*").hasAnyRole("ADMIN")
 						.requestMatchers("/game_form").hasAnyRole("ADMIN")
 						.requestMatchers("/admin/**").hasAnyRole("ADMIN"))
 				.formLogin(formLogin -> formLogin
