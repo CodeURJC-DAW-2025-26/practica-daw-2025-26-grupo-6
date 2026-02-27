@@ -23,18 +23,17 @@ public class EventService {
         return repository.findAllById(ids);
     }
 
-	public boolean exist(long id) {
-		return repository.existsById(id);
-	}
+    public boolean exist(long id) {
+        return repository.existsById(id);
+    }
 
-	public List<Event> findAll() {
-		return repository.findAll();
-	}
+    public List<Event> findAll() {
+        return repository.findAll();
+    }
 
-	public List<Event> findByFilter(String name, String tag) {
-		return repository.findByNameAndTag(name, tag);
-	}
-
+    public List<Event> findByFilter(String name, String tag) {
+        return repository.findByNameAndTag(name, tag);
+    }
 
     public void save(Event event) {
         repository.save(event);
@@ -51,4 +50,9 @@ public class EventService {
     public List<Event> findByValidatedTrue() {
         return repository.findByValidatedTrue();
     }
+
+    public List<Event> findValidatedByFilter(String name, String tag) {
+        return repository.findValidatedByNameAndTag(name, tag);
+    }
+
 }

@@ -35,4 +35,16 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByValidatedTrue();
     List<Event> findByValidatedFalse();
 
+    
+@Query("""
+     SELECT e
+     FROM Event e
+     WHERE
+       e.validated = true
+       AND (LOWER(e.eventName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '')
+       AND (LOWER(e.eventTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
+    """)
+    List<Event> findValidatedByNameAndTag(String name, String tag);
+
+
 }
