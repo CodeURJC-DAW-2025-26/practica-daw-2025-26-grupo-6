@@ -1,58 +1,62 @@
 {{>header}}
 
-  <main class="main">
-    <section id="project-details" class="project-details section">
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <img src="/images/{{game.gameImage.id}}" class="img-fluid">
-              <button>
-                <div class="project-hero-overlay">
-                  <div class="project-status">
-                    <i class="bi bi-heart heart-outline"></i>
-                    <i class="bi bi-heart-fill heart-fill"></i>
-                  </div>
+<main class="main">
+  <section id="project-details" class="project-details section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
+            <img src="/images/{{game.gameImage.id}}" class="img-fluid">
+            <button>
+              <div class="project-hero-overlay">
+                <div class="project-status">
+                  <i class="bi bi-heart heart-outline"></i>
+                  <i class="bi bi-heart-fill heart-fill"></i>
                 </div>
-              </button>
-            </div>
+              </div>
+            </button>
           </div>
-          <div class="col-lg-4">
-            <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">{{game.gameName}}</h1>
-              <p class="project-description">{{game.gameDescription}}</p>
-              <div class="project-details">
-                <div class="detail-item">
-                  <span class="label">Jugadores</span>
-                  <span class="value">{{game.minPlayers}} - {{game.maxPlayers}}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="label">Duración</span>
-                  <span class="value">{{game.minDuration}} - {{game.maxDuration}}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="label">Género</span>
-                  <span class="value">{{game.genre}}</span>
-                </div> 
+        </div>
+        <div class="col-lg-4">
+          <div class="project-info" data-aos="fade-left" data-aos-delay="300">
+            <h1 class="project-title">{{game.gameName}}</h1>
+            <p class="project-description">{{game.gameDescription}}</p>
+            <div class="project-details">
+              <div class="detail-item">
+                <span class="label">Jugadores</span>
+                <span class="value">{{game.minPlayers}} - {{game.maxPlayers}}</span>
               </div>
-              <div class="row">
-                <div class="col">
-                  <form action="/removeGame/{{game.gameId}}" method="post">
-                    <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
-                    <input type="hidden" name="_csrf" value="{{token}}" />
-                  </form>
-                </div>
-                <div class="col">
-                  <a class="submit-btn" href="game_form">
-                    <i class="bi bi-pencil-square"></i>
-                    Modificar juego
-                  </a>
-                </div>
+              <div class="detail-item">
+                <span class="label">Duración</span>
+                <span class="value">{{game.minDuration}} - {{game.maxDuration}}</span>
               </div>
+              <div class="detail-item">
+                <span class="label">Género</span>
+                <span class="value">{{game.genre}}</span>
+              </div>
+            </div>
+            <div class="row">
+
+              <div class="col-auto">
+                <a class="btn btn-link text-primary text-decoration-none p-0" href="game_form">
+                  <i class="bi bi-pencil-square me-1"></i> Modificar juego
+                </a>
+              </div>
+
+              <div class="col">
+                <form action="/removeGame/{{game.gameId}}" method="post"
+                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar este juego? Esta acción no se puede deshacer.');">
+                  <button type="submit" class="btn btn-link text-primary text-decoration-none p-0"
+                    style="box-shadow: none;">Eliminar<i class="bi bi-trash"></i></button>
+                  <input type="hidden" name="_csrf" value="{{token}}" />
+                </form>
+              </div>
+
             </div>
           </div>
         </div>
-    </section>
-  </main>
+      </div>
+  </section>
+</main>
 
 {{>footer}}

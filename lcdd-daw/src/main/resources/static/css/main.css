@@ -1190,10 +1190,10 @@ section,
 }
 
 .project-details .project-hero img {
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-  transition: all 0.4s ease;
+   object-fit: contain;
+  height: 100%;
+  width: auto;
+  max-width: 100%
 }
 
 .project-details .project-hero .project-hero-overlay {
