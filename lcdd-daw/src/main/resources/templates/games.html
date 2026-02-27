@@ -1,33 +1,35 @@
 {{>header}}
 
-  <main class="main">
-    <section id="projects" class="projects section">
-      <h1 style="text-align: center;">JUEGOS</h1>
-      <div class="container mb-4">
+<main class="main">
+  <section id="projects" class="projects section">
+    <h1 style="text-align: center;">JUEGOS</h1>
+    <div class="container mb-4">
+      <form method="get" action="/games">
         <div class="row g-2 align-items-center">
           <div class="col-12 col-md-4 col-lg-3">
-            <input class="form-control" type="search" placeholder="Buscar juegos..." aria-label="Search">
+            <input name="name" class="form-control" type="search" placeholder="Buscar juegos..." aria-label="Search">
           </div>
           <div class="col-6 col-md-2 col-lg-2">
-            <select class="form-select" aria-label="Filtrar por categoría">
+            <select name="tag" class="form-select" aria-label="Filtrar por categoría">
               <option selected value="">Categoría</option>
-              <option value="cards">Cartas</option>
-              <option value="strategy">Estrategia</option>
+              <option value="Cartas">Cartas</option>
+              <option value="Estrategia">Estrategia</option>
             </select>
           </div>
           <div class="col-6 col-md-2 col-lg-1">
-            <select class="form-select" aria-label="Filtrar por jugadores">
+            <select name="players" class="form-select" aria-label="Filtrar por jugadores">
               <option selected value="">Jug.</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+              <option value=5>+5</option>
             </select>
           </div>
           <div class="col-6 col-md-2 col-lg-2">
-            <select class="form-select" aria-label="Filtrar por duración">
+            <select name="duration" class="form-select" aria-label="Filtrar por duración">
               <option selected value="">Duración</option>
-              <option value="20 min">20 min</option>
-              <option value="30 min">30 min</option>
+              <option value=20>20 min</option>
+              <option value=30>+30 min</option>
             </select>
           </div>
           <div class="col-6 col-md-2 col-lg-2">
@@ -42,32 +44,33 @@
             </a>
           </div>
           {{/admin}}
-        </div>
-      </div>
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row gy-4">
-          {{#game}}
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="/game/{{gameId}}">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/images/{{gameImage.id}}" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">{{genre}}</div>
-                  <h4 class="project-title">{{gameName}}</h4>
-                  <p class="project-description">{{gameDescription}}</p>
-                </div>
+      </form>
+    </div>
+    </div>
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-4">
+        {{#game}}
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <a class="project-card" href="/game/{{gameId}}">
+            <div class="project-card">
+              <div class="project-image">
+                <img src="/images/{{gameImage.id}}" alt="Project" class="img-fluid">
               </div>
-            </a>
-          </div>
-          {{/game}}
-          {{^game}}
-          <div>No hay juegos</div>
-          {{/game}}
+              <div class="project-info">
+                <div class="project-category">{{genre}}</div>
+                <h4 class="project-title">{{gameName}}</h4>
+                <p class="project-description">{{gameDescription}}</p>
+              </div>
+            </div>
+          </a>
         </div>
+        {{/game}}
+        {{^game}}
+        <div>No hay juegos</div>
+        {{/game}}
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
 {{>footer}}

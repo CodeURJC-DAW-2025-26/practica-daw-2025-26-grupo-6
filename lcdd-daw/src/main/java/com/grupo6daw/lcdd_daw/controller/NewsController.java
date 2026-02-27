@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.model.New;
@@ -26,8 +27,13 @@ public class NewsController {
 	private ImageService imageService;
 	
 	@GetMapping("/news")
-	public String news(Model model) {
-		model.addAttribute("new", newService.findAll());
+	public String news(Model model,
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String tag) {
+
+		model.addAttribute("new", newService.findByFilter(name, tag));
+		model.addAttribute("name", name == null ? "" : name);
+		model.addAttribute("tag", tag == null ? "" : tag);
 		return "news";
 	}
 

@@ -41,8 +41,15 @@ public class GamesController {
 	private ImageService imageService;
 
 	@GetMapping("/games")
-	public String games(Model model) {
-		model.addAttribute("game", gameService.findAll());
+	public String games(Model model,
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String tag,
+			@RequestParam(required = false) Integer players,
+			@RequestParam(required = false) Integer duration) {
+		
+		model.addAttribute("game", gameService.findByFilter(name, tag, players, duration));
+		model.addAttribute("name", name == null ? "" : name);
+		model.addAttribute("tag", tag == null ? "" : tag);
 		return "games";
 	}
 

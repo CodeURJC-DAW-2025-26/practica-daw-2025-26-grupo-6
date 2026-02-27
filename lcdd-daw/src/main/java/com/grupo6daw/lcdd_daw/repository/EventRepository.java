@@ -1,5 +1,6 @@
 package com.grupo6daw.lcdd_daw.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -20,5 +21,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 """)
     Page<Object[]> findEventsOrderedByParticipants(Pageable pageable);
     Optional<Event> findByEventName(String eventName);
+    
+    @Query("""
+    SELECT e 
+    FROM Event e 
+    WHERE 
+    (LOWER(e.eventName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '') AND 
+    (LOWER(e.eventTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
+    """)
+    List<Event> findByNameAndTag(String name, String tag);
 
 }

@@ -31,6 +31,10 @@ public class GameService {
 		return repository.findAll();
 	}
 
+	public List<Game> findByFilter(String name, String tag, Integer players, Integer duration) {
+		return repository.findByNameAndTagAndPlayersAndDuration(name, tag, players, duration);
+	}
+
 	public void save(Game game) {
 		repository.save(game);
 	}

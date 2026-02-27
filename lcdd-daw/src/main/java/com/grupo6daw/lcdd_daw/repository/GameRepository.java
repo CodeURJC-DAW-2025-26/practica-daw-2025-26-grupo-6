@@ -1,5 +1,6 @@
 package com.grupo6daw.lcdd_daw.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -22,4 +23,14 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     """)
     Page<Object[]> findGamesOrderedByFavs(Pageable pageable);
 
+    @Query(""" 
+	  SELECT g
+	  FROM Game g
+	  WHERE
+	  (LOWER(g.gameName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '') AND
+	  (LOWER(g.genre) = LOWER(:tag) OR :tag IS NULL OR :tag = '') AND
+	  ((g.minPlayers <= :players AND g.maxPlayers >= :players) OR :players IS NULL) AND
+	  ((g.minDuration <= :duration AND g.maxDuration >= :duration) OR :duration IS NULL)
+    """)
+    List<Game> findByNameAndTagAndPlayersAndDuration(String name, String tag, Integer players, Integer duration);
 }

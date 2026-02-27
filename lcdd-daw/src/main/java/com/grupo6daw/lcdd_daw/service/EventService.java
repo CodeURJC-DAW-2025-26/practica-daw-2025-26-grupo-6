@@ -31,6 +31,10 @@ public class EventService {
 		return repository.findAll();
 	}
 
+	public List<Event> findByFilter(String name, String tag) {
+		return repository.findByNameAndTag(name, tag);
+	}
+
 	public void save(Event event) {
 		repository.save(event);
 	}
