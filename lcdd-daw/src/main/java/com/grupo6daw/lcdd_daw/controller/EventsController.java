@@ -75,7 +75,7 @@ public class EventsController {
 		model.addAttribute("hasErrors", false);
 		model.addAttribute("allErrors", new ArrayList<String>());
 
-		return "redirect:/event_form";
+		return "event_form";
 	}
 
 	@GetMapping("/event_form/{id}")

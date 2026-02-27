@@ -24,7 +24,7 @@
             <form method="post" action="/event_form" enctype="multipart/form-data" class="php-email-form">
 
               {{#event}} <div class="form">
-                <input type="hidden" name="eventId" value="{{eventId}}" />
+                <input type="hidden" name="eventId" value="{{#eventId}}{{eventId}}{{/eventId}}" />
                 <div class="form-field">
                   <label for="eventName" class="required-label">Nombre:</label>
                   <input type="text" name="eventName" id="eventName" value="{{eventName}}"
