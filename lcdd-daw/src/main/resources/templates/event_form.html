@@ -28,14 +28,14 @@
                 <div class="form-field">
                   <label for="eventName" class="required-label">Nombre:</label>
                   <input type="text" name="eventName" id="eventName" value="{{eventName}}"
-                    class="form-control {{#eventNameError}}is-invalid{{/eventNameError}}">
+                    class="form-control {{#eventNameError}}is-invalid{{/eventNameError}}" required>
                 </div>
                 <br>
 
                 <div class="form-field full-width">
                   <label for="eventDescription" class="required-label">Descripción:</label>
                   <textarea name="eventDescription" id="eventDescription" rows="5"
-                    class="form-control {{#eventDescriptionError}}is-invalid{{/eventDescriptionError}}">{{eventDescription}}</textarea>
+                    class="form-control {{#eventDescriptionError}}is-invalid{{/eventDescriptionError}}">{{eventDescription}}</textarea required>
                 </div>
                 <br>
 

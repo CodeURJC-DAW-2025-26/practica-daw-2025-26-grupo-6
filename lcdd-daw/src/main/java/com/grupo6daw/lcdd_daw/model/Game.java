@@ -11,6 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 @Entity
 public class Game {
 
@@ -18,22 +23,33 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gameId = null;
 
+    @NotBlank(message = "El nombre del juego es obligatorio")
     private String gameName;
 
     @Column(columnDefinition = "TEXT")
+    @NotBlank(message = "La descripción no puede estar vacía")
     private String gameDescription;
 
     @OneToOne
     private Image gameImage;
 
+    @NotNull(message = "Indica el mínimo de jugadores")
+    @Min(value = 1, message = "El mínimo de jugadores debe ser al menos 1")
     private Long minPlayers;
 
+    @NotNull(message = "Indica el máximo de jugadores")
+    @Min(value = 1, message = "El máximo de jugadores debe ser al menos 1")
     private Long maxPlayers;
 
+    @NotNull(message = "Indica la duración mínima")
+    @Min(value = 1, message = "La duración mínima debe ser mayor a 0")
     private Long minDuration;
 
+    @NotNull(message = "Indica la duración máxima")
+    @Min(value = 1, message = "La duración máxima debe ser mayor a 0")
     private Long maxDuration;
 
+    @NotBlank(message = "El género es obligatorio")
     private String genre;
 
     @ManyToMany(mappedBy = "userFavGames")
