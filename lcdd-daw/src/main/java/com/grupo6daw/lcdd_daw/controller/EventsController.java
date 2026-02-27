@@ -2,29 +2,27 @@ package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.Event;
+import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 
-import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import org.springframework.security.web.csrf.CsrfToken;
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.List;
+import jakarta.validation.Valid;
 
 @Controller
 public class EventsController {
@@ -37,7 +35,7 @@ public class EventsController {
 
 	@GetMapping("/events")
 	public String events(Model model) {
-		model.addAttribute("event", eventService.findAll());
+		model.addAttribute("event", eventService.findByValidatedTrue());
 		return "events";
 	}
 

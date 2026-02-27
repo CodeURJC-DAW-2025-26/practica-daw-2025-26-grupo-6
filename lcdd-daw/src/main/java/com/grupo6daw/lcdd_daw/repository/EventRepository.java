@@ -1,5 +1,6 @@
 package com.grupo6daw.lcdd_daw.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -19,6 +20,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     ORDER BY COUNT(DISTINCT u) DESC, e.eventName ASC
 """)
     Page<Object[]> findEventsOrderedByParticipants(Pageable pageable);
+
     Optional<Event> findByEventName(String eventName);
+
+    List<Event> findByValidatedTrue();
+    List<Event> findByValidatedFalse();
 
 }
