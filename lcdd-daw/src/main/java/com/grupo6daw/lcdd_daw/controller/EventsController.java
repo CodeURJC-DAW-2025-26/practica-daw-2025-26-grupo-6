@@ -139,4 +139,16 @@ public class EventsController {
 
 		return "redirect:/events";
 	}
+
+	@PostMapping("/removeEvent/{id}")
+	public String removeEvent(Model model, @PathVariable long id) {
+
+		Optional<Event> event = eventService.findById(id);
+		if (event.isPresent()) {
+			eventService.delete(id);
+			model.addAttribute("event", event.get());
+		}
+		
+		return "redirect:/events";
+	}
 }
