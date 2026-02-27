@@ -13,7 +13,7 @@
               <form method="post" id="registerForm" action="/register" method="post"  class="php-email-form">
                 <div class="form">
                   <div class="form-field">
-                    <label for="email">Correo electrónico:</label>
+                    <label for="email" class="required-label">Correo electrónico:</label>
                     <input type="email" name="email" id="email" value="{{email}}" {{#invalidEmail}}class="is-invalid"{{/invalidEmail}} required>
                     <div class="invalid-feedback">
                       Ya existe un usuario con este email.
@@ -21,12 +21,12 @@
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="password">Contraseña:</label>
+                    <label for="password" class="required-label">Contraseña:</label>
                     <input type="password" name="password" id="password" value="{{password}}" minlength="4" required>
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="confirm-password">Confirmar contraseña:</label>
+                    <label for="confirm-password" class="required-label">Confirmar contraseña:</label>
                     <input type="password" name="confirm-password" id="confirm-password" value="{{password}}" minlength="4" required>
                     <div class="invalid-feedback">
                       Las contraseñas deben ser iguales.
@@ -34,18 +34,18 @@
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="name">Nombre:</label>
-                    <input type="name" name="name" id="name" value="{{name}}" required>
+                    <label for="name" class="required-label">Nombre:</label>
+                    <input type="text" name="name" id="name" value="{{name}}" required>
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="surnames">Apellidos:</label>
-                    <input type="surnames" name="surnames" id="surnames" value="{{surnames}}" required>
+                    <label for="surnames" class="required-label">Apellidos:</label>
+                    <input type="text" name="surnames" id="surnames" value="{{surnames}}" required>
                   </div>
                   <br>
                   <div class="form-field">
-                    <label for="nickname">Nickname:</label>
-                    <input type="nickname" name="nickname" id="nickname" value="{{nickname}}" required>
+                    <label for="nickname" class="required-label">Nickname:</label>
+                    <input type="text" name="nickname" id="nickname" value="{{nickname}}" required>
                   </div>
                   <br>
                   <div class="row">
