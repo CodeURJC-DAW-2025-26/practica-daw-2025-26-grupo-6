@@ -34,8 +34,13 @@ public class EventsController {
 	private ImageService imageService;
 
 	@GetMapping("/events")
-	public String events(Model model) {
-		model.addAttribute("event", eventService.findByValidatedTrue());
+	public String events(Model model,
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String tag) {
+
+		model.addAttribute("event", eventService.findByFilter(name, tag));
+		model.addAttribute("name", name == null ? "" : name);
+		model.addAttribute("tag", tag == null ? "" : tag);
 		return "events";
 	}
 

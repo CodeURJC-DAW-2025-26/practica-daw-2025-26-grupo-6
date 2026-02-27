@@ -4,22 +4,24 @@
     <section id="projects" class="projects section">
       <h1 style="text-align: center;">EVENTOS</h1>
       <div class="container mb-4">
-        <div class="row g-2 align-items-center">
-          <div class="col-12 col-md-5 col-lg-6">
-            <input class="form-control" type="search" placeholder="Buscar eventos..." aria-label="Search">
-          </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <select class="form-select" aria-label="Filtrar por categoría">
-              <option selected value="">Filtrar categoría</option>
-              <option value="boardgames">Juegos de mesa</option>
-              <option value="rol">Rol</option>
-            </select>
-          </div>
-          <div class="col-6 col-md-2 col-lg-2">
-            <button class="btn_lcdd w-100" type="submit">
-              <i class="bi bi-search"></i> Buscar
-            </button>
-          </div>
+        <form method="get" action="/events">
+          <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-5 col-lg-6">
+              <input name="name" class="form-control" type="search" placeholder="Buscar eventos..." aria-label="Search">
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+              <select name="tag" class="form-select" aria-label="Filtrar por categoría">
+                <option selected value="">Filtrar categoría</option>
+                <option value="Juegos de mesa">Juegos de mesa</option>
+                <option value="Rol">Rol</option>
+                <option value="Cartas">Cartas</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-2 col-lg-2">
+              <button class="btn_lcdd w-100" type="submit">
+                <i class="bi bi-search"></i> Buscar
+              </button>
+            </div>
           {{#logged}}
           <div class="col-12 col-md-2 col-lg-2">
             <a href="event_form" class="btn_lcdd_black w-100">
@@ -27,6 +29,7 @@
             </a>
           </div>
           {{/logged}}
+          </form>
         </div>
       </div>
 

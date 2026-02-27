@@ -4,22 +4,24 @@
     <section id="projects" class="projects section">
       <h1 style="text-align: center;">NOTICIAS</h1>
       <div class="container mb-4">
-        <div class="row g-2 align-items-center">
-          <div class="col-12 col-md-5 col-lg-6">
-            <input class="form-control" type="search" placeholder="Buscar noticias..." aria-label="Search">
-          </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <select class="form-select" aria-label="Filtrar por tema">
-              <option selected value="">Filtrar por tema</option>
-              <option value="changes">Cambios</option>
-              <option value="event">Evento</option>
-            </select>
-          </div>
-          <div class="col-6 col-md-2 col-lg-2">
-            <button class="btn_lcdd w-100" type="submit">
-              <i class="bi bi-search"></i> Buscar
-            </button>
-          </div>
+        <form method="get" action="/news">
+          <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-5 col-lg-6">
+              <input name="name" class="form-control" type="search" placeholder="Buscar noticias..." aria-label="Search">
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+              <select name="tag" class="form-select" aria-label="Filtrar por tema">
+                <option selected value="">Filtrar por tema</option>
+                <option value="Cambios">Cambios</option>
+                <option value="Evento">Evento</option>
+                <option value="Rol">Rol</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-2 col-lg-2">
+              <button class="btn_lcdd w-100" type="submit">
+                <i class="bi bi-search"></i> Buscar
+              </button>
+            </div>
           {{#logged}}
           <div class="col-12 col-md-2 col-lg-2">
             <a href="new_form" class="btn_lcdd_black w-100">
@@ -27,6 +29,7 @@
             </a>
           </div>
           {{/logged}}
+          </form>
         </div>
       </div>
       <div class="container" data-aos="fade-up" data-aos-delay="100">

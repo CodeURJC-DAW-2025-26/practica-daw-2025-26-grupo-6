@@ -31,6 +31,10 @@ public class NewService {
 		return repository.findAll();
 	}
 
+	public List<New> findByFilter(String name, String tag) {
+		return repository.findByNameAndTag(name, tag);
+	}
+
 	public void save(New newEntity) {
 		repository.save(newEntity);
 	}
