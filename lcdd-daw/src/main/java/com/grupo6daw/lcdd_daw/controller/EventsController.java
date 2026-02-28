@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.model.User;
+import com.grupo6daw.lcdd_daw.service.UserService;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 
@@ -33,6 +35,9 @@ public class EventsController {
 	@Autowired
 	private ImageService imageService;
 
+	@Autowired
+	private UserService userService;
+
 	@GetMapping("/events")
 	public String events(Model model,
 			@RequestParam(required = false) String name,
@@ -45,10 +50,20 @@ public class EventsController {
 	}
 
 	@GetMapping("/event/{id}")
-	public String eventDetail(@PathVariable long id, Model model) {
+	public String eventDetail(@PathVariable long id, Model model, HttpServletRequest request) {
 		Optional<Event> event = eventService.findById(id);
 		if (event.isPresent()) {
 			model.addAttribute("event", event.get());
+
+			boolean hasEditPermission = false;
+			if (request.getUserPrincipal() != null) {
+				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+				boolean isOwner = event.get().getEventCreator() != null
+						&& event.get().getEventCreator().getUserId().equals(currentUserId);
+				boolean isAdmin = request.isUserInRole("ADMIN");
+				hasEditPermission = isOwner || isAdmin;
+			}
+			model.addAttribute("hasEditPermission", hasEditPermission);
 		}
 		return "detail_event_page";
 	}
@@ -105,65 +120,68 @@ public class EventsController {
 	}
 
 	@PostMapping("/event_form")
-	public String saveEvent(HttpServletRequest request,
-			@Valid Event event,
-			BindingResult bindingResult,
-			@RequestParam("imageField") MultipartFile imageField,
-			Model model) throws IOException {
+	public String saveEvent(Model model, @Valid Event event, BindingResult bindingResult,
+			@RequestParam("imageField") MultipartFile imageField, HttpServletRequest request) throws IOException {
 
 		List<String> errorMessages = new ArrayList<>();
-
 		boolean isNewEvent = (event.getEventId() == null);
 
-		if (event.isRequiresRegistration() && (event.getLink() == null || event.getLink().trim().isEmpty())) {
-			bindingResult.rejectValue("link", "error.link", "El enlace es obligatorio si activas el registro");
+	
+		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+		User currentUser = userService.getUser(currentUserId).orElseThrow();
+
+		if (!isNewEvent) {
+			Event existingEvent = eventService.findById(event.getEventId()).get();
+			boolean isOwner = existingEvent.getEventCreator() != null
+					&& existingEvent.getEventCreator().getUserId().equals(currentUserId);
+			boolean isAdmin = request.isUserInRole("ADMIN");
+
+			if (!isOwner && !isAdmin) {
+				return "redirect:/events?error=unauthorized";
+			}
+
+			event.setEventCreator(existingEvent.getEventCreator());
+		} else {
+
+			event.setEventCreator(currentUser);
 		}
 
-		if (bindingResult.hasErrors() || (isNewEvent && imageField.isEmpty())) {
+		if (bindingResult.hasFieldErrors("eventName")) {
+			errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
+		}
+		if (bindingResult.hasFieldErrors("eventDescription")) {
+			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
+		}
 
-			if (bindingResult.hasFieldErrors("eventName")) {
-				errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
+		if (event.isRequiresRegistration()) {
+			if (event.getLink() == null || event.getLink().trim().isEmpty()) {
+				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
 			}
+		} else {
+			event.setLink("");
+		}
 
-			if (bindingResult.hasFieldErrors("eventDescription")) {
-				errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
-			}
+		if (event.getEventTag() == null)
+			event.setEventTag("");
 
-			if (isNewEvent && imageField.isEmpty()) {
-				errorMessages.add("Por favor, sube una imagen para el evento");
-				model.addAttribute("imageError", "La imagen es obligatoria");
-			}
+		if (isNewEvent && imageField.isEmpty()) {
+			errorMessages.add("Debes adjuntar una imagen para el evento.");
+		}
 
-			if (event.getLink() == null)
-				event.setLink("");
-			if (event.getEventTag() == null)
-				event.setEventTag("");
-
-			if (bindingResult.hasFieldErrors("link")) {
-
-				errorMessages.add(bindingResult.getFieldError("link").getDefaultMessage());
-			}
-
+		if (!errorMessages.isEmpty()) {
 			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 			if (csrfToken != null)
 				model.addAttribute("token", csrfToken.getToken());
-
 			model.addAttribute("hasErrors", true);
 			model.addAttribute("allErrors", errorMessages);
 			model.addAttribute("event", event);
-
-			if (event.getEventTag() == null)
-				event.setEventTag("");
-
 			return "event_form";
 		}
 
 		if (!imageField.isEmpty()) {
-			// If the user uploads a new image, we create it and set it to the event
 			Image image = imageService.createImage(imageField.getInputStream());
 			event.setEventImage(image);
 		} else if (!isNewEvent) {
-			// If not new event and no new image uploaded, we keep the old image
 			Event oldEvent = eventService.findById(event.getEventId()).get();
 			event.setEventImage(oldEvent.getEventImage());
 		}

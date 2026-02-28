@@ -29,9 +29,8 @@
               </div>
             </div>
             <br>
+            {{#hasEditPermission}}
             <div class="row mt-3 align-items-center">
-
-
               <div class="col-auto">
                 <a class="btn btn-link text-primary text-decoration-none p-0" href="/event_form/{{event.eventId}}">
                   <i class="bi bi-pencil-square me-1"></i> Modificar evento
@@ -39,7 +38,8 @@
               </div>
 
               <div class="col-auto">
-                <form action="/removeEvent/{{event.eventId}}" method="post" class="m-0" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.');">
+                <form action="/removeEvent/{{event.eventId}}" method="post" class="m-0"
+                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.');">
                   <button type="submit" class="btn btn-link text-primary text-decoration-none p-0"
                     style="box-shadow: none;">
                     <i class="bi bi-trash me-1"></i> Eliminar
@@ -48,6 +48,7 @@
                 </form>
               </div>
             </div>
+            {{/hasEditPermission}}
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ public class GamesController {
 			@RequestParam(required = false) String tag,
 			@RequestParam(required = false) Integer players,
 			@RequestParam(required = false) Integer duration) {
-		
+
 		model.addAttribute("game", gameService.findByFilter(name, tag, players, duration));
 		model.addAttribute("name", name == null ? "" : name);
 		model.addAttribute("tag", tag == null ? "" : tag);
@@ -54,10 +54,16 @@ public class GamesController {
 	}
 
 	@GetMapping("/game/{id}")
-	public String gameDetail(@PathVariable long id, Model model) {
+	public String gameDetail(@PathVariable long id, Model model, HttpServletRequest request) {
 		Optional<Game> game = gameService.findById(id);
 		if (game.isPresent()) {
 			model.addAttribute("game", game.get());
+
+			boolean hasEditPermission = false;
+			if (request.getUserPrincipal() != null) {
+				hasEditPermission = request.isUserInRole("ADMIN");
+			}
+			model.addAttribute("hasEditPermission", hasEditPermission);
 		}
 		return "detail_game_page";
 	}
@@ -83,6 +89,22 @@ public class GamesController {
 		return "game_form";
 	}
 
+	@GetMapping("/game_form/{id}")
+	public String editGameForm(@PathVariable long id, Model model, HttpServletRequest request) {
+		Optional<Game> game = gameService.findById(id);
+		if (game.isPresent()) {
+			model.addAttribute("game", game.get());
+			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+			if (csrfToken != null) {
+				model.addAttribute("token", csrfToken.getToken());
+			}
+			model.addAttribute("hasErrors", false);
+			model.addAttribute("allErrors", new ArrayList<String>());
+			return "game_form";
+		}
+		return "redirect:/games";
+	}
+
 	@PostMapping("/game_form")
 	public String saveGame(HttpServletRequest request,
 			@Valid Game game,
@@ -91,65 +113,46 @@ public class GamesController {
 			Model model) throws IOException {
 
 		List<String> errorMessages = new ArrayList<>();
+		boolean isNewGame = (game.getGameId() == null);
 
-	
+		if (game.getMinPlayers() != null && game.getMaxPlayers() != null) {
+			if (game.getMinPlayers() > game.getMaxPlayers()) {
+				bindingResult.rejectValue("maxPlayers", "error.maxPlayers",
+						"El máximo de jugadores no puede ser menor que el mínimo.");
+			}
+		}
 
-    // Check the players count (if both are provided)
+		if (game.getMinDuration() != null && game.getMaxDuration() != null) {
+			if (game.getMinDuration() > game.getMaxDuration()) {
+				bindingResult.rejectValue("maxDuration", "error.maxDuration",
+						"La duración máxima no puede ser menor que la mínima.");
+			}
+		}
 
-    if (game.getMinPlayers() != null && game.getMaxPlayers() != null) {
-        if (game.getMinPlayers() > game.getMaxPlayers()) {
-            // If minPlayers is greater than maxPlayers, we add an error to the BindingResult
-            bindingResult.rejectValue("maxPlayers", "error.maxPlayers", "El máximo de jugadores no puede ser menor que el mínimo.");
-        }
-    }
+		if (isNewGame && imageField.isEmpty()) {
+			errorMessages.add("Por favor, sube una imagen de portada para el juego");
+		}
 
-    // Check the duration (if both are provided)
-    if (game.getMinDuration() != null && game.getMaxDuration() != null) {
-        if (game.getMinDuration() > game.getMaxDuration()) {
-            bindingResult.rejectValue("maxDuration", "error.maxDuration", "La duración máxima no puede ser menor que la mínima.");
-        }
-    }
+		if (bindingResult.hasErrors() || !errorMessages.isEmpty()) {
 
-
-		if (bindingResult.hasErrors() || imageField.isEmpty()) {
-
-
-			if (bindingResult.hasFieldErrors("gameName")) {
+			if (bindingResult.hasFieldErrors("gameName"))
 				errorMessages.add(bindingResult.getFieldError("gameName").getDefaultMessage());
-			}
-
-			if (bindingResult.hasFieldErrors("gameDescription")) {
+			if (bindingResult.hasFieldErrors("gameDescription"))
 				errorMessages.add(bindingResult.getFieldError("gameDescription").getDefaultMessage());
-			}
-
-			if (bindingResult.hasFieldErrors("genre")) {
+			if (bindingResult.hasFieldErrors("genre"))
 				errorMessages.add(bindingResult.getFieldError("genre").getDefaultMessage());
-			}
-
-			if (bindingResult.hasFieldErrors("minPlayers")) {
+			if (bindingResult.hasFieldErrors("minPlayers"))
 				errorMessages.add(bindingResult.getFieldError("minPlayers").getDefaultMessage());
-			}
-
-			if (bindingResult.hasFieldErrors("maxPlayers")) {
+			if (bindingResult.hasFieldErrors("maxPlayers"))
 				errorMessages.add(bindingResult.getFieldError("maxPlayers").getDefaultMessage());
-			}
-
-			if (bindingResult.hasFieldErrors("minDuration")) {
+			if (bindingResult.hasFieldErrors("minDuration"))
 				errorMessages.add(bindingResult.getFieldError("minDuration").getDefaultMessage());
-			}
-
-			if (bindingResult.hasFieldErrors("maxDuration")) {
+			if (bindingResult.hasFieldErrors("maxDuration"))
 				errorMessages.add(bindingResult.getFieldError("maxDuration").getDefaultMessage());
-			}
-
-			if (imageField.isEmpty()) {
-				errorMessages.add("Por favor, sube una imagen de portada para el juego");
-			}
 
 			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-			if (csrfToken != null) {
+			if (csrfToken != null)
 				model.addAttribute("token", csrfToken.getToken());
-			}
 
 			model.addAttribute("hasErrors", true);
 			model.addAttribute("allErrors", errorMessages);
@@ -157,15 +160,16 @@ public class GamesController {
 
 			return "game_form";
 		}
-;
-        Image image = imageService.createImage(imageField.getInputStream());
-        
-      
-        game.setGameImage(image);
-        
-    
-        gameService.save(game); 
 
+		if (!imageField.isEmpty()) {
+			Image image = imageService.createImage(imageField.getInputStream());
+			game.setGameImage(image);
+		} else if (!isNewGame) {
+			Game oldGame = gameService.findById(game.getGameId()).get();
+			game.setGameImage(oldGame.getGameImage());
+		}
+
+		gameService.save(game);
 		return "redirect:/games";
 	}
 

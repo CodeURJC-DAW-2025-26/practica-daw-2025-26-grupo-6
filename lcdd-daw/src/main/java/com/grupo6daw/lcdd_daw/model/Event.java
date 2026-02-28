@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -43,7 +44,7 @@ public class Event {
     @ManyToMany(mappedBy = "userRegisteredEvents")
     private Set<User> eventRegisteredUsers = new HashSet<>();
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "fk_creator") // Forcing column to change name to 'fk_creator'
     private User eventCreator;
 
