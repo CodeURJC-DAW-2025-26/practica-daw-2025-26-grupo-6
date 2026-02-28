@@ -21,10 +21,11 @@ public class New {
   private Long newId = null;
 
   @NotBlank(message = "El nombre/título de la noticia es obligatorio")
-  @Size(min = 3, max = 100, message = "El título debe tener entre 3 y 100 caracteres")
+  @Size(min = 10, max = 100, message = "El título debe tener entre 10 y 100 caracteres")
   private String newName;
 
   @NotBlank(message = "La descripción no puede estar vacía")
+  @Size(min = 50, max = 3000, message = "La descripción debe tener entre 50 y 3000 caracteres")
   @Column(columnDefinition = "TEXT")
   private String newDescription;
 
