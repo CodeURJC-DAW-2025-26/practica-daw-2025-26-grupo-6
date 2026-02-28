@@ -129,6 +129,42 @@ public class EventsController {
 		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
 		User currentUser = userService.getUser(currentUserId).orElseThrow();
 
+		// Error check (@Valid)
+		if (bindingResult.hasFieldErrors("eventName")) {
+			errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
+		}
+		if (bindingResult.hasFieldErrors("eventDescription")) {
+			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
+		}
+
+		// Checking the registration requirement and link)
+		if (event.isRequiresRegistration()) {
+			if (event.getLink() == null || event.getLink().trim().isEmpty()) {
+				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
+			}
+		} else {
+			// if the event doesn't require registration, we ignore any link provided and set it to null
+			event.setLink(null);
+		}
+
+		// Image validation (only for new events, for existing ones we allow them to keep their old image if they don't upload a new one)
+		if (isNewEvent && imageField.isEmpty()) {
+			errorMessages.add("Debes adjuntar una imagen para el evento.");
+		}
+
+		// if the image is provided, we check if it's a valid image file (by checking the content type)
+		if (!errorMessages.isEmpty()) {
+			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+			if (csrfToken != null) {
+				model.addAttribute("token", csrfToken.getToken());
+			}
+			model.addAttribute("hasErrors", true);
+			model.addAttribute("allErrors", errorMessages);
+			model.addAttribute("event", event);
+			return "event_form";
+		}
+
+		// OWNER CHECK (if it's a new event, we set the owner to the current user, if it's an existing event, we check if the current user is the owner or an admin, if not, we redirect to the events page with an error)
 		if (!isNewEvent) {
 			Event existingEvent = eventService.findById(event.getEventId()).get();
 			boolean isOwner = existingEvent.getEventCreator() != null
@@ -141,40 +177,12 @@ public class EventsController {
 
 			event.setEventCreator(existingEvent.getEventCreator());
 		} else {
-
 			event.setEventCreator(currentUser);
 		}
 
-		if (bindingResult.hasFieldErrors("eventName")) {
-			errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
-		}
-		if (bindingResult.hasFieldErrors("eventDescription")) {
-			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
-		}
-
-		if (event.isRequiresRegistration()) {
-			if (event.getLink() == null || event.getLink().trim().isEmpty()) {
-				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
-			}
-		} else {
-			event.setLink("");
-		}
-
-		if (event.getEventTag() == null)
+		// IMAGE HANDLING (if a new image is uploaded, we create a new Image entity and set it to the event, if it's an existing event and no new image is uploaded, we keep the old image)
+		if (event.getEventTag() == null) {
 			event.setEventTag("");
-
-		if (isNewEvent && imageField.isEmpty()) {
-			errorMessages.add("Debes adjuntar una imagen para el evento.");
-		}
-
-		if (!errorMessages.isEmpty()) {
-			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-			if (csrfToken != null)
-				model.addAttribute("token", csrfToken.getToken());
-			model.addAttribute("hasErrors", true);
-			model.addAttribute("allErrors", errorMessages);
-			model.addAttribute("event", event);
-			return "event_form";
 		}
 
 		if (!imageField.isEmpty()) {
@@ -185,6 +193,7 @@ public class EventsController {
 			event.setEventImage(oldEvent.getEventImage());
 		}
 
+		// Finally, we save the event
 		eventService.save(event);
 
 		return "redirect:/events";
@@ -199,7 +208,6 @@ public class EventsController {
 			boolean isAdmin = request.isUserInRole("ADMIN");
 			boolean isOwner = false;
 
-			
 			if (request.getUserPrincipal() != null) {
 				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
 				isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);

@@ -1,13 +1,14 @@
 {{>header}}
 
 <main class="main">
-  <section id="quote" class="quote section">
-    <div class="container" data-aos="fade-up">
+  <section id="quote" class="quote section pt-0">
+    <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-10">
           <div class="quote-form">
             <div class="form-intro">
-              <h3>Añadir o modificar evento</h3>
+              <h3>Añadir o modificar un evento</h3>
+              <p>Rellena los campos para añadir o modificar un evento.</p>
             </div>
 
             {{#hasErrors}}
@@ -15,59 +16,82 @@
               style="border-left: 5px solid #890f00;">
               <strong><i class="bi bi-exclamation-triangle-fill me-2"></i> Ups! Hay errores:</strong>
               <ul class="mt-2 mb-0">
-                {{#allErrors}} <li>{{.}}</li> {{/allErrors}}
+                {{#allErrors}}
+                <li>{{.}}</li>
+                {{/allErrors}}
               </ul>
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {{/hasErrors}}
 
-            <form method="post" action="/event_form" enctype="multipart/form-data" class="php-email-form">
-
-              {{#event}} <div class="form">
+            <form method="post" action="/event_form" enctype="multipart/form-data"
+              class="custom-login-form needs-validation" novalidate>
+              {{#event}}
+              <div class="form">
                 <input type="hidden" name="eventId" value="{{#eventId}}{{eventId}}{{/eventId}}" />
+
                 <div class="form-field">
-                  <label for="eventName" class="required-label">Nombre:</label>
-                  <input type="text" name="eventName" id="eventName" value="{{eventName}}"
-                    class="form-control {{#eventNameError}}is-invalid{{/eventNameError}}">
+                  <label for="eventName" class="required-label">Nombre del evento:</label>
+                  <input type="text" class="form-control" name="eventName" id="eventName" value="{{eventName}}"
+                    minlength="5" maxlength="100" required>
+                  <div class="invalid-feedback">
+                    El nombre del evento debe tener entre 5 y 100 caracteres.
+                  </div>
                 </div>
                 <br>
 
                 <div class="form-field full-width">
                   <label for="eventDescription" class="required-label">Descripción:</label>
-                  <textarea name="eventDescription" id="eventDescription" rows="5"
-                    class="form-control {{#eventDescriptionError}}is-invalid{{/eventDescriptionError}}">{{eventDescription}}</textarea>
+                  <textarea name="eventDescription" id="eventDescription" rows="5" class="form-control" minlength="50"
+                    maxlength="3000" required>{{eventDescription}}</textarea>
+                  <div class="invalid-feedback">
+                    La descripción debe tener entre 50 y 3000 caracteres.
+                  </div>
                 </div>
                 <br>
 
                 <div class="form-field">
                   <label for="eventTag">Tag del evento:</label>
-                  <input type="text" name="eventTag" id="eventTag" value="{{eventTag}}" class="form-control">
+                  <input type="text" name="eventTag" id="eventTag" value="{{eventTag}}">
                 </div>
                 <br>
 
                 <div class="form-field">
                   <label for="imageField" class="required-label">Imagen del evento:</label>
-                  <input type="file" name="imageField" id="imageField"
-                    class="form-control {{#imageError}}is-invalid{{/imageError}}" accept="image/*">
+                  {{#eventId}}
+                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*">
+                  {{/eventId}}
+
+                  {{^eventId}}
+                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*" required>
+                  {{/eventId}}
+                  <div class="invalid-feedback">
+                    Por favor, sube una imagen válida para el evento.
+                  </div>
                 </div>
                 <br>
 
                 <div class="form-field">
                   <label class="mb-2">¿El evento requiere registro?</label>
                   <div class="btn-group w-100" role="group">
+
                     {{#requiresRegistration}}
-                    <input type="radio" class="btn-check" name="requiresRegistration" id="req-si" value="true" checked>
+                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-si"
+                      value="true" checked>
                     {{/requiresRegistration}}
                     {{^requiresRegistration}}
-                    <input type="radio" class="btn-check" name="requiresRegistration" id="req-si" value="true">
+                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-si"
+                      value="true">
                     {{/requiresRegistration}}
                     <label class="btn btn-outline-primary py-2" for="req-si">Sí</label>
 
                     {{#requiresRegistration}}
-                    <input type="radio" class="btn-check" name="requiresRegistration" id="req-no" value="false">
+                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-no"
+                      value="false">
                     {{/requiresRegistration}}
                     {{^requiresRegistration}}
-                    <input type="radio" class="btn-check" name="requiresRegistration" id="req-no" value="false" checked>
+                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-no"
+                      value="false" checked>
                     {{/requiresRegistration}}
                     <label class="btn btn-outline-secondary py-2" for="req-no">No</label>
                   </div>
@@ -76,35 +100,40 @@
 
                 {{#requiresRegistration}}
                 <div id="link-container" class="form-field" style="display: block;">
-                  {{/requiresRegistration}}
-
-                  {{^requiresRegistration}}
-                  <div id="link-container" class="form-field" style="display: none;">
-                    {{/requiresRegistration}}
-
-                    <label for="link" class="required-label">Enlace de registro:</label>
-                    <input type="text" name="link" id="link" value="{{link}}"
-                      class="form-control {{#linkError}}is-invalid{{/linkError}}">
-
-                    {{#linkError}}
-                    <div class="invalid-feedback text-danger" style="display: block;">
-                      {{linkError}}
-                    </div>
-                    {{/linkError}}
-                  </div>
-
-                </div> {{/event}} <div class="row mt-4">
-                  <div class="col-lg-3">
-                    <a href="/events" class="submit-btn text-center pt-2"
-                      style="text-decoration:none; display:block;">Atrás</a>
-                  </div>
-                  <div class="col-lg-2"></div>
-                  <div class="col-lg-3">
-                    <button type="submit" class="submit-btn"><span>Guardar Evento</span></button>
+                  <label for="link" class="required-label">Enlace de registro:</label>
+                  <input type="url" name="link" id="link" value="{{link}}" class="form-control" required>
+                  <div class="invalid-feedback">
+                    Por favor, introduce un enlace web válido (ej: https://forms.gle/...).
                   </div>
                 </div>
+                {{/requiresRegistration}}
 
-                <input type="hidden" name="_csrf" value="{{token}}" />
+                {{^requiresRegistration}}
+                <div id="link-container" class="form-field" style="display: none;">
+                  <label for="link" class="required-label">Enlace de registro:</label>
+                  <input type="url" name="link" id="link" value="{{link}}" class="form-control">
+                  <div class="invalid-feedback">
+                    Por favor, introduce un enlace web válido (ej: https://forms.gle/...).
+                  </div>
+                </div>
+                {{/requiresRegistration}}
+
+              </div>
+              {{/event}}
+
+              <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-2">
+                <a href="/events" class="submit-btn"
+                  style="background: #6c757d; margin-top: 0; justify-content: center; display: flex; text-decoration: none;">
+                  <i class="bi bi-arrow-left"></i>
+                  <span class="ms-2">Atrás</span>
+                </a>
+                <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center; display: flex;">
+                  <span class="me-2">Guardar Evento</span>
+                  <i class="bi bi-check2-circle"></i>
+                </button>
+              </div>
+
+              <input type="hidden" name="_csrf" value="{{token}}" />
 
             </form>
           </div>
@@ -115,3 +144,26 @@
 </main>
 
 {{>footer}}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const radios = document.querySelectorAll('.radio-registro');
+    const linkContainer = document.getElementById('link-container');
+    const linkInput = document.getElementById('link');
+
+    function toggleLinkValidation() {
+      const isSi = document.getElementById('req-si').checked;
+
+      if (isSi) {
+        linkContainer.style.display = 'block';
+        linkInput.setAttribute('required', 'true');
+      } else {
+        linkContainer.style.display = 'none';
+        linkInput.removeAttribute('required');
+        linkInput.classList.remove('is-invalid'); // Limpia el borde rojo si se oculta
+      }
+    }
+
+    radios.forEach(radio => radio.addEventListener('change', toggleLinkValidation));
+  });
+</script>

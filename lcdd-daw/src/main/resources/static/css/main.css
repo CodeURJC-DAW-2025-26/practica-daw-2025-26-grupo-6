@@ -1819,3 +1819,31 @@ section,
 .btn-group .btn {
   padding: 10px 20px;
 }
+
+/* main red button */
+.btn-caverna-primary {
+  background-color: #a71b12;
+  border: 2px solid #a71b12;
+  color: #ffffff;
+  transition: all 0.3s ease-out;
+}
+
+.btn-caverna-primary:hover {
+  background-color: #890f00;
+  border-color: #890f00;
+  color: #ffffff;
+}
+
+/* Secondary button events (Outline) */
+.btn-caverna-outline {
+  background-color: transparent;
+  border: 2px solid #212529;
+  color: #212529;
+  transition: all 0.3s ease-out;
+}
+
+.btn-caverna-outline:hover {
+  background-color: #212529;
+  border-color: #212529;
+  color: #ffffff;
+}
