@@ -1,7 +1,11 @@
 package com.grupo6daw.lcdd_daw.service;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -9,9 +13,14 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.grupo6daw.lcdd_daw.dto.ProfileUpdateDTO;
 import com.grupo6daw.lcdd_daw.dto.UserRegistrationDto;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.User;
@@ -19,6 +28,9 @@ import com.grupo6daw.lcdd_daw.repository.UserRepository;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -56,7 +68,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Optional<User> getUser(Long id) {
+    public Optional<User> getUser(long id) {
         return userRepository.findById(id);
     }
 
@@ -67,7 +79,61 @@ public class UserService {
         if (imageOptional.isPresent() && imageOptional.get().getImageFile() != null) {
             return new InputStreamResource(imageOptional.get().getImageFile().getBinaryStream());
         } else {
-            return new ClassPathResource("static/img/default_profile.png");
+            return new ClassPathResource("static/img/person/Portrait_Placeholder.png");
+        }
+    }
+
+    public void updateProfile(long id, ProfileUpdateDTO dto) throws IOException {
+        Exception error = null;
+        User user = userRepository.findById(id).orElseThrow();
+        user.setUserNickname(dto.getNickname());
+        user.setUserName(dto.getName());
+        user.setUserSurname(dto.getSurnames());
+        user.setUserInterests(dto.getInterests());
+        
+        MultipartFile file = dto.getProfileImage();
+        if (file != null && !file.isEmpty()) {
+            try {
+                user.setUserImage(new Image(new SerialBlob(file.getBytes())));
+            } catch (Exception e) {
+                error = e;
+            }
+        }
+        
+        // If error when changing image, apply everything else and throw
+        userRepository.save(user);
+        if (error != null) {
+            throw new IOException("Failed to create image blob", error);
+        }
+    }
+
+    public void deleteUser(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            forceLogoutUser(id);
+            userRepository.deleteById(id);
+        }
+    }
+
+    private void forceLogoutUser(long id) {
+        // 1. Get all "principals" (logged-in users)
+        List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+
+        for (Object principal : allPrincipals) {
+            if (principal instanceof UserDetails userDetails) {
+                long userId = Long.parseLong(userDetails.getUsername());
+                // 2. Check if this is the user we want to boot
+                if (id == userId) {
+                    // 3. Get all active sessions for this user
+                    List<SessionInformation> sessions = sessionRegistry.getAllSessions(principal, false);
+                    
+                    for (SessionInformation session : sessions) {
+                        // 4. Mark the session as expired
+                        session.expireNow();
+                    }
+                    return;
+                }
+            }
         }
     }
 
