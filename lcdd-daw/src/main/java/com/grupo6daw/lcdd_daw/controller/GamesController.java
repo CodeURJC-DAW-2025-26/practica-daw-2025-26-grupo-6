@@ -1,17 +1,21 @@
 package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.model.Game;
@@ -22,17 +26,6 @@ import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
-import org.springframework.security.web.csrf.CsrfToken;
-
-import org.springframework.validation.FieldError;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GamesController {

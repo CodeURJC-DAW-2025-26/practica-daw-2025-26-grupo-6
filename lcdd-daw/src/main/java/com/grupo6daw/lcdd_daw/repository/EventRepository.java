@@ -35,6 +35,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByValidatedTrue();
     List<Event> findByValidatedFalse();
 
+
     
 @Query("""
      SELECT e
@@ -43,6 +44,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
        e.validated = true
        AND (LOWER(e.eventName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '')
        AND (LOWER(e.eventTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
+       ORDER BY e.creationDate DESC
     """)
     Page<Event> findValidatedByNameAndTag(String name, String tag, Pageable page);
 

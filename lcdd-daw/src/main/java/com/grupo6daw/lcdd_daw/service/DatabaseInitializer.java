@@ -53,73 +53,73 @@ public class DatabaseInitializer {
     // Sample News
     New new1 = new New("Vuelven las jornadas de rol a la URJC",
         "El campus de Móstoles acogerá la cuarta edición de 'Dangers & Dragons | Jornadas de Rol', un evento pensado tanto para aquellos que desean descubrir el emocionante mundo del rol como para los jugadores experimentados.",
-        "Rol");
+        "Rol", true);
     setNewImage(new1, "/sample_images/news/newsImg.jpg");
     newService.save(new1);
 
     New new2 = new New("Gran Torneo de Magic: The Gathering",
         "La Caverna organiza su torneo trimestral de MTG en formato Commander. ¡Ven a demostrar quién manda en la mesa!",
-        "Evento");
+        "Evento", true);
     setNewImage(new2, "/sample_images/news/magicTournament.jpg");
     newService.save(new2);
 
     New new3 = new New("Cambio de canal de reuniones: Nuevo canal de comunicación para los socios",
         "Atención socios: a partir de la próxima semana, las reuniones de administradores se realizarán en el canal de Discord 'REUNIONES ADMIN'",
-        "Cambios");
+        "Cambios", true);
     setNewImage(new3, "/sample_images/news/cambio_discord.jpg");
     newService.save(new3);
 
     New new4 = new New("Jornadas de Puertas Abiertas en Móstoles",
         "¿Aún no conoces la asociación? Ven a conocernos y prueba cualquiera de nuestros juegos de forma gratuita este viernes.",
-        "Evento");
+        "Evento", true);
     setNewImage(new4, "/sample_images/news/poster.jpg");
     newService.save(new4);
 
     New new5 = new New("Actualización en el sistema de cuotas de socio",
         "Hemos simplificado el proceso de pago para el segundo cuatrimestre. Consulta los nuevos plazos y beneficios en la web.",
-        "Cambios");
+        "Cambios", true);
     setNewImage(new5, "/sample_images/news/cuotas.jpg");
     newService.save(new5);
 
     New new6 = new New("Resultados de las elecciones a la Junta",
         "Damos la bienvenida a los nuevos miembros de la directiva de La Caverna del Dragón para el curso actual.",
-        "Cambios");
+        "Cambios", true);
     setNewImage(new6, "/sample_images/news/junta.jpg");
     newService.save(new6);
 
     New new7 = new New("Maratón 12 Horas de Juegos de Mesa",
         "Un evento sin descanso donde sacaremos los juegos más largos y complejos de nuestra ludoteca.",
-        "Evento");
+        "Evento", true);
     setNewImage(new7, "/sample_images/news/maraton.jpg");
     newService.save(new7);
 
     New new8 = new New("Nuevas adquisiciones para la ludoteca",
         "Hemos renovado nuestro catálogo con más de 10 títulos nuevos. ¡Pásate a probar las últimas novedades!",
-        "Cambios");
+        "Cambios", true);
     setNewImage(new8, "/sample_images/news/ludoteca.jpg");
     newService.save(new8);
 
     New new9 = new New("Especial Halloween: Noche de Pesadilla",
         "Prepárate para una velada de juegos de mesa de terror y roles ocultos. Habrá premios para los mejores.",
-        "Evento");
+        "Evento", true);
     setNewImage(new9, "/sample_images/news/halloween.jpg");
     newService.save(new9);
 
     New new10 = new New("Clasificatorio para el Torneo Nacional de Catan",
         "¿Eres el rey del comercio en la URJC? Participa en nuestro torneo oficial y consigue una plaza para la final nacional.",
-        "Evento");
+        "Evento", true);
     setNewImage(new10, "/sample_images/news/catan.jpg");
     newService.save(new10);
 
     New new11 = new New("Mejoras en la Sala de Juegos",
         "Hemos renovado las mesas y sillas de nuestra sede para que vuestras partidas de 8 horas sean mucho más cómodas.",
-        "Cambios");
+        "Cambios", true);
     setNewImage(new11, "/sample_images/news/sede_mejora.jpg");
     newService.save(new11);
 
     New new12 = new New("Playtesting: Probamos el sistema propio de La Caverna",
         "Varios socios han diseñado un sistema de rol ligero. Ven a probarlo y ayúdanos a pulir las reglas antes de su publicación.",
-        "Rol");
+        "Rol", true);
     setNewImage(new12, "/sample_images/news/playtesting.jpg");
     newService.save(new12);
 
