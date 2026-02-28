@@ -70,4 +70,18 @@ public class UserService {
             return new ClassPathResource("static/img/default_profile.png");
         }
     }
+
+    // Searching user by email, needed for the RegisterWebController to assign the profile image after registration
+    public Optional<User> findByUserEmail(String email) {
+        return userRepository.findByUserEmail(email);
+    }
+
+    // Saving user after assigning the profile image, needed for the RegisterWebController
+    public void save(User user) {
+        userRepository.save(user);
+    }
+// New method to check if a nickname already exists, needed for the RegisterWebController
+    public boolean existsByUserNickname(String nickname) {
+        return userRepository.existsByUserNickname(nickname);
+    }
 }

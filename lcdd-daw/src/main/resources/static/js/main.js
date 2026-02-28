@@ -142,48 +142,6 @@
     }, 1000);
   })
 
-  const form = document.getElementById('registerForm');
-  if (form) {
-    form.addEventListener('submit', async function(event) {
-      const email = document.getElementById('email');
-      const password = document.getElementById('password');
-      const confirmPassword = document.getElementById('confirm-password');
-
-      event.preventDefault();
-
-      try {
-        const response = await fetch(`/userExists?email=${encodeURIComponent(email.value)}`);
-        const exists = await response.json();
-        console.log(exists);
-
-        if (exists) {
-          // Show error
-          email.classList.add('is-invalid');
-          return;
-        } else {
-          // Clean error
-          email.classList.remove('is-invalid');
-        }
-      } catch (error) {
-        console.error("Error al verificar el usuario:", error);
-        return;
-      }
-      
-      if (password.value !== confirmPassword.value) {
-          // Show error
-          confirmPassword.classList.add('is-invalid');
-          password.classList.add('is-invalid');
-          return;
-          
-      } else {
-          // Clean error
-          confirmPassword.classList.remove('is-invalid');
-          password.classList.remove('is-invalid');
-      }
-
-      form.submit();
-    });
-  }
 
 // --- Event form logic (Show/Hide link container) ---
   const radioSi = document.getElementById('req-si');
@@ -290,4 +248,34 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // Password confirmation logic for register.html
+  const registerForm = document.getElementById('registerForm');
+  
+  // Only execute this code if we're on the register page (where the form exists)
+  if (registerForm) {
+    const pwd = document.getElementById('password');
+    const confirmPwd = document.getElementById('confirm-password');
+
+    // Check if passwords match and set custom validity message if they don't
+    function validatePasswords() {
+      if (pwd.value !== confirmPwd.value) {
+        confirmPwd.setCustomValidity("Las contraseñas no coinciden");
+      } else {
+        confirmPwd.setCustomValidity(""); 
+      }
+    }
+
+    // Checking on form submission
+    registerForm.addEventListener('submit', validatePasswords);
+
+    // Checking in real-time as the user types
+    pwd.addEventListener('input', validatePasswords);
+    confirmPwd.addEventListener('input', validatePasswords);
+  }
+
 });
