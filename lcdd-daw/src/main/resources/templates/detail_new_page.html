@@ -3,32 +3,67 @@
 <main class="main">
   <section id="project-details" class="project-details section">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
-      <div class="row">
-        <div class="col-lg-5">
-          <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-            <img src="/images/{{new.newImage.id}}" class="img-fluid">
-            <div class="project-hero-overlay">
-              <div class="project-status">
-                <i class="bi bi-tag"></i>
-                {{new.newTag}}
-              </div>
+      <div class="row align-items-start">
+
+        <div class="col-lg-5 col-md-12">
+          <div class="project-hero-container"
+            style="background-color: #f4f4f4; border-radius: 12px; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 450px; max-height: 650px; width: 100%; position: relative;">
+
+            <img src="/images/{{new.newImage.id}}" class="img-fluid"
+              style="max-width: 100%; max-height: 650px; width: auto; height: auto; display: block; object-fit: contain;">
+
+            <div style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+              <span class="badge rounded-pill px-3 py-2 shadow"
+                style="background-color: #a71b12; color: white; font-weight: 500; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.2);">
+                <i class="bi bi-tag-fill me-1"></i> {{new.newTag}}
+              </span>
             </div>
           </div>
         </div>
-        <div class="col-lg-7">
-          <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-            <h1 class="project-title">{{new.newName}}</h1>
-            <p class="project-description">{{new.newDescription}}</p>
+
+        <div class="col-lg-7 col-md-12">
+          <div class="project-info ps-lg-4 mt-4 mt-lg-0">
+
+            <h1 class="project-title" style="font-weight: 700; color: #212529; margin-top: 0; margin-bottom: 5px;">
+              {{new.newName}}
+            </h1>
+
+            <div class="mb-4 text-muted d-flex align-items-center flex-wrap gap-3" style="font-size: 0.95rem;">
+              <div>
+                <i class="bi bi-person-circle me-1"></i> Creado por:
+                {{#new.newCreator}}
+                <a href="/user/{{new.newCreator.userId}}" class="text-decoration-none fw-bold" style="color: #a71b12;">
+                  {{#new.newCreator.userNickname}}{{new.newCreator.userNickname}}{{/new.newCreator.userNickname}}
+                  {{^new.newCreator.userNickname}}La Caverna del Dragón{{/new.newCreator.userNickname}}
+                </a>
+                {{/new.newCreator}}
+                {{^new.newCreator}}
+                <a href="/" class="text-decoration-none fw-bold" style="color: #a71b12;">
+                  La Caverna del Dragón
+                </a>
+                {{/new.newCreator}}
+              </div>
+
+              {{#new.creationDate}}
+              <div class="border-start ps-3">
+                <i class="bi bi-calendar3 me-1"></i> {{new.creationDate}}
+              </div>
+              {{/new.creationDate}}
+            </div>
+
+            <div class="project-description mb-4" style="font-size: 1.1rem; line-height: 1.6;">
+              {{new.newDescription}}
+            </div>
 
             {{#hasEditPermission}}
-            <div class="row mt-3 align-items-center">
+            <div class="row mt-5 pt-3 border-top align-items-center">
               <div class="col-auto">
                 <a class="btn btn-link text-primary text-decoration-none p-0" href="/new_form/{{new.newId}}">
                   <i class="bi bi-pencil-square me-1"></i> Modificar noticia
                 </a>
               </div>
 
-              <div class="col-auto">
+              <div class="col-auto ms-3">
                 <form action="/removeNew/{{new.newId}}" method="post" class="m-0"
                   onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta noticia?');">
                   <button type="submit" class="btn btn-link text-primary text-decoration-none p-0"
@@ -40,9 +75,11 @@
               </div>
             </div>
             {{/hasEditPermission}}
+
           </div>
         </div>
       </div>
+    </div>
   </section>
 </main>
 

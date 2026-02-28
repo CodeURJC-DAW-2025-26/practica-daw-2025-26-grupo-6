@@ -6,10 +6,20 @@
       <div class="row justify-content-center">
         <div class="col-lg-10" data-aos="fade-left" data-aos-delay="300">
           <div class="quote-form">
+
+            {{#newPost}}
             <div class="form-intro">
-              <h3>Añadir o modificar noticia</h3>
-              <p>Rellena los campos para añadir o modificar una noticia.</p>
+              <h3>
+                {{#newId}}Modificar{{/newId}}
+                {{^newId}}Añadir{{/newId}}
+                una noticia
+              </h3>
+              <p>
+                {{#newId}}Modifica los datos de la noticia seleccionada.{{/newId}}
+                {{^newId}}Rellena los campos para publicar una nueva noticia.{{/newId}}
+              </p>
             </div>
+            {{/newPost}}
 
             {{#hasErrors}}
             <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert"
@@ -23,27 +33,29 @@
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {{/hasErrors}}
+
             <form method="post" action="/new_form" enctype="multipart/form-data"
               class="custom-login-form needs-validation" novalidate>
+
               {{#newPost}}
               <div class="form">
+
                 <input type="hidden" name="newId" value="{{#newId}}{{newId}}{{/newId}}" />
 
                 <div class="form-field">
-                  <label for="newName" class="required-label">Titulo:</label>
-                  <input type="text" class="form-control" name="newName" id="newName"
-                    value="{{#newName}}{{newName}}{{/newName}}" minlength="10" maxlength="100" required>
+                  <label for="newName" class="required-label">Título:</label>
+                  <input type="text" name="newName" id="newName" value="{{newName}}" class="form-control" minlength="10"
+                    maxlength="100" required>
                   <div class="invalid-feedback">
-                    El titulo debe tener entre 10 y 100 caracteres.
+                    El título debe tener entre 10 y 100 caracteres.
                   </div>
                 </div>
                 <br>
 
                 <div class="form-field full-width">
                   <label for="newDescription" class="required-label">Descripción:</label>
-                  <textarea minlength="50" maxlength="3000" class="form-control" name="newDescription"
-                    id="newDescription" rows="8"
-                    required>{{#newDescription}}{{newDescription}}{{/newDescription}}</textarea>
+                  <textarea name="newDescription" id="newDescription" rows="8" class="form-control" minlength="50"
+                    maxlength="3000" required>{{newDescription}}</textarea>
                   <div class="invalid-feedback">
                     La descripción debe tener entre 50 y 3000 caracteres.
                   </div>
@@ -52,41 +64,49 @@
 
                 <div class="form-field">
                   <label for="newTag" class="form-label">Tag:</label>
-                  <input type="text" name="newTag" id="newTag" value="{{#newTag}}{{newTag}}{{/newTag}}">
+                  <input type="text" name="newTag" id="newTag" value="{{newTag}}" class="form-control" maxlength="50">
                 </div>
                 <br>
 
                 <div class="form-field">
-                  <label for="imageField" class="form-label">Imagen:</label>
+                  <label for="imageField" class="required-label">Imagen de portada:</label>
 
                   {{#newId}}
-                  <input class="form-control" type="file" name="imageField" id="imageField">
+                  <input type="file" name="imageField" id="imageField" class="form-control"
+                    accept=".jpg, .jpeg, .png, .webp">
                   {{/newId}}
 
                   {{^newId}}
-                  <input class="form-control" type="file" name="imageField" id="imageField" required>
+                  <input type="file" name="imageField" id="imageField" class="form-control"
+                    accept=".jpg, .jpeg, .png, .webp" required>
                   {{/newId}}
+
                   <div class="invalid-feedback">
-                    Por favor, selecciona una imagen válida.
+                    Debes subir una imagen válida (JPG, PNG o WebP).
                   </div>
                 </div>
-                {{/newPost}}
 
-                <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-2">
-
-                  <a href="/news" class="submit-btn"
-                    style="background: #6c757d; margin-top: 0; justify-content: center;">
-                    <i class="bi bi-arrow-left"></i>
-                    <span>Atrás</span>
-                  </a>
-
-                  <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center;">
-                    <span>Guardar Noticia</span>
-                    <i class="bi bi-check2-circle"></i>
-                  </button>
-
-                </div>
               </div>
+              {{/newPost}}
+
+              <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-2">
+                <a href="/news" class="submit-btn"
+                  style="background: #6c757d; margin-top: 0; justify-content: center; display: flex; text-decoration: none;">
+                  <i class="bi bi-arrow-left"></i>
+                  <span class="ms-2">Atrás</span>
+                </a>
+
+                <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center; display: flex;">
+                  <span class="me-2">
+                    {{#newPost}}
+                    {{#newId}}Actualizar Noticia{{/newId}}
+                    {{^newId}}Guardar Noticia{{/newId}}
+                    {{/newPost}}
+                  </span>
+                  <i class="bi bi-check2-circle"></i>
+                </button>
+              </div>
+
               <input type="hidden" name="_csrf" value="{{token}}" />
             </form>
           </div>

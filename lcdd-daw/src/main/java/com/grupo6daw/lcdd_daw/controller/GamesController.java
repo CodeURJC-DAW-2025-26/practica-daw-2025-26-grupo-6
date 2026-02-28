@@ -18,6 +18,7 @@ import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.service.GameService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
+import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -41,6 +42,9 @@ public class GamesController {
 
 	@Autowired
 	private ImageService imageService;
+
+	@Autowired
+	private ImageValidationService imageValidationService;
 
 	@GetMapping("/games")
 	public String games(Model model,
@@ -123,6 +127,7 @@ public class GamesController {
 		List<String> errorMessages = new ArrayList<>();
 		boolean isNewGame = (game.getGameId() == null);
 
+		// logical validation for players and duration
 		if (game.getMinPlayers() != null && game.getMaxPlayers() != null) {
 			if (game.getMinPlayers() > game.getMaxPlayers()) {
 				bindingResult.rejectValue("maxPlayers", "error.maxPlayers",
@@ -137,12 +142,12 @@ public class GamesController {
 			}
 		}
 
-		if (isNewGame && imageField.isEmpty()) {
-			errorMessages.add("Por favor, sube una imagen de portada para el juego");
-		}
+		// img validation
+		imageValidationService.validate(imageField, errorMessages, isNewGame);
 
 		if (bindingResult.hasErrors() || !errorMessages.isEmpty()) {
 
+			// passing annotation errors
 			if (bindingResult.hasFieldErrors("gameName"))
 				errorMessages.add(bindingResult.getFieldError("gameName").getDefaultMessage());
 			if (bindingResult.hasFieldErrors("gameDescription"))
@@ -158,6 +163,7 @@ public class GamesController {
 			if (bindingResult.hasFieldErrors("maxDuration"))
 				errorMessages.add(bindingResult.getFieldError("maxDuration").getDefaultMessage());
 
+			// Token CSRF 
 			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 			if (csrfToken != null)
 				model.addAttribute("token", csrfToken.getToken());
@@ -169,6 +175,7 @@ public class GamesController {
 			return "game_form";
 		}
 
+		// saving game and image
 		if (!imageField.isEmpty()) {
 			Image image = imageService.createImage(imageField.getInputStream());
 			game.setGameImage(image);
@@ -183,7 +190,7 @@ public class GamesController {
 
 	@PostMapping("/removeGame/{id}")
 	public String removeGame(@PathVariable long id, HttpServletRequest request) {
-		
+
 		if (request.isUserInRole("ADMIN")) {
 			gameService.delete(id);
 		}
