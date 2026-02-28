@@ -67,7 +67,7 @@ public class UserService {
         if (imageOptional.isPresent() && imageOptional.get().getImageFile() != null) {
             return new InputStreamResource(imageOptional.get().getImageFile().getBinaryStream());
         } else {
-            return new ClassPathResource("static/img/default_profile.png");
+            return new ClassPathResource("static/img/person/Portrait_Placeholder.png");
         }
     }
 }
