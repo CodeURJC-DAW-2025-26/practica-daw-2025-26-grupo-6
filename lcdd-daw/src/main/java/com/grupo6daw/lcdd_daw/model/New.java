@@ -14,6 +14,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+
 @Entity
 public class New {
   @Id
@@ -39,6 +41,8 @@ public class New {
 
   @ManyToOne
   private User newCreator;
+
+  private LocalDate creationDate = LocalDate.now();
 
   public New() {
   }
@@ -105,4 +109,13 @@ public class New {
   public void setNewCreator(User newCreator) {
     this.newCreator = newCreator;
   }
+
+  public LocalDate getCreationDate() {
+      return creationDate;
+  }
+
+  public void setCreationDate(LocalDate creationDate) {
+      this.creationDate = creationDate;
+  }
+
 }

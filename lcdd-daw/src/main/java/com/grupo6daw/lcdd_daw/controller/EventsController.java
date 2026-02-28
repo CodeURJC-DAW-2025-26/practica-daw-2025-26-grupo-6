@@ -26,6 +26,7 @@ import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.UserService;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
+import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -54,6 +55,9 @@ public class EventsController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private ImageValidationService imageValidationService;
 
 	@GetMapping("/events")
 	public String events(Model model,
@@ -165,24 +169,7 @@ public class EventsController {
 			event.setLink(null);
 		}
 
-		//image validation (if it's a new event, the image is required, if it's an existing event, the image is optional, but if it's provided, we check if it's a valid image file and not too big)
-        if (!imageField.isEmpty()) {
-            // check size (10MB)
-            if (imageField.getSize() > 10 * 1024 * 1024) {
-                errorMessages.add("El archivo es demasiado grande. El límite son 10MB.");
-            }
-
-            // checking content type to ensure it's an image (jpg, png, webp)
-            String contentType = imageField.getContentType();
-            List<String> validTypes = List.of("image/jpeg", "image/png", "image/webp");
-            if (contentType == null || !validTypes.contains(contentType)) {
-                errorMessages.add("Formato de imagen no permitido. Usa JPG, PNG o WebP.");
-            }
-        } else if (isNewEvent) {
-            
-            errorMessages.add("Debes adjuntar una imagen para el evento.");
-        }
-
+		imageValidationService.validate(imageField, errorMessages, isNewEvent);
 
 		// if the image is provided, we check if it's a valid image file (by checking
 		// the content type)

@@ -1,11 +1,22 @@
 {{>header}}
 <main class="main">
-  <section id="quote" class="quote section">
+  <section id="quote" class="quote section pt-0">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-10">
           <div class="quote-form">
-            <h3>Añadir juego</h3>
+
+            <div class="form-intro">
+              <h3>
+                {{#game.gameId}}Modificar{{/game.gameId}}
+                {{^game.gameId}}Añadir{{/game.gameId}}
+                un juego
+              </h3>
+              <p>
+                {{#game.gameId}}Modifica los datos del juego seleccionado.{{/game.gameId}}
+                {{^game.gameId}}Rellena los campos para registrar un nuevo juego.{{/game.gameId}}
+              </p>
+            </div>
 
             {{#hasErrors}}
             <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert"
@@ -21,77 +32,118 @@
             </div>
             {{/hasErrors}}
 
-            <form method="post" action="/game_form" enctype="multipart/form-data" class="php-email-form">
+            <form method="post" action="/game_form" enctype="multipart/form-data"
+              class="custom-login-form needs-validation" novalidate>
 
               {{#game}}
               <div class="form">
                 <input type="hidden" name="gameId" value="{{#gameId}}{{gameId}}{{/gameId}}" />
-                <div class="form-field full-width">
-                  <label for="gameName" class="required-label">Nombre del Juego</label>
+
+                <div class="form-field">
+                  <label for="gameName" class="required-label">Nombre del Juego:</label>
                   <input type="text" name="gameName" id="gameName" value="{{#gameName}}{{gameName}}{{/gameName}}"
-                    class="form-control" required>
+                    class="form-control" minlength="2" maxlength="100" required>
+                  <div class="invalid-feedback">
+                    El nombre del juego debe tener entre 2 y 100 caracteres.
+                  </div>
                 </div>
+                <br>
 
-                <div class="form-field full-width mt-3">
-                  <label for="gameDescription" class="required-label">Descripción</label>
-                  <textarea name="gameDescription" id="gameDescription" rows="4" class="form-control" required
-                    >{{#gameDescription}}{{gameDescription}}{{/gameDescription}}</textarea>
-                                  </div>
+                <div class="form-field full-width">
+                  <label for="gameDescription" class="required-label">Descripción:</label>
+                  <textarea name="gameDescription" id="gameDescription" rows="5" class="form-control" minlength="10"
+                    maxlength="2000" required>{{#gameDescription}}{{gameDescription}}{{/gameDescription}}</textarea>
+                  <div class="invalid-feedback">
+                    La descripción del juego debe tener entre 10 y 2000 caracteres.
+                  </div>
+                </div>
+                <br>
 
-                <div class="form-field mt-3">
-                  <label for="genre" class="required-label">Género</label>
+                <div class="form-field">
+                  <label for="genre" class="required-label">Género:</label>
                   <input type="text" name="genre" id="genre" value="{{#genre}}{{genre}}{{/genre}}" class="form-control"
-                    required>
+                    minlength="3" maxlength="50" required>
+                  <div class="invalid-feedback">
+                    El género del juego debe tener entre 3 y 50 caracteres.
+                  </div>
                 </div>
+                <br>
 
                 <div class="row mt-4 p-3 mb-2 bg-light rounded border">
                   <div class="col-12 mb-2">
                     <h6 class="text-primary border-bottom">Jugadores</h6>
                   </div>
                   <div class="col-md-6 form-field">
-                    <label for="minPlayers">Mínimo</label>
+                    <label for="minPlayers">Mínimo:</label>
                     <input type="number" name="minPlayers" id="minPlayers"
-                      value="{{#minPlayers}}{{minPlayers}}{{/minPlayers}}" class="form-control" min="1">
+                      value="{{#minPlayers}}{{minPlayers}}{{/minPlayers}}" class="form-control" min="1" required>
+                    <div class="invalid-feedback">
+                      El número mínimo de jugadores debe ser mayor o igual a 1.
+                    </div>
                   </div>
                   <div class="col-md-6 form-field">
-                    <label for="maxPlayers">Máximo</label>
+                    <label for="maxPlayers">Máximo:</label>
                     <input type="number" name="maxPlayers" id="maxPlayers"
-                      value="{{#maxPlayers}}{{maxPlayers}}{{/maxPlayers}}" class="form-control" min="1">
+                      value="{{#maxPlayers}}{{maxPlayers}}{{/maxPlayers}}" class="form-control" min="1" required>
+                    <div class="invalid-feedback">
+                      El número máximo de jugadores debe ser mayor o igual a 1.
+                    </div>
                   </div>
                 </div>
+                <br>
 
                 <div class="row mt-3 p-3 mb-2 bg-light rounded border">
                   <div class="col-12 mb-2">
                     <h6 class="text-primary border-bottom">Duración (minutos)</h6>
                   </div>
                   <div class="col-md-6 form-field">
-                    <label for="minDuration">Mínima</label>
+                    <label for="minDuration">Mínima:</label>
                     <input type="number" name="minDuration" id="minDuration"
-                      value="{{#minDuration}}{{minDuration}}{{/minDuration}}" class="form-control" min="1">
+                      value="{{#minDuration}}{{minDuration}}{{/minDuration}}" class="form-control" min="1" required>
+                    <div class="invalid-feedback">
+                      La duración mínima debe ser mayor o igual a 1 minuto.
+                    </div>
                   </div>
                   <div class="col-md-6 form-field">
-                    <label for="maxDuration">Máxima</label>
+                    <label for="maxDuration">Máxima:</label>
                     <input type="number" name="maxDuration" id="maxDuration"
-                      value="{{#maxDuration}}{{maxDuration}}{{/maxDuration}}" class="form-control" min="1">
+                      value="{{#maxDuration}}{{maxDuration}}{{/maxDuration}}" class="form-control" min="1" required>
+                    <div class="invalid-feedback">
+                      La duración máxima debe ser mayor o igual a 1 minuto.
+                    </div>
+                  </div>
+                </div>
+                <br>
+
+                <div class="form-field">
+                  <label for="imageField" class="required-label">Imagen de portada:</label>
+                  {{#gameId}}
+                  <input type="file" name="imageField" id="imageField" class="form-control"
+                    accept=".jpg, .jpeg, .png, .webp">
+                  {{/gameId}}
+
+                  {{^gameId}}
+                  <input type="file" name="imageField" id="imageField" class="form-control"
+                    accept=".jpg, .jpeg, .png, .webp" required>
+                  {{/gameId}}
+                  <div class="invalid-feedback">
+                    La imagen de portada debe ser un archivo válido (JPG, PNG, WEBP).
                   </div>
                 </div>
 
-                <div class="form-field mt-3">
-                  <label for="imageField">Imagen de portada</label>
-                  <input type="file" name="imageField" id="imageField" class="form-control">
-                </div>
               </div>
               {{/game}}
 
-              <div class="row mt-4">
-                <div class="col-lg-3">
-                  <a href="/games" class="submit-btn text-center pt-2"
-                    style="text-decoration:none; display:block; background: #6c757d;">Atrás</a>
-                </div>
-                <div class="col-lg-2"></div>
-                <div class="col-lg-3">
-                  <button type="submit" class="submit-btn"><span>Guardar Juego</span></button>
-                </div>
+              <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-2">
+                <a href="/games" class="submit-btn"
+                  style="background: #6c757d; margin-top: 0; justify-content: center; display: flex; text-decoration: none;">
+                  <i class="bi bi-arrow-left"></i>
+                  <span class="ms-2">Atrás</span>
+                </a>
+                <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center; display: flex;">
+                  <span class="me-2">Guardar Juego</span>
+                  <i class="bi bi-check2-circle"></i>
+                </button>
               </div>
 
               <input type="hidden" name="_csrf" value="{{token}}" />

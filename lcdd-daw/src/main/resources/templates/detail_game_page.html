@@ -3,59 +3,79 @@
 <main class="main">
   <section id="project-details" class="project-details section">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
-      <div class="row">
-        <div class="col-lg-8">
-          <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-            <img src="/images/{{game.gameImage.id}}" class="img-fluid">
-            <button>
-              <div class="project-hero-overlay">
-                <div class="project-status">
-                  <i class="bi bi-heart heart-outline"></i>
-                  <i class="bi bi-heart-fill heart-fill"></i>
-                </div>
-              </div>
-            </button>
+      <div class="row align-items-start">
+
+        <div class="col-lg-5 col-md-12">
+          <div class="project-hero-container"
+            style="background-color: #f4f4f4; border-radius: 12px; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 450px; max-height: 650px; width: 100%; position: relative;">
+
+            <img src="/images/{{game.gameImage.id}}" class="img-fluid"
+              style="max-width: 100%; max-height: 650px; width: auto; height: auto; display: block; object-fit: contain;">
+
+            <div style="position: absolute; top: 15px; left: 15px; z-index: 10;">
+              <button class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center"
+                style="width: 42px; height: 42px; border: none;" title="Añadir a favoritos">
+                <i class="bi bi-heart heart-outline text-danger fs-5"></i>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="col-lg-4">
-          <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-            <h1 class="project-title">{{game.gameName}}</h1>
-            <p class="project-description">{{game.gameDescription}}</p>
-            <div class="project-details">
-              <div class="detail-item">
-                <span class="label">Jugadores</span>
-                <span class="value">{{game.minPlayers}} - {{game.maxPlayers}}</span>
-              </div>
-              <div class="detail-item">
-                <span class="label">Duración</span>
-                <span class="value">{{game.minDuration}} - {{game.maxDuration}}</span>
-              </div>
-              <div class="detail-item">
-                <span class="label">Género</span>
-                <span class="value">{{game.genre}}</span>
-              </div>
+
+        <div class="col-lg-7 col-md-12">
+          <div class="project-info ps-lg-4 mt-4 mt-lg-0">
+
+            <h1 class="project-title" style="font-weight: 700; color: #212529; margin-top: 0;">
+              {{game.gameName}}
+            </h1>
+
+            <div class="project-description mb-4" style="font-size: 1.1rem; line-height: 1.6;">
+              {{game.gameDescription}}
             </div>
+
+            <div class="row bg-light rounded p-3 mb-4 mx-0 border text-center text-sm-start">
+
+              <div class="col-sm-4 mb-3 mb-sm-0">
+                <strong class="text-primary d-block mb-1"><i class="bi bi-people-fill me-2"></i>Jugadores</strong>
+                <span class="text-dark fs-5">{{game.minPlayers}} - {{game.maxPlayers}}</span>
+              </div>
+
+              <div class="col-sm-4 mb-3 mb-sm-0">
+                <strong class="text-primary d-block mb-1"><i class="bi bi-clock-fill me-2"></i>Duración</strong>
+                <span class="text-dark fs-5">{{game.minDuration}} - {{game.maxDuration}}'</span>
+              </div>
+
+              <div class="col-sm-4">
+                <strong class="text-primary d-block mb-1"><i class="bi bi-controller me-2"></i>Género</strong>
+                <span class="text-dark fs-5">{{game.genre}}</span>
+              </div>
+
+            </div>
+
             {{#hasEditPermission}}
-            <div class="row">
+            <div class="row mt-5 pt-3 border-top align-items-center">
               <div class="col-auto">
                 <a class="btn btn-link text-primary text-decoration-none p-0" href="/game_form/{{game.gameId}}">
                   <i class="bi bi-pencil-square me-1"></i> Modificar juego
                 </a>
               </div>
 
-              <div class="col">
-                <form action="/removeGame/{{game.gameId}}" method="post"
+              <div class="col-auto ms-3">
+                <form action="/removeGame/{{game.gameId}}" method="post" class="m-0"
                   onsubmit="return confirm('¿Estás seguro de que quieres eliminar este juego? Esta acción no se puede deshacer.');">
                   <button type="submit" class="btn btn-link text-primary text-decoration-none p-0"
-                    style="box-shadow: none;">Eliminar<i class="bi bi-trash"></i></button>
+                    style="box-shadow: none;">
+                    <i class="bi bi-trash me-1"></i> Eliminar
+                  </button>
                   <input type="hidden" name="_csrf" value="{{token}}" />
                 </form>
               </div>
             </div>
             {{/hasEditPermission}}
+
           </div>
         </div>
       </div>
+    </div>
   </section>
 </main>
 

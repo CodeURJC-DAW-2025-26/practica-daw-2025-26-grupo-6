@@ -7,8 +7,15 @@
         <div class="col-lg-10">
           <div class="quote-form">
             <div class="form-intro">
-              <h3>Añadir o modificar un evento</h3>
-              <p>Rellena los campos para añadir o modificar un evento.</p>
+              <h3>
+                {{#event.eventId}}Modificar{{/event.eventId}}
+                {{^event.eventId}}Añadir{{/event.eventId}}
+                un evento
+              </h3>
+              <p>
+                {{#event.eventId}}Modifica los datos del evento seleccionado (serán validados por un administrador).{{/event.eventId}}
+                {{^event.eventId}}Rellena los campos para registrar un nuevo evento (serán validados por un administrador).{{/event.eventId}}
+              </p>
             </div>
 
             {{#hasErrors}}
@@ -63,7 +70,8 @@
                   {{/eventId}}
 
                   {{^eventId}}
-                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*" accept=".jpg, .jpeg, .png, .webp" required>
+                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*"
+                    accept=".jpg, .jpeg, .png, .webp" required>
                   {{/eventId}}
                   <div class="invalid-feedback">
                     Por favor, sube una imagen válida para el evento.
