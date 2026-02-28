@@ -228,6 +228,11 @@ public String events(Model model,
 		// Finally, we save the event
 		eventService.save(event);
 
+		if (isNewEvent) {
+            currentUser.getUserOwnEvents().add(event);
+            userService.save(currentUser); 
+        }
+
 		return "redirect:/events";
 	}
 

@@ -404,3 +404,111 @@ function loadMoreGames() {
       spinner.classList.add('d-none');
     });
 }
+
+/**
+ * ==========================================
+ * Editing user profile logic:
+ * 1. When user clicks "Edit Profile", switch to edit mode
+ * 2. In edit mode, show image upload and make inputs editable
+ * 3. Show "Cancel" and "Save Changes" buttons in edit mode
+ * 4. If user clicks "Cancel", revert all changes and switch back to view mode
+ * ==========================================
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  const btnEdit = document.getElementById('btn-edit-profile');
+  const btnCancel = document.getElementById('btn-cancel-edit');
+  const editActions = document.getElementById('edit-actions');
+  const imageUpload = document.getElementById('image-upload-wrapper');
+  const inputs = document.querySelectorAll('.profile-input');
+
+  const nicknameDisplay = document.getElementById('nickname-display');
+  const nicknameInputGroup = document.getElementById('nickname-input-group');
+  const nicknameInput = document.querySelector('input[name="nickname"]');
+  const passwordGroups = document.querySelectorAll('.password-edit-group');
+  const updateForm = document.getElementById('update-form');
+  const pwd = document.getElementById('new-password');
+  const confirmPwd = document.getElementById('confirm-password-edit');
+
+  const imagePreview = document.getElementById('profile-img-preview');
+  const fileInput = document.getElementById('image');
+
+  // saving original image src to revert back if user cancels editing, only if the image preview element exists on the page (profile.html)
+  let originalImageSrc = imagePreview ? imagePreview.src : '';
+  const originalValues = {};
+
+  function toggleEditMode(enable) {
+    if (enable) {
+      btnEdit.classList.add('d-none');
+      editActions.classList.remove('d-none');
+      imageUpload.classList.remove('d-none');
+
+      if (nicknameDisplay) nicknameDisplay.classList.add('d-none');
+      if (nicknameInputGroup) nicknameInputGroup.classList.remove('d-none');
+      if (nicknameInput) originalValues['nickname'] = nicknameInput.value;
+
+      passwordGroups.forEach(group => group.classList.remove('d-none'));
+
+      inputs.forEach(input => {
+        originalValues[input.name] = input.value;
+        input.removeAttribute('readonly');
+        input.classList.remove('form-control-plaintext');
+      });
+    } else {
+      btnEdit.classList.remove('d-none');
+      editActions.classList.add('d-none');
+      imageUpload.classList.add('d-none');
+
+      if (nicknameDisplay) nicknameDisplay.classList.remove('d-none');
+      if (nicknameInputGroup) nicknameInputGroup.classList.add('d-none');
+      if (nicknameInput) nicknameInput.value = originalValues['nickname'];
+
+      passwordGroups.forEach(group => group.classList.add('d-none'));
+      if (pwd) pwd.value = '';
+      if (confirmPwd) confirmPwd.value = '';
+
+      // restoring original image src if user cancels editing
+      if (imagePreview) imagePreview.src = originalImageSrc;
+      if (fileInput) fileInput.value = '';
+
+      inputs.forEach(input => {
+        input.value = originalValues[input.name];
+        input.setAttribute('readonly', true);
+        input.classList.add('form-control-plaintext');
+      });
+    }
+  }
+
+  function validatePasswords() {
+    if (pwd.value !== confirmPwd.value) {
+      confirmPwd.setCustomValidity("Las contraseñas no coinciden");
+    } else {
+      confirmPwd.setCustomValidity("");
+    }
+  }
+
+  if (btnEdit) btnEdit.addEventListener('click', () => toggleEditMode(true));
+  if (btnCancel) btnCancel.addEventListener('click', () => toggleEditMode(false));
+
+  if (pwd && confirmPwd) {
+    pwd.addEventListener('input', validatePasswords);
+    confirmPwd.addEventListener('input', validatePasswords);
+    if (updateForm) updateForm.addEventListener('submit', validatePasswords);
+  }
+
+  // --- img preview for profile editing ---
+  if (imageUpload && imagePreview && fileInput) {
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+
+      if (file) {
+        if (file.type.startsWith('image/')) {
+          const objectUrl = URL.createObjectURL(file);
+          imagePreview.src = objectUrl;
+        } else {
+          alert('Por favor, selecciona un archivo de imagen válido (JPG, PNG...).');
+          this.value = '';
+        }
+      }
+    });
+  }
+});

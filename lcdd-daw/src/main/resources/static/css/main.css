@@ -1847,3 +1847,39 @@ section,
   border-color: #212529;
   color: #ffffff;
 }
+
+/* ==========================================
+   user profile page adjustments
+   ========================================== */
+.hover-shadow:hover {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important;
+  transform: translateY(-2px);
+}
+
+.transition-all {
+  transition: all .2s ease-in-out;
+}
+
+
+.nav-pills .nav-link.active, 
+.nav-pills .show > .nav-link {
+  background-color: #a71b12;
+  color: white;
+}
+
+.nav-pills .nav-link {
+  color: #444;
+}
+
+
+.form-control-plaintext.profile-input {
+  outline: none;
+  padding-left: 0;
+}
+
+.form-control.profile-input:not(.form-control-plaintext) {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  padding-left: 0.75rem;
+  border-radius: 0.375rem;
+}
