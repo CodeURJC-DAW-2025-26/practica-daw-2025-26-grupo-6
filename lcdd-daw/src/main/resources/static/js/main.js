@@ -279,3 +279,78 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+  
+  const ctxGames = document.getElementById("gamesFavChart");
+  const ctxEvents = document.getElementById("eventsParticipantsChart");
+
+  // fill data with placeholders if there are less than 10 items to ensure the chart always has 10 bars and doesn't look empty
+  const fillPlaceholderData = (data, type) => {
+    const minItems = 10;
+    const filledData = [...data];
+    
+    for (let i = filledData.length; i < minItems; i++) {
+      filledData.push({
+        [type === 'game' ? 'gameName' : 'eventName']: "---",
+        [type === 'game' ? 'favCount' : 'participantCount']: 0
+      });
+    }
+    return filledData;
+  };
+
+  const createAdminChart = (canvas, data, label, color, type) => {
+    // apply placeholder logic to ensure the chart always has 10 bars
+    const processedData = fillPlaceholderData(data, type);
+
+    new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: processedData.map(d => d.gameName || d.eventName),
+        datasets: [{
+          label: label,
+          data: processedData.map(d => d.favCount || d.participantCount),
+          backgroundColor: color + "73", // 45% opacity
+          borderColor: color,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { display: false },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: (context) => context.raw === 0 ? "Sin datos" : `${context.raw} ${label}`
+            }
+          }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true, 
+            suggestedMax: 10, 
+            ticks: { precision: 0 } 
+          },
+          x: { ticks: { maxRotation: 45, minRotation: 0 } }
+        }
+      }
+    });
+  };
+
+  if (ctxGames) {
+    fetch("/admin/api/top-favorite-games")
+      .then(res => res.json())
+      .then(data => createAdminChart(ctxGames, data, "Favoritos", "#a71b12", "game"))
+      .catch(err => console.error("Error Juegos Chart:", err));
+  }
+
+  if (ctxEvents) {
+    fetch("/admin/api/top-events-participants")
+      .then(res => res.json())
+      .then(data => createAdminChart(ctxEvents, data, "Participantes", "#28a745", "event"))
+      .catch(err => console.error("Error Eventos Chart:", err));
+  }
+});
