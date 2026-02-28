@@ -44,4 +44,8 @@ public class NewService {
 	public void delete(long id) {
 		repository.deleteById(id);
 	}
+
+	public List<New> findTop3() {
+        return repository.findTop3ByOrderByCreationDateDesc();
+    }
 }

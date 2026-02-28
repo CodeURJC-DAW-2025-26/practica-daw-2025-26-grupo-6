@@ -14,6 +14,8 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     Optional<Game> findByGameName(String gameName);
 
+    List<Game> findTop3ByOrderByGameIdDesc();
+
     @Query("""
       SELECT g AS game, COUNT(DISTINCT u) AS favCount
       FROM Game g

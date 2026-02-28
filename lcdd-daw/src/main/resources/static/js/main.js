@@ -6,7 +6,7 @@
 * License: https://bootstrapmade.com/license/
 */
 
-(function() {
+(function () {
   "use strict";
 
   /**
@@ -52,7 +52,7 @@
    * Toggle mobile nav dropdowns
    */
   document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-    navmenu.addEventListener('click', function(e) {
+    navmenu.addEventListener('click', function (e) {
       e.preventDefault();
       this.parentNode.classList.toggle('active');
       this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
@@ -110,30 +110,30 @@
   const timers = document.querySelectorAll(".next-event-timer");
   let date = new Date("2026-10-10 10:10:10");
   timers.forEach(timer => {
-    
-    setInterval(function() {
+
+    setInterval(function () {
       // Get the current date and time
       let now = new Date().getTime();
-      
+
       // Calculate the distance between now and the countdown date
       let distance = date - now;
-      
+
       // Calculate days, hours, minutes and seconds
       let days = Math.floor(distance / (1000 * 60 * 60 * 24));
       let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      
+
       // Display the result
       timer.querySelector(".days").innerHTML = days.
-          toString().padStart(2, '0');
+        toString().padStart(2, '0');
       timer.querySelector(".hours").innerHTML = hours.
-          toString().padStart(2, '0');
+        toString().padStart(2, '0');
       timer.querySelector(".minutes").innerHTML = minutes.
-          toString().padStart(2, '0');
+        toString().padStart(2, '0');
       timer.querySelector(".seconds").innerHTML = seconds.
-          toString().padStart(2, '0');
-      
+        toString().padStart(2, '0');
+
       // If the countdown is over, display a message
       if (distance < 0) {
         clearInterval(x);
@@ -143,7 +143,7 @@
   })
 
 
-// --- Event form logic (Show/Hide link container) ---
+  // --- Event form logic (Show/Hide link container) ---
   const radioSi = document.getElementById('req-si');
   const radioNo = document.getElementById('req-no');
   const linkContainer = document.getElementById('link-container');
@@ -155,11 +155,11 @@
         linkContainer.style.display = 'block';
       } else {
         linkContainer.style.display = 'none';
-        
+
         // Clear the input value if changed to "No"
         const linkInput = document.getElementById('link');
         if (linkInput) {
-          linkInput.value = ''; 
+          linkInput.value = '';
         }
       }
     }
@@ -199,63 +199,63 @@
  * 2. Validate image input (size and format) before form submission 
  */
 document.addEventListener('DOMContentLoaded', function () {
-    
-    const radios = document.querySelectorAll('.radio-registro');
-    const linkContainer = document.getElementById('link-container');
-    const linkInput = document.getElementById('link');
 
-    if (radios.length > 0 && linkContainer && linkInput) {
-        const toggleLinkValidation = () => {
-            const siRadio = document.getElementById('req-si');
-            if (siRadio && siRadio.checked) {
-                linkContainer.style.display = 'block';
-                linkInput.setAttribute('required', 'true');
-            } else {
-                linkContainer.style.display = 'none';
-                linkInput.removeAttribute('required');
-                linkInput.classList.remove('is-invalid');
-            }
-        };
+  const radios = document.querySelectorAll('.radio-registro');
+  const linkContainer = document.getElementById('link-container');
+  const linkInput = document.getElementById('link');
 
-        radios.forEach(radio => radio.addEventListener('change', toggleLinkValidation));
-        
-        toggleLinkValidation();
-    }
+  if (radios.length > 0 && linkContainer && linkInput) {
+    const toggleLinkValidation = () => {
+      const siRadio = document.getElementById('req-si');
+      if (siRadio && siRadio.checked) {
+        linkContainer.style.display = 'block';
+        linkInput.setAttribute('required', 'true');
+      } else {
+        linkContainer.style.display = 'none';
+        linkInput.removeAttribute('required');
+        linkInput.classList.remove('is-invalid');
+      }
+    };
 
-   // image validation
-    const imageInput = document.getElementById('imageField');
+    radios.forEach(radio => radio.addEventListener('change', toggleLinkValidation));
 
-    if (imageInput) {
-        imageInput.addEventListener('change', function() {
-            const file = this.files[0];
-            const maxSize = 10 * 1024 * 1024; // 10MB
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    toggleLinkValidation();
+  }
 
-            if (file) {
-                // size validation
-                if (file.size > maxSize) {
-                    alert('¡Archivo demasiado grande! El máximo permitido son 10MB.');
-                    this.value = ''; 
-                    return;
-                }
+  // image validation
+  const imageInput = document.getElementById('imageField');
 
-                // format validation
-                if (!allowedTypes.includes(file.type)) {
-                    alert('Formato no permitido. Por favor, sube JPG, PNG o WebP.');
-                    this.value = ''; 
-                    return;
-                }
-            }
-        });
-    }
+  if (imageInput) {
+    imageInput.addEventListener('change', function () {
+      const file = this.files[0];
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+      if (file) {
+        // size validation
+        if (file.size > maxSize) {
+          alert('¡Archivo demasiado grande! El máximo permitido son 10MB.');
+          this.value = '';
+          return;
+        }
+
+        // format validation
+        if (!allowedTypes.includes(file.type)) {
+          alert('Formato no permitido. Por favor, sube JPG, PNG o WebP.');
+          this.value = '';
+          return;
+        }
+      }
+    });
+  }
 
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  
+document.addEventListener('DOMContentLoaded', function () {
+
   // Password confirmation logic for register.html
   const registerForm = document.getElementById('registerForm');
-  
+
   // Only execute this code if we're on the register page (where the form exists)
   if (registerForm) {
     const pwd = document.getElementById('password');
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (pwd.value !== confirmPwd.value) {
         confirmPwd.setCustomValidity("Las contraseñas no coinciden");
       } else {
-        confirmPwd.setCustomValidity(""); 
+        confirmPwd.setCustomValidity("");
       }
     }
 
@@ -280,8 +280,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-  
+document.addEventListener("DOMContentLoaded", function () {
+
   const ctxGames = document.getElementById("gamesFavChart");
   const ctxEvents = document.getElementById("eventsParticipantsChart");
 
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const fillPlaceholderData = (data, type) => {
     const minItems = 10;
     const filledData = [...data];
-    
+
     for (let i = filledData.length; i < minItems; i++) {
       filledData.push({
         [type === 'game' ? 'gameName' : 'eventName']: "---",
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", function() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { 
+        plugins: {
           legend: { display: false },
           tooltip: {
             enabled: true,
@@ -329,10 +329,10 @@ document.addEventListener("DOMContentLoaded", function() {
           }
         },
         scales: {
-          y: { 
-            beginAtZero: true, 
-            suggestedMax: 10, 
-            ticks: { precision: 0 } 
+          y: {
+            beginAtZero: true,
+            suggestedMax: 10,
+            ticks: { precision: 0 }
           },
           x: { ticks: { maxRotation: 45, minRotation: 0 } }
         }
@@ -354,3 +354,53 @@ document.addEventListener("DOMContentLoaded", function() {
       .catch(err => console.error("Error Eventos Chart:", err));
   }
 });
+
+/**
+ * AJAX to load more games
+ */
+let currentGamePage = 1;
+
+function loadMoreGames() {
+  const btn = document.getElementById('load-more-btn');
+  const text = document.getElementById('btn-text');
+  const spinner = document.getElementById('btn-spinner');
+
+  const urlParams = new URLSearchParams(window.location.search);
+  urlParams.set('page', currentGamePage);
+
+  btn.disabled = true;
+  text.textContent = "Cargando...";
+  spinner.classList.remove('d-none');
+
+  fetch(`/games?${urlParams.toString()}`)
+    .then(response => response.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      const newGames = doc.querySelectorAll('#games-container .game-item');
+      const container = document.getElementById('games-container');
+
+      if (newGames.length > 0) {
+        newGames.forEach(game => container.appendChild(game));
+
+        const hasNextPage = doc.getElementById('load-more-btn') !== null;
+        if (!hasNextPage) {
+          btn.style.display = 'none';
+        } else {
+          currentGamePage++;
+          btn.disabled = false;
+          text.textContent = "Cargar más juegos";
+          spinner.classList.add('d-none');
+        }
+      } else {
+        btn.style.display = 'none';
+      }
+    })
+    .catch(error => {
+      console.error('Error al cargar juegos:', error);
+      btn.disabled = false;
+      text.textContent = "Error. Reintentar";
+      spinner.classList.add('d-none');
+    });
+}

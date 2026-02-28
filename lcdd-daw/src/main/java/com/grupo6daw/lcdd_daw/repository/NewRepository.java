@@ -20,5 +20,7 @@ public interface NewRepository extends JpaRepository<New, Long> {
 	""")
 	Page<New> findByNameAndTag(String name, String tag, Pageable page);
 
+	List<New> findTop3ByOrderByCreationDateDesc();
+
 }
 
