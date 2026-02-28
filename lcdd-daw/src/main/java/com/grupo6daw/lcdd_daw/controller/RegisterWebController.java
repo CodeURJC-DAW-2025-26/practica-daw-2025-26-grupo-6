@@ -29,12 +29,12 @@ public class RegisterWebController {
 
 	@GetMapping("/userExists")
 	@ResponseBody
-	public boolean getMethodName(@RequestParam String email) {
+	public boolean userExists(@RequestParam String email) {
 		return userService.existsByUserEmail(email);
 	}
 
 	@GetMapping("/register")
-	public String register(Model model) {
+	public String registerDisplay(Model model) {
 		model.addAttribute("email", "");
 		model.addAttribute("password", "");
 		model.addAttribute("name", "");
@@ -45,7 +45,7 @@ public class RegisterWebController {
 	}
 
 	@PostMapping("/register")
-	public String postMethodName(Model model, @Valid UserRegistrationDto dto, HttpServletRequest request) {
+	public String register(Model model, @Valid UserRegistrationDto dto, HttpServletRequest request) {
 		
 		if (userService.existsByUserEmail(dto.getEmail())) {
 			model.addAttribute("email", dto.getEmail());

@@ -6,9 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
@@ -16,6 +19,16 @@ public class WebSecurityConfig {
 
 	@Autowired
 	RepositoryUserDetailsService userDetailsService;
+
+	@Bean
+	public SessionRegistry sessionRegistry() {
+    	return new SessionRegistryImpl();
+	}
+
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher() {
+    	return new HttpSessionEventPublisher();
+	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -62,6 +75,9 @@ public class WebSecurityConfig {
 						.requestMatchers("/new_form/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/removeNew/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/removeEvent/*").hasAnyRole("REGISTERED_USER")
+						.requestMatchers("/user/*/update").hasAnyRole("REGISTERED_USER")
+						.requestMatchers("/user/*/delete").hasAnyRole("REGISTERED_USER")
+						.requestMatchers("/removeEvent/*").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/removeGame/*").hasAnyRole("ADMIN")
 						.requestMatchers("/game_form/*").hasAnyRole("ADMIN")
 						.requestMatchers("/game_form").hasAnyRole("ADMIN")
@@ -75,6 +91,14 @@ public class WebSecurityConfig {
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/")
 						.permitAll());
+		
+		// SessionRegistry configuration
+		http    
+			.sessionManagement(session -> session
+				.maximumSessions(-1) // No limit on sessions
+				.sessionRegistry(sessionRegistry())
+				.expiredSessionStrategy(new RedirectToCurrentUrlStrategy())
+    		);			
 
 		return http.build();
 	}
