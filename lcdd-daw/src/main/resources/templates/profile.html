@@ -11,7 +11,7 @@
                   <div class="form">
                     <div class="row">
                       <div class="col-lg-3">
-                        <img src="/images/{{user.userImage.id}}" class="img-fluid">
+                        <img src="/user/{{userId}}/image" class="img-fluid">
                         <br>
                         <br>
                         <div class="form-field">
@@ -42,25 +42,27 @@
                         </div>
                         <div class="row-buttons">
                           <div class="col-lg-2">
-                            <a href="/index" class="submit-btn">Volver sin guardar</a>
+                            <a href="/" class="submit-btn">Volver sin guardar</a>
                           </div>
                           <div class="col-lg-2">
-                            <a href="/index" type="submit" class="submit-btn">
+                            <a href="/" type="submit" class="submit-btn">
                               <span>Guardar cambios</span>
                               <i class="bi bi-arrow-right"></i>
                             </a>
                           </div>
                           <div class="col-lg-2">
-                            <a href="/index" type="submit" class="submit-btn">
+                            <a href="/" type="submit" class="submit-btn">
                               <span>Eliminar cuenta</span>
                               <i class="bi bi-exclamation-octagon"></i>
                             </a>
                           </div>
                         </div>
                         <br>
+                        {{#user.userFavGames.0}}
                         <h4>Juegos favoritos</h4>
+                        {{/user.userFavGames.0}}
                         <div class="row gy-4">
-                          {{#userFavGames}}
+                          {{#user.userFavGames}}
                           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                             <a class="project-card" href="/game/{{gameId}}">
                               <div class="project-image">
@@ -72,47 +74,45 @@
                               </div>
                             </a>
                           </div>
-                          {{/userFavGames}}
+                          {{/user.userFavGames}}
                         </div>
                         <br>
+                        {{#user.userOwnEvents.0}}
                         <h4>Mis eventos</h4>
-                        <!--Aqui hay dos row gy-4, porque?-->
+                        {{/user.userOwnEvents.0}}
                         <div class="row gy-4">
-                          <div class="row gy-4">
-                            {{#userOwnEvents}}
-                            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                              <a class="project-card" href="/event/{{eventId}}">
-                                <div class="project-image">
-                                  <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
-                                </div>
-                                <div class="project-info">
-                                  <div class="project-category">{{eventTag}}</div>
-                                  <h4 class="project-title">{{eventName}}</h4>
-                                </div>
-                              </a>
-                            </div>
-                            {{/userOwnEvents}}
+                          {{#user.userOwnEvents}}
+                          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                            <a class="project-card" href="/event/{{eventId}}">
+                              <div class="project-image">
+                                <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
+                              </div>
+                              <div class="project-info">
+                                <div class="project-category">{{eventTag}}</div>
+                                <h4 class="project-title">{{eventName}}</h4>
+                              </div>
+                            </a>
                           </div>
+                          {{/user.userOwnEvents}}
                         </div>
                         <br>
+                        {{#user.userNews.0}}
                         <h4>Mis noticias</h4>
-                        <!--Aqui tambien hay dos row gy-4-->
+                        {{/user.userNews.0}}
                         <div class="row gy-4">
-                          <div class="row gy-4">
-                            {{#userNews}}
-                            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                              <a class="project-card" href="/new/{{newId}}">
-                                <div class="project-image">
-                                  <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
-                                </div>
-                                <div class="project-info">
-                                  <div class="project-category">{{newTag}}</div>
-                                  <h4 class="project-title">{{newName}}</h4>
-                                </div>
-                              </a>
-                            </div>
-                            {{/userNews}}
+                          {{#user.userNews}}
+                          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                            <a class="project-card" href="/new/{{newId}}">
+                              <div class="project-image">
+                                <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
+                              </div>
+                              <div class="project-info">
+                                <div class="project-category">{{newTag}}</div>
+                                <h4 class="project-title">{{newName}}</h4>
+                              </div>
+                            </a>
                           </div>
+                          {{/user.userNews}}
                         </div>
                       </div>
                     </div>
