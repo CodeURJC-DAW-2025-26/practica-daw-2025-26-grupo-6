@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.grupo6daw.lcdd_daw.model.Game;
@@ -31,8 +33,8 @@ public class GameService {
 		return repository.findAll();
 	}
 
-	public List<Game> findByFilter(String name, String tag, Integer players, Integer duration) {
-		return repository.findByNameAndTagAndPlayersAndDuration(name, tag, players, duration);
+	public Page<Game> findByFilter(String name, String tag, Integer players, Integer duration, Pageable page) {
+		return repository.findByNameAndTagAndPlayersAndDuration(name, tag, players, duration, page);
 	}
 
 	public void save(Game game) {

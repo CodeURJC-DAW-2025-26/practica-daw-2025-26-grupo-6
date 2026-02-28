@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.grupo6daw.lcdd_daw.model.Event;
@@ -51,8 +53,8 @@ public class EventService {
         return repository.findByValidatedTrue();
     }
 
-    public List<Event> findValidatedByFilter(String name, String tag) {
-        return repository.findValidatedByNameAndTag(name, tag);
+    public Page<Event> findValidatedByFilter(String name, String tag, Pageable page) {
+        return repository.findValidatedByNameAndTag(name, tag, page);
     }
 
 }

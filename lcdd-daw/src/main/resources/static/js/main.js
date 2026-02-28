@@ -142,48 +142,6 @@
     }, 1000);
   })
 
-  const form = document.getElementById('registerForm');
-  if (form) {
-    form.addEventListener('submit', async function(event) {
-      const email = document.getElementById('email');
-      const password = document.getElementById('password');
-      const confirmPassword = document.getElementById('confirm-password');
-
-      event.preventDefault();
-
-      try {
-        const response = await fetch(`/userExists?email=${encodeURIComponent(email.value)}`);
-        const exists = await response.json();
-        console.log(exists);
-
-        if (exists) {
-          // Show error
-          email.classList.add('is-invalid');
-          return;
-        } else {
-          // Clean error
-          email.classList.remove('is-invalid');
-        }
-      } catch (error) {
-        console.error("Error al verificar el usuario:", error);
-        return;
-      }
-      
-      if (password.value !== confirmPassword.value) {
-          // Show error
-          confirmPassword.classList.add('is-invalid');
-          password.classList.add('is-invalid');
-          return;
-          
-      } else {
-          // Clean error
-          confirmPassword.classList.remove('is-invalid');
-          password.classList.remove('is-invalid');
-      }
-
-      form.submit();
-    });
-  }
 
 // --- Event form logic (Show/Hide link container) ---
   const radioSi = document.getElementById('req-si');
@@ -231,3 +189,168 @@
       }, false)
     })
 })()
+
+
+// Scripts for event_form.html
+
+/**
+ * logic for event form:
+ * 1. Show/hide link input based on "Requiere inscripción" radio buttons
+ * 2. Validate image input (size and format) before form submission 
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    
+    const radios = document.querySelectorAll('.radio-registro');
+    const linkContainer = document.getElementById('link-container');
+    const linkInput = document.getElementById('link');
+
+    if (radios.length > 0 && linkContainer && linkInput) {
+        const toggleLinkValidation = () => {
+            const siRadio = document.getElementById('req-si');
+            if (siRadio && siRadio.checked) {
+                linkContainer.style.display = 'block';
+                linkInput.setAttribute('required', 'true');
+            } else {
+                linkContainer.style.display = 'none';
+                linkInput.removeAttribute('required');
+                linkInput.classList.remove('is-invalid');
+            }
+        };
+
+        radios.forEach(radio => radio.addEventListener('change', toggleLinkValidation));
+        
+        toggleLinkValidation();
+    }
+
+   // image validation
+    const imageInput = document.getElementById('imageField');
+
+    if (imageInput) {
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+            if (file) {
+                // size validation
+                if (file.size > maxSize) {
+                    alert('¡Archivo demasiado grande! El máximo permitido son 10MB.');
+                    this.value = ''; 
+                    return;
+                }
+
+                // format validation
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Formato no permitido. Por favor, sube JPG, PNG o WebP.');
+                    this.value = ''; 
+                    return;
+                }
+            }
+        });
+    }
+
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // Password confirmation logic for register.html
+  const registerForm = document.getElementById('registerForm');
+  
+  // Only execute this code if we're on the register page (where the form exists)
+  if (registerForm) {
+    const pwd = document.getElementById('password');
+    const confirmPwd = document.getElementById('confirm-password');
+
+    // Check if passwords match and set custom validity message if they don't
+    function validatePasswords() {
+      if (pwd.value !== confirmPwd.value) {
+        confirmPwd.setCustomValidity("Las contraseñas no coinciden");
+      } else {
+        confirmPwd.setCustomValidity(""); 
+      }
+    }
+
+    // Checking on form submission
+    registerForm.addEventListener('submit', validatePasswords);
+
+    // Checking in real-time as the user types
+    pwd.addEventListener('input', validatePasswords);
+    confirmPwd.addEventListener('input', validatePasswords);
+  }
+
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  
+  const ctxGames = document.getElementById("gamesFavChart");
+  const ctxEvents = document.getElementById("eventsParticipantsChart");
+
+  // fill data with placeholders if there are less than 10 items to ensure the chart always has 10 bars and doesn't look empty
+  const fillPlaceholderData = (data, type) => {
+    const minItems = 10;
+    const filledData = [...data];
+    
+    for (let i = filledData.length; i < minItems; i++) {
+      filledData.push({
+        [type === 'game' ? 'gameName' : 'eventName']: "---",
+        [type === 'game' ? 'favCount' : 'participantCount']: 0
+      });
+    }
+    return filledData;
+  };
+
+  const createAdminChart = (canvas, data, label, color, type) => {
+    // apply placeholder logic to ensure the chart always has 10 bars
+    const processedData = fillPlaceholderData(data, type);
+
+    new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: processedData.map(d => d.gameName || d.eventName),
+        datasets: [{
+          label: label,
+          data: processedData.map(d => d.favCount || d.participantCount),
+          backgroundColor: color + "73", // 45% opacity
+          borderColor: color,
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { display: false },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: (context) => context.raw === 0 ? "Sin datos" : `${context.raw} ${label}`
+            }
+          }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true, 
+            suggestedMax: 10, 
+            ticks: { precision: 0 } 
+          },
+          x: { ticks: { maxRotation: 45, minRotation: 0 } }
+        }
+      }
+    });
+  };
+
+  if (ctxGames) {
+    fetch("/admin/api/top-favorite-games")
+      .then(res => res.json())
+      .then(data => createAdminChart(ctxGames, data, "Favoritos", "#a71b12", "game"))
+      .catch(err => console.error("Error Juegos Chart:", err));
+  }
+
+  if (ctxEvents) {
+    fetch("/admin/api/top-events-participants")
+      .then(res => res.json())
+      .then(data => createAdminChart(ctxEvents, data, "Participantes", "#28a745", "event"))
+      .catch(err => console.error("Error Eventos Chart:", err));
+  }
+});

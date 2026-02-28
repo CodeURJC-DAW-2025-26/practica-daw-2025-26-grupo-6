@@ -32,5 +32,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 	  ((g.minPlayers <= :players AND g.maxPlayers >= :players) OR :players IS NULL) AND
 	  ((g.minDuration <= :duration AND g.maxDuration >= :duration) OR :duration IS NULL)
     """)
-    List<Game> findByNameAndTagAndPlayersAndDuration(String name, String tag, Integer players, Integer duration);
+      Page<Game> findByNameAndTagAndPlayersAndDuration(String name, String tag, Integer players, Integer duration, Pageable page);
 }

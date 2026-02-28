@@ -1,27 +1,27 @@
 {{>header}}
 
-  <main class="main">
-    <section id="projects" class="projects section">
-      <h1 style="text-align: center;">EVENTOS</h1>
-      <div class="container mb-4">
-        <form method="get" action="/events">
-          <div class="row g-2 align-items-center">
-            <div class="col-12 col-md-5 col-lg-6">
-              <input name="name" class="form-control" type="search" placeholder="Buscar eventos..." aria-label="Search">
-            </div>
-            <div class="col-6 col-md-3 col-lg-2">
-              <select name="tag" class="form-select" aria-label="Filtrar por categoría">
-                <option selected value="">Filtrar categoría</option>
-                <option value="Juegos de mesa">Juegos de mesa</option>
-                <option value="Rol">Rol</option>
-                <option value="Cartas">Cartas</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-2 col-lg-2">
-              <button class="btn_lcdd w-100" type="submit">
-                <i class="bi bi-search"></i> Buscar
-              </button>
-            </div>
+<main class="main">
+  <section id="projects" class="projects section">
+    <h1 style="text-align: center;">EVENTOS</h1>
+    <div class="container mb-4">
+      <form method="get" action="/events">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-5 col-lg-6">
+            <input name="name" class="form-control" type="search" placeholder="Buscar eventos..." aria-label="Search">
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <select name="tag" class="form-select" aria-label="Filtrar por categoría">
+              <option selected value="">Filtrar categoría</option>
+              <option value="Juegos de mesa">Juegos de mesa</option>
+              <option value="Rol">Rol</option>
+              <option value="Cartas">Cartas</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-2 col-lg-2">
+            <button class="btn_lcdd w-100" type="submit">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
           {{#logged}}
           <div class="col-12 col-md-2 col-lg-2">
             <a href="event_form" class="btn_lcdd_black w-100">
@@ -29,35 +29,63 @@
             </a>
           </div>
           {{/logged}}
-          </form>
-        </div>
-      </div>
+      </form>
+    </div>
+    </div>
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row gy-4">
-          {{#event}}
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="/event/{{eventId}}">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">{{eventTag}}</div>
-                  <h4 class="project-title">{{eventName}}</h4>
-                  <p class="project-description">
-                    🎲🧩♟ {{eventDescription}}</p>
-                </div>
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div id="events-container" class="row gy-4">
+        {{#event}}
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <a class="project-card" href="/event/{{eventId}}">
+            <div class="project-card">
+              <div class="project-image">
+                <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
               </div>
-            </a>
-          </div>
-          {{/event}}
-          {{^event}}
-          <div>No hay eventos</div>
-          {{/event}}
+              <div class="project-info">
+                <div class="project-category">{{eventTag}}</div>
+                <h4 class="project-title">{{eventName}}</h4>
+                <p class="project-description">
+                  🎲🧩♟ {{eventDescription}}</p>
+              </div>
+            </div>
+          </a>
         </div>
+        {{/event}}
+        {{^event}}
+        <div>No hay eventos</div>
+        {{/event}}
       </div>
-    </section>
-  </main>
+      <div class="text-center col-lg-4">
+        {{#hasNext}}
+          <button id="load-more-btn" class="btn_lcdd" onclick="loadMore()">Cargar más</button>
+        {{/hasNext}}
+      </div>
+    </div>
+  </section>
+</main>
 
+<script>
+  let currentPage = 1;
+  function loadMore() {
+    const name = "{{name}}";
+    const tag = "{{tag}}";
+    const btn = document.getElementById('load-more-btn');
+
+    fetch(`/events?page=${currentPage}&name=${name}&tag=${tag}`)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newEvents = doc.getElementById('events-container').innerHTML;
+        document.getElementById('events-container').insertAdjacentHTML('beforeend', newEvents);
+        const hasNext = doc.getElementById('load-more-btn') !== null;
+        if (!hasNext) {
+          btn.style.display = 'none';
+        }
+        currentPage++;
+      })
+      .catch(error => console.error('Error cargando eventos:', error));
+  }
+</script>
 {{>footer}}

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.grupo6daw.lcdd_daw.model.New;
@@ -31,8 +33,8 @@ public class NewService {
 		return repository.findAll();
 	}
 
-	public List<New> findByFilter(String name, String tag) {
-		return repository.findByNameAndTag(name, tag);
+	public Page<New> findByFilter(String name, String tag, Pageable page) {
+		return repository.findByNameAndTag(name, tag, page);
 	}
 
 	public void save(New newEntity) {

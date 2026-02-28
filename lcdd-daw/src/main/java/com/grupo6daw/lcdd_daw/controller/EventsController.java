@@ -6,15 +6,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
@@ -22,12 +28,26 @@ import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.UserService;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
+import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
 public class EventsController {
+
+	@ControllerAdvice
+	public class GlobalExceptionHandler {
+
+		@ExceptionHandler(MaxUploadSizeExceededException.class)
+		public String handleMaxSizeException(MaxUploadSizeExceededException exc,
+				RedirectAttributes redirectAttributes) {
+			redirectAttributes.addFlashAttribute("hasErrors", true);
+			redirectAttributes.addFlashAttribute("allErrors",
+					List.of("El archivo es demasiado grande o el formato es incompatible. El límite configurado es 10MB."));
+			return "redirect:/event_form";
+		}
+	}
 
 	@Autowired
 	private EventService eventService;
@@ -38,16 +58,25 @@ public class EventsController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/events")
-	public String events(Model model,
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String tag) {
+	@Autowired
+	private ImageValidationService imageValidationService;
 
-		model.addAttribute("event", eventService.findValidatedByFilter(name, tag));
-		model.addAttribute("name", name == null ? "" : name);
-		model.addAttribute("tag", tag == null ? "" : tag);
-		return "events";
-	}
+@GetMapping("/events")
+public String events(Model model,
+    @RequestParam(required = false) String name,
+    @RequestParam(required = false) String tag,
+    @RequestParam(defaultValue = "0") int page) {
+
+    Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag, PageRequest.of(page, 10));
+
+    model.addAttribute("event", eventsPage.getContent());
+    model.addAttribute("name", name == null ? "" : name);
+    model.addAttribute("tag", tag == null ? "" : tag);
+    model.addAttribute("hasNext", eventsPage.hasNext());
+    model.addAttribute("nextPage", page + 1);
+
+    return "events";
+}
 
 	@GetMapping("/event/{id}")
 	public String eventDetail(@PathVariable long id, Model model, HttpServletRequest request) {
@@ -129,6 +158,43 @@ public class EventsController {
 		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
 		User currentUser = userService.getUser(currentUserId).orElseThrow();
 
+		// Error check (@Valid)
+		if (bindingResult.hasFieldErrors("eventName")) {
+			errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
+		}
+		if (bindingResult.hasFieldErrors("eventDescription")) {
+			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
+		}
+
+		// Checking the registration requirement and link)
+		if (event.isRequiresRegistration()) {
+			if (event.getLink() == null || event.getLink().trim().isEmpty()) {
+				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
+			}
+		} else {
+			// if the event doesn't require registration, we ignore any link provided and
+			// set it to null
+			event.setLink(null);
+		}
+
+		imageValidationService.validate(imageField, errorMessages, isNewEvent);
+
+		// if the image is provided, we check if it's a valid image file (by checking
+		// the content type)
+		if (!errorMessages.isEmpty()) {
+			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+			if (csrfToken != null) {
+				model.addAttribute("token", csrfToken.getToken());
+			}
+			model.addAttribute("hasErrors", true);
+			model.addAttribute("allErrors", errorMessages);
+			model.addAttribute("event", event);
+			return "event_form";
+		}
+
+		// OWNER CHECK (if it's a new event, we set the owner to the current user, if
+		// it's an existing event, we check if the current user is the owner or an
+		// admin, if not, we redirect to the events page with an error)
 		if (!isNewEvent) {
 			Event existingEvent = eventService.findById(event.getEventId()).get();
 			boolean isOwner = existingEvent.getEventCreator() != null
@@ -141,40 +207,14 @@ public class EventsController {
 
 			event.setEventCreator(existingEvent.getEventCreator());
 		} else {
-
 			event.setEventCreator(currentUser);
 		}
 
-		if (bindingResult.hasFieldErrors("eventName")) {
-			errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
-		}
-		if (bindingResult.hasFieldErrors("eventDescription")) {
-			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
-		}
-
-		if (event.isRequiresRegistration()) {
-			if (event.getLink() == null || event.getLink().trim().isEmpty()) {
-				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
-			}
-		} else {
-			event.setLink("");
-		}
-
-		if (event.getEventTag() == null)
+		// IMAGE HANDLING (if a new image is uploaded, we create a new Image entity and
+		// set it to the event, if it's an existing event and no new image is uploaded,
+		// we keep the old image)
+		if (event.getEventTag() == null) {
 			event.setEventTag("");
-
-		if (isNewEvent && imageField.isEmpty()) {
-			errorMessages.add("Debes adjuntar una imagen para el evento.");
-		}
-
-		if (!errorMessages.isEmpty()) {
-			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-			if (csrfToken != null)
-				model.addAttribute("token", csrfToken.getToken());
-			model.addAttribute("hasErrors", true);
-			model.addAttribute("allErrors", errorMessages);
-			model.addAttribute("event", event);
-			return "event_form";
 		}
 
 		if (!imageField.isEmpty()) {
@@ -185,6 +225,7 @@ public class EventsController {
 			event.setEventImage(oldEvent.getEventImage());
 		}
 
+		// Finally, we save the event
 		eventService.save(event);
 
 		return "redirect:/events";
@@ -199,7 +240,6 @@ public class EventsController {
 			boolean isAdmin = request.isUserInRole("ADMIN");
 			boolean isOwner = false;
 
-			
 			if (request.getUserPrincipal() != null) {
 				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
 				isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);

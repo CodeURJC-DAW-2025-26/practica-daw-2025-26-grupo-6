@@ -1,226 +1,120 @@
 {{>header}}
 
 <main class="main">
-  <section id="quote" class="quote section">
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-      <div class="row justify-content-center">
-        <h4>Solicitudes pendientes:</h4>
+  <section id="admin-dashboard" class="quote section">
+    <div class="container" data-aos="fade-up">
+
+      <div class="form-intro text-center mb-5">
+        <h1 style="font-weight: 700; color: #212529;">Panel de Administración</h1>
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-center">
+            <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page" style="color: #a71b12; font-weight: 600;">
+              Administración</li>
+          </ol>
+        </nav>
+      </div>
+
+      <div class="admin-section mb-5">
+        <div class="d-flex align-items-center mb-4 border-bottom pb-2">
+          <i class="bi bi-clipboard-check text-primary fs-3 me-3"></i>
+          <h3 class="mb-0" style="font-weight: 700;">Solicitudes Pendientes</h3>
+        </div>
+
         <div class="row gy-4">
           {{#events}}
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="project-card">
+          <div class="col-lg-4 col-md-6" data-aos="fade-up">
+            <div class="project-card shadow-sm border-0 h-100">
               <a class="d-block text-decoration-none" href="/event/{{eventId}}">
-                <div class="project-image">
-                  <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
+                <div class="project-image" style="height: 180px; overflow: hidden;">
+                  <img src="/images/{{eventImage.id}}" alt="Evento" class="img-fluid w-100 h-100"
+                    style="object-fit: cover;">
                 </div>
-                <div class="project-info">
-                  <div class="project-category">{{eventTag}}</div>
+                <div class="project-info p-3">
+                  <div class="project-category mb-2">{{eventTag}}</div>
                   <h4 class="project-title">{{eventName}}</h4>
-                  <p class="text-muted" style="min-height: 3em; overflow: hidden; text-overflow: ellipsis;">
+                  <p class="text-muted small mb-0"
+                    style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                     {{eventDescription}}
                   </p>
                 </div>
               </a>
-
-              <div class="d-flex gap-2 mt-2">
-                <form method="post" action="/admin/approveEvent/{{eventId}}"
-                  onsubmit="return confirmApprove('{{eventName}}')">
+              <div class="p-3 pt-0 d-flex gap-2">
+                <form method="post" action="/admin/approveEvent/{{eventId}}" class="flex-grow-1">
                   <input type="hidden" name="_csrf" value="{{token}}">
-                  <button type="submit" class="btn btn-success rounded-pill px-3">
-                    Aceptar
-                  </button>
+                  <button type="submit" class="btn btn-success w-100 rounded-pill btn-sm">Aprobar</button>
                 </form>
-                <form method="post" action="/admin/rejectEvent/{{eventId}}"
-                  onsubmit="return confirmReject('{{eventName}}')">
+                <form method="post" action="/admin/rejectEvent/{{eventId}}" class="flex-grow-1">
                   <input type="hidden" name="_csrf" value="{{token}}">
-                  <button type="submit" class="btn btn-danger rounded-pill px-3">
-                    Rechazar
-                  </button>
+                  <button type="submit" class="btn btn-outline-danger w-100 rounded-pill btn-sm">Rechazar</button>
                 </form>
-
               </div>
             </div>
           </div>
           {{/events}}
 
-          <!--Falta darle diseño a este mensaje-->
           {{^events}}
-          <div>No hay Solicitudes</div>
+          <div class="col-12 text-center py-4 bg-light rounded-3 border border-dashed">
+            <p class="mb-0 text-muted italic">No hay solicitudes pendientes.</p>
+          </div>
           {{/events}}
         </div>
       </div>
-      <br>
-      <hr>
-      <h3>Usuarios registrados</h3>
 
-      <div class="row gy-4 mt-3">
-        {{#users}}
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-          <a class="project-card d-block text-decoration-none" href="/user/{{userId}}">
-            <div class="project-image">
-              {{#userImage}}
-              <img src="/images/{{id}}" alt="Avatar de {{userNickname}}" class="img-fluid">
-              {{/userImage}}
-              {{^userImage}}
-              <img src="/img/person/Portrait_Placeholder.png" alt="Avatar por defecto" class="img-fluid">
-              {{/userImage}}
-            </div>
-            <div class="project-info">
-              <div class="project-category">{{userEmail}}</div>
-              <h4 class="project-title">{{userNickname}}</h4>
-              <p class="text-muted">{{userName}} {{userSurname}}</p>
-            </div>
-          </a>
+      <div class="admin-section mb-5">
+        <div class="d-flex align-items-center mb-4 border-bottom pb-2">
+          <i class="bi bi-people text-primary fs-3 me-3"></i>
+          <h3 class="mb-0" style="font-weight: 700;">Usuarios Registrados</h3>
         </div>
-        {{/users}}
-
-        {{^users}}
-        <div class="alert alert-info">No hay usuarios registrados.</div>
-        {{/users}}
+        <div class="row gy-3">
+          {{#users}}
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <a href="/user/{{userId}}"
+              class="d-flex align-items-center p-2 shadow-sm border rounded text-decoration-none bg-white h-100">
+              <div class="flex-shrink-0" style="width: 50px; height: 50px;">
+                {{#userImage}}
+                <img src="/images/{{id}}" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+                {{/userImage}}
+                {{^userImage}}
+                <img src="/img/person/Portrait_Placeholder.png" class="rounded-circle w-100 h-100"
+                  style="object-fit: cover;">
+                {{/userImage}}
+              </div>
+              <div class="flex-grow-1 ms-3 overflow-hidden">
+                <h6 class="mb-0 text-dark fw-bold text-truncate">{{userNickname}}</h6>
+                <small class="text-muted text-truncate d-block">{{userEmail}}</small>
+              </div>
+            </a>
+          </div>
+          {{/users}}
+        </div>
       </div>
-      <br>
-      <!--No se que quereis de mustache aqui, luego se mira-->
-      <div class="row justify-content-center">
-        <h3>Estadísticas:</h3>
+
+      <div class="admin-section">
+        <div class="d-flex align-items-center mb-4 border-bottom pb-2">
+          <i class="bi bi-graph-up-arrow text-primary fs-3 me-3"></i>
+          <h3 class="mb-0" style="font-weight: 700;">Estadísticas</h3>
+        </div>
         <div class="row gy-4">
-          <h5>Juegos con más favoritos:</h5>
-
-          <div class="col-12 col-lg-8" style="min-height: 320px;">
-            <canvas id="gamesFavChart" height="120" aria-label="Gráfica de juegos con más favoritos"></canvas>
+          <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-3">
+              <h6 class="fw-bold mb-3"><i class="bi bi-controller me-2"></i>Juegos Favoritos</h6>
+              <div style="height: 300px;"><canvas id="gamesFavChart"></canvas></div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-3">
+              <h6 class="fw-bold mb-3"><i class="bi bi-calendar-check me-2"></i>Participación en Eventos</h6>
+              <div style="height: 300px;"><canvas id="eventsParticipantsChart"></canvas></div>
+            </div>
           </div>
         </div>
-        <div class="row gy-4 mt-4">
-          <h5>Eventos con más participantes:</h5>
-          <div class="col-12 col-lg-8" style="min-height: 320px;">
-            <canvas id="eventsParticipantsChart" height="120"></canvas>
-          </div>
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
-        <script>
-          document.addEventListener("DOMContentLoaded", async () => {
-            const canvas = document.getElementById("gamesFavChart");
-            if (!canvas) return;
-
-            try {
-              const response = await fetch("/admin/api/top-favorite-games", {
-                headers: { "Accept": "application/json" }
-              });
-
-              if (!response.ok) throw new Error("Error HTTP " + response.status);
-
-              const data = await response.json();
-
-              const labels = data.map(d => d.gameName);
-              const values = data.map(d => d.favCount);
-
-              new Chart(canvas, {
-                type: "bar",
-                data: {
-                  labels: labels,
-                  datasets: [{
-                    label: "Nº de usuarios que lo tienen en favoritos",
-                    data: values,
-                    backgroundColor: "rgba(54, 162, 235, 0.45)",
-                    borderColor: "rgba(54, 162, 235, 1)",
-                    borderWidth: 1,
-                    borderRadius: 6
-                  }]
-                },
-                options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  aspectRatio: 2.4,
-                  scales: {
-                    y: {
-                      beginAtZero: true,
-                      ticks: { precision: 0 },
-                      title: { display: true, text: "Usuarios" }
-                    },
-                    x: {
-                      ticks: { autoSkip: false, maxRotation: 30, minRotation: 0 }
-                    }
-                  }
-                }
-              });
-
-            } catch (error) {
-              console.error("Error cargando gráfica:", error);
-              canvas.parentElement.innerHTML =
-                '<div class="alert alert-warning">No se pudo cargar la gráfica.</div>';
-            }
-          });
-        </script>
-        <script>
-          document.addEventListener("DOMContentLoaded", async () => {
-            const canvas = document.getElementById("eventsParticipantsChart");
-            if (!canvas) return;
-
-            const res = await fetch("/admin/api/top-events-participants", { headers: { "Accept": "application/json" } });
-            if (!res.ok) {
-              canvas.parentElement.innerHTML = '<div class="alert alert-warning">No se pudo cargar la gráfica de eventos.</div>';
-              return;
-            }
-
-            const data = await res.json();
-            const labels = data.map(d => d.eventName);
-            const values = data.map(d => d.participantCount);
-
-            new Chart(canvas, {
-              type: "bar",
-              data: {
-                labels,
-                datasets: [{
-                  label: "Nº de participantes",
-                  data: values,
-                  backgroundColor: "rgba(255, 159, 64, 0.45)",
-                  borderColor: "rgba(255, 159, 64, 1)",
-                  borderWidth: 1,
-                  borderRadius: 6
-                }]
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                aspectRatio: 2.4,
-                scales: {
-                  y: { beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: "Usuarios" } },
-                  x: { ticks: { autoSkip: false, maxRotation: 30, minRotation: 0 } }
-                }
-              }
-            });
-          });
-        </script>
       </div>
+
+    </div>
   </section>
-  <script>
-    function confirmApprove(name) {
-      return confirm(`¿Aprobar el evento "${name}"?`);
-    }
-    function confirmReject(name) {
-      return confirm(`¿Rechazar (eliminar) el evento "${name}"? Esta acción no se puede deshacer.`);
-    }
-  </script>
 </main>
 
-<footer id="footer" class="footer dark-background">
-  <!-- Poner algo en footer (Redes de la asociación o lo q sea) -->
-  <div class="footer-bottom">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="footer-bottom-content">
-            <p class="mb-0"><span class="sitename">La Caverna Del Dragón</span></p>
-            <div class="credits">
-              Desarrollo de Aplicaciones Web - Grupo 6 - 2026
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-  {{>footer}}
+{{>footer}}

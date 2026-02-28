@@ -25,10 +25,11 @@ public class Event {
     private Long eventId = null;
 
     @NotBlank(message = "El nombre del evento es obligatorio")
-    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
+    @Size(min = 5, max = 100, message = "El nombre debe tener entre 5 y 100 caracteres")
     private String eventName;
 
     @NotBlank(message = "La descripción no puede estar vacía")
+    @Size(min = 50, max = 3000, message = "La descripción debe tener entre 50 y 3000 caracteres")
     @Column(columnDefinition = "TEXT")
     private String eventDescription;
 
@@ -39,6 +40,8 @@ public class Event {
     private String eventTag;
 
     private boolean requiresRegistration;
+
+    @Size(max = 255, message = "El enlace no puede superar los 255 caracteres")
     private String link;
 
     @ManyToMany(mappedBy = "userRegisteredEvents")

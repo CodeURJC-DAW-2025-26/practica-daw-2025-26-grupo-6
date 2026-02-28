@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserNickname(String nickname);
     boolean existsByUserEmail(String email);
 
+    boolean existsByUserNickname(String userNickname);
+
     @Query("SELECT u.userImage from UserTable u WHERE u.userId = :id")
     Optional<Image> findImageByUserId(long id);
 }

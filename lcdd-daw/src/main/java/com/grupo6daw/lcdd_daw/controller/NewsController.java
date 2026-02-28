@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.service.NewService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
+import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -39,14 +42,23 @@ public class NewsController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private ImageValidationService imageValidationService;
+
 	@GetMapping("/news")
 	public String news(Model model,
 			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String tag) {
+			@RequestParam(required = false) String tag,
+			@RequestParam(defaultValue = "0") int page) {
 
-		model.addAttribute("new", newService.findByFilter(name, tag));
+		Page<New> newsPage = newService.findByFilter(name, tag, PageRequest.of(page, 10));
+
+		model.addAttribute("new", newsPage.getContent());
 		model.addAttribute("name", name == null ? "" : name);
 		model.addAttribute("tag", tag == null ? "" : tag);
+		model.addAttribute("hasNext", newsPage.hasNext());
+		model.addAttribute("nextPage", page + 1);
+		
 		return "news";
 	}
 
@@ -71,16 +83,21 @@ public class NewsController {
 
 	@GetMapping("/new_form")
 	public String showNewForm(Model model, HttpServletRequest request) {
-		
-		model.addAttribute("newPost", new New());
+
+	
+		New newPost = new New();
+		newPost.setNewName("");
+		newPost.setNewDescription("");
+		newPost.setNewTag("");
 
 		
+		model.addAttribute("newPost", newPost);
+
 		CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 		if (csrfToken != null) {
 			model.addAttribute("token", csrfToken.getToken());
 		}
 
-		
 		model.addAttribute("hasErrors", false);
 		model.addAttribute("allErrors", new ArrayList<String>());
 
@@ -109,7 +126,8 @@ public class NewsController {
 	}
 
 	@PostMapping("/new_form")
-	public String newNewProcess(Model model, @Valid New newPost, BindingResult bindingResult, MultipartFile imageField,
+	public String newNewProcess(Model model, @Valid New newPost, BindingResult bindingResult,
+			@RequestParam("imageField") MultipartFile imageField,
 			HttpServletRequest request) throws IOException {
 
 		List<String> errorMessages = new ArrayList<>();
@@ -117,20 +135,6 @@ public class NewsController {
 
 		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
 		User currentUser = userService.getUser(currentUserId).orElseThrow();
-
-		if (!isNewPost) {
-			New existingNew = newService.findById(newPost.getNewId()).get();
-			boolean isOwner = existingNew.getNewCreator() != null
-					&& existingNew.getNewCreator().getUserId().equals(currentUserId);
-			boolean isAdmin = request.isUserInRole("ADMIN");
-
-			if (!isOwner && !isAdmin) {
-				return "redirect:/news?error=unauthorized";
-			}
-			newPost.setNewCreator(existingNew.getNewCreator());
-		} else {
-			newPost.setNewCreator(currentUser);
-		}
 
 		if (bindingResult.hasErrors()) {
 			if (bindingResult.hasFieldErrors("newName")) {
@@ -144,9 +148,7 @@ public class NewsController {
 			}
 		}
 
-		if (isNewPost && imageField.isEmpty()) {
-			errorMessages.add("Por favor, sube una imagen para la noticia.");
-		}
+		imageValidationService.validate(imageField, errorMessages, isNewPost);
 
 		if (!errorMessages.isEmpty()) {
 			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
@@ -157,6 +159,22 @@ public class NewsController {
 			model.addAttribute("allErrors", errorMessages);
 			model.addAttribute("newPost", newPost);
 			return "new_form";
+		}
+
+		if (!isNewPost) {
+			New existingNew = newService.findById(newPost.getNewId()).get();
+			boolean isOwner = existingNew.getNewCreator() != null
+					&& existingNew.getNewCreator().getUserId().equals(currentUserId);
+			boolean isAdmin = request.isUserInRole("ADMIN");
+
+			if (!isOwner && !isAdmin) {
+				return "redirect:/news?error=unauthorized";
+			}
+
+			newPost.setNewCreator(existingNew.getNewCreator());
+		} else {
+
+			newPost.setNewCreator(currentUser);
 		}
 
 		if (!imageField.isEmpty()) {

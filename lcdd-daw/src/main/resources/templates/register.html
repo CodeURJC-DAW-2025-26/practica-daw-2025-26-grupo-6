@@ -1,75 +1,126 @@
 {{>header}}
 
-  <main class="main">
-    <section id="quote" class="quote section">
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row justify-content-center">
-          <div class="col-lg-10" data-aos="fade-left" data-aos-delay="300">
-            <div class="quote-form">
-              <div class="form-intro">
-                <h3>Registrarse</h3>
-                <p>Introduzca los siguientes datos para crear su cuenta</p>
-              </div>
-              <form method="post" id="registerForm" action="/register" method="post"  class="php-email-form">
-                <div class="form">
-                  <div class="form-field">
-                    <label for="email" class="required-label">Correo electrónico:</label>
-                    <input type="email" name="email" id="email" value="{{email}}" {{#invalidEmail}}class="is-invalid"{{/invalidEmail}} required>
-                    <div class="invalid-feedback">
-                      Ya existe un usuario con este email.
-                    </div>
-                  </div>
-                  <br>
-                  <div class="form-field">
-                    <label for="password" class="required-label">Contraseña:</label>
-                    <input type="password" name="password" id="password" value="{{password}}" minlength="4" required>
-                  </div>
-                  <br>
-                  <div class="form-field">
-                    <label for="confirm-password" class="required-label">Confirmar contraseña:</label>
-                    <input type="password" name="confirm-password" id="confirm-password" value="{{password}}" minlength="4" required>
-                    <div class="invalid-feedback">
-                      Las contraseñas deben ser iguales.
-                    </div>
-                  </div>
-                  <br>
-                  <div class="form-field">
-                    <label for="name" class="required-label">Nombre:</label>
-                    <input type="text" name="name" id="name" value="{{name}}" required>
-                  </div>
-                  <br>
-                  <div class="form-field">
-                    <label for="surnames" class="required-label">Apellidos:</label>
-                    <input type="text" name="surnames" id="surnames" value="{{surnames}}" required>
-                  </div>
-                  <br>
-                  <div class="form-field">
-                    <label for="nickname" class="required-label">Nickname:</label>
-                    <input type="text" name="nickname" id="nickname" value="{{nickname}}" required>
-                  </div>
-                  <br>
-                  <div class="row">
-                    <div class="col-lg-2">
-                      <a href="index" class="submit-btn">Volver</a>
-                    </div>
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-3">
-                      <button type="submit" class="submit-btn">
-                        <span>Registrarse</span>
-                        <i class="bi bi-arrow-right"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <br>
-                  <h4>¿Ya tienes cuenta en La Caverna del Dragón?</h4>
-                  <a href="login" class="submit">Click aquí para ir a login</a>
-                  <input type="hidden" name="_csrf" value="{{token}}" />
-              </form>
+<main class="main">
+  <section id="quote" class="quote section pt-0">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row justify-content-center">
+        <div class="col-lg-8" data-aos="fade-left" data-aos-delay="300">
+          <div class="quote-form">
+
+            <div class="form-intro text-center mb-4">
+              <h3>Únete a la aventura</h3>
+              <p>Rellena los datos para crear tu cuenta en La Caverna del Dragón.</p>
             </div>
+
+            {{#hasErrors}}
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert" style="border-left: 5px solid #890f00;">
+              <strong><i class="bi bi-exclamation-triangle-fill me-2"></i> Ups! Revisa los datos:</strong>
+              <ul class="mt-2 mb-0">
+                {{#allErrors}} <li>{{.}}</li> {{/allErrors}}
+              </ul>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{/hasErrors}}
+
+            <form method="post" id="registerForm" action="/register" enctype="multipart/form-data"
+              class="custom-login-form needs-validation" novalidate>
+
+              <div class="form">
+
+                <div class="form-field">
+                  <label for="email" class="required-label">Correo electrónico:</label>
+                  <input type="email" name="email" id="email" value="{{email}}"
+                    class="form-control {{#invalidEmail}}is-invalid{{/invalidEmail}}" required>
+                  <div class="invalid-feedback">
+                    {{#invalidEmail}}Ya existe un usuario registrado con este correo.{{/invalidEmail}}
+                    {{^invalidEmail}}Por favor, introduce un correo electrónico válido.{{/invalidEmail}}
+                  </div>
+                </div>
+                <br>
+
+                <div class="row">
+                  <div class="col-md-6 form-field mb-3 mb-md-0">
+                    <label for="password" class="required-label">Contraseña:</label>
+                    <input type="password" name="password" id="password" class="form-control" minlength="4" maxlength="20" required>
+                    <div class="invalid-feedback">La contraseña debe tener entre 4 y 20 caracteres.</div>
+                  </div>
+                  <div class="col-md-6 form-field">
+                    <label for="confirm-password" class="required-label">Confirmar contraseña:</label>
+                    <input type="password" name="confirm-password" id="confirm-password" 
+                           class="form-control {{#passwordError}}is-invalid{{/passwordError}}" minlength="4" maxlength="20" required>
+                    <div class="invalid-feedback">
+                      {{#passwordError}}{{passwordError}}{{/passwordError}}
+                      {{^passwordError}}Las contraseñas deben coincidir.{{/passwordError}}
+                    </div>
+                  </div>
+                </div>
+                <br>
+
+                <div class="row">
+                  <div class="col-md-6 form-field mb-3 mb-md-0">
+                    <label for="name" class="required-label">Nombre:</label>
+                    <input type="text" name="name" id="name" value="{{name}}" class="form-control" required>
+                    <div class="invalid-feedback">El nombre es obligatorio.</div>
+                  </div>
+                  <div class="col-md-6 form-field">
+                    <label for="surnames" class="required-label">Apellidos:</label>
+                    <input type="text" name="surnames" id="surnames" value="{{surnames}}" class="form-control" required>
+                    <div class="invalid-feedback">Los apellidos son obligatorios.</div>
+                  </div>
+                </div>
+                <br>
+
+                <div class="form-field">
+                  <label for="nickname" class="required-label">Nickname (Apodo):</label>
+                  <input type="text" name="nickname" id="nickname" value="{{nickname}}" class="form-control" minlength="3" maxlength="15" required>
+                  <div class="invalid-feedback">El nickname debe tener entre 3 y 15 caracteres.</div>
+                </div>
+                <br>
+
+                <div class="form-field p-3 bg-light rounded border">
+                  <label for="imageField" class="form-label fw-bold text-primary mb-1">
+                    <i class="bi bi-camera me-1"></i> Imagen de perfil (Opcional)
+                  </label>
+                  <p class="text-muted small mb-2">Puedes elegir tu avatar ahora o subirlo más adelante desde tu perfil.
+                  </p>
+
+                  <input type="file" name="imageField" id="imageField" class="form-control"
+                    accept=".jpg, .jpeg, .png, .webp">
+
+                  <div class="invalid-feedback">
+                    Sube una imagen válida (JPG, PNG o WebP) de menos de 10MB.
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
+                <a href="/" class="submit-btn"
+                  style="background: #6c757d; margin-top: 0; justify-content: center; display: flex; text-decoration: none;">
+                  <i class="bi bi-arrow-left"></i>
+                  <span class="ms-2">Volver al inicio</span>
+                </a>
+
+                <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center; display: flex;">
+                  <span class="me-2">Completar Registro</span>
+                  <i class="bi bi-person-plus-fill"></i>
+                </button>
+              </div>
+
+              <div class="text-center pt-4 border-top">
+                <p class="mb-2 text-muted">¿Ya tienes cuenta en La Caverna del Dragón?</p>
+                <a href="/login" class="text-primary fw-bold text-decoration-none" style="font-size: 1.1rem;">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión
+                </a>
+              </div>
+
+              <input type="hidden" name="_csrf" value="{{token}}" />
+            </form>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+</main>
 
 {{>footer}}

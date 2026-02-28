@@ -44,7 +44,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
        AND (LOWER(e.eventName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '')
        AND (LOWER(e.eventTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
     """)
-    List<Event> findValidatedByNameAndTag(String name, String tag);
+    Page<Event> findValidatedByNameAndTag(String name, String tag, Pageable page);
 
 
 }
