@@ -24,45 +24,60 @@
             </div>
             {{/hasErrors}}
             <form method="post" action="/new_form" enctype="multipart/form-data" class="php-email-form">
+              {{#newPost}}
               <div class="form">
+                <input type="hidden" name="newId" value="{{#newId}}{{newId}}{{/newId}}" />
+
                 <div class="form-field">
                   <label for="newName" class="required-label">Nombre:</label>
-                  <input type="text" name="newName" id="newName" placeholder="" required>
+                  <input type="text" name="newName" id="newName" value="{{#newName}}{{newName}}{{/newName}}" required>
                 </div>
                 <br>
+
                 <div class="form-field full-width">
                   <label for="newDescription" class="required-label">Descripción:</label>
-                  <textarea name="newDescription" id="newDescription" rows="8" placeholder="" required=""></textarea>
+                  <textarea name="newDescription" id="newDescription" rows="8"
+                    required>{{#newDescription}}{{newDescription}}{{/newDescription}}</textarea>
                 </div>
                 <br>
+
                 <div class="form-field">
                   <label for="newTag" class="form-label">Tag:</label>
-                  <input type="text" name="newTag" id="newTag" placeholder="">
+                  <input type="text" name="newTag" id="newTag" value="{{#newTag}}{{newTag}}{{/newTag}}">
                 </div>
                 <br>
+
                 <div class="form-field">
-                  <label for="imageField" class="form-label">Adjunta una imagen:</label>
+                  <label for="imageField" class="form-label">Imagen (dejar vacío para mantener la actual):</label>
+
+                  {{#newId}}
+                  <input class="form-control" type="file" name="imageField" id="imageField">
+                  {{/newId}}
+
+                  {{^newId}}
                   <input class="form-control" type="file" name="imageField" id="imageField" required>
+                  {{/newId}}
                 </div>
-                <div class="row">
-                  <div class="col-lg-3">
-                    <a href="news" class="submit-btn">Volver sin guardar</a>
-                  </div>
-                  <div class="col-lg-2"></div>
-                  <div class="col-lg-3">
-                    <button type="submit" class="submit-btn">
-                      <span>Añadir</span>
-                      <i class="bi bi-arrow-right"></i>
-                    </button>
-                  </div>
+              </div>
+              {{/newPost}}
+
+              <div class="row mt-4">
+                <div class="col-lg-3">
+                  <a href="/news" class="submit-btn text-center pt-2"
+                    style="text-decoration:none; display:block; background: #6c757d;">Atrás</a>
                 </div>
-                <input type="hidden" name="_csrf" value="{{token}}" />
+                <div class="col-lg-2"></div>
+                <div class="col-lg-3">
+                  <button type="submit" class="submit-btn"><span>Guardar Noticia</span></button>
+                </div>
+              </div>
+              <input type="hidden" name="_csrf" value="{{token}}" />
             </form>
           </div>
         </div>
       </div>
     </div>
-  </section><!-- /Quote Section -->
+  </section>
 </main>
 
 {{>footer}}

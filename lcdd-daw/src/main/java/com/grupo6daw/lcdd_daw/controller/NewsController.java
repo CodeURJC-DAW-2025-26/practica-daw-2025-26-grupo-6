@@ -70,8 +70,42 @@ public class NewsController {
 	}
 
 	@GetMapping("/new_form")
-	public String new_form() {
+	public String showNewForm(Model model, HttpServletRequest request) {
+		
+		model.addAttribute("newPost", new New());
+
+		
+		CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+		if (csrfToken != null) {
+			model.addAttribute("token", csrfToken.getToken());
+		}
+
+		
+		model.addAttribute("hasErrors", false);
+		model.addAttribute("allErrors", new ArrayList<String>());
+
 		return "new_form";
+	}
+
+	@GetMapping("/new_form/{id}")
+	public String editNewForm(@PathVariable long id, HttpServletRequest request, Model model) {
+		Optional<New> newPost = newService.findById(id);
+		if (newPost.isPresent()) {
+			New n = newPost.get();
+
+			boolean isAdmin = request.isUserInRole("ADMIN");
+			Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+			boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
+
+			if (isAdmin || isOwner) {
+				model.addAttribute("newPost", n);
+				CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+				if (csrfToken != null)
+					model.addAttribute("token", csrfToken.getToken());
+				return "new_form";
+			}
+		}
+		return "redirect:/news";
 	}
 
 	@PostMapping("/new_form")
@@ -138,14 +172,18 @@ public class NewsController {
 	}
 
 	@PostMapping("/removeNew/{id}")
-	public String removeNew(Model model, @PathVariable long id) {
-
+	public String removeNew(@PathVariable long id, HttpServletRequest request) {
 		Optional<New> newPost = newService.findById(id);
 		if (newPost.isPresent()) {
-			newService.delete(id);
-			model.addAttribute("new", newPost.get());
-		}
+			New n = newPost.get();
+			boolean isAdmin = request.isUserInRole("ADMIN");
+			Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+			boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
 
+			if (isAdmin || isOwner) {
+				newService.delete(id);
+			}
+		}
 		return "redirect:/news";
 	}
 }

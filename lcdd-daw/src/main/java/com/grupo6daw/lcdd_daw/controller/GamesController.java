@@ -174,14 +174,11 @@ public class GamesController {
 	}
 
 	@PostMapping("/removeGame/{id}")
-	public String removeGame(Model model, @PathVariable long id) {
-
-		Optional<Game> game = gameService.findById(id);
-		if (game.isPresent()) {
+	public String removeGame(@PathVariable long id, HttpServletRequest request) {
+		
+		if (request.isUserInRole("ADMIN")) {
 			gameService.delete(id);
-			model.addAttribute("game", game.get());
 		}
-
 		return "redirect:/games";
 	}
 

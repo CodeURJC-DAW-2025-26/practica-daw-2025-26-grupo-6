@@ -126,7 +126,6 @@ public class EventsController {
 		List<String> errorMessages = new ArrayList<>();
 		boolean isNewEvent = (event.getEventId() == null);
 
-	
 		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
 		User currentUser = userService.getUser(currentUserId).orElseThrow();
 
@@ -192,14 +191,24 @@ public class EventsController {
 	}
 
 	@PostMapping("/removeEvent/{id}")
-	public String removeEvent(Model model, @PathVariable long id) {
-
+	public String removeEvent(@PathVariable long id, HttpServletRequest request) {
 		Optional<Event> event = eventService.findById(id);
-		if (event.isPresent()) {
-			eventService.delete(id);
-			model.addAttribute("event", event.get());
-		}
 
+		if (event.isPresent()) {
+			Event e = event.get();
+			boolean isAdmin = request.isUserInRole("ADMIN");
+			boolean isOwner = false;
+
+			
+			if (request.getUserPrincipal() != null) {
+				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+				isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);
+			}
+
+			if (isAdmin || isOwner) {
+				eventService.delete(id);
+			}
+		}
 		return "redirect:/events";
 	}
 }
