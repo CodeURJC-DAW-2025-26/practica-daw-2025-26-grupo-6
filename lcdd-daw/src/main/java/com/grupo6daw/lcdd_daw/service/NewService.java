@@ -48,4 +48,16 @@ public class NewService {
 	public List<New> findTop3() {
         return repository.findTop3ByOrderByCreationDateDesc();
     }
+
+	public List<New> findByValidatedFalse() {
+        return repository.findByValidatedFalse();
+    }
+
+    public List<New> findByValidatedTrue() {
+        return repository.findByValidatedTrue();
+    }
+
+    public Page<New> findValidatedByFilter(String name, String tag, Pageable page) {
+        return repository.findValidatedByNameAndTag(name, tag, page);
+    }
 }

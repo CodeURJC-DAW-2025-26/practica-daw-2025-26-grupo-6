@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.grupo6daw.lcdd_daw.dto.EventParticipantsStatDTO;
 import com.grupo6daw.lcdd_daw.dto.GameFavStatDTO;
 import com.grupo6daw.lcdd_daw.model.Event;
+import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.NewService;
@@ -51,11 +52,12 @@ public class AdministrationController {
     @GetMapping
     public String admin(HttpServletRequest request, Model model,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "userNickname,asc") String sort
     ) {
 
         model.addAttribute("events", eventService.findByValidatedFalse());
+        model.addAttribute("news", newService.findByValidatedFalse());
 
         String[] parts = sort.split(",", 2);
         String field = parts[0];
@@ -131,6 +133,23 @@ public class AdministrationController {
     @PostMapping("/rejectEvent/{id}")
     public String rejectEvent(@PathVariable long id) {
         eventService.delete(id);
+        return "redirect:/admin";
+    }
+    
+    @PostMapping("/approveNew/{id}")
+    public String approveNew(@PathVariable long id) {
+        Optional<New> news = newService.findById(id);
+        if (news.isPresent()) {
+            New n = news.get();
+            n.setValidated(true);
+            newService.save(n);
+        }
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/rejectNew/{id}")
+    public String rejectNew(@PathVariable long id) {
+        newService.delete(id);
         return "redirect:/admin";
     }
 

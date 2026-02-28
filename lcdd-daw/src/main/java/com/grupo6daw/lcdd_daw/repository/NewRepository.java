@@ -17,10 +17,26 @@ public interface NewRepository extends JpaRepository<New, Long> {
 	WHERE
 	(LOWER(n.newName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '') AND
 	(LOWER(n.newTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
+	ORDER BY n.creationDate DESC
 	""")
 	Page<New> findByNameAndTag(String name, String tag, Pageable page);
 
 	List<New> findTop3ByOrderByCreationDateDesc();
+
+	List<New> findByValidatedTrue();
+    List<New> findByValidatedFalse();
+
+	@Query("""
+     SELECT n
+	FROM New n
+	WHERE
+       n.validated = true
+       AND (LOWER(n.newName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '')
+       AND (LOWER(n.newTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
+       ORDER BY n.creationDate DESC
+    """)
+    Page<New> findValidatedByNameAndTag(String name, String tag, Pageable page);
+
 
 }
 

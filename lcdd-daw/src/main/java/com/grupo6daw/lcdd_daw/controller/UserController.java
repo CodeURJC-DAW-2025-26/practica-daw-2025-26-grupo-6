@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import com.grupo6daw.lcdd_daw.dto.ProfileUpdateDTO;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.UserService;
@@ -40,7 +41,8 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile(Model model) {
-        Long id = Long.parseLong((String) model.getAttribute("userId"));
+        // Usamos el valueOf de tu compañero
+        Long id = Long.valueOf((String) model.getAttribute("userId"));
         User user = userService.getUser(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
         model.addAttribute("user", user);
         return "profile";
@@ -74,7 +76,8 @@ public class UserController {
             @PathVariable long id) throws IOException {
 
         boolean admin = (boolean) model.getAttribute("admin");
-        Long userId = Long.parseLong((String) model.getAttribute("userId"));
+        // Usamos el valueOf de tu compañero
+        Long userId = Long.valueOf((String) model.getAttribute("userId"));
 
         if (!admin && userId != id) {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
@@ -119,7 +122,8 @@ public class UserController {
     @PostMapping("/user/{id}/delete")
     public String deleteProfile(Model model, HttpServletRequest request, @PathVariable long id) {
         boolean admin = (boolean) model.getAttribute("admin");
-        Long userId = Long.parseLong((String) model.getAttribute("userId"));
+        // Usamos el valueOf de tu compañero
+        Long userId = Long.valueOf((String) model.getAttribute("userId"));
 
         if (!admin && userId != id) {
             return "redirect:/error";
