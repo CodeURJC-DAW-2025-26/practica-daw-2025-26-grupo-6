@@ -1,14 +1,15 @@
 {{>header}}
 
 <main class="main">
-  <section id="quote" class="quote section">
+  <section id="quote" class="quote section pt-0">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
       <div class="row justify-content-center">
-        <div class="col-lg-10" data-aos="fade-left" data-aos-delay="300">
+        <div class="col-lg-8" data-aos="fade-left" data-aos-delay="300">
           <div class="quote-form">
-            <div class="form-intro">
-              <h3>Iniciar sesión</h3>
-              <p>Introduzca sus credenciales para acceder.</p>
+
+            <div class="form-intro text-center mb-4">
+              <h3>Bienvenido de nuevo</h3>
+              <p>Introduce tus credenciales para acceder a La Caverna del Dragón.</p>
             </div>
 
             {{#loginError}}
@@ -21,40 +22,51 @@
             {{/loginError}}
 
             <form action="/login" method="post" class="custom-login-form needs-validation" novalidate>
+
               <div class="form">
+
                 <div class="form-field">
                   <label for="email" class="required-label">Correo electrónico:</label>
-                  <input type="email" class="form-control" name="email" id="email" placeholder="" required="">
-
+                  <input type="email" class="form-control" name="email" id="email" placeholder="ejemplo@correo.com"
+                    required>
                   <div class="invalid-feedback">
                     Por favor, ingrese un correo electrónico válido.
                   </div>
                 </div>
                 <br>
+
                 <div class="form-field">
                   <label for="password" class="required-label">Contraseña:</label>
-                  <input type="password" class="form-control" name="password" id="password" placeholder="" required="">
+                  <input type="password" class="form-control" name="password" id="password" placeholder="********"
+                    minlength="4" maxlength="20" required>
                   <div class="invalid-feedback">
-                    Por favor, ingresa una contraseña válida.
+                    Contraseña incorrecta.
                   </div>
                 </div>
-                <br>
-                <div class="row">
-                  <div class="col-lg-2">
-                    <a href="index" class="submit-btn">Volver</a>
-                  </div>
-                  <div class="col-lg-1"></div>
-                  <div class="col-lg-3">
-                    <button type="submit" class="submit-btn">
-                      <span>Iniciar sesión</span>
-                      <i class="bi bi-arrow-right"></i>
-                    </button>
-                  </div>
-                </div>
-                <br>
-                <h4>¿No tienes cuenta en La Caverna Del Dragón?</h4>
-                <a href="register" class="submit">Click aquí para crear una</a>
-              </div> <input type="hidden" name="_csrf" value="{{token}}" />
+
+              </div>
+
+              <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
+                <a href="/" class="submit-btn"
+                  style="background: #6c757d; margin-top: 0; justify-content: center; display: flex; text-decoration: none;">
+                  <i class="bi bi-arrow-left"></i>
+                  <span class="ms-2">Volver</span>
+                </a>
+
+                <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center; display: flex;">
+                  <span class="me-2">Iniciar sesión</span>
+                  <i class="bi bi-box-arrow-in-right"></i>
+                </button>
+              </div>
+
+              <div class="text-center pt-4 border-top">
+                <p class="mb-2 text-muted">¿No tienes cuenta en La Caverna del Dragón?</p>
+                <a href="/register" class="text-primary fw-bold text-decoration-none" style="font-size: 1.1rem;">
+                  <i class="bi bi-person-plus me-1"></i> Click aquí para crear una
+                </a>
+              </div>
+
+              <input type="hidden" name="_csrf" value="{{token}}" />
             </form>
           </div>
         </div>
