@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,11 +47,17 @@ public class GamesController {
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) String tag,
 			@RequestParam(required = false) Integer players,
-			@RequestParam(required = false) Integer duration) {
+			@RequestParam(required = false) Integer duration,
+			@RequestParam(defaultValue = "0") int page) {
 
-		model.addAttribute("game", gameService.findByFilter(name, tag, players, duration));
+		Page<Game> gamesPage = gameService.findByFilter(name, tag, players, duration, PageRequest.of(page, 10));
+
+		model.addAttribute("game", gamesPage.getContent());
 		model.addAttribute("name", name == null ? "" : name);
 		model.addAttribute("tag", tag == null ? "" : tag);
+		model.addAttribute("hasNext", gamesPage.hasNext());
+		model.addAttribute("nextPage", page + 1);
+		
 		return "games";
 	}
 

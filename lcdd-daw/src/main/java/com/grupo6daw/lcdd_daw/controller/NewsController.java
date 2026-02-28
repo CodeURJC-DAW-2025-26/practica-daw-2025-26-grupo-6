@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,11 +44,17 @@ public class NewsController {
 	@GetMapping("/news")
 	public String news(Model model,
 			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String tag) {
+			@RequestParam(required = false) String tag,
+			@RequestParam(defaultValue = "0") int page) {
 
-		model.addAttribute("new", newService.findByFilter(name, tag));
+		Page<New> newsPage = newService.findByFilter(name, tag, PageRequest.of(page, 10));
+
+		model.addAttribute("new", newsPage.getContent());
 		model.addAttribute("name", name == null ? "" : name);
 		model.addAttribute("tag", tag == null ? "" : tag);
+		model.addAttribute("hasNext", newsPage.hasNext());
+		model.addAttribute("nextPage", page + 1);
+		
 		return "news";
 	}
 

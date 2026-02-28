@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,16 +57,22 @@ public class EventsController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/events")
-	public String events(Model model,
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String tag) {
+@GetMapping("/events")
+public String events(Model model,
+    @RequestParam(required = false) String name,
+    @RequestParam(required = false) String tag,
+    @RequestParam(defaultValue = "0") int page) {
 
-		model.addAttribute("event", eventService.findValidatedByFilter(name, tag));
-		model.addAttribute("name", name == null ? "" : name);
-		model.addAttribute("tag", tag == null ? "" : tag);
-		return "events";
-	}
+    Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag, PageRequest.of(page, 10));
+
+    model.addAttribute("event", eventsPage.getContent());
+    model.addAttribute("name", name == null ? "" : name);
+    model.addAttribute("tag", tag == null ? "" : tag);
+    model.addAttribute("hasNext", eventsPage.hasNext());
+    model.addAttribute("nextPage", page + 1);
+
+    return "events";
+}
 
 	@GetMapping("/event/{id}")
 	public String eventDetail(@PathVariable long id, Model model, HttpServletRequest request) {

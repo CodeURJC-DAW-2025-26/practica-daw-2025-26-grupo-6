@@ -1,27 +1,27 @@
 {{>header}}
 
-  <main class="main">
-    <section id="projects" class="projects section">
-      <h1 style="text-align: center;">NOTICIAS</h1>
-      <div class="container mb-4">
-        <form method="get" action="/news">
-          <div class="row g-2 align-items-center">
-            <div class="col-12 col-md-5 col-lg-6">
-              <input name="name" class="form-control" type="search" placeholder="Buscar noticias..." aria-label="Search">
-            </div>
-            <div class="col-6 col-md-3 col-lg-2">
-              <select name="tag" class="form-select" aria-label="Filtrar por tema">
-                <option selected value="">Filtrar por tema</option>
-                <option value="Cambios">Cambios</option>
-                <option value="Evento">Evento</option>
-                <option value="Rol">Rol</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-2 col-lg-2">
-              <button class="btn_lcdd w-100" type="submit">
-                <i class="bi bi-search"></i> Buscar
-              </button>
-            </div>
+<main class="main">
+  <section id="projects" class="projects section">
+    <h1 style="text-align: center;">NOTICIAS</h1>
+    <div class="container mb-4">
+      <form method="get" action="/news">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-5 col-lg-6">
+            <input name="name" class="form-control" type="search" placeholder="Buscar noticias..." aria-label="Search">
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <select name="tag" class="form-select" aria-label="Filtrar por tema">
+              <option selected value="">Filtrar por tema</option>
+              <option value="Cambios">Cambios</option>
+              <option value="Evento">Evento</option>
+              <option value="Rol">Rol</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-2 col-lg-2">
+            <button class="btn_lcdd w-100" type="submit">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
           {{#logged}}
           <div class="col-12 col-md-2 col-lg-2">
             <a href="new_form" class="btn_lcdd_black w-100">
@@ -29,33 +29,61 @@
             </a>
           </div>
           {{/logged}}
-          </form>
-        </div>
-      </div>
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row gy-4">
-          {{#new}}
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="/new/{{newId}}">
-              <div class="project-card">
-                <div class="project-image">
-                  <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
-                </div>
-                <div class="project-info">
-                  <div class="project-category">{{newTag}}</div>
-                  <h4 class="project-title">{{newName}}</h4>
-                  <p class="project-description">{{newDescription}}</p>
-                </div>
+      </form>
+    </div>
+    </div>
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div id="events-container" class="row gy-4">
+        {{#new}}
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <a class="project-card" href="/new/{{newId}}">
+            <div class="project-card">
+              <div class="project-image">
+                <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
               </div>
-            </a>
-          </div>
-          {{/new}}
-          {{^new}}
-          <div>No hay noticias</div>
-          {{/new}}
+              <div class="project-info">
+                <div class="project-category">{{newTag}}</div>
+                <h4 class="project-title">{{newName}}</h4>
+                <p class="project-description">{{newDescription}}</p>
+              </div>
+            </div>
+          </a>
         </div>
+        {{/new}}
+        {{^new}}
+        <div>No hay noticias</div>
+        {{/new}}
       </div>
-    </section>
-  </main>
+      <div class="text-center col-lg-4">
+        {{#hasNext}}
+        <button id="load-more-btn" class="btn_lcdd" onclick="loadMore()">Cargar más</button>
+        {{/hasNext}}
+      </div>
+    </div>
+  </section>
+</main>
 
+<script>
+  let currentPage = 1;
+  function loadMore() {
+    const name = "{{name}}";
+    const tag = "{{tag}}";
+    const btn = document.getElementById('load-more-btn');
+
+    fetch(`/news?page=${currentPage}&name=${name}&tag=${tag}`)
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newEvents = doc.getElementById('events-container').innerHTML;
+        document.getElementById('events-container').insertAdjacentHTML('beforeend', newEvents);
+        const hasNext = doc.getElementById('load-more-btn') !== null;
+        if (!hasNext) {
+          btn.style.display = 'none';
+        }
+        currentPage++;
+      })
+      .catch(error => console.error('Error cargando noticias:', error));
+  }
+</script>
 {{>footer}}
