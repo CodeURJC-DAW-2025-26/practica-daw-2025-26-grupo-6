@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -83,7 +84,7 @@ public class User {
     @OneToMany
     private List<New> userNews;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Image userImage;
 
     @ElementCollection(fetch = FetchType.EAGER)

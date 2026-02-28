@@ -1,6 +1,7 @@
 package com.grupo6daw.lcdd_daw.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -134,5 +135,12 @@ public class New {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getFormattedDate() {
+        if (this.creationDate == null) return "";
+        // Definimos el formato: día/mes/año
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return this.creationDate.format(formatter);
     }
 }

@@ -5,11 +5,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.repository.GameRepository;
+import org.springframework.data.domain.Sort; 
 
 @Service
 public class GameService {
@@ -33,9 +35,17 @@ public class GameService {
 		return repository.findAll();
 	}
 
-	public Page<Game> findByFilter(String name, String tag, Integer players, Integer duration, Pageable page) {
-		return repository.findByNameAndTagAndPlayersAndDuration(name, tag, players, duration, page);
-	}
+	
+
+public Page<Game> findByFilter(String name, String tag, Integer players, Integer duration, Pageable pageable) {
+    Pageable sortedPageable = PageRequest.of(
+        pageable.getPageNumber(), 
+        pageable.getPageSize(), 
+        Sort.by("gameId").descending()
+    );
+    
+    return repository.findByNameAndTagAndPlayersAndDuration(name, tag, players, duration, sortedPageable);
+}
 
 	public void save(Game game) {
 		repository.save(game);

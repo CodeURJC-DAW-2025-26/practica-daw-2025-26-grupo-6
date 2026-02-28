@@ -67,6 +67,7 @@ public class WebSecurityConfig {
 						.requestMatchers("/userExists").permitAll()
 						.requestMatchers("/user/*").permitAll()
 						.requestMatchers("/user/*/image").permitAll()
+						.requestMatchers("/userDeleted").permitAll()
 						// PRIVATE PAGES
 						.requestMatchers("/profile").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/event_form").hasAnyRole("REGISTERED_USER")

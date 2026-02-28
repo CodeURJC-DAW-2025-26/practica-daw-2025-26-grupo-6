@@ -10,7 +10,7 @@
           <div class="quote-form">
             <div class="form-intro">
 
-              <form id="update-form" action="/user/{{user.userId}}/update" method="post" class="php-email-form">
+              <form id="update-form" enctype="multipart/form-data" action="/user/{{user.userId}}/update" method="post" class="php-email-form">
 
                 <div class="form">
                   <div class="row">
@@ -26,7 +26,6 @@
                       </div>
                     </div>
 
-                    <!-- Columna Derecha: Datos del usuario -->
                     <div class="col-lg-9">
 
                       <div class="form-field">

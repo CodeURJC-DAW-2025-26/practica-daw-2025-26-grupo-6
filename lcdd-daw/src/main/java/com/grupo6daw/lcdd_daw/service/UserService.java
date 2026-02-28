@@ -91,7 +91,7 @@ public class UserService {
         user.setUserSurname(dto.getSurnames());
         user.setUserInterests(dto.getInterests());
         
-        MultipartFile file = dto.getProfileImage();
+        MultipartFile file = dto.getImage();
         if (file != null && !file.isEmpty()) {
             try {
                 user.setUserImage(new Image(new SerialBlob(file.getBytes())));
