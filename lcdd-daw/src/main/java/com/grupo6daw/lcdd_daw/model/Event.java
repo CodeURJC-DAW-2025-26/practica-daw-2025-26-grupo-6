@@ -65,11 +65,12 @@ public class Event {
     public Event() {
     }
 
-    public Event(String eventName, String eventDescription, String eventTag) {
+    public Event(String eventName, String eventDescription, String eventTag, boolean validated) {
         super();
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventTag = eventTag;
+        this.validated = validated;
     }
 
     public Long getEventId() {
