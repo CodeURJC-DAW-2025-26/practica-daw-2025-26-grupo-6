@@ -1,42 +1,49 @@
 {{>header}}
 
-  <main class="main">
-    <section id="project-details" class="project-details section">
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row">
-          <div class="col-lg-5">
-            <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
-              <img src="/images/{{new.newImage.id}}" class="img-fluid">
-              <div class="project-hero-overlay">
-                <div class="project-status">
-                  <i class="bi bi-tag"></i>
-                  {{new.newTag}}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-7">
-            <div class="project-info" data-aos="fade-left" data-aos-delay="300">
-              <h1 class="project-title">{{new.newName}}</h1>
-              <p class="project-description">{{new.newDescription}}</p>
-              <div class="row">
-                <div class="col-lg-4">
-                  <form action="/removeNew/{{new.newId}}" method="post">
-                    <button type="submit" class="submit-btn">Eliminar<i class="bi bi-trash"></i></button>
-                    <input type="hidden" name="_csrf" value="{{token}}" />
-                  </form>
-                </div>
-                <div class="col -lg-8">
-                  <a class="submit-btn" href="new_form">
-                    <i class="bi bi-pencil-square"></i>
-                    Modificar noticia
-                  </a>
-                </div>
+<main class="main">
+  <section id="project-details" class="project-details section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="project-hero" data-aos="zoom-out" data-aos-delay="200">
+            <img src="/images/{{new.newImage.id}}" class="img-fluid">
+            <div class="project-hero-overlay">
+              <div class="project-status">
+                <i class="bi bi-tag"></i>
+                {{new.newTag}}
               </div>
             </div>
           </div>
         </div>
-    </section>
-  </main>
+        <div class="col-lg-7">
+          <div class="project-info" data-aos="fade-left" data-aos-delay="300">
+            <h1 class="project-title">{{new.newName}}</h1>
+            <p class="project-description">{{new.newDescription}}</p>
+
+            {{#hasEditPermission}}
+            <div class="row mt-3 align-items-center">
+              <div class="col-auto">
+                <a class="btn btn-link text-primary text-decoration-none p-0" href="/new_form/{{new.newId}}">
+                  <i class="bi bi-pencil-square me-1"></i> Modificar noticia
+                </a>
+              </div>
+
+              <div class="col-auto">
+                <form action="/removeNew/{{new.newId}}" method="post" class="m-0"
+                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta noticia?');">
+                  <button type="submit" class="btn btn-link text-primary text-decoration-none p-0"
+                    style="box-shadow: none;">
+                    <i class="bi bi-trash me-1"></i> Eliminar
+                  </button>
+                  <input type="hidden" name="_csrf" value="{{token}}" />
+                </form>
+              </div>
+            </div>
+            {{/hasEditPermission}}
+          </div>
+        </div>
+      </div>
+  </section>
+</main>
 
 {{>footer}}

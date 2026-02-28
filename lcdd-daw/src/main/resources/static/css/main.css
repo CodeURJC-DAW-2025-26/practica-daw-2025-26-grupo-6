@@ -1190,7 +1190,7 @@ section,
 }
 
 .project-details .project-hero img {
-   object-fit: contain;
+  object-fit: contain;
   height: 100%;
   width: auto;
   max-width: 100%
@@ -1637,7 +1637,8 @@ section,
   margin: 0;
 }
 
-.quote .php-email-form .form-grid {
+.quote .php-email-form .form-grid,
+.quote .custom-login-form .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
@@ -1645,17 +1646,21 @@ section,
 }
 
 @media (max-width: 768px) {
-  .quote .php-email-form .form-grid {
+
+  .quote .php-email-form .form-grid,
+  .quote .custom-login-form .form-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
 }
 
-.quote .php-email-form .form-field.full-width {
+.quote .php-email-form .form-field.full-width,
+.quote .custom-login-form .form-field.full-width {
   grid-column: 1/-1;
 }
 
-.quote .php-email-form .form-field label {
+.quote .php-email-form .form-field label,
+.quote .custom-login-form .form-field label {
   display: block;
   font-size: 14px;
   font-weight: 500;
@@ -1665,7 +1670,10 @@ section,
 
 .quote .php-email-form input,
 .quote .php-email-form select,
-.quote .php-email-form textarea {
+.quote .php-email-form textarea,
+.quote .custom-login-form input,
+.quote .custom-login-form select,
+.quote .custom-login-form textarea {
   width: 100%;
   padding: 16px 20px;
   border: 1px solid color-mix(in srgb, var(--default-color), transparent 85%);
@@ -1679,7 +1687,10 @@ section,
 
 .quote .php-email-form input:focus,
 .quote .php-email-form select:focus,
-.quote .php-email-form textarea:focus {
+.quote .php-email-form textarea:focus,
+.quote .custom-login-form input:focus,
+.quote .custom-login-form select:focus,
+.quote .custom-login-form textarea:focus {
   outline: none;
   border-color: var(--accent-color);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 88%);
@@ -1687,11 +1698,15 @@ section,
 
 .quote .php-email-form input::placeholder,
 .quote .php-email-form select::placeholder,
-.quote .php-email-form textarea::placeholder {
+.quote .php-email-form textarea::placeholder,
+.quote .custom-login-form input::placeholder,
+.quote .custom-login-form select::placeholder,
+.quote .custom-login-form textarea::placeholder {
   color: color-mix(in srgb, var(--default-color), transparent 55%);
 }
 
-.quote .php-email-form select {
+.quote .php-email-form select,
+.quote .custom-login-form select {
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 20px center;
@@ -1700,13 +1715,15 @@ section,
   appearance: none;
 }
 
-.quote .php-email-form textarea {
+.quote .php-email-form textarea,
+.quote .custom-login-form textarea {
   resize: vertical;
   min-height: 120px;
   font-family: var(--default-font);
 }
 
-.quote .php-email-form .submit-btn {
+.quote .php-email-form .submit-btn,
+.quote .custom-login-form .submit-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1735,16 +1752,19 @@ section,
   margin-left: calc(-.5 * var(--bs-gutter-x));
 }
 
-.quote .php-email-form .submit-btn:hover {
+.quote .php-email-form .submit-btn:hover,
+.quote .custom-login-form .submit-btn:hover {
   background: color-mix(in srgb, var(--accent-color), #000 8%);
   transform: translateY(-1px);
 }
 
-.quote .php-email-form .submit-btn:hover i {
+.quote .php-email-form .submit-btn:hover i,
+.quote .custom-login-form .submit-btn:hover i {
   transform: translateX(4px);
 }
 
-.quote .php-email-form .submit-btn i {
+.quote .php-email-form .submit-btn i,
+.quote .custom-login-form .submit-btn i {
   font-size: 16px;
   transition: transform 0.3s ease;
 }
@@ -1778,10 +1798,10 @@ section,
   text-transform: uppercase;
   padding: 5px 16px;
   border-radius: 50px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
   z-index: 10;
   pointer-events: none;
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .project-hero {

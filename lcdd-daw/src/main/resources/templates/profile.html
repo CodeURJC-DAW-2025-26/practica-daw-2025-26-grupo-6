@@ -1,77 +1,90 @@
-{{>header}}
+{{> header}}
 
 <main class="main">
   <section id="quote" class="quote section">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
+
       <div class="row justify-content-center">
         <div class="col-lg-12" data-aos="fade-left" data-aos-delay="300">
+
           <div class="quote-form">
             <div class="form-intro">
+
               <form method="post" class="php-email-form">
+
                 <div class="form">
                   <div class="row">
+
+                    <!-- Columna Izquierda: Imagen -->
                     <div class="col-lg-3">
-                      {{#user.userImage}}
-                      <img src="/images/{{user.userImage.id}}" class="img-fluid">
-                      {{/user.userImage}}
-                      {{^user.userImage}}
-                      <img src="/img/person/Portrait_Placeholder.png" class="img-fluid" alt="Avatar por defecto">
-                      {{/user.userImage}}
-                      <br>
-                      <br>
+                      <img src="/user/{{user.userId}}/image" class="img-fluid">
+
+                      <br><br>
+
                       <div class="form-field">
                         <label for="image" class="form-label">Cambiar imagen:</label>
                         <input class="form-control" type="file" id="image" required>
                       </div>
                     </div>
+
+                    <!-- Columna Derecha: Datos del usuario -->
                     <div class="col-lg-9">
+
                       <div class="form-field">
-                        <label for="name">Nickname:</label>
-                        <input type="text" name="name" id="name" value="{{user.userNickname}}" placeholder=""
-                          required="">
+                        <label for="nickname">Nickname:</label>
+                        <input type="text" name="nickname" id="nickname" value="{{user.userNickname}}" required>
                       </div>
+
                       <br>
+
                       <div class="form-field">
                         <label for="name">Nombre:</label>
-                        <input type="text" name="name" id="name" value="{{user.userName}}" placeholder="" required="">
+                        <input type="text" name="name" id="name" value="{{user.userName}}" required>
                       </div>
+
                       <br>
+
                       <div class="form-field">
                         <label for="surname">Apellidos:</label>
-                        <input type="text" name="surname" id="surname" value="{{user.userSurname}}" placeholder=""
-                          required="">
+                        <input type="text" name="surname" id="surname" value="{{user.userSurname}}" required>
                       </div>
+
                       <br>
+
                       <div class="form-field full-width">
                         <label for="interests">Intereses:</label>
-                        <textarea name="interests" id="interests" rows="4" placeholder=""
-                          required="">{{user.userInterests}}</textarea>
+                        <textarea name="interests" id="interests" rows="4" required>{{user.userInterests}}</textarea>
                       </div>
+
                       <div class="row-buttons">
                         <div class="col-lg-2">
-                          <a href="/index" class="submit-btn">Volver sin guardar</a>
+                          <a href="/" class="submit-btn">Volver sin guardar</a>
                         </div>
                         <div class="col-lg-2">
-                          <a href="/index" type="submit" class="submit-btn">
+                          <button type="submit" class="submit-btn">
                             <span>Guardar cambios</span>
                             <i class="bi bi-arrow-right"></i>
-                          </a>
+                          </button>
                         </div>
                         <div class="col-lg-2">
-                          <a href="/index" type="submit" class="submit-btn">
+                          <a href="/delete-account" class="submit-btn">
                             <span>Eliminar cuenta</span>
                             <i class="bi bi-exclamation-octagon"></i>
                           </a>
                         </div>
                       </div>
+
                       <br>
+
+                      <!-- Juegos favoritos -->
+                      {{#userFavGames.0}}
                       <h4>Juegos favoritos</h4>
+                      {{/userFavGames.0}}
+
                       <div class="row gy-4">
                         {{#userFavGames}}
-                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                          <a class="project-card" href="/game/{{gameId}}">
-                            <div class="project-image">
-                              <img src="/images/{{gameImage.id}}" alt="Project" class="img-fluid">
+                        <div class="col-lg-4 col-md-6">
+                          <a class="project-card" hrefmage.id}}
                             </div>
                             <div class="project-info">
                               <div class="project-category">{{genre}}</div>
@@ -81,56 +94,68 @@
                         </div>
                         {{/userFavGames}}
                       </div>
+
                       <br>
+
+                      <!-- Eventos -->
+                      {{#userOwnEvents.0}}
                       <h4>Mis eventos</h4>
-                      <!--Aqui hay dos row gy-4, porque?-->
+                      {{/userOwnEvents.0}}
+
                       <div class="row gy-4">
-                        <div class="row gy-4">
-                          {{#userOwnEvents}}
-                          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                            <a class="project-card" href="/event/{{eventId}}">
-                              <div class="project-image">
-                                <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
-                              </div>
-                              <div class="project-info">
-                                <div class="project-category">{{eventTag}}</div>
-                                <h4 class="project-title">{{eventName}}</h4>
-                              </div>
-                            </a>
-                          </div>
-                          {{/userOwnEvents}}
+                        {{#userOwnEvents}}
+                        <div class="col-lg-4 col-md-6">
+                          <a class="project-card" href="/event/{{eventId}}">
+                            <div class="project-image">
+                              <img src="/images/{{eventImage.id}}" class="img-fluid">
+                            </div>
+                            <div class="project-info">
+                              <div class="project-category">{{eventTag}}</div>
+                              <h4 class="project-title">{{eventName}}</h4>
+                            </div>
+                          </a>
                         </div>
+                        {{/userOwnEvents}}
                       </div>
+
                       <br>
+
+                      <!-- Noticias -->
+                      {{#userNews.0}}
                       <h4>Mis noticias</h4>
-                      <!--Aqui tambien hay dos row gy-4-->
+                      {{/userNews.0}}
+
                       <div class="row gy-4">
-                        <div class="row gy-4">
-                          {{#userNews}}
-                          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                            <a class="project-card" href="/new/{{newId}}">
-                              <div class="project-image">
-                                <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
-                              </div>
-                              <div class="project-info">
-                                <div class="project-category">{{newTag}}</div>
-                                <h4 class="project-title">{{newName}}</h4>
-                              </div>
-                            </a>
-                          </div>
-                          {{/userNews}}
+                        {{#userNews}}
+                        <div class="col-lg-4 col-md-6">
+                          <a class="project-card" href="/new/{{newId}}">
+                            <div class="project-image">
+                              <img src="/images/{{newImage.id}}" class="img-fluid">
+                            </div>
+                            <div class="project-info">
+                              <div class="project-category">{{newTag}}</div>
+                              <h4 class="project-title">{{newName}}</h4>
+                            </div>
+                          </a>
                         </div>
+                        {{/userNews}}
                       </div>
+
                     </div>
+
                   </div>
                 </div>
+
               </form>
+
             </div>
           </div>
+
         </div>
       </div>
+
     </div>
   </section>
 </main>
 
-{{>footer}}
+{{> footer}}

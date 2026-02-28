@@ -7,8 +7,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class New {
@@ -16,8 +20,11 @@ public class New {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long newId = null;
 
+  @NotBlank(message = "El nombre/título de la noticia es obligatorio")
+  @Size(min = 3, max = 100, message = "El título debe tener entre 3 y 100 caracteres")
   private String newName;
 
+  @NotBlank(message = "La descripción no puede estar vacía")
   @Column(columnDefinition = "TEXT")
   private String newDescription;
 
@@ -29,7 +36,7 @@ public class New {
   @OneToMany
   private List<Event> newEvents;
 
-  @OneToOne
+  @ManyToOne
   private User newCreator;
 
   public New() {

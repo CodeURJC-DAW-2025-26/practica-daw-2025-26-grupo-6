@@ -17,6 +17,16 @@ import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.service.NewService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.security.web.csrf.CsrfToken;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.grupo6daw.lcdd_daw.model.User;
+import com.grupo6daw.lcdd_daw.service.UserService;
+
 @Controller
 public class NewsController {
 
@@ -25,7 +35,10 @@ public class NewsController {
 
 	@Autowired
 	private ImageService imageService;
-	
+
+	@Autowired
+	private UserService userService;
+
 	@GetMapping("/news")
 	public String news(Model model,
 			@RequestParam(required = false) String name,
@@ -37,41 +50,140 @@ public class NewsController {
 		return "news";
 	}
 
-  @GetMapping("/new/{id}")
-	public String newDetail(@PathVariable long id, Model model) {
+	@GetMapping("/new/{id}")
+	public String newDetail(@PathVariable long id, Model model, HttpServletRequest request) {
 		Optional<New> newPost = newService.findById(id);
 		if (newPost.isPresent()) {
 			model.addAttribute("new", newPost.get());
+
+			boolean hasEditPermission = false;
+			if (request.getUserPrincipal() != null) {
+				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+				boolean isOwner = newPost.get().getNewCreator() != null
+						&& newPost.get().getNewCreator().getUserId().equals(currentUserId);
+				boolean isAdmin = request.isUserInRole("ADMIN");
+				hasEditPermission = isOwner || isAdmin;
+			}
+			model.addAttribute("hasEditPermission", hasEditPermission);
 		}
 		return "detail_new_page";
 	}
 
-  @GetMapping("/new_form")
-	public String new_form() {
+	@GetMapping("/new_form")
+	public String showNewForm(Model model, HttpServletRequest request) {
+		
+		model.addAttribute("newPost", new New());
+
+		
+		CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+		if (csrfToken != null) {
+			model.addAttribute("token", csrfToken.getToken());
+		}
+
+		
+		model.addAttribute("hasErrors", false);
+		model.addAttribute("allErrors", new ArrayList<String>());
+
 		return "new_form";
 	}
 
+	@GetMapping("/new_form/{id}")
+	public String editNewForm(@PathVariable long id, HttpServletRequest request, Model model) {
+		Optional<New> newPost = newService.findById(id);
+		if (newPost.isPresent()) {
+			New n = newPost.get();
+
+			boolean isAdmin = request.isUserInRole("ADMIN");
+			Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+			boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
+
+			if (isAdmin || isOwner) {
+				model.addAttribute("newPost", n);
+				CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+				if (csrfToken != null)
+					model.addAttribute("token", csrfToken.getToken());
+				return "new_form";
+			}
+		}
+		return "redirect:/news";
+	}
+
 	@PostMapping("/new_form")
-	public String newNewProcess(Model model, New newPost, MultipartFile imageField) throws IOException {
+	public String newNewProcess(Model model, @Valid New newPost, BindingResult bindingResult, MultipartFile imageField,
+			HttpServletRequest request) throws IOException {
+
+		List<String> errorMessages = new ArrayList<>();
+		boolean isNewPost = (newPost.getNewId() == null);
+
+		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+		User currentUser = userService.getUser(currentUserId).orElseThrow();
+
+		if (!isNewPost) {
+			New existingNew = newService.findById(newPost.getNewId()).get();
+			boolean isOwner = existingNew.getNewCreator() != null
+					&& existingNew.getNewCreator().getUserId().equals(currentUserId);
+			boolean isAdmin = request.isUserInRole("ADMIN");
+
+			if (!isOwner && !isAdmin) {
+				return "redirect:/news?error=unauthorized";
+			}
+			newPost.setNewCreator(existingNew.getNewCreator());
+		} else {
+			newPost.setNewCreator(currentUser);
+		}
+
+		if (bindingResult.hasErrors()) {
+			if (bindingResult.hasFieldErrors("newName")) {
+				errorMessages.add(bindingResult.getFieldError("newName").getDefaultMessage());
+			}
+			if (bindingResult.hasFieldErrors("newDescription")) {
+				errorMessages.add(bindingResult.getFieldError("newDescription").getDefaultMessage());
+			}
+			if (bindingResult.hasFieldErrors("newTag")) {
+				errorMessages.add(bindingResult.getFieldError("newTag").getDefaultMessage());
+			}
+		}
+
+		if (isNewPost && imageField.isEmpty()) {
+			errorMessages.add("Por favor, sube una imagen para la noticia.");
+		}
+
+		if (!errorMessages.isEmpty()) {
+			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+			if (csrfToken != null) {
+				model.addAttribute("token", csrfToken.getToken());
+			}
+			model.addAttribute("hasErrors", true);
+			model.addAttribute("allErrors", errorMessages);
+			model.addAttribute("newPost", newPost);
+			return "new_form";
+		}
+
 		if (!imageField.isEmpty()) {
 			Image image = imageService.createImage(imageField.getInputStream());
 			newPost.setNewImage(image);
+		} else if (!isNewPost) {
+			New oldNew = newService.findById(newPost.getNewId()).get();
+			newPost.setNewImage(oldNew.getNewImage());
 		}
 
 		newService.save(newPost);
-
-		return "redirect:news";
+		return "redirect:/news";
 	}
 
 	@PostMapping("/removeNew/{id}")
-	public String removeNew(Model model, @PathVariable long id) {
-
+	public String removeNew(@PathVariable long id, HttpServletRequest request) {
 		Optional<New> newPost = newService.findById(id);
 		if (newPost.isPresent()) {
-			newService.delete(id);
-			model.addAttribute("new", newPost.get());
-		}
+			New n = newPost.get();
+			boolean isAdmin = request.isUserInRole("ADMIN");
+			Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+			boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
 
+			if (isAdmin || isOwner) {
+				newService.delete(id);
+			}
+		}
 		return "redirect:/news";
 	}
 }

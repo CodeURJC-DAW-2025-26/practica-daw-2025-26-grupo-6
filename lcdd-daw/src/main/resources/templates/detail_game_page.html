@@ -35,10 +35,10 @@
                 <span class="value">{{game.genre}}</span>
               </div>
             </div>
+            {{#hasEditPermission}}
             <div class="row">
-
               <div class="col-auto">
-                <a class="btn btn-link text-primary text-decoration-none p-0" href="game_form">
+                <a class="btn btn-link text-primary text-decoration-none p-0" href="/game_form/{{game.gameId}}">
                   <i class="bi bi-pencil-square me-1"></i> Modificar juego
                 </a>
               </div>
@@ -51,8 +51,8 @@
                   <input type="hidden" name="_csrf" value="{{token}}" />
                 </form>
               </div>
-
             </div>
+            {{/hasEditPermission}}
           </div>
         </div>
       </div>

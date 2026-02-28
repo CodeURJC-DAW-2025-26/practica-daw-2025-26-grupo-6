@@ -25,6 +25,7 @@
 
               {{#game}}
               <div class="form">
+                <input type="hidden" name="gameId" value="{{#gameId}}{{gameId}}{{/gameId}}" />
                 <div class="form-field full-width">
                   <label for="gameName" class="required-label">Nombre del Juego</label>
                   <input type="text" name="gameName" id="gameName" value="{{#gameName}}{{gameName}}{{/gameName}}"
