@@ -6,25 +6,49 @@
       <div class="row justify-content-center">
         <h4>Solicitudes pendientes:</h4>
         <div class="row gy-4">
-          {{#event}}
+          {{#events}}
+
           <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <a class="project-card" href="/detail_event_page/{{eventId}}">
-              <div class="project-image">
-                <img src="/detail_event_page/{{eventId}}/{{eventImage}}" alt="Project" class="img-fluid">
+
+            <div class="project-card">
+              <a class="d-block text-decoration-none" href="/event/{{eventId}}">
+                <div class="project-image">
+                  <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
+                </div>
+                <div class="project-info">
+                  <div class="project-category">{{eventTag}}</div>
+                  <h4 class="project-title">{{eventName}}</h4>
+                  <p class="text-muted" style="min-height: 3em; overflow: hidden; text-overflow: ellipsis;">
+                    {{eventDescription}}
+                  </p>
+                </div>
+              </a>
+
+              <div class="d-flex gap-2 mt-2">
+                <form method="post" action="/admin/approveEvent/{{eventId}}"
+                  onsubmit="return confirmApprove('{{eventName}}')">
+                  <input type="hidden" name="_csrf" value="{{token}}">
+                  <button type="submit" class="btn btn-success rounded-pill px-3">
+                    Aceptar
+                  </button>
+                </form>
+                <form method="post" action="/admin/rejectEvent/{{eventId}}"
+                  onsubmit="return confirmReject('{{eventName}}')">
+                  <input type="hidden" name="_csrf" value="{{token}}">
+                  <button type="submit" class="btn btn-danger rounded-pill px-3">
+                    Rechazar
+                  </button>
+                </form>
+
               </div>
-              <div class="project-info">
-                <div class="project-category">{{eventTag}}</div>
-                <h4 class="project-title">{{eventName}}</h4>
-                <button class="btn btn-success rounded-pill px-3">Aceptar</button>
-                <button class="btn btn-danger rounded-pill px-3">Rechazar</button>
-              </div>
-            </a>
+            </div>
           </div>
-          {{/event}}
+          {{/events}}
+
           <!--Falta darle diseño a este mensaje-->
-          {{^event}}
+          {{^events}}
           <div>No hay Solicitudes</div>
-          {{/event}}
+          {{/events}}
         </div>
       </div>
       <br>
@@ -144,6 +168,14 @@
         </script>
       </div>
   </section>
+  <script>
+    function confirmApprove(name) {
+      return confirm(`¿Aprobar el evento "${name}"?`);
+    }
+    function confirmReject(name) {
+      return confirm(`¿Rechazar (eliminar) el evento "${name}"? Esta acción no se puede deshacer.`);
+    }
+  </script>
 </main>
 
 <footer id="footer" class="footer dark-background">

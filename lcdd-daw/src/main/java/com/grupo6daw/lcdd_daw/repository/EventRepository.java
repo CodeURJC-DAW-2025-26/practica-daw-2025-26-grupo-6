@@ -20,6 +20,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     ORDER BY COUNT(DISTINCT u) DESC, e.eventName ASC
 """)
     Page<Object[]> findEventsOrderedByParticipants(Pageable pageable);
+
     Optional<Event> findByEventName(String eventName);
     
     @Query("""
@@ -30,5 +31,20 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     (LOWER(e.eventTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
     """)
     List<Event> findByNameAndTag(String name, String tag);
+
+    List<Event> findByValidatedTrue();
+    List<Event> findByValidatedFalse();
+
+    
+@Query("""
+     SELECT e
+     FROM Event e
+     WHERE
+       e.validated = true
+       AND (LOWER(e.eventName) LIKE LOWER(CONCAT('%', :name, '%')) OR :name IS NULL OR :name = '')
+       AND (LOWER(e.eventTag) = LOWER(:tag) OR :tag IS NULL OR :tag = '')
+    """)
+    List<Event> findValidatedByNameAndTag(String name, String tag);
+
 
 }
