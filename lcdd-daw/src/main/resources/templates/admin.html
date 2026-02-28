@@ -52,6 +52,34 @@
         </div>
       </div>
       <br>
+      <hr>
+      <h3>Usuarios registrados</h3>
+
+      <div class="row gy-4 mt-3">
+        {{#users}}
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <a class="project-card d-block text-decoration-none" href="/user/{{userId}}">
+            <div class="project-image">
+              {{#userImage}}
+              <img src="/images/{{id}}" alt="Avatar de {{userNickname}}" class="img-fluid">
+              {{/userImage}}
+              {{^userImage}}
+              <img src="/img/person/Portrait_Placeholder.png" alt="Avatar por defecto" class="img-fluid">
+              {{/userImage}}
+            </div>
+            <div class="project-info">
+              <div class="project-category">{{userEmail}}</div>
+              <h4 class="project-title">{{userNickname}}</h4>
+              <p class="text-muted">{{userName}} {{userSurname}}</p>
+            </div>
+          </a>
+        </div>
+        {{/users}}
+
+        {{^users}}
+        <div class="alert alert-info">No hay usuarios registrados.</div>
+        {{/users}}
+      </div>
       <br>
       <!--No se que quereis de mustache aqui, luego se mira-->
       <div class="row justify-content-center">
