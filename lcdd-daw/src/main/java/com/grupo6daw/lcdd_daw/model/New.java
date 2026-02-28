@@ -15,6 +15,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class New {
@@ -42,7 +45,13 @@ public class New {
   @ManyToOne
   private User newCreator;
 
-  private LocalDate creationDate = LocalDate.now();
+  @Column(updatable = false)
+  private LocalDateTime creationDate;
+
+  @PrePersist
+    protected void onCreate() {
+        this.creationDate = LocalDateTime.now();
+    }
 
   public New() {
   }
@@ -110,12 +119,13 @@ public class New {
     this.newCreator = newCreator;
   }
 
-  public LocalDate getCreationDate() {
-      return creationDate;
-  }
+  public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
 
-  public void setCreationDate(LocalDate creationDate) {
-      this.creationDate = creationDate;
-  }
-
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
 }
+
+

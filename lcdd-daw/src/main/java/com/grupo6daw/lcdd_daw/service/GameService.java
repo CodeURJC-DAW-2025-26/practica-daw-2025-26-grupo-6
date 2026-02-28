@@ -44,4 +44,8 @@ public class GameService {
 	public void delete(long id) {
 		repository.deleteById(id);
 	}
+
+	public List<Game> findTop3() {
+        return repository.findTop3ByOrderByGameIdDesc();
+    }
 }
