@@ -13,19 +13,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 
 @Controller
 public class UserController {
-	
+
 	@Autowired
 	UserService userService;
 
 	@GetMapping("/profile")
-	public String profile(Model model) {
-		Long id = Long.parseLong((String) model.getAttribute("userId"));
-		User user = userService.getUser(id).orElseThrow();
+	public String profile(Model model, HttpServletRequest request) {
+		
+		String userId = request.getUserPrincipal().getName();
+		User user = userService.getUser(Long.parseLong(userId)).orElseThrow();
 		model.addAttribute("user", user);
 		return "profile";
 	}
@@ -37,12 +40,12 @@ public class UserController {
 		Resource imageFile = userService.getImageFile(id);
 
 		MediaType mediaType = MediaTypeFactory
-			.getMediaType(imageFile)
-			.orElse(MediaType.IMAGE_JPEG);
+				.getMediaType(imageFile)
+				.orElse(MediaType.IMAGE_JPEG);
 
 		return ResponseEntity
-			.ok()
-			.contentType(mediaType)
-			.body(imageFile);
+				.ok()
+				.contentType(mediaType)
+				.body(imageFile);
 	}
 }
