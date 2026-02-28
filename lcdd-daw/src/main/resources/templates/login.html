@@ -20,16 +20,23 @@
             </div>
             {{/loginError}}
 
-            <form action="/login" method="post" class="custom-login-form">
+            <form action="/login" method="post" class="custom-login-form needs-validation" novalidate>
               <div class="form">
                 <div class="form-field">
                   <label for="email" class="required-label">Correo electrónico:</label>
-                  <input type="email" name="email" id="email" placeholder="" required="">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="" required="">
+
+                  <div class="invalid-feedback">
+                    Por favor, ingrese un correo electrónico válido.
+                  </div>
                 </div>
                 <br>
                 <div class="form-field">
                   <label for="password" class="required-label">Contraseña:</label>
-                  <input type="password" name="password" id="password" placeholder="" required="">
+                  <input type="password" class="form-control"name="password" id="password" placeholder="" required="">
+                  <div class="invalid-feedback">
+                    Por favor, ingresa una contraseña válida.
+                  </div>
                 </div>
                 <br>
                 <div class="row">
@@ -47,7 +54,7 @@
                 <br>
                 <h4>¿No tienes cuenta en La Caverna Del Dragón?</h4>
                 <a href="register" class="submit">Click aquí para crear una</a>
-                </div> <input type="hidden" name="_csrf" value="{{token}}" />
+              </div> <input type="hidden" name="_csrf" value="{{token}}" />
             </form>
           </div>
         </div>
