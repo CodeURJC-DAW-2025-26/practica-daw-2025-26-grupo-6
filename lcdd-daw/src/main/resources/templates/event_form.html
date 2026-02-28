@@ -63,7 +63,7 @@
                   {{/eventId}}
 
                   {{^eventId}}
-                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*" required>
+                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*" accept=".jpg, .jpeg, .png, .webp" required>
                   {{/eventId}}
                   <div class="invalid-feedback">
                     Por favor, sube una imagen válida para el evento.
@@ -144,26 +144,3 @@
 </main>
 
 {{>footer}}
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const radios = document.querySelectorAll('.radio-registro');
-    const linkContainer = document.getElementById('link-container');
-    const linkInput = document.getElementById('link');
-
-    function toggleLinkValidation() {
-      const isSi = document.getElementById('req-si').checked;
-
-      if (isSi) {
-        linkContainer.style.display = 'block';
-        linkInput.setAttribute('required', 'true');
-      } else {
-        linkContainer.style.display = 'none';
-        linkInput.removeAttribute('required');
-        linkInput.classList.remove('is-invalid'); // Limpia el borde rojo si se oculta
-      }
-    }
-
-    radios.forEach(radio => radio.addEventListener('change', toggleLinkValidation));
-  });
-</script>

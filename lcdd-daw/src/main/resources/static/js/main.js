@@ -231,3 +231,63 @@
       }, false)
     })
 })()
+
+
+// Scripts for event_form.html
+
+/**
+ * logic for event form:
+ * 1. Show/hide link input based on "Requiere inscripción" radio buttons
+ * 2. Validate image input (size and format) before form submission 
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    
+    const radios = document.querySelectorAll('.radio-registro');
+    const linkContainer = document.getElementById('link-container');
+    const linkInput = document.getElementById('link');
+
+    if (radios.length > 0 && linkContainer && linkInput) {
+        const toggleLinkValidation = () => {
+            const siRadio = document.getElementById('req-si');
+            if (siRadio && siRadio.checked) {
+                linkContainer.style.display = 'block';
+                linkInput.setAttribute('required', 'true');
+            } else {
+                linkContainer.style.display = 'none';
+                linkInput.removeAttribute('required');
+                linkInput.classList.remove('is-invalid');
+            }
+        };
+
+        radios.forEach(radio => radio.addEventListener('change', toggleLinkValidation));
+        
+        toggleLinkValidation();
+    }
+
+   // image validation
+    const imageInput = document.getElementById('imageField');
+
+    if (imageInput) {
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+            if (file) {
+                // size validation
+                if (file.size > maxSize) {
+                    alert('¡Archivo demasiado grande! El máximo permitido son 10MB.');
+                    this.value = ''; 
+                    return;
+                }
+
+                // format validation
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Formato no permitido. Por favor, sube JPG, PNG o WebP.');
+                    this.value = ''; 
+                    return;
+                }
+            }
+        });
+    }
+});

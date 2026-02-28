@@ -10,11 +10,15 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
@@ -28,6 +32,19 @@ import jakarta.validation.Valid;
 
 @Controller
 public class EventsController {
+
+	@ControllerAdvice
+	public class GlobalExceptionHandler {
+
+		@ExceptionHandler(MaxUploadSizeExceededException.class)
+		public String handleMaxSizeException(MaxUploadSizeExceededException exc,
+				RedirectAttributes redirectAttributes) {
+			redirectAttributes.addFlashAttribute("hasErrors", true);
+			redirectAttributes.addFlashAttribute("allErrors",
+					List.of("El archivo es demasiado grande o el formato es incompatible. El límite configurado es 10MB."));
+			return "redirect:/event_form";
+		}
+	}
 
 	@Autowired
 	private EventService eventService;
@@ -143,16 +160,32 @@ public class EventsController {
 				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
 			}
 		} else {
-			// if the event doesn't require registration, we ignore any link provided and set it to null
+			// if the event doesn't require registration, we ignore any link provided and
+			// set it to null
 			event.setLink(null);
 		}
 
-		// Image validation (only for new events, for existing ones we allow them to keep their old image if they don't upload a new one)
-		if (isNewEvent && imageField.isEmpty()) {
-			errorMessages.add("Debes adjuntar una imagen para el evento.");
-		}
+		//image validation (if it's a new event, the image is required, if it's an existing event, the image is optional, but if it's provided, we check if it's a valid image file and not too big)
+        if (!imageField.isEmpty()) {
+            // check size (10MB)
+            if (imageField.getSize() > 10 * 1024 * 1024) {
+                errorMessages.add("El archivo es demasiado grande. El límite son 10MB.");
+            }
 
-		// if the image is provided, we check if it's a valid image file (by checking the content type)
+            // checking content type to ensure it's an image (jpg, png, webp)
+            String contentType = imageField.getContentType();
+            List<String> validTypes = List.of("image/jpeg", "image/png", "image/webp");
+            if (contentType == null || !validTypes.contains(contentType)) {
+                errorMessages.add("Formato de imagen no permitido. Usa JPG, PNG o WebP.");
+            }
+        } else if (isNewEvent) {
+            
+            errorMessages.add("Debes adjuntar una imagen para el evento.");
+        }
+
+
+		// if the image is provided, we check if it's a valid image file (by checking
+		// the content type)
 		if (!errorMessages.isEmpty()) {
 			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 			if (csrfToken != null) {
@@ -164,7 +197,9 @@ public class EventsController {
 			return "event_form";
 		}
 
-		// OWNER CHECK (if it's a new event, we set the owner to the current user, if it's an existing event, we check if the current user is the owner or an admin, if not, we redirect to the events page with an error)
+		// OWNER CHECK (if it's a new event, we set the owner to the current user, if
+		// it's an existing event, we check if the current user is the owner or an
+		// admin, if not, we redirect to the events page with an error)
 		if (!isNewEvent) {
 			Event existingEvent = eventService.findById(event.getEventId()).get();
 			boolean isOwner = existingEvent.getEventCreator() != null
@@ -180,7 +215,9 @@ public class EventsController {
 			event.setEventCreator(currentUser);
 		}
 
-		// IMAGE HANDLING (if a new image is uploaded, we create a new Image entity and set it to the event, if it's an existing event and no new image is uploaded, we keep the old image)
+		// IMAGE HANDLING (if a new image is uploaded, we create a new Image entity and
+		// set it to the event, if it's an existing event and no new image is uploaded,
+		// we keep the old image)
 		if (event.getEventTag() == null) {
 			event.setEventTag("");
 		}
