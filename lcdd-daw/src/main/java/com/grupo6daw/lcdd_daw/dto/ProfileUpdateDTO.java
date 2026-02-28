@@ -17,7 +17,7 @@ public class ProfileUpdateDTO {
 
     private String interests = "";
 
-    private MultipartFile profileImage;
+    private MultipartFile image;
     
     public String getName() {
         return name;
@@ -51,11 +51,11 @@ public class ProfileUpdateDTO {
         this.interests = interests;
     }
 
-    public MultipartFile getProfileImage() {
-        return profileImage;
+    public MultipartFile getImage() {
+        return image;
     }
 
-    public void setProfileImage(MultipartFile profileImage) {
-        this.profileImage = profileImage;
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }

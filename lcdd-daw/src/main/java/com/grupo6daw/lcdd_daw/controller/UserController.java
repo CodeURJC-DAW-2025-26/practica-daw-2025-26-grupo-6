@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @Controller
@@ -56,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok().contentType(mediaType).body(imageFile);
     }
 
-    	@PostMapping("/user/{id}/update") 
+    @PostMapping("/user/{id}/update") 
 	public String updateProfile(Model model, @Valid ProfileUpdateDTO dto, HttpServletRequest request, @PathVariable long id) throws IOException {
 		boolean admin = (boolean) model.getAttribute("admin");
         Long userId = Long.parseLong((String) model.getAttribute("userId"));
@@ -80,6 +83,15 @@ public class UserController {
         }
 
 		userService.deleteUser(id);
-		return "redirect:/logout";
+		return "redirect:/userDeleted";
 	}
+
+    @GetMapping("/userDeleted")
+    public String userDeleted(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/";
+    }
+    
 }
