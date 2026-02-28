@@ -1,7 +1,7 @@
 {{>header}}
 
 <main class="main">
-  <section id="quote" class="quote section">
+  <section id="quote" class="quote section pt-0">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
       <div class="row justify-content-center">
         <div class="col-lg-10" data-aos="fade-left" data-aos-delay="300">
@@ -23,21 +23,30 @@
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {{/hasErrors}}
-            <form method="post" action="/new_form" enctype="multipart/form-data" class="php-email-form">
+            <form method="post" action="/new_form" enctype="multipart/form-data"
+              class="custom-login-form needs-validation" novalidate>
               {{#newPost}}
               <div class="form">
                 <input type="hidden" name="newId" value="{{#newId}}{{newId}}{{/newId}}" />
 
                 <div class="form-field">
-                  <label for="newName" class="required-label">Nombre:</label>
-                  <input type="text" name="newName" id="newName" value="{{#newName}}{{newName}}{{/newName}}" required>
+                  <label for="newName" class="required-label">Titulo:</label>
+                  <input type="text" class="form-control" name="newName" id="newName"
+                    value="{{#newName}}{{newName}}{{/newName}}" minlength="10" maxlength="100" required>
+                  <div class="invalid-feedback">
+                    El titulo debe tener entre 10 y 100 caracteres.
+                  </div>
                 </div>
                 <br>
 
                 <div class="form-field full-width">
                   <label for="newDescription" class="required-label">Descripción:</label>
-                  <textarea name="newDescription" id="newDescription" rows="8"
+                  <textarea minlength="50" maxlength="3000" class="form-control" name="newDescription"
+                    id="newDescription" rows="8"
                     required>{{#newDescription}}{{newDescription}}{{/newDescription}}</textarea>
+                  <div class="invalid-feedback">
+                    La descripción debe tener entre 50 y 3000 caracteres.
+                  </div>
                 </div>
                 <br>
 
@@ -48,7 +57,7 @@
                 <br>
 
                 <div class="form-field">
-                  <label for="imageField" class="form-label">Imagen (dejar vacío para mantener la actual):</label>
+                  <label for="imageField" class="form-label">Imagen:</label>
 
                   {{#newId}}
                   <input class="form-control" type="file" name="imageField" id="imageField">
@@ -57,18 +66,25 @@
                   {{^newId}}
                   <input class="form-control" type="file" name="imageField" id="imageField" required>
                   {{/newId}}
+                  <div class="invalid-feedback">
+                    Por favor, selecciona una imagen válida.
+                  </div>
                 </div>
-              </div>
-              {{/newPost}}
+                {{/newPost}}
 
-              <div class="row mt-4">
-                <div class="col-lg-3">
-                  <a href="/news" class="submit-btn text-center pt-2"
-                    style="text-decoration:none; display:block; background: #6c757d;">Atrás</a>
-                </div>
-                <div class="col-lg-2"></div>
-                <div class="col-lg-3">
-                  <button type="submit" class="submit-btn"><span>Guardar Noticia</span></button>
+                <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-2">
+
+                  <a href="/news" class="submit-btn"
+                    style="background: #6c757d; margin-top: 0; justify-content: center;">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Atrás</span>
+                  </a>
+
+                  <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center;">
+                    <span>Guardar Noticia</span>
+                    <i class="bi bi-check2-circle"></i>
+                  </button>
+
                 </div>
               </div>
               <input type="hidden" name="_csrf" value="{{token}}" />
