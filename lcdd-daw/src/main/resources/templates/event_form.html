@@ -13,10 +13,8 @@
                 un evento
               </h3>
               <p>
-                {{#event.eventId}}Modifica los datos del evento seleccionado (serán validados por un
-                administrador).{{/event.eventId}}
-                {{^event.eventId}}Rellena los campos para registrar un nuevo evento (serán validados por un
-                administrador).{{/event.eventId}}
+                {{#event.eventId}}Modifica los datos del evento seleccionado.{{/event.eventId}}
+                {{^event.eventId}}Rellena los campos para registrar un nuevo evento.{{/event.eventId}}
               </p>
             </div>
 
@@ -90,7 +88,7 @@
                 <div class="col-12 mt-4">
                   <div class="form-field p-3 border rounded-3 bg-light h-100 d-flex flex-column justify-content-center">
                     <label for="imageField" class="required-label">Imagen de cabecera:</label>
-                    
+
                     {{^eventId}}
                     <input type="file" name="imageField" id="imageField" class="form-control"
                       accept=".jpg, .jpeg, .png, .webp" required>
@@ -157,7 +155,8 @@
                           placeholder="https://forms.gle/...">
                         <div class="invalid-feedback">Por favor, introduce una URL válida (ej: https://...).</div>
                       </div>
-                      <small class="text-muted mt-2 d-block">Introduce la URL del formulario o plataforma externa.</small>
+                      <small class="text-muted mt-2 d-block">Introduce la URL del formulario o plataforma
+                        externa.</small>
                     </div>
                   </div>
                 </div>

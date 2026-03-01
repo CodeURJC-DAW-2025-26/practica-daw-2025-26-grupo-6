@@ -2,6 +2,7 @@ package com.grupo6daw.lcdd_daw.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -216,95 +217,94 @@ public class DatabaseInitializer {
     }
 
     // Sample Events
-
-    if (eventRepository.findByEventName("Noche de Estrategia: Clásicos Modernos").isEmpty()) {
-      Event e1 = new Event("Noche de Estrategia: Clásicos Modernos",
-          "¿Eres más de construir carreteras en Catan o de conquistar ciudades en Carcassonne? Una velada dedicada a los juegos que definieron nuestra afición.",
-          "Estrategia", true, LocalDate.now().plusDays(5), 20);
-      setEventImage(e1, "/sample_images/events/event.jpg");
-      eventService.save(e1);
+    
+    if (eventRepository.findByEventName("Evento de juegos de mesa Octubre 2026").isEmpty()) {
+      Event event1 = new Event("Evento de juegos de mesa Octubre 2026",
+          "🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟\nLa asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de juegos de mesa para que venga a jugar y divertirse todo el mundo.",
+          "Cartas", true, LocalDate.now().plusDays(5), 50);
+      setEventImage(event1, "/sample_images/events/event.jpg");
+      eventService.save(event1);
     }
 
-    if (eventRepository.findByEventName("Torneo Relámpago de Virus!").isEmpty()) {
-      Event e2 = new Event("Torneo Relámpago de Virus!",
-          "¡La epidemia no descansa! Ven a participar en este torneo rápido de eliminatorias directas. Partidas de 15 minutos donde el caos está asegurado.",
-          "Cartas", true, LocalDate.now().plusDays(12), 32);
-      setEventImage(e2, "/sample_images/events/virus_torneo.jpg");
-      eventService.save(e2);
+    if (eventRepository.findByEventName("Maratón 12h: Juegos de Mesa").isEmpty()) {
+      Event event2 = new Event("Maratón 12h: Juegos de Mesa",
+          "📦🏰 ¿Aguantarás 12 horas seguidas jugando? Desde los clásicos Catan y Carcassonne hasta los pesados como Terraforming Mars. ¡Ven cuando quieras!",
+          "Juego de mesa", true, LocalDate.now().plusDays(10), 30);
+      setEventImage(event2, "/sample_images/events/maraton.jpg");
+      eventService.save(event2);
     }
 
-    if (eventRepository.findByEventName("Introducción a Dungeons & Dragons").isEmpty()) {
-      Event e3 = new Event("Introducción a Dungeons & Dragons",
-          "¿Quieres empezar a rolear pero no sabes por dónde? Te ayudamos a crear tu primer personaje y jugaremos una aventura introductoria corta.",
-          "Rol", true, LocalDate.now().plusDays(20), 10);
-      setEventImage(e3, "/sample_images/events/beginner_role.jpg");
-      eventService.save(e3);
+    if (eventRepository.findByEventName("Copa de Kanto: Pokémon TCG").isEmpty()) {
+      Event event3 = new Event("Copa de Kanto: Pokémon TCG",
+          "⚡🐭 ¡Hazte con todos! Participa en nuestro torneo oficial de Pokémon. Habrá cartas promo para los participantes y sobres para el top 3.",
+          "Cartas", true, LocalDate.now().plusDays(15), 16);
+      setEventImage(event3, "/sample_images/events/pokemon_cup.jpg");
+      eventService.save(event3);
     }
 
-    if (eventRepository.findByEventName("Liga de Cartas: Magic & Pokémon").isEmpty()) {
-      Event e4 = new Event("Liga de Cartas: Magic & Pokémon",
-          "Primera jornada de nuestra liga inter-juegos. Trae tu mazo de Commander o tu baraja de Pokémon TCG y suma puntos para el ranking semestral.",
-          "Cartas", true, LocalDate.now().plusWeeks(4), 40);
-      setEventImage(e4, "/sample_images/events/pokemon_cup.jpg");
-      eventService.save(e4);
+    if (eventRepository.findByEventName("Tarde de Juegos Rápidos").isEmpty()) {
+      Event event4 = new Event("Tarde de Juegos Rápidos",
+          "💨🃏 Virus!, Taco Gato, ¡Mía! y más. Partidas rápidas y muchas risas en esta tarde dedicada a los juegos más dinámicos de la asociación.",
+          "Juego de mesa", true, LocalDate.now().plusDays(20), 40);
+      setEventImage(event4, "/sample_images/events/filler_afternoon.jpg");
+      eventService.save(event4);
     }
 
-    if (eventRepository.findByEventName("Maratón Nocturna: Juegos Épicos").isEmpty()) {
-      Event e5 = new Event("Maratón Nocturna: Juegos Épicos",
-          "Sacamos la artillería pesada: Twilight Imperium, Nemesis y Scythe. Solo para valientes dispuestos a pasar una noche entera entre tableros.",
-          "Estrategia", true, LocalDate.now().plusMonths(2), 15);
-      setEventImage(e5, "/sample_images/events/maraton.jpg");
-      eventService.save(e5);
+    if (eventRepository.findByEventName("Liga de Estrategia: Temporada 1").isEmpty()) {
+      Event event5 = new Event("Liga de Estrategia: Temporada 1",
+          "👑🗺 ¿Eres el mejor estratega? Apúntate a nuestra liga trimestral de juegos de tablero. Suma puntos cada semana y encabeza el ranking.",
+          "Juego de mesa", true, LocalDate.now().plusDays(25), 24);
+      setEventImage(event5, "/sample_images/events/strategy_league.jpg");
+      eventService.save(event5);
     }
 
-    if (eventRepository.findByEventName("Party Games Jam").isEmpty()) {
-      Event e6 = new Event("Party Games Jam",
-          "Tarde dedicada a juegos ligeros como Taco Gato, Exploding Kittens y Jungle Speed. Ideal para conocer gente nueva en la asociación.",
-          "Juego de mesa", true, LocalDate.now().plusDays(3), 0);
-      setEventImage(e6, "/sample_images/events/filler_afternoon.jpg");
-      eventService.save(e6);
+    if (eventRepository.findByEventName("Duelo al Sol: Torneo de Bang!").isEmpty()) {
+      Event event6 = new Event("Duelo al Sol: Torneo de Bang!",
+          "🤠🔫 Sheriff, alguaciles o forajidos... ¿quién sobrevivirá? Ven a participar en este torneo del juego de cartas más famoso del Oeste.",
+          "Cartas", true, LocalDate.now().plusMonths(1), 32);
+      setEventImage(event6, "/sample_images/events/bang_tournament.jpg");
+      eventService.save(event6);
     }
 
-    if (eventRepository.findByEventName("Torneo de Bang! El Regreso del Forajido").isEmpty()) {
-      Event e7 = new Event("Torneo de Bang! El Regreso del Forajido",
-          "Prepara tus balas. Nuevo torneo de roles ocultos en el Salvaje Oeste. Habrá premios especiales para el Sheriff y el Renegado que más duren.",
-          "Cartas", true, LocalDate.now().plusDays(45), 28);
-      setEventImage(e7, "/sample_images/events/bang_tournament.jpg");
-      eventService.save(e7);
+    if (eventRepository.findByEventName("Día del Novato: Aprende a Rolear").isEmpty()) {
+      Event event7 = new Event("Día del Novato: Aprende a Rolear",
+          "🎲🔰 ¿Te da miedo empezar? No te preocupes. Evento diseñado exclusivamente para gente que nunca ha tocado un dado de 20 caras.",
+          "Rol", true, LocalDate.now().plusMonths(1).plusDays(5), 10);
+      setEventImage(event7, "/sample_images/events/beginner_role.jpg");
+      eventService.save(event7);
     }
 
     if (eventRepository.findByEventName("Campeonato de Carcassonne URJC").isEmpty()) {
-      Event e8 = new Event("Campeonato de Carcassonne URJC",
-          "Demuestra que eres el mejor arquitecto medieval en este torneo de Carcassonne con todas sus expansiones. Clasificatorio interno.",
-          "Estrategia", true, LocalDate.now().plusDays(60), 24);
-      setEventImage(e8, "/sample_images/events/carcassonne_tourney.jpg");
-      eventService.save(e8);
+      Event event8 = new Event("Campeonato de Carcassonne URJC",
+          "🧩🏰 Coloca tus losetas y tus monjes estratégicamente. Torneo clasificatorio con reglamento de torneo nacional.",
+          "Juego de mesa", true, LocalDate.now().plusMonths(1).plusDays(10), 20);
+      setEventImage(event8, "/sample_images/events/carcassonne_tourney.jpg");
+      eventService.save(event8);
     }
 
-    if (eventRepository.findByEventName("Retorno al Pasado: Yu-Gi-Oh! Retro").isEmpty()) {
-      Event e9 = new Event("Retorno al Pasado: Yu-Gi-Oh! Retro",
-          "¿Echas de menos las invocaciones por sacrificio y las fusiones clásicas? Torneo especial con lista de cartas de la era dorada.",
-          "Cartas", true, LocalDate.now().plusDays(15), 16);
-      setEventImage(e9, "/sample_images/events/ygo_goat.jpg");
-      eventService.save(e9);
+    if (eventRepository.findByEventName("Torneo de Virus!: Epidemia en la URJC").isEmpty()) {
+      Event event9 = new Event("Torneo de Virus!: Epidemia en la URJC",
+          "☣️👨‍⚕️ ¡El laboratorio se ha descontrolado! Ven a participar en el torneo del juego más rápido de Tranjis. ¿Lograrás tener tus cuatro órganos sanos antes que nadie?",
+          "Juego de mesa", true, LocalDate.now().plusMonths(2), 32);
+      setEventImage(event9, "/sample_images/events/virus_torneo.jpg");
+      eventService.save(event9);
     }
 
-    if (eventRepository.findByEventName("Gymkana Navideña").isEmpty()) {
-      Event e10 = new Event("Gymkana Navideña",
-          "Pruebas de habilidad, memoria y rapidez mental usando componentes de juegos de mesa. ¡Ven con tu equipo y gana la cesta de juegos!",
-          "Juego de mesa", true, LocalDate.of(2026, 12, 20), 50);
-      setEventImage(e10, "/sample_images/events/gymkana_event.jpg");
-      eventService.save(e10);
+    if (eventRepository.findByEventName("Yu-Gi-Oh!: Torneo Goat Format").isEmpty()) {
+      Event event10 = new Event("Yu-Gi-Oh!: Torneo Goat Format",
+          "🔙🃏 Volvemos a los orígenes. Un torneo nostálgico con las reglas y cartas del año 2005. ¡Saca tus viejas glorias del baúl!",
+          "Cartas", true, LocalDate.now().plusMonths(2).plusDays(15), 16);
+      setEventImage(event10, "/sample_images/events/ygo_goat.jpg");
+      eventService.save(event10);
     }
 
-    if (eventRepository.findByEventName("Torneo de Catan Universitario").isEmpty()) {
-      Event e11 = new Event("Torneo de Catan Universitario",
-          "Consigue madera, ovejas y ladrillos. Conviértete en el mejor colono de la universidad en nuestro torneo de Catan con plazas limitadas.",
-          "Estrategia", true, LocalDate.now().plusDays(25), 16);
-      setEventImage(e11, "/sample_images/news/catan.jpg");
-      eventService.save(e11);
+    if (eventRepository.findByEventName("La Gran Gymkana de La Caverna").isEmpty()) {
+      Event event11 = new Event("La Gran Gymkana de La Caverna",
+          "🏃‍♂️🎲 Supera pruebas rápidas de distintos juegos de mesa para ganar puntos. Una competición por equipos loca y muy divertida.",
+          "Juego de mesa", true, LocalDate.now().plusMonths(3), 50);
+      setEventImage(event11, "/sample_images/events/gymkana_event.jpg");
+      eventService.save(event11);
     }
-
 
     // Sample users
     userRepository.save(new User("user", "user", "user", "interests", "user@user.com",

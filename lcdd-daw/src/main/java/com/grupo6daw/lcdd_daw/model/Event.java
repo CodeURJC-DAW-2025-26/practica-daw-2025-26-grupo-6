@@ -65,13 +65,13 @@ public class Event {
     @Column(updatable = false)
     private LocalDateTime creationDate;
 
-    // --- date format ---
+    // --- NEW DATE FIELDS ---
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate eventDate;
 
     private Integer maxParticipants;
 
-    // --- constructor ---
+    // --- CONSTRUCTORS ---
 
     public Event() {
     }
@@ -87,62 +87,141 @@ public class Event {
         this.maxParticipants = maxParticipants;
     }
 
-    
+    // --- LIFECYCLE METHODS ---
 
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();
     }
 
-    // --- GETTERS and SETTERS ---
+    // --- GETTERS AND SETTERS ---
 
-    public Long getEventId() { return eventId; }
-    public void setEventId(Long eventId) { this.eventId = eventId; }
+    public Long getEventId() {
+        return eventId;
+    }
 
-    public String getEventName() { return eventName; }
-    public void setEventName(String eventName) { this.eventName = eventName; }
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
 
-    public String getEventDescription() { return eventDescription; }
-    public void setEventDescription(String eventDescription) { this.eventDescription = eventDescription; }
+    public String getEventName() {
+        return eventName;
+    }
 
-    public Image getEventImage() { return eventImage; }
-    public void setEventImage(Image eventImage) { this.eventImage = eventImage; }
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
 
-    public String getEventTag() { return eventTag; }
-    public void setEventTag(String eventTag) { this.eventTag = eventTag; }
+    public String getEventDescription() {
+        return eventDescription;
+    }
 
-    public Set<User> getEventRegisteredUsers() { return eventRegisteredUsers; }
-    public void setEventRegisteredUsers(Set<User> eventRegisteredUsers) { this.eventRegisteredUsers = eventRegisteredUsers; }
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
 
-    public User getEventCreator() { return eventCreator; }
-    public void setEventCreator(User eventCreator) { this.eventCreator = eventCreator; }
+    // FIXED: Image Getters and Setters restored
+    public Image getEventImage() {
+        return eventImage;
+    }
 
-    public List<New> getEventNews() { return eventNews; }
-    public void setEventNews(List<New> eventNews) { this.eventNews = eventNews; }
+    public void setEventImage(Image eventImage) {
+        this.eventImage = eventImage;
+    }
 
-    public boolean isRequiresRegistration() { return requiresRegistration; }
-    public void setRequiresRegistration(boolean requiresRegistration) { this.requiresRegistration = requiresRegistration; }
+    public String getEventTag() {
+        return eventTag;
+    }
 
-    public String getLink() { return link; }
-    public void setLink(String link) { this.link = link; }
+    public void setEventTag(String eventTag) {
+        this.eventTag = eventTag;
+    }
 
-    public LocalDateTime getCreationDate() { return creationDate; }
-    public void setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; }
+    public Set<User> getEventRegisteredUsers() {
+        return eventRegisteredUsers;
+    }
 
-    public boolean isValidated() { return validated; }
-    public void setValidated(boolean validated) { this.validated = validated; }
+    public void setEventRegisteredUsers(Set<User> eventRegisteredUsers) {
+        this.eventRegisteredUsers = eventRegisteredUsers;
+    }
 
-    public LocalDate getEventDate() { return eventDate; }
-    public void setEventDate(LocalDate eventDate) { this.eventDate = eventDate; }
+    public User getEventCreator() {
+        return eventCreator;
+    }
 
-    public Integer getMaxParticipants() { return maxParticipants; }
-    public void setMaxParticipants(Integer maxParticipants) { this.maxParticipants = maxParticipants; }
+    public void setEventCreator(User eventCreator) {
+        this.eventCreator = eventCreator;
+    }
+
+    public List<New> getEventNews() {
+        return eventNews;
+    }
+
+    public void setEventNews(List<New> eventNews) {
+        this.eventNews = eventNews;
+    }
+
+    public boolean isRequiresRegistration() {
+        return requiresRegistration;
+    }
+
+    public void setRequiresRegistration(boolean requiresRegistration) {
+        this.requiresRegistration = requiresRegistration;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public boolean isValidated() {
+        return validated;
+    }
+
+    public void setValidated(boolean validated) {
+        this.validated = validated;
+    }
+
+    public LocalDate getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(LocalDate eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public Integer getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(Integer maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+
+    // --- FORM AND VIEW FORMATTERS ---
 
     public String getEventDateForForm() {
         return this.eventDate != null ? this.eventDate.toString() : "";
     }
-    
+
     public String getMaxParticipantsForForm() {
         return this.maxParticipants != null ? this.maxParticipants.toString() : "";
+    }
+
+    public String getFormattedDate() {
+        if (this.eventDate == null)
+            return "";
+        return this.eventDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }

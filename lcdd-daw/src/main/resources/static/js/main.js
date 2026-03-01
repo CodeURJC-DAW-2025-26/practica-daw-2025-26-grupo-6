@@ -13,9 +13,16 @@
   function toggleScrolled() {
     const selectBody = document.querySelector('body');
     const selectHeader = document.querySelector('#header');
-    if (!selectHeader) return;
-    if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fixed-top')) return;
-    window.scrollY > 100 ? selectBody.classList.add('scrolled') : selectBody.classList.remove('scrolled');
+
+    if (selectBody.classList.contains('scrolled')) {
+      if (window.scrollY < 64) {
+        selectBody.classList.remove('scrolled');
+      }
+    } else {
+      if (window.scrollY > 100) {
+        selectBody.classList.add('scrolled');
+      }
+    }
   }
 
   document.addEventListener('scroll', toggleScrolled);
@@ -178,6 +185,24 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // EndDate validation
+  const startDate = document.getElementById('startDate');
+  const endDate = document.getElementById('endDate');
+
+  function endDateValidation() {
+    const startInput = document.getElementById('startDate');
+    const endInput = document.getElementById('endDate');
+    const startDate = new Date(startInput.value);
+    const endDate = new Date(endInput.value);
+    if (startDate > endDate) {
+      endInput.setCustomValidity("La fecha de fin debe ser posterior a la de inicio.");
+    } else {
+      endInput.setCustomValidity("");
+    }
+  }
+  startDate.addEventListener("change", endDateValidation);
+  endDate.addEventListener("change", endDateValidation);
 });
 
 /**
@@ -532,3 +557,37 @@ function loadMoreGames() {
       if (spinner) spinner.classList.add('d-none');
     });
 }
+
+/**
+ * ==========================================
+ * CAROUSEL EVENT TIMER LOGIC
+ * ==========================================
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  const timers = document.querySelectorAll('.countdown-timer');
+  
+  if (timers.length > 0) {
+      setInterval(() => {
+          timers.forEach(timer => {
+              const targetDateStr = timer.getAttribute('data-date');
+              if (!targetDateStr) return;
+              
+              const targetDate = new Date(targetDateStr + "T00:00:00").getTime();
+              const now = new Date().getTime();
+              const diff = targetDate - now;
+
+              if (diff > 0) {
+                  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                  timer.innerHTML = `<i class="bi bi-clock-history me-1"></i> Faltan: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+              } else {
+                  timer.innerHTML = `<i class="bi bi-stars me-1"></i> ¡El evento es hoy!`;
+                  timer.classList.replace('bg-danger', 'bg-success');
+              }
+          });
+      }, 1000);
+  }
+});

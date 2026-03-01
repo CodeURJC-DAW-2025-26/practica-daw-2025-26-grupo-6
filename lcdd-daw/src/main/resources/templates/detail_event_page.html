@@ -21,45 +21,37 @@
           </div>
         </div>
 
-        <div class="col-lg-7 col-md-12">
-          <div class="project-info ps-lg-4 mt-4 mt-lg-0">
-            <h1 class="project-title" style="font-weight: 700; color: #212529; margin-top: 0; margin-bottom: 5px;">
-              {{event.eventName}}
-            </h1>
+        <div class="col-lg-7 col-md-12 ps-lg-5 mt-4 mt-lg-0">
+          <div class="project-info p-4 bg-white rounded-4 shadow-sm border">
+            <h2 class="fw-bold mb-3" style="color: #212529;">{{event.eventName}}</h2>
 
-            <div class="mb-4 text-muted" style="font-size: 0.95rem;">
-              <i class="bi bi-person-circle me-1"></i> Creado por: 
-              {{#event.eventCreator}}
-                <a href="/user/{{event.eventCreator.userId}}" class="text-decoration-none fw-bold" style="color: #a71b12;">
-                  {{event.eventCreator.userNickname}}
-                </a>
-              {{/event.eventCreator}}
-              {{^event.eventCreator}}
-                <a href="/" class="text-decoration-none fw-bold" style="color: #a71b12;">
-                  La Caverna del Dragón
-                </a>
-              {{/event.eventCreator}}
+            <div class="d-flex flex-wrap gap-4 mb-4 pb-3 border-bottom text-muted" style="font-size: 0.95rem;">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-calendar-event text-danger fs-5 me-2"></i>
+                <span class="fw-medium text-dark">{{formattedDate}}</span>
+              </div>
+              <div class="d-flex align-items-center">
+                <i class="bi bi-people text-danger fs-5 me-2"></i>
+                <span class="fw-medium text-dark">
+                  Aforo: {{#event.maxParticipants}}{{event.maxParticipants}}{{/event.maxParticipants}}
+                  {{^event.maxParticipants}}Ilimitado{{/event.maxParticipants}}
+                </span>
+              </div>
             </div>
 
-            <div class="project-description mb-4" style="font-size: 1.1rem; line-height: 1.6;">
+            <div class="project-description mb-4" style="font-size: 1.05rem; line-height: 1.6; color: #444;">
               {{event.eventDescription}}
             </div>
 
-            <div class="d-flex align-items-center gap-3">
-              <div class="col-auto">
-                <button class="btn rounded-pill px-4 shadow-sm btn-caverna-primary" type="submit">
-                  <i class="bi bi-person-plus me-1"></i> Apuntarse
-                </button>
-              </div>
-
-              {{#event.link}}
+            <div class="row align-items-center mt-4">
+              {{#event.requiresRegistration}}
               <div class="col-auto">
                 <a href="{{event.link}}" target="_blank" rel="noopener noreferrer"
-                  class="btn rounded-pill px-4 shadow-sm btn-caverna-outline">
+                  class="btn btn-danger rounded-pill px-4 shadow-sm" style="background-color: #a71b12; border: none;">
                   <i class="bi bi-box-arrow-up-right me-1"></i> Enlace de inscripción
                 </a>
               </div>
-              {{/event.link}}
+              {{/event.requiresRegistration}}
             </div>
 
             {{#hasEditPermission}}
@@ -73,7 +65,7 @@
               <div class="col-auto ms-3">
                 <form action="/removeEvent/{{event.eventId}}" method="post" class="m-0"
                   onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?');">
-                  <button type="submit" class="btn btn-link text-primary text-decoration-none p-0"
+                  <button type="submit" class="btn btn-link text-danger text-decoration-none p-0"
                     style="box-shadow: none;">
                     <i class="bi bi-trash me-1"></i> Eliminar
                   </button>

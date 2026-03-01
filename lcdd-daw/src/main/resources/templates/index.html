@@ -2,155 +2,71 @@
 
 <main class="main">
 
+  {{^noEvents}}
   <section id="next-events" class="next-events section light-background">
     <div id="next-events-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="row">
           <div class="col-1">
+            {{#moreThanOne}}
             <button class="carousel-control-prev" type="button" data-bs-target="#next-events-carousel"
               data-bs-slide="prev" data-bs-theme="dark">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Previous</span>
             </button>
+            {{/moreThanOne}}
           </div>
 
           <div class="col-10">
-            <div class="carousel-item active">
+            {{#nextEvents}}
+            <div class="carousel-item {{#isActive}}active{{/isActive}}">
               <div class="container project-details">
                 <div class="row">
                   <div class="col-lg-5">
                     <div class="project-hero">
-                      <img src="/img/events/event.jpg" class="img-fluid rounded">
+                      <img src="/images/{{event.eventImage.id}}" class="img-fluid rounded" alt="{{event.eventName}}">
                     </div>
-
                   </div>
                   <div class="col-lg-7">
                     <div class="project-info">
-                      <h1 class="project-title">Evento juegos de mesa</h1>
-                      <div class="project-description">
-                        <p>🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟</p>
-                        <p>
-                          La asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del
-                          evento de
-                          juegos de mesa para que venga a jugar y divertirse todo el mundo.
-                        </p>
-                        <p>
-                          La asociación pondrá sus propios juegos y los miembros llevaremos algunos nuestros propios.
-                          ¡Puedes probar los que quieras y también traer los tuyos si quieres jugarlos con los demás!
-                        </p>
+                      <h1 class="project-title">{{event.eventName}}</h1>
+
+                      <div
+                        class="d-inline-block bg-danger text-white rounded-pill px-3 py-1 mb-3 fw-bold countdown-timer"
+                        data-date="{{event.eventDate}}">
+                        <i class="bi bi-hourglass-split me-1"></i> Calculando tiempo...
                       </div>
-                      <div class="next-event-timer mb-4">
-                        <div class="row text-center">
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="days">25</h3>
-                              <p>Días</p>
-                            </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="hours">20</h3>
-                              <p>Horas</p>
-                            </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="minutes">12</h3>
-                              <p>Minutos</p>
-                            </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="seconds">10</h3>
-                              <p>Segundos</p>
-                            </div>
-                          </div>
-                        </div>
+
+                      <div class="project-description mb-3"
+                        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                        {{event.eventDescription}}
                       </div>
-                      <div class="more-information-section">
-                        <div class="mt-4"> <a href="detail_event_page" class="btn btn-outline-dark rounded-pill px-4">
-                            Más información <i class="bi bi-arrow-right ms-1"></i>
-                          </a>
-                        </div>
-                      </div>
+
+                      <a href="/event/{{event.eventId}}" class="btn btn-outline-dark rounded-pill shadow-sm">
+                        <i class="bi bi-info-circle me-1"></i> Ver detalles
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="carousel-item">
-              <div class="container project-details">
-                <div class="row">
-                  <div class="col-lg-5">
-                    <div class="project-hero">
-                      <img src="/img/poster.jpg" class="img-fluid rounded">
-                    </div>
-
-
-
-                  </div>
-                  <div class="col-lg-7">
-                    <div class="project-info">
-                      <h1 class="project-title">Lorem ipsum</h1>
-                      <div class="project-description">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero rerum dolores ad enim velit
-                        reiciendis sed voluptate, magnam officia minima ducimus aut molestiae sit placeat culpa veniam?
-                        A,
-                        mollitia distinctio.
-                      </div>
-                      <div class="next-event-timer mb-4">
-                        <div class="row text-center">
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="days">25</h3>
-                              <p>Días</p>
-                            </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="hours">500</h3>
-                              <p>Horas</p>
-                            </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="minutes">12</h3>
-                              <p>Minutos</p>
-                            </div>
-                          </div>
-                          <div class="col-lg-3 col-md-6 mb-4">
-                            <div class="timer-item">
-                              <h3 class="seconds">100</h3>
-                              <p>Segundos</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="more-information-section">
-                        <div class="mt-4"> <a href="detail_event_page" class="btn btn-outline-dark rounded-pill px-4">
-                            Más información <i class="bi bi-arrow-right ms-1"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {{/nextEvents}}
           </div>
 
           <div class="col-1">
+            {{#moreThanOne}}
             <button class="carousel-control-next" type="button" data-bs-target="#next-events-carousel"
               data-bs-slide="next" data-bs-theme="dark">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
+            {{/moreThanOne}}
           </div>
         </div>
       </div>
     </div>
   </section>
+  {{/noEvents}}
 
   <section id="latest-news" class="projects section">
     <div class="container" data-aos="fade-up">
