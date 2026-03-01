@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.repository.GameRepository;
+import com.grupo6daw.lcdd_daw.repository.UserRepository;
+
 import org.springframework.data.domain.Sort;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,7 @@ public class GameService {
 	private GameRepository repository;
 
 	@Autowired
-	private UserService userService;
+	private UserRepository userRepository;
 
 	public Optional<Game> findById(long id) {
 		return repository.findById(id);
@@ -70,7 +72,7 @@ public class GameService {
 	
 			for (User user : users) {
 				user.removeFavoriteGame(game);
-				userService.save(user); 
+				userRepository.save(user); 
 			}
 
 			repository.delete(game);
