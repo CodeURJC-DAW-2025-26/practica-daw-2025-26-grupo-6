@@ -24,6 +24,7 @@ public class EventService {
     @Autowired
     private UserRepository userRepository;
 
+
     public void delete(long id) {
         Optional<Event> eventOpt = repository.findById(id);
 
@@ -76,6 +77,7 @@ public class EventService {
     public List<Event> findByValidatedTrue() {
         return repository.findByValidatedTrue();
     }
+
     public List<Event> findUpcomingEvents(LocalDate date) {
         return repository.findByEventDateGreaterThanEqualOrderByEventDateAsc(date);
     }

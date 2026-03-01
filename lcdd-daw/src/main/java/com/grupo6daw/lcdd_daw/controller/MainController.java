@@ -27,7 +27,12 @@ public class MainController {
 
 	@GetMapping("/")
 	public String main(Model model) {
-		List<Event> nextEvents = eventService.findUpcomingEvents(LocalDate.now());
+		
+		List<Event> nextEvents = eventService.findUpcomingEvents(LocalDate.now())
+				.stream()
+				.filter(Event::isValidated) 
+				.limit(3)
+				.toList(); 
 
 		if (!nextEvents.isEmpty()) {
 			List<Map<String, Object>> eventsWithActive = new ArrayList<>();
