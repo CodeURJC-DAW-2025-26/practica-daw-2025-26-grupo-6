@@ -1,148 +1,375 @@
-{{> header}}
+{{>header}}
 
 <main class="main">
-  <section id="quote" class="quote section">
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
+  <section id="user-profile" class="section pt-4 mb-5">
+    <div class="container" data-aos="fade-up">
 
+      <div class="form-intro text-center mb-4 mt-2">
+        <h1 style="font-weight: 700; color: #212529; text-transform: uppercase;">Perfil de Usuario</h1>
+        <p class="text-muted">Gestiona tu cuenta, tus eventos y tus juegos favoritos</p>
+        <hr style="width: 50px; margin: 10px auto 20px auto; border-top: 3px solid #a71b12; opacity: 1;">
+      </div>
+
+      {{#hasErrors}}
       <div class="row justify-content-center">
-        <div class="col-lg-12" data-aos="fade-left" data-aos-delay="300">
+        <div class="col-lg-8">
+          <div class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm" role="alert"
+            style="border-left: 5px solid #890f00;">
+            <strong><i class="bi bi-exclamation-triangle-fill me-2"></i> Ups! Hay errores:</strong>
+            <ul class="mt-2 mb-0">
+              {{#allErrors}}
+              <li>{{.}}</li>
+              {{/allErrors}}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+      {{/hasErrors}}
 
-          <div class="quote-form">
-            <div class="form-intro">
+      <div class="row gy-4 align-items-start">
 
-              <form id="update-form" enctype="multipart/form-data" action="/user/{{user.userId}}/update" method="post" class="php-email-form">
+        <div class="col-lg-4">
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-4 text-center">
 
-                <div class="form">
-                  <div class="row">
+              <form id="update-form" enctype="multipart/form-data" action="/user/{{user.userId}}/update" method="post"
+                class="needs-validation" novalidate>
+                <input type="hidden" name="_csrf" value="{{token}}" />
 
-                    <div class="col-lg-3">
-                      <img src="/user/{{user.userId}}/image" class="img-fluid">
-
-                      <br><br>
-
-                      <div class="form-field">
-                        <label for="image" class="form-label">Cambiar imagen:</label>
-                        <input class="form-control" type="file" name="image" id="image">
-                      </div>
-                    </div>
-
-                    <div class="col-lg-9">
-
-                      <div class="form-field">
-                        <label for="nickname" class="required-label">Nickname:</label>
-                        <input type="text" name="nickname" id="nickname" value="{{user.userNickname}}" required>
-                      </div>
-
-                      <br>
-
-                      <div class="form-field">
-                        <label for="name" class="required-label">Nombre:</label>
-                        <input type="text" name="name" id="name" value="{{user.userName}}" required>
-                      </div>
-
-                      <br>
-
-                      <div class="form-field">
-                        <label for="surnames" class="required-label">Apellidos:</label>
-                        <input type="text" name="surnames" id="surnames" value="{{user.userSurname}}" required>
-                      </div>
-
-                      <br>
-
-                      <div class="form-field full-width">
-                        <label for="interests">Intereses:</label>
-                        <textarea name="interests" id="interests" rows="4">{{user.userInterests}}</textarea>
-                      </div>
-
-                      <div class="row-buttons">
-                        <div class="col-lg-2">
-                          <a href="/" class="submit-btn">Volver sin guardar</a>
-                        </div>
-                        <div class="col-lg-2">
-                          <button form="update-form" type="submit" class="submit-btn">
-                            <span>Guardar cambios</span>
-                            <i class="bi bi-arrow-right"></i>
-                          </button>
-                        </div>
-                        <div class="col-lg-2">
-                          <button form="delete-form" type="submit" class="submit-btn">
-                            <span>Eliminar cuenta</span>
-                            <i class="bi bi-exclamation-octagon"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <br>
-                    </div>
+                <div class="position-relative d-inline-block mb-2">
+                  <div class="rounded-circle overflow-hidden shadow-sm"
+                    style="width: 150px; height: 150px; margin: 0 auto; border: 3px solid #f8f9fa;">
+                    {{#user.userImage}}
+                    <img src="/images/{{id}}" id="profile-img-preview" alt="Perfil" class="w-100 h-100"
+                      style="object-fit: cover;">
+                    {{/user.userImage}}
+                    {{^user.userImage}}
+                    <img src="/img/person/Portrait_Placeholder.png" id="profile-img-preview" alt="Perfil"
+                      class="w-100 h-100" style="object-fit: cover;">
+                    {{/user.userImage}}
+                  </div>
+                  <div id="image-upload-wrapper" class="position-absolute bottom-0 end-0 d-none">
+                    <label for="image" class="btn btn-sm btn-danger rounded-circle shadow"
+                      style="cursor: pointer; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
+                      <i class="bi bi-camera-fill"></i>
+                    </label>
+                    <input class="d-none" type="file" name="image" id="image" accept="image/*">
                   </div>
                 </div>
-              <input type="hidden" name="_csrf" value="{{token}}" />
+
+                <h3 id="nickname-display" class="fw-bold mt-2 mb-0" style="color: #a71b12;">{{user.userNickname}}</h3>
+                <p class="text-muted small mb-4">{{user.userName}} {{user.userSurname}}</p>
+
+                <div class="user-details text-start mt-2 border-top pt-3">
+
+                  <div class="mb-3 d-none" id="nickname-input-group">
+                    <label class="form-label text-muted small text-uppercase fw-bold mb-1 required-label">Apodo</label>
+                    <input type="text" class="form-control profile-input-edit" name="nickname"
+                      value="{{user.userNickname}}" minlength="3" required>
+                    <div class="invalid-feedback">El apodo debe tener al menos 3 caracteres.</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label text-muted small text-uppercase fw-bold mb-1 required-label">Correo
+                      Electrónico</label>
+                    <input type="email" class="form-control form-control-plaintext profile-input" name="email"
+                      value="{{user.userEmail}}" readonly required>
+                    <div class="invalid-feedback">Introduce un correo electrónico válido.</div>
+                  </div>
+
+                  <div class="row g-2 mb-3 d-none password-edit-group">
+                    <div class="col-6">
+                      <label class="form-label text-muted small text-uppercase fw-bold mb-1">Nueva Contraseña</label>
+                      <input type="password" class="form-control profile-input-edit" id="new-password" name="password"
+                        minlength="4" placeholder="Opcional">
+                      <div class="form-text mt-1" style="font-size: 0.75rem; line-height: 1.1;">Déjalo en blanco si no
+                        quieres cambiarla.</div>
+                      <div class="invalid-feedback">Mínimo 4 caracteres.</div>
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label text-muted small text-uppercase fw-bold mb-1">Confirmar</label>
+                      <input type="password" class="form-control profile-input-edit" id="confirm-password-edit"
+                        name="confirmPassword" placeholder="Repite la contraseña">
+                      <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+                    </div>
+                  </div>
+
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label
+                        class="form-label text-muted small text-uppercase fw-bold mb-1 required-label">Nombre</label>
+                      <input type="text" class="form-control form-control-plaintext profile-input" name="name"
+                        value="{{user.userName}}" readonly required>
+                      <div class="invalid-feedback">El nombre es obligatorio.</div>
+                    </div>
+                    <div class="col-6">
+                      <label
+                        class="form-label text-muted small text-uppercase fw-bold mb-1 required-label">Apellidos</label>
+                      <input type="text" class="form-control form-control-plaintext profile-input" name="surnames"
+                        value="{{user.userSurname}}" readonly required>
+                      <div class="invalid-feedback">Los apellidos son obligatorios.</div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="form-label text-muted small text-uppercase fw-bold mb-1">Sobre mí / Intereses</label>
+                    <textarea class="form-control form-control-plaintext profile-input" name="interests" rows="3"
+                      readonly style="resize: none;">{{user.userInterests}}</textarea>
+                  </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-2">
+                  <button type="button" id="btn-edit-profile" class="btn btn-outline-dark rounded-pill">
+                    <i class="bi bi-pencil-square me-2"></i> Editar Perfil
+                  </button>
+
+                  <div id="edit-actions" class="d-none d-grid gap-2">
+                    <button type="submit" class="btn btn-danger rounded-pill shadow-sm">
+                      <i class="bi bi-save me-2"></i> Guardar Cambios
+                    </button>
+                    <button type="button" id="btn-cancel-edit" class="btn btn-light rounded-pill border">
+                      Cancelar
+                    </button>
+                  </div>
+
+                  <hr class="my-3 text-muted">
+
+                  <button form="delete-form" type="submit"
+                    class="btn btn-link text-danger text-decoration-none small p-0"
+                    onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta permanentemente?');">
+                    <i class="bi bi-exclamation-octagon me-1"></i> Eliminar Cuenta
+                  </button>
+                </div>
               </form>
-              {{#user.userFavGames.0}}
-                <h4>Juegos favoritos</h4>
-                {{/user.userFavGames.0}}
-                <div class="row gy-4">
-                  {{#user.userFavGames}}
-                  <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <a class="project-card" href="/game/{{gameId}}">
-                      <div class="project-image">
-                        <img src="/images/{{gameImage.id}}" alt="Project" class="img-fluid">
-                      </div>
-                      <div class="project-info">
-                        <div class="project-category">{{genre}}</div>
-                        <h4 class="project-title">{{gameName}}</h4>
-                      </div>
-                    </a>
+
+              <form id="delete-form" action="/user/{{user.userId}}/delete" method="post" class="d-none">
+                <input type="hidden" name="_csrf" value="{{token}}" />
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-4">
+
+              <ul class="nav nav-pills nav-fill mb-4 border-bottom pb-3 gap-2" id="profileTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active rounded-pill fw-bold" id="created-events-tab" data-bs-toggle="tab"
+                    data-bs-target="#created-events" type="button" role="tab">
+                    <i class="bi bi-calendar-plus-fill me-2"></i>Mis Eventos
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link rounded-pill fw-bold" id="my-news-tab" data-bs-toggle="tab"
+                    data-bs-target="#my-news" type="button" role="tab">
+                    <i class="bi bi-newspaper me-2"></i>Mis Noticias
+                  </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link rounded-pill fw-bold" id="joined-events-tab" data-bs-toggle="tab"
+                    data-bs-target="#joined-events" type="button" role="tab">
+                    <i class="bi bi-ticket-perforated-fill me-2"></i>Mis Inscripciones
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link rounded-pill fw-bold" id="fav-games-tab" data-bs-toggle="tab"
+                    data-bs-target="#fav-games" type="button" role="tab">
+                    <i class="bi bi-suit-heart-fill me-2"></i>Juegos Favoritos
+                  </button>
+                </li>
+
+
+              </ul>
+
+              <div class="tab-content" id="profileTabsContent">
+
+                <div class="tab-pane fade show active" id="created-events" role="tabpanel"
+                  aria-labelledby="created-events-tab">
+                  <div class="row gy-3">
+                    {{#user.userOwnEvents}}
+                    <div class="col-md-6" data-aos="fade-up">
+                      <a href="/event/{{eventId}}"
+                        class="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                        <div class="row g-0 h-100">
+                          <div class="col-4">
+                            <img src="/images/{{eventImage.id}}" class="img-fluid rounded-start h-100 w-100"
+                              style="object-fit: cover;" alt="...">
+                          </div>
+                          <div class="col-8">
+                            <div class="card-body py-2 px-3 d-flex flex-column h-100 justify-content-center">
+                              <div class="d-flex gap-2 mb-1">
+                                <span
+                                  class="badge bg-danger bg-opacity-10 text-danger align-self-start">{{eventTag}}</span>
+
+                                {{^validated}}
+                                <span class="badge bg-warning text-dark align-self-start" style="font-size: 0.75rem;">
+                                  <i class="bi bi-hourglass-split me-1"></i>Pendiente de Validación
+                                </span>
+                                {{/validated}}
+                              </div>
+
+                              <h6 class="card-title fw-bold mb-1 text-truncate">{{eventName}}</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    {{/user.userOwnEvents}}
+
+                    {{^user.userOwnEvents}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-calendar-plus fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">Aún no has organizado ningún evento.</p>
+                      <a href="/event_form" class="btn btn-sm btn-outline-dark rounded-pill">Crear mi primer
+                        evento</a>
+                    </div>
+                    {{/user.userOwnEvents}}
                   </div>
-                  {{/user.userFavGames}}
                 </div>
-                <br>
-                {{#user.userOwnEvents.0}}
-                <h4>Mis eventos</h4>
-                {{/user.userOwnEvents.0}}
-                <div class="row gy-4">
-                  {{#user.userOwnEvents}}
-                  <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <a class="project-card" href="/event/{{eventId}}">
-                      <div class="project-image">
-                        <img src="/images/{{eventImage.id}}" alt="Project" class="img-fluid">
-                      </div>
-                      <div class="project-info">
-                        <div class="project-category">{{eventTag}}</div>
-                        <h4 class="project-title">{{eventName}}</h4>
-                      </div>
-                    </a>
+
+                <div class="tab-pane fade" id="joined-events" role="tabpanel" aria-labelledby="joined-events-tab">
+                  <div class="row gy-3">
+                    {{#user.userRegisteredEvents}}
+                    <div class="col-md-6" data-aos="fade-up">
+                      <a href="/event/{{eventId}}"
+                        class="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                        <div class="row g-0 h-100">
+                          <div class="col-4">
+                            {{#eventImage}}
+                            <img src="/images/{{id}}" class="img-fluid rounded-start h-100 w-100"
+                              style="object-fit: cover;" alt="{{eventName}}">
+                            {{/eventImage}}
+                            {{^eventImage}}
+                            <div
+                              class="bg-secondary h-100 w-100 d-flex align-items-center justify-content-center text-white rounded-start">
+                              <i class="bi bi-calendar-event"></i>
+                            </div>
+                            {{/eventImage}}
+                          </div>
+                          <div class="col-8">
+                            <div class="card-body py-2 px-3 d-flex flex-column h-100 justify-content-center">
+                              <span class="badge bg-warning text-dark align-self-start mb-1"><i
+                                  class="bi bi-ticket-perforated me-1"></i>Inscrito</span>
+                              <h6 class="card-title fw-bold mb-1 text-truncate">{{eventName}}</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    {{/user.userRegisteredEvents}}
+
+                    {{^user.userRegisteredEvents}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-ticket-detailed fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">Aún no te has inscrito a ningún evento.</p>
+                      <a href="/events" class="btn btn-sm btn-outline-dark rounded-pill">Explorar eventos</a>
+                    </div>
+                    {{/user.userRegisteredEvents}}
                   </div>
-                  {{/user.userOwnEvents}}
                 </div>
-                <br>
-                {{#user.userNews.0}}
-                <h4>Mis noticias</h4>
-                {{/user.userNews.0}}
-                <div class="row gy-4">
-                  {{#user.userNews}}
-                  <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <a class="project-card" href="/new/{{newId}}">
-                      <div class="project-image">
-                        <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
-                      </div>
-                      <div class="project-info">
-                        <div class="project-category">{{newTag}}</div>
-                        <h4 class="project-title">{{newName}}</h4>
-                      </div>
-                    </a>
+
+                <div class="tab-pane fade" id="fav-games" role="tabpanel" aria-labelledby="fav-games-tab">
+                  <div class="row gy-3">
+                    {{#user.userFavGames}}
+                    <div class="col-md-6" data-aos="fade-up">
+                      <a href="/game/{{gameId}}"
+                        class="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                        <div class="row g-0 h-100">
+                          <div class="col-4">
+                            {{#gameImage}}
+                            <img src="/images/{{id}}" class="img-fluid rounded-start h-100 w-100"
+                              style="object-fit: cover;" alt="{{gameName}}">
+                            {{/gameImage}}
+                            {{^gameImage}}
+                            <div
+                              class="bg-secondary h-100 w-100 d-flex align-items-center justify-content-center text-white rounded-start">
+                              <i class="bi bi-dice-5"></i>
+                            </div>
+                            {{/gameImage}}
+                          </div>
+                          <div class="col-8">
+                            <div class="card-body py-2 px-3 d-flex flex-column h-100 justify-content-center">
+                              <span
+                                class="badge bg-success bg-opacity-10 text-success align-self-start mb-1">{{genre}}</span>
+                              <h6 class="card-title fw-bold mb-1 text-truncate">{{gameName}}</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    {{/user.userFavGames}}
+
+                    {{^user.userFavGames}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-controller fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">No tienes ningún juego marcado como favorito.</p>
+                      <a href="/games" class="btn btn-sm btn-outline-dark rounded-pill">Ir a la Ludoteca</a>
+                    </div>
+                    {{/user.userFavGames}}
                   </div>
-                  {{/user.userNews}}
                 </div>
+
+                <div class="tab-pane fade" id="my-news" role="tabpanel" aria-labelledby="my-news-tab">
+                  <div class="row gy-3">
+                    {{#user.userNews}}
+                    <div class="col-md-6" data-aos="fade-up">
+                      <a href="/new/{{newId}}"
+                        class="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                        <div class="row g-0 h-100">
+                          <div class="col-4">
+                            {{#newImage}}
+                            <img src="/images/{{id}}" class="img-fluid rounded-start h-100 w-100"
+                              style="object-fit: cover;" alt="...">
+                            {{/newImage}}
+                            {{^newImage}}
+                            <div
+                              class="bg-secondary h-100 w-100 d-flex align-items-center justify-content-center text-white rounded-start">
+                              <i class="bi bi-newspaper"></i>
+                            </div>
+                            {{/newImage}}
+                          </div>
+                          <div class="col-8">
+                            <div class="card-body py-2 px-3 d-flex flex-column h-100 justify-content-center">
+                              <div class="d-flex gap-2 mb-1">
+                                <span
+                                  class="badge bg-primary bg-opacity-10 text-primary align-self-start">{{newTag}}</span>
+
+                                {{^validated}}
+                                <span class="badge bg-warning text-dark align-self-start" style="font-size: 0.75rem;">
+                                  <i class="bi bi-hourglass-split me-1"></i>Pendiente de Validación
+                                </span>
+                                {{/validated}}
+                              </div>
+                              <h6 class="card-title fw-bold mb-1 text-truncate">{{newName}}</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    {{/user.userNews}}
+
+                    {{^user.userNews}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-journal-text fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">Aún no has redactado ninguna noticia.</p>
+                      <a href="/new_form" class="btn btn-sm btn-outline-dark rounded-pill">Redactar noticia</a>
+                    </div>
+                    {{/user.userNews}}
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
         </div>
+
       </div>
-    </section>
+    </div>
+  </section>
+</main>
 
-    <form id="delete-form" action="/user/{{user.userId}}/delete" method="post" style="display: none;">
-      <input type="hidden" name="_csrf" value="{{token}}" />
-    </form>
-  </main>
-
-{{> footer}}
+{{>footer}}

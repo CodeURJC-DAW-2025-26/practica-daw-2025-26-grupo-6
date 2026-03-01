@@ -9,13 +9,39 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.grupo6daw.lcdd_daw.model.Event;
+import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.repository.EventRepository;
+import com.grupo6daw.lcdd_daw.repository.UserRepository;
 
 @Service
 public class EventService {
 
     @Autowired
     private EventRepository repository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public void delete(long id) {
+        Optional<Event> eventOpt = repository.findById(id);
+
+        if (eventOpt.isPresent()) {
+            Event event = eventOpt.get();
+
+            User creator = event.getEventCreator();
+            if (creator != null) {
+                creator.getUserOwnEvents().remove(event);
+                userRepository.save(creator);
+            }
+
+            for (User participant : event.getEventRegisteredUsers()) {
+                participant.getUserRegisteredEvents().remove(event);
+                userRepository.save(participant);
+            }
+
+            repository.deleteById(id);
+        }
+    }
 
     public Optional<Event> findById(long id) {
         return repository.findById(id);
@@ -39,10 +65,6 @@ public class EventService {
 
     public void save(Event event) {
         repository.save(event);
-    }
-
-    public void delete(long id) {
-        repository.deleteById(id);
     }
 
     public List<Event> findByValidatedFalse() {

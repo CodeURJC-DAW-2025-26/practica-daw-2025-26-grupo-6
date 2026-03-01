@@ -22,6 +22,7 @@
         </div>
 
         <div class="row gy-4">
+          <h6 class="fw-bold mb-3">Eventos</h6>
           {{#events}}
           <div class="col-lg-4 col-md-6" data-aos="fade-up">
             <div class="project-card shadow-sm border-0 h-100">
@@ -58,6 +59,43 @@
             <p class="mb-0 text-muted italic">No hay solicitudes pendientes.</p>
           </div>
           {{/events}}
+
+          <h6 class="fw-bold mb-3">Noticias</h6>
+          {{#news}}
+          <div class="col-lg-4 col-md-6" data-aos="fade-up">
+            <div class="project-card shadow-sm border-0 h-100">
+              <a class="d-block text-decoration-none" href="/news/{{newId}}">
+                <div class="project-image" style="height: 180px; overflow: hidden;">
+                  <img src="/images/{{newImage.id}}" alt="Noticia" class="img-fluid w-100 h-100"
+                    style="object-fit: cover;">
+                </div>
+                <div class="project-info p-3">
+                  <div class="project-category mb-2">{{newTag}}</div>
+                  <h4 class="project-title">{{newName}}</h4>
+                  <p class="text-muted small mb-0"
+                    style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    {{newDescription}}
+                  </p>
+                </div>
+              </a>
+              <div class="p-3 pt-0 d-flex gap-2">
+                <form method="post" action="/admin/approveNew/{{newId}}" class="flex-grow-1">
+                  <input type="hidden" name="_csrf" value="{{token}}">
+                  <button type="submit" class="btn btn-success w-100 rounded-pill btn-sm">Aprobar</button>
+                </form>
+                <form method="post" action="/admin/rejectNew/{{newId}}" class="flex-grow-1">
+                  <input type="hidden" name="_csrf" value="{{token}}">
+                  <button type="submit" class="btn btn-outline-danger w-100 rounded-pill btn-sm">Rechazar</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {{/news}}
+          {{^news}}
+          <div class="col-12 text-center py-4 bg-light rounded-3 border border-dashed">
+            <p class="mb-0 text-muted italic">No hay solicitudes pendientes.</p>
+          </div>
+          {{/news}}
         </div>
       </div>
 

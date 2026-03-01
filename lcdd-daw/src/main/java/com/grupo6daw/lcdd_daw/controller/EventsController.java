@@ -27,13 +27,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.User;
-import com.grupo6daw.lcdd_daw.service.UserService;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.ImageValidationService;
+import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
+import org.springframework.data.domain.Sort;
 
 @Controller
 public class EventsController {
@@ -69,7 +71,8 @@ public String events(Model model,
     @RequestParam(required = false) String tag,
     @RequestParam(defaultValue = "0") int page) {
 
-    Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag, PageRequest.of(page, 10));
+    Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag, 
+    PageRequest.of(page, 10, Sort.by("eventId").descending()));
 
     model.addAttribute("event", eventsPage.getContent());
     model.addAttribute("name", name == null ? "" : name);
@@ -88,7 +91,7 @@ public String events(Model model,
 
 			boolean hasEditPermission = false;
 			if (request.getUserPrincipal() != null) {
-				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+				Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 				boolean isOwner = event.get().getEventCreator() != null
 						&& event.get().getEventCreator().getUserId().equals(currentUserId);
 				boolean isAdmin = request.isUserInRole("ADMIN");
@@ -167,7 +170,7 @@ public String events(Model model,
 		List<String> errorMessages = new ArrayList<>();
 		boolean isNewEvent = (event.getEventId() == null);
 
-		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+		Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 		User currentUser = userService.getUser(currentUserId).orElseThrow();
 
 		// Error check (@Valid)
@@ -254,6 +257,11 @@ public String events(Model model,
 		// Finally, we save the event
 		eventService.save(event);
 
+		if (isNewEvent) {
+            currentUser.getUserOwnEvents().add(event);
+            userService.save(currentUser); 
+        }
+
 		return "redirect:/events";
 	}
 
@@ -267,7 +275,7 @@ public String events(Model model,
 			boolean isOwner = false;
 
 			if (request.getUserPrincipal() != null) {
-				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+				Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 				isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);
 			}
 

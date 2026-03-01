@@ -381,17 +381,105 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /**
+ * AJAX to load more events
+ */
+let currentEventsPage = 1;
+
+function loadMoreEvents() {
+  const btn = document.getElementById('load-more-events-btn');
+  const text = document.getElementById('btn-events-text');
+  const spinner = document.getElementById('btn-events-spinner');
+
+
+  const name = btn.getAttribute('data-name') || "";
+  const tag = btn.getAttribute('data-tag') || "";
+
+  btn.disabled = true;
+  text.textContent = "Cargando...";
+  spinner.classList.remove('d-none');
+
+  fetch(`/events?page=${currentEventsPage}&name=${name}&tag=${tag}`)
+    .then(response => response.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const newItems = doc.getElementById('events-container').innerHTML;
+
+      document.getElementById('events-container').insertAdjacentHTML('beforeend', newItems);
+
+      const hasNext = doc.getElementById('load-more-events-btn') !== null;
+      if (!hasNext) {
+        btn.style.display = 'none';
+      } else {
+        currentEventsPage++;
+        btn.disabled = false;
+        text.textContent = "Cargar más eventos";
+        spinner.classList.add('d-none');
+      }
+    })
+    .catch(error => {
+      console.error('Error cargando eventos:', error);
+      btn.disabled = false;
+      text.textContent = "Error. Reintentar";
+      spinner.classList.add('d-none');
+    });
+}
+
+/**
+ * AJAX to load more news
+ */
+let currentNewsPage = 1;
+
+function loadMoreNews() {
+  const btn = document.getElementById('load-more-news-btn');
+  const text = document.getElementById('btn-news-text');
+  const spinner = document.getElementById('btn-news-spinner');
+  const name = btn.getAttribute('data-name') || "";
+  const tag = btn.getAttribute('data-tag') || "";
+
+  btn.disabled = true;
+  text.textContent = "Cargando...";
+  spinner.classList.remove('d-none');
+
+  fetch(`/news?page=${currentNewsPage}&name=${name}&tag=${tag}`)
+    .then(response => response.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const newItems = doc.getElementById('news-container').innerHTML;
+
+      document.getElementById('news-container').insertAdjacentHTML('beforeend', newItems);
+
+      const hasNext = doc.getElementById('load-more-news-btn') !== null;
+      if (!hasNext) {
+        btn.style.display = 'none';
+      } else {
+        currentNewsPage++;
+        btn.disabled = false;
+        text.textContent = "Cargar más noticias";
+        spinner.classList.add('d-none');
+      }
+    })
+    .catch(error => {
+      console.error('Error cargando noticias:', error);
+      btn.disabled = false;
+      text.textContent = "Error. Reintentar";
+      spinner.classList.add('d-none');
+    });
+}
+
+/**
  * AJAX to load more games
  */
-let currentGamePage = 1;
+let currentGamesPage = 1;
 
 function loadMoreGames() {
-  const btn = document.getElementById('load-more-btn');
-  const text = document.getElementById('btn-text');
-  const spinner = document.getElementById('btn-spinner');
+  const btn = document.getElementById('load-more-games-btn');
+  const text = document.getElementById('btn-games-text');
+  const spinner = document.getElementById('btn-games-spinner');
 
   const urlParams = new URLSearchParams(window.location.search);
-  urlParams.set('page', currentGamePage);
+  urlParams.set('page', currentGamesPage);
 
   btn.disabled = true;
   text.textContent = "Cargando...";
@@ -409,11 +497,11 @@ function loadMoreGames() {
       if (newGames.length > 0) {
         newGames.forEach(game => container.appendChild(game));
 
-        const hasNextPage = doc.getElementById('load-more-btn') !== null;
+        const hasNextPage = doc.getElementById('load-more-games-btn') !== null;
         if (!hasNextPage) {
           btn.style.display = 'none';
         } else {
-          currentGamePage++;
+          currentGamesPage++;
           btn.disabled = false;
           text.textContent = "Cargar más juegos";
           spinner.classList.add('d-none');
@@ -429,3 +517,130 @@ function loadMoreGames() {
       spinner.classList.add('d-none');
     });
 }
+
+/**
+ * ==========================================
+ * Editing user profile logic:
+ * 1. When user clicks "Edit Profile", switch to edit mode
+ * 2. In edit mode, show image upload and make inputs editable
+ * 3. Show "Cancel" and "Save Changes" buttons in edit mode
+ * 4. If user clicks "Cancel", revert all changes and switch back to view mode
+ * ==========================================
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  const btnEdit = document.getElementById('btn-edit-profile');
+  const btnCancel = document.getElementById('btn-cancel-edit');
+  const editActions = document.getElementById('edit-actions');
+  const imageUpload = document.getElementById('image-upload-wrapper');
+  const inputs = document.querySelectorAll('.profile-input');
+
+  const nicknameDisplay = document.getElementById('nickname-display');
+  const nicknameInputGroup = document.getElementById('nickname-input-group');
+  const nicknameInput = document.querySelector('input[name="nickname"]');
+  const passwordGroups = document.querySelectorAll('.password-edit-group');
+  const updateForm = document.getElementById('update-form');
+  const pwd = document.getElementById('new-password');
+  const confirmPwd = document.getElementById('confirm-password-edit');
+
+  const imagePreview = document.getElementById('profile-img-preview');
+  const fileInput = document.getElementById('image');
+
+  const emailInput = document.querySelector('input[name="email"]');
+  const passwordInput = document.getElementById('new-password');
+
+  if (updateForm) {
+    updateForm.addEventListener('submit', function (event) {
+      // Comprobamos si el email ha cambiado o si hay texto en la contraseña
+      const emailChanged = emailInput.value !== originalValues['email'];
+      const passwordChanged = passwordInput.value.trim() !== "";
+
+      if (emailChanged || passwordChanged) {
+        const confirmacion = confirm("Has cambiado tus credenciales de acceso (correo o contraseña). Por seguridad, se cerrará tu sesión y deberás entrar con los nuevos datos. ¿Deseas continuar?");
+
+        if (!confirmacion) {
+          event.preventDefault(); // Si cancela, no se envía el formulario
+        }
+      }
+    });
+  }
+
+  // saving original image src to revert back if user cancels editing, only if the image preview element exists on the page (profile.html)
+  let originalImageSrc = imagePreview ? imagePreview.src : '';
+  const originalValues = {};
+
+  function toggleEditMode(enable) {
+    if (enable) {
+      btnEdit.classList.add('d-none');
+      editActions.classList.remove('d-none');
+      imageUpload.classList.remove('d-none');
+
+      if (nicknameDisplay) nicknameDisplay.classList.add('d-none');
+      if (nicknameInputGroup) nicknameInputGroup.classList.remove('d-none');
+      if (nicknameInput) originalValues['nickname'] = nicknameInput.value;
+
+      passwordGroups.forEach(group => group.classList.remove('d-none'));
+
+      inputs.forEach(input => {
+        originalValues[input.name] = input.value;
+        input.removeAttribute('readonly');
+        input.classList.remove('form-control-plaintext');
+      });
+    } else {
+      btnEdit.classList.remove('d-none');
+      editActions.classList.add('d-none');
+      imageUpload.classList.add('d-none');
+
+      if (nicknameDisplay) nicknameDisplay.classList.remove('d-none');
+      if (nicknameInputGroup) nicknameInputGroup.classList.add('d-none');
+      if (nicknameInput) nicknameInput.value = originalValues['nickname'];
+
+      passwordGroups.forEach(group => group.classList.add('d-none'));
+      if (pwd) pwd.value = '';
+      if (confirmPwd) confirmPwd.value = '';
+
+      // restoring original image src if user cancels editing
+      if (imagePreview) imagePreview.src = originalImageSrc;
+      if (fileInput) fileInput.value = '';
+
+      inputs.forEach(input => {
+        input.value = originalValues[input.name];
+        input.setAttribute('readonly', true);
+        input.classList.add('form-control-plaintext');
+      });
+    }
+  }
+
+  function validatePasswords() {
+    if (pwd.value !== confirmPwd.value) {
+      confirmPwd.setCustomValidity("Las contraseñas no coinciden");
+    } else {
+      confirmPwd.setCustomValidity("");
+    }
+  }
+
+  if (btnEdit) btnEdit.addEventListener('click', () => toggleEditMode(true));
+  if (btnCancel) btnCancel.addEventListener('click', () => toggleEditMode(false));
+
+  if (pwd && confirmPwd) {
+    pwd.addEventListener('input', validatePasswords);
+    confirmPwd.addEventListener('input', validatePasswords);
+    if (updateForm) updateForm.addEventListener('submit', validatePasswords);
+  }
+
+  // --- img preview for profile editing ---
+  if (imageUpload && imagePreview && fileInput) {
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+
+      if (file) {
+        if (file.type.startsWith('image/')) {
+          const objectUrl = URL.createObjectURL(file);
+          imagePreview.src = objectUrl;
+        } else {
+          alert('Por favor, selecciona un archivo de imagen válido (JPG, PNG...).');
+          this.value = '';
+        }
+      }
+    });
+  }
+});

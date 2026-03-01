@@ -62,8 +62,7 @@ public class UserService {
                 "",
                 dto.getEmail(),
                 passwordEncoder.encode(dto.getPassword()),
-                "REGISTERED_USER"
-        );
+                "REGISTERED_USER");
 
         userRepository.save(user);
     }
@@ -83,14 +82,30 @@ public class UserService {
         }
     }
 
-    public void updateProfile(long id, ProfileUpdateDTO dto) throws IOException {
+    public boolean updateProfile(long id, ProfileUpdateDTO dto) throws IOException {
         Exception error = null;
         User user = userRepository.findById(id).orElseThrow();
+        boolean credentialsChanged = false;
+
+   
+        if (dto.getEmail() != null && !dto.getEmail().isEmpty() && !user.getUserEmail().equals(dto.getEmail())) {
+            user.setUserEmail(dto.getEmail());
+            credentialsChanged = true;
+        }
+
+    
+        if (dto.getPassword() != null && !dto.getPassword().trim().isEmpty()) {
+            user.setUserEncodedPassword(passwordEncoder.encode(dto.getPassword()));
+            credentialsChanged = true;
+        }
+
+        
         user.setUserNickname(dto.getNickname());
         user.setUserName(dto.getName());
         user.setUserSurname(dto.getSurnames());
         user.setUserInterests(dto.getInterests());
-        
+
+      
         MultipartFile file = dto.getImage();
         if (file != null && !file.isEmpty()) {
             try {
@@ -99,12 +114,17 @@ public class UserService {
                 error = e;
             }
         }
-        
-        // If error when changing image, apply everything else and throw
+
+       
         userRepository.save(user);
+
+      
         if (error != null) {
             throw new IOException("Failed to create image blob", error);
         }
+
+    
+        return credentialsChanged;
     }
 
     public void deleteUser(long id) {
@@ -126,7 +146,7 @@ public class UserService {
                 if (id == userId) {
                     // 3. Get all active sessions for this user
                     List<SessionInformation> sessions = sessionRegistry.getAllSessions(principal, false);
-                    
+
                     for (SessionInformation session : sessions) {
                         // 4. Mark the session as expired
                         session.expireNow();
@@ -137,16 +157,20 @@ public class UserService {
         }
     }
 
-    // Searching user by email, needed for the RegisterWebController to assign the profile image after registration
+    // Searching user by email, needed for the RegisterWebController to assign the
+    // profile image after registration
     public Optional<User> findByUserEmail(String email) {
         return userRepository.findByUserEmail(email);
     }
 
-    // Saving user after assigning the profile image, needed for the RegisterWebController
+    // Saving user after assigning the profile image, needed for the
+    // RegisterWebController
     public void save(User user) {
         userRepository.save(user);
     }
-// New method to check if a nickname already exists, needed for the RegisterWebController
+
+    // New method to check if a nickname already exists, needed for the
+    // RegisterWebController
     public boolean existsByUserNickname(String nickname) {
         return userRepository.existsByUserNickname(nickname);
     }

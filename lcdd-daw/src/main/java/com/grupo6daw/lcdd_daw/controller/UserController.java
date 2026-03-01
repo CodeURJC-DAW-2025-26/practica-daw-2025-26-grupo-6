@@ -16,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.grupo6daw.lcdd_daw.dto.ProfileUpdateDTO;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.UserService;
@@ -23,6 +25,11 @@ import com.grupo6daw.lcdd_daw.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+
+import org.springframework.validation.BindingResult;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -33,18 +40,19 @@ public class UserController {
         this.userService = userService;
     }
 
-	@GetMapping("/profile")
-	public String profile(Model model) {
-		Long id = Long.parseLong((String) model.getAttribute("userId"));
-		User user = userService.getUser(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
-		model.addAttribute("user", user);
-		return "profile";
-	}
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        
+        Long id = Long.valueOf((String) model.getAttribute("userId"));
+        User user = userService.getUser(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+        model.addAttribute("user", user);
+        return "profile";
+    }
 
     @GetMapping("/user/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
         User user = userService.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
 
         model.addAttribute("user", user);
         return "profile";
@@ -59,32 +67,74 @@ public class UserController {
         return ResponseEntity.ok().contentType(mediaType).body(imageFile);
     }
 
-    @PostMapping("/user/{id}/update") 
-	public String updateProfile(Model model, @Valid ProfileUpdateDTO dto, HttpServletRequest request, @PathVariable long id) throws IOException {
-		boolean admin = (boolean) model.getAttribute("admin");
-        Long userId = Long.parseLong((String) model.getAttribute("userId"));
-        
+    @PostMapping("/user/{id}/update")
+    public String updateProfile(Model model, @Valid ProfileUpdateDTO dto, BindingResult bindingResult,
+            HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication, @PathVariable long id,
+            RedirectAttributes redirectAttributes) throws IOException {
+
+        boolean admin = (boolean) model.getAttribute("admin");
+        Long userId = Long.valueOf((String) model.getAttribute("userId"));
+
         if (!admin && userId != id) {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
         }
 
-		userService.updateProfile(id, dto);
-		
-		return "redirect:/user/" + id;
-	}
+     
+        User currentUser = userService.findById(id).orElseThrow();
+
+       
+        if (dto.getEmail() != null && !currentUser.getUserEmail().equalsIgnoreCase(dto.getEmail().trim())) {
+            if (userService.existsByUserEmail(dto.getEmail().trim())) {
+                bindingResult.rejectValue("email", "error.email",
+                        "Este correo electrónico ya está registrado por otro usuario.");
+            }
+        }
+
+        if (dto.getNickname() != null && !currentUser.getUserNickname().equalsIgnoreCase(dto.getNickname().trim())) {
+            if (userService.existsByUserNickname(dto.getNickname().trim())) {
+                bindingResult.rejectValue("nickname", "error.nickname", "Este apodo ya está en uso. Elige otro.");
+            }
+        }
+
+        
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", currentUser);
+            model.addAttribute("hasErrors", true);
+
+            List<String> errors = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            model.addAttribute("allErrors", errors);
+
+            return "profile";
+        }
+
+       
+        boolean credentialsChanged = userService.updateProfile(id, dto);
+
+        if (credentialsChanged && authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+            redirectAttributes.addFlashAttribute("loginMessage",
+                    "Tus credenciales han cambiado correctamente. Por favor, inicia sesión con tus nuevos datos.");
+            return "redirect:/login";
+        }
+        return "redirect:/user/" + id;
+    }
 
     @PostMapping("/user/{id}/delete")
-	public String deleteProfile(Model model, HttpServletRequest request, @PathVariable long id) {
-		boolean admin = (boolean) model.getAttribute("admin");
-        Long userId = Long.parseLong((String) model.getAttribute("userId"));
-        
+    public String deleteProfile(Model model, HttpServletRequest request, @PathVariable long id) {
+        boolean admin = (boolean) model.getAttribute("admin");
+      
+        Long userId = Long.valueOf((String) model.getAttribute("userId"));
+
         if (!admin && userId != id) {
             return "redirect:/error";
         }
 
-		userService.deleteUser(id);
-		return "redirect:/userDeleted";
-	}
+        userService.deleteUser(id);
+        return "redirect:/userDeleted";
+    }
 
     @GetMapping("/userDeleted")
     public String userDeleted(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -93,5 +143,5 @@ public class UserController {
         }
         return "redirect:/";
     }
-    
+
 }

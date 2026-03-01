@@ -1,34 +1,33 @@
 package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.Image;
-import com.grupo6daw.lcdd_daw.service.NewService;
+import com.grupo6daw.lcdd_daw.model.New;
+import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.ImageValidationService;
+import com.grupo6daw.lcdd_daw.service.NewService;
+import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
-import org.springframework.security.web.csrf.CsrfToken;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.grupo6daw.lcdd_daw.model.User;
-import com.grupo6daw.lcdd_daw.service.UserService;
 
 @Controller
 public class NewsController {
@@ -51,7 +50,7 @@ public class NewsController {
 			@RequestParam(required = false) String tag,
 			@RequestParam(defaultValue = "0") int page) {
 
-		Page<New> newsPage = newService.findByFilter(name, tag, PageRequest.of(page, 10));
+		Page<New> newsPage = newService.findValidatedByFilter(name, tag, PageRequest.of(page, 10));
 
 		model.addAttribute("new", newsPage.getContent());
 		model.addAttribute("name", name == null ? "" : name);
@@ -70,7 +69,7 @@ public class NewsController {
 
 			boolean hasEditPermission = false;
 			if (request.getUserPrincipal() != null) {
-				Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+				Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 				boolean isOwner = newPost.get().getNewCreator() != null
 						&& newPost.get().getNewCreator().getUserId().equals(currentUserId);
 				boolean isAdmin = request.isUserInRole("ADMIN");
@@ -111,7 +110,7 @@ public class NewsController {
 			New n = newPost.get();
 
 			boolean isAdmin = request.isUserInRole("ADMIN");
-			Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+			Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 			boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
 
 			if (isAdmin || isOwner) {
@@ -133,7 +132,7 @@ public class NewsController {
 		List<String> errorMessages = new ArrayList<>();
 		boolean isNewPost = (newPost.getNewId() == null);
 
-		Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+		Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 		User currentUser = userService.getUser(currentUserId).orElseThrow();
 
 		if (bindingResult.hasErrors()) {
@@ -186,6 +185,11 @@ public class NewsController {
 		}
 
 		newService.save(newPost);
+
+		if (isNewPost) {
+        currentUser.getUserNews().add(newPost);
+        userService.save(currentUser); 
+    }
 		return "redirect:/news";
 	}
 
@@ -195,7 +199,7 @@ public class NewsController {
 		if (newPost.isPresent()) {
 			New n = newPost.get();
 			boolean isAdmin = request.isUserInRole("ADMIN");
-			Long currentUserId = Long.parseLong(request.getUserPrincipal().getName());
+			Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 			boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
 
 			if (isAdmin || isOwner) {

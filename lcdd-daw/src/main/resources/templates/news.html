@@ -2,88 +2,97 @@
 
 <main class="main">
   <section id="projects" class="projects section">
-    <h1 style="text-align: center;">NOTICIAS</h1>
-    <div class="container mb-4">
-      <form method="get" action="/news">
-        <div class="row g-2 align-items-center">
-          <div class="col-12 col-md-5 col-lg-6">
-            <input name="name" class="form-control" type="search" placeholder="Buscar noticias..." aria-label="Search">
+
+    <div class="container" data-aos="fade-up">
+      <div class="form-intro text-center mb-5 mt-4">
+        <h1 style="font-weight: 700; color: #212529; text-transform: uppercase;">Noticias</h1>
+        <p class="text-muted">Mantente al día con las últimas novedades y anuncios</p>
+        <hr style="width: 50px; margin: 20px auto; border-top: 3px solid #a71b12; opacity: 1;">
+      </div>
+
+      <div class="card shadow-sm border-0 p-3 bg-light mb-5">
+        <form method="get" action="/news">
+          <div class="row g-2 align-items-center">
+            <div class="col-lg-6 col-md-5">
+              <input name="name" class="form-control" type="search" placeholder="Buscar por título..." value="{{name}}">
+            </div>
+            <div class="col-lg-2 col-md-3">
+              <select name="tag" class="form-select">
+                <option value="">Cualquier tema</option>
+                <option value="Cambios">Cambios</option>
+                <option value="Evento">Evento</option>
+                <option value="Rol">Rol</option>
+              </select>
+            </div>
+
+            <div class="col-lg-2 col-md-2">
+              <button class="btn_lcdd w-100 d-flex align-items-center justify-content-center" type="submit"
+                style="height: 38px; border: none; background-color: #a71b12;">
+                <i class="bi bi-search me-2"></i> Buscar
+              </button>
+            </div>
+
+            {{#logged}}
+            <div class="col-lg-2 col-md-2">
+              <a href="/new_form"
+                class="btn_lcdd_black w-100 text-decoration-none d-flex align-items-center justify-content-center"
+                style="height: 38px;">
+                <i class="bi bi-plus-circle me-2"></i> Redactar
+              </a>
+            </div>
+            {{/logged}}
           </div>
-          <div class="col-6 col-md-3 col-lg-2">
-            <select name="tag" class="form-select" aria-label="Filtrar por tema">
-              <option selected value="">Filtrar por tema</option>
-              <option value="Cambios">Cambios</option>
-              <option value="Evento">Evento</option>
-              <option value="Rol">Rol</option>
-            </select>
-          </div>
-          <div class="col-6 col-md-2 col-lg-2">
-            <button class="btn_lcdd w-100" type="submit">
-              <i class="bi bi-search"></i> Buscar
-            </button>
-          </div>
-          {{#logged}}
-          <div class="col-12 col-md-2 col-lg-2">
-            <a href="new_form" class="btn_lcdd_black w-100">
-              <i class="bi bi-plus-circle me-2"></i> Crear noticia
+        </form>
+      </div>
+
+      <div id="news-container" class="row gy-4">
+        {{#new}}
+        <div class="col-lg-4 col-md-6 news-item">
+          <div class="project-card h-100 shadow-sm border-0">
+            <a href="/new/{{newId}}" class="text-decoration-none">
+              <div class="project-image" style="height: 220px; overflow: hidden;">
+                {{#newImage}}
+                <img src="/images/{{id}}" alt="{{newName}}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                {{/newImage}}
+                {{^newImage}}
+                <div class="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
+                  <i class="bi bi-newspaper fs-1"></i>
+                </div>
+                {{/newImage}}
+              </div>
+              <div class="project-info p-3">
+                <div class="project-category mb-2 fw-bold" style="color: #a71b12; font-size: 0.8rem;">{{newTag}}</div>
+                <h4 class="project-title text-dark">{{newName}}</h4>
+                <p class="project-description text-muted small"
+                  style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                  {{newDescription}}
+                </p>
+              </div>
             </a>
           </div>
-          {{/logged}}
-      </form>
-    </div>
-    </div>
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-      <div id="events-container" class="row gy-4">
-        {{#new}}
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-          <a class="project-card" href="/new/{{newId}}">
-            <div class="project-card">
-              <div class="project-image">
-                <img src="/images/{{newImage.id}}" alt="Project" class="img-fluid">
-              </div>
-              <div class="project-info">
-                <div class="project-category">{{newTag}}</div>
-                <h4 class="project-title">{{newName}}</h4>
-                <p class="project-description">{{newDescription}}</p>
-              </div>
-            </div>
-          </a>
         </div>
         {{/new}}
+
         {{^new}}
-        <div>No hay noticias</div>
+        <div class="col-12 text-center py-5">
+          <i class="bi bi-journal-x fs-1 text-muted"></i>
+          <p class="mt-3 text-muted">No hay noticias que coincidan con tu búsqueda.</p>
+          <a href="/news" class="btn btn-link text-danger">Ver todas las noticias</a>
+        </div>
         {{/new}}
       </div>
-      <div class="text-center col-lg-4">
+
+      <div class="text-center mt-5 mb-5">
         {{#hasNext}}
-        <button id="load-more-btn" class="btn_lcdd" onclick="loadMore()">Cargar más</button>
+        <button id="load-more-news-btn" class="btn-load-more" onclick="loadMoreNews()" data-name="{{name}}"
+          data-tag="{{tag}}">
+          <span id="btn-news-text">Cargar más noticias</span>
+          <span id="btn-news-spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+        </button>
         {{/hasNext}}
       </div>
     </div>
   </section>
 </main>
 
-<script>
-  let currentPage = 1;
-  function loadMore() {
-    const name = "{{name}}";
-    const tag = "{{tag}}";
-    const btn = document.getElementById('load-more-btn');
-
-    fetch(`/news?page=${currentPage}&name=${name}&tag=${tag}`)
-      .then(response => response.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const newEvents = doc.getElementById('events-container').innerHTML;
-        document.getElementById('events-container').insertAdjacentHTML('beforeend', newEvents);
-        const hasNext = doc.getElementById('load-more-btn') !== null;
-        if (!hasNext) {
-          btn.style.display = 'none';
-        }
-        currentPage++;
-      })
-      .catch(error => console.error('Error cargando noticias:', error));
-  }
-</script>
 {{>footer}}
