@@ -1,5 +1,6 @@
 package com.grupo6daw.lcdd_daw.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,6 +74,10 @@ public class EventService {
 
     public List<Event> findByValidatedTrue() {
         return repository.findByValidatedTrue();
+    }
+
+    public List<Event> findByEventEndDateAfter(LocalDateTime date) {
+        return repository.findByEventEndDateAfter(date);
     }
 
     public Page<Event> findValidatedByFilter(String name, String tag, Pageable page) {

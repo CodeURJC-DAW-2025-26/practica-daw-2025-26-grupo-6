@@ -117,8 +117,8 @@ public String events(Model model,
 		Event event = new Event();
 		event.setEventName("");
 		event.setEventDescription("");
-		event.setEventStartDate(LocalDateTime.now().plusHours(1));
-		event.setEventEndDate(LocalDateTime.now().plusHours(2));
+		event.setEventStartDate(LocalDateTime.now().plusHours(1).withSecond(0).withNano(0));
+		event.setEventEndDate(LocalDateTime.now().plusHours(2).withSecond(0).withNano(0));
 		event.setEventTag("");
 		event.setLink("");
 		event.setRequiresRegistration(false);
@@ -188,10 +188,10 @@ public String events(Model model,
 		}
 
 		// Check if dates are valid
-		if (!event.getStartLocalDateTime().isBefore(event.getEndLocalDateTime())) {
+		if (!event.getEventStartDate().isBefore(event.getEventEndDate())) {
 			errorMessages.add("La fecha de inicio debe ser anterior a la fecha de fin");
 		}
-		if (event.getStartLocalDateTime().isBefore(LocalDateTime.now())) {
+		if (event.getEventStartDate().isBefore(LocalDateTime.now())) {
 			errorMessages.add("La fecha de inicio debe ser posterior a la fecha actual");
 		}
 

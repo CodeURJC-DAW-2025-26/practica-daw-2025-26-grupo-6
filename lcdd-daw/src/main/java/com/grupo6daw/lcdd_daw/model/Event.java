@@ -190,16 +190,16 @@ public class Event {
         this.creationDate = creationDate;
     }
     
-    public String getEventStartDate() {
-        return eventStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+    public LocalDateTime getEventStartDate() {
+        return eventStartDate;
     }
     
     public void setEventStartDate(LocalDateTime eventStartDate) {
         this.eventStartDate = eventStartDate;
     }
     
-    public String getEventEndDate() {
-        return eventEndDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+    public LocalDateTime getEventEndDate() {
+        return eventEndDate;
     }
     
     public void setEventEndDate(LocalDateTime eventEndDate) {
@@ -212,13 +212,5 @@ public class Event {
 
     public String getFormattedEndDate() {
         return eventEndDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
-    }
-
-    public LocalDateTime getStartLocalDateTime() {
-        return eventStartDate;
-    }
-
-    public LocalDateTime getEndLocalDateTime() {
-        return eventEndDate;
     }
 }
