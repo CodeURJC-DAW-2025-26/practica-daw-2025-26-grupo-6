@@ -139,7 +139,7 @@ public class New {
 
     public String getFormattedDate() {
         if (this.creationDate == null) return "";
-        // Definimos el formato: día/mes/año
+        // Format the date as "dd/MM/yyyy"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return this.creationDate.format(formatter);
     }
