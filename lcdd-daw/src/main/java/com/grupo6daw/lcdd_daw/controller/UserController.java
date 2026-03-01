@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile(Model model) {
-        // Usamos el valueOf de tu compañero
+        
         Long id = Long.valueOf((String) model.getAttribute("userId"));
         User user = userService.getUser(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
         model.addAttribute("user", user);
@@ -75,26 +75,29 @@ public class UserController {
 
         boolean admin = (boolean) model.getAttribute("admin");
         Long userId = Long.valueOf((String) model.getAttribute("userId"));
-        boolean credentialsChanged = userService.updateProfile(id, dto);
 
         if (!admin && userId != id) {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
         }
 
+     
         User currentUser = userService.findById(id).orElseThrow();
 
-        if (dto.getEmail() != null && !currentUser.getUserEmail().equals(dto.getEmail())) {
-            if (userService.existsByUserEmail(dto.getEmail())) {
-                bindingResult.rejectValue("email", "error.email", "Ese correo electrónico ya está registrado.");
+       
+        if (dto.getEmail() != null && !currentUser.getUserEmail().equalsIgnoreCase(dto.getEmail().trim())) {
+            if (userService.existsByUserEmail(dto.getEmail().trim())) {
+                bindingResult.rejectValue("email", "error.email",
+                        "Este correo electrónico ya está registrado por otro usuario.");
             }
         }
 
-        if (dto.getNickname() != null && !currentUser.getUserNickname().equals(dto.getNickname())) {
-            if (userService.existsByUserNickname(dto.getNickname())) {
-                bindingResult.rejectValue("nickname", "error.nickname", "Ese apodo ya está en uso. Elige otro.");
+        if (dto.getNickname() != null && !currentUser.getUserNickname().equalsIgnoreCase(dto.getNickname().trim())) {
+            if (userService.existsByUserNickname(dto.getNickname().trim())) {
+                bindingResult.rejectValue("nickname", "error.nickname", "Este apodo ya está en uso. Elige otro.");
             }
         }
 
+        
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", currentUser);
             model.addAttribute("hasErrors", true);
@@ -107,9 +110,11 @@ public class UserController {
             return "profile";
         }
 
+       
+        boolean credentialsChanged = userService.updateProfile(id, dto);
+
         if (credentialsChanged && authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
-            
             redirectAttributes.addFlashAttribute("loginMessage",
                     "Tus credenciales han cambiado correctamente. Por favor, inicia sesión con tus nuevos datos.");
             return "redirect:/login";
@@ -120,7 +125,7 @@ public class UserController {
     @PostMapping("/user/{id}/delete")
     public String deleteProfile(Model model, HttpServletRequest request, @PathVariable long id) {
         boolean admin = (boolean) model.getAttribute("admin");
-        // Usamos el valueOf de tu compañero
+      
         Long userId = Long.valueOf((String) model.getAttribute("userId"));
 
         if (!admin && userId != id) {
