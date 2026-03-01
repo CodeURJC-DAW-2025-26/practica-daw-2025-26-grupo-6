@@ -22,12 +22,12 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SessionRegistry sessionRegistry() {
-    	return new SessionRegistryImpl();
+		return new SessionRegistryImpl();
 	}
 
 	@Bean
 	public HttpSessionEventPublisher httpSessionEventPublisher() {
-    	return new HttpSessionEventPublisher();
+		return new HttpSessionEventPublisher();
 	}
 
 	@Bean
@@ -52,6 +52,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(authorize -> authorize
 						// PUBLIC PAGES
 						.requestMatchers("/").permitAll()
+						.requestMatchers("/error").permitAll()
 						.requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
 						.requestMatchers("/sample_images/**").permitAll()
 						.requestMatchers("/images/**").permitAll()
@@ -83,7 +84,8 @@ public class WebSecurityConfig {
 						.requestMatchers("/removeGame/*").hasAnyRole("ADMIN")
 						.requestMatchers("/game_form/*").hasAnyRole("ADMIN")
 						.requestMatchers("/game_form").hasAnyRole("ADMIN")
-						.requestMatchers("/admin/**").hasAnyRole("ADMIN"))
+						.requestMatchers("/admin/**").hasRole("ADMIN") 
+						.anyRequest().permitAll())
 				.formLogin(formLogin -> formLogin
 						.loginPage("/login")
 						.usernameParameter("email")
@@ -92,15 +94,16 @@ public class WebSecurityConfig {
 				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/")
-						.permitAll());
-		
+						.permitAll())
+				.exceptionHandling(e -> e.authenticationEntryPoint((req, res, ex) -> res.sendError(403))
+						.accessDeniedHandler((req, res, ex) -> res.sendError(403)));
+
 		// SessionRegistry configuration
-		http    
-			.sessionManagement(session -> session
-				.maximumSessions(-1) // No limit on sessions
-				.sessionRegistry(sessionRegistry())
-				.expiredSessionStrategy(new RedirectToCurrentUrlStrategy())
-    		);			
+		http
+				.sessionManagement(session -> session
+						.maximumSessions(-1) // No limit on sessions
+						.sessionRegistry(sessionRegistry())
+						.expiredSessionStrategy(new RedirectToCurrentUrlStrategy()));
 
 		return http.build();
 	}

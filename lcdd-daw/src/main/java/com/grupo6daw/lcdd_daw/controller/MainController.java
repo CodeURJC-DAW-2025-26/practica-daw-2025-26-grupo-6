@@ -1,6 +1,6 @@
 package com.grupo6daw.lcdd_daw.controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,23 +20,25 @@ public class MainController {
 
 	@Autowired
 	private EventService eventService;
-
 	@Autowired
 	private GameService gameService;
-
 	@Autowired
 	private NewService newService;
 
 	@GetMapping("/")
 	public String main(Model model) {
-		List<Event> nextEvents = eventService.findByEventEndDateAfter(LocalDateTime.now());
 		
+		List<Event> nextEvents = eventService.findUpcomingEvents(LocalDate.now())
+				.stream()
+				.filter(Event::isValidated) 
+				.limit(3)
+				.toList(); 
+
 		if (!nextEvents.isEmpty()) {
-			// Create a list of maps that makes only the first element active
 			List<Map<String, Object>> eventsWithActive = new ArrayList<>();
 			for (int i = 0; i < nextEvents.size(); i++) {
-    			Map<String, Object> m = Map.of("event", nextEvents.get(i), "isActive", i == 0);
-    			eventsWithActive.add(m);
+				Map<String, Object> m = Map.of("event", nextEvents.get(i), "isActive", i == 0);
+				eventsWithActive.add(m);
 			}
 			model.addAttribute("nextEvents", eventsWithActive);
 		}
