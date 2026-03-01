@@ -94,7 +94,27 @@ public class EventsController {
 						&& event.get().getEventCreator().getUserId().equals(currentUserId);
 				boolean isAdmin = request.isUserInRole("ADMIN");
 				hasEditPermission = isOwner || isAdmin;
+
+				boolean isRegistered = false;
+				if (request.getUserPrincipal() != null) {
+					Optional<User> currentUserOpt = userService.getUser(currentUserId);
+					if (currentUserOpt.isPresent()) {
+						isRegistered = currentUserOpt.get().getUserRegisteredEvents().contains(event.get());
+					}
+				}
+				model.addAttribute("isRegistered", isRegistered);
 			}
+
+			int currentParticipants = event.get().getEventRegisteredUsers() != null 
+                                      ? event.get().getEventRegisteredUsers().size() 
+                                      : 0;
+            model.addAttribute("currentParticipants", currentParticipants);
+
+			boolean isFull = false;
+            if (event.get().getMaxParticipants() != null && event.get().getMaxParticipants() > 0) {
+                isFull = currentParticipants >= event.get().getMaxParticipants();
+            }
+            model.addAttribute("isFull", isFull);
 
 			// Provide formatted date for the view
 			model.addAttribute("formattedDate", event.get().getFormattedDate());
@@ -218,10 +238,20 @@ public class EventsController {
 			if (!isOwner && !isAdmin) {
 				return "redirect:/events?error=unauthorized";
 			}
-
 			event.setEventCreator(existingEvent.getEventCreator());
+			event.setEventRegisteredUsers(existingEvent.getEventRegisteredUsers());
+			event.setValidated(false);
+			event.setValidated(existingEvent.isValidated());
+
+			 // Keep the existing validation status for admins, but set to false for regular users
+			 if (!isAdmin) {
+				 event.setValidated(false);
+			 }
+
 		} else {
 			event.setEventCreator(currentUser);
+			
+			event.setValidated(false);
 		}
 
 		// Handle tags
@@ -270,5 +300,44 @@ public class EventsController {
 			}
 		}
 		return "redirect:/events";
+	}
+
+	@PostMapping("/event/{id}/join")
+	public String joinEvent(@PathVariable long id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+		if (request.getUserPrincipal() == null) {
+			return "redirect:/login";
+		}
+		Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+		Optional<User> currentUserOpt = userService.getUser(currentUserId);
+
+		Optional<Event> eventOpt = eventService.findById(id);
+
+		if (currentUserOpt.isPresent() && eventOpt.isPresent()) {
+			User currentUser = currentUserOpt.get();
+			Event event = eventOpt.get();
+
+			if (currentUser.getUserRegisteredEvents().contains(event)) {
+
+				currentUser.unregisterFromEvent(event);
+				userService.save(currentUser);
+				redirectAttributes.addFlashAttribute("message", "Te has desapuntado del evento.");
+				return "redirect:/event/" + id;
+			}
+
+			if (event.getMaxParticipants() != null && event.getMaxParticipants() > 0) {
+				int participantesActuales = event.getEventRegisteredUsers().size();
+				if (participantesActuales >= event.getMaxParticipants()) {
+					redirectAttributes.addFlashAttribute("error", "El aforo de este evento está completo.");
+					return "redirect:/event/" + id;
+				}
+			}
+
+			currentUser.registerToEvent(event);
+			userService.save(currentUser);
+			redirectAttributes.addFlashAttribute("message", "¡Te has apuntado al evento con éxito!");
+		}
+
+		return "redirect:/event/" + id;
 	}
 }

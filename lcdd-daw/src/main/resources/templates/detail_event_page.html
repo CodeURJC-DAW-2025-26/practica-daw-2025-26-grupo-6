@@ -21,7 +21,23 @@
 
         <div class="col-lg-7 col-md-12 ps-lg-5 mt-4 mt-lg-0">
           <div class="project-info p-4 bg-white rounded-4 shadow-sm border">
+
+            {{#message}}
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+              <i class="bi bi-check-circle-fill me-2"></i> {{message}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{/message}}
+
+            {{#error}}
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i> {{error}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{/error}}
+
             <h2 class="fw-bold mb-3" style="color: #212529;">{{event.eventName}}</h2>
+
 
             <div class="d-flex flex-wrap gap-4 mb-4 pb-3 border-bottom text-muted" style="font-size: 0.95rem;">
               <div class="d-flex align-items-center">
@@ -31,8 +47,9 @@
               <div class="d-flex align-items-center">
                 <i class="bi bi-people text-danger fs-5 me-2"></i>
                 <span class="fw-medium text-dark">
-                  Aforo: {{#event.maxParticipants}}{{event.maxParticipants}}{{/event.maxParticipants}}
-                  {{^event.maxParticipants}}Ilimitado{{/event.maxParticipants}}
+                  Apuntados: <span class="text-danger fw-bold">{{currentParticipants}}</span>
+                  {{#event.maxParticipants}} / {{event.maxParticipants}}{{/event.maxParticipants}}
+                  {{^event.maxParticipants}} (Aforo ilimitado){{/event.maxParticipants}}
                 </span>
               </div>
             </div>
@@ -56,36 +73,41 @@
                 {{/event.requiresRegistration}}
 
                 <form action="/event/{{event.eventId}}/join" method="post" class="m-0">
+                  {{#isRegistered}}
+                  <button type="submit" class="btn btn-outline-dark rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-person-dash-fill me-1"></i> Desapuntarme
+                  </button>
+                  {{/isRegistered}}
+                  {{^isRegistered}}
                   <button type="submit" class="btn btn-dark rounded-pill px-4 shadow-sm">
                     <i class="bi bi-person-plus-fill me-1"></i> Apuntarme
                   </button>
+                  {{/isRegistered}}
                   <input type="hidden" name="_csrf" value="{{token}}" />
                 </form>
 
+                {{#hasEditPermission}}
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                  <a class="btn btn-link text-primary text-decoration-none p-0" href="/event_form/{{event.eventId}}">
+                    <i class="bi bi-pencil-square me-1"></i> Modificar evento
+                  </a>
+
+                  <form action="/removeEvent/{{event.eventId}}" method="post" class="m-0"
+                    onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?');">
+                    <button type="submit" class="btn btn-link text-danger text-decoration-none p-0"
+                      style="box-shadow: none;">
+                      <i class="bi bi-trash me-1"></i> Eliminar
+                    </button>
+                    <input type="hidden" name="_csrf" value="{{token}}" />
+                  </form>
+                </div>
+                {{/hasEditPermission}}
+
               </div>
-
-              {{#hasEditPermission}}
-              <div class="d-flex flex-wrap align-items-center gap-3">
-                <a class="btn btn-link text-primary text-decoration-none p-0" href="/event_form/{{event.eventId}}">
-                  <i class="bi bi-pencil-square me-1"></i> Modificar evento
-                </a>
-
-                <form action="/removeEvent/{{event.eventId}}" method="post" class="m-0"
-                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?');">
-                  <button type="submit" class="btn btn-link text-danger text-decoration-none p-0"
-                    style="box-shadow: none;">
-                    <i class="bi bi-trash me-1"></i> Eliminar
-                  </button>
-                  <input type="hidden" name="_csrf" value="{{token}}" />
-                </form>
-              </div>
-              {{/hasEditPermission}}
-
             </div>
           </div>
         </div>
       </div>
-    </div>
   </section>
 </main>
 
