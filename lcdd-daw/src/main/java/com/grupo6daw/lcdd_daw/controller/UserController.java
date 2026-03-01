@@ -2,8 +2,11 @@ package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
@@ -13,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,11 +30,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
-import org.springframework.validation.BindingResult;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Controller
 public class UserController {
 
@@ -41,20 +40,54 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String profile(Model model) {
-        
-        Long id = Long.valueOf((String) model.getAttribute("userId"));
-        User user = userService.getUser(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+    public String profile(Model model, HttpServletRequest request) {
+
+        if (request.getUserPrincipal() == null) {
+            throw new AccessDeniedException("No hay usuario autenticado");
+        }
+
+        Long currentUserId = Long.valueOf(request.getUserPrincipal().getName()); 
+        User user = userService.getUser(currentUserId)
+                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+
+        boolean isAdmin = request.isUserInRole("ADMIN");
+        boolean hasEditPermission = true; 
+
         model.addAttribute("user", user);
+        model.addAttribute("hasEditPermission", hasEditPermission);
+        model.addAttribute("isOwner", true);
+        model.addAttribute("isAdmin", isAdmin);
+
+        model.addAttribute("userId", String.valueOf(currentUserId));
+        model.addAttribute("admin", isAdmin);
+
         return "profile";
     }
 
     @GetMapping("/user/{id}")
-    public String userProfile(@PathVariable Long id, Model model) {
+    public String userProfile(@PathVariable Long id, Model model, HttpServletRequest request) {
         User user = userService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
-
         model.addAttribute("user", user);
+
+        boolean hasEditPermission = false;
+        boolean isOwner = false;
+        boolean isAdmin = false;
+
+        if (request.getUserPrincipal() != null) {
+            Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+            isOwner = user.getUserId() != null && user.getUserId().equals(currentUserId);
+            isAdmin = request.isUserInRole("ADMIN");
+            hasEditPermission = isOwner || isAdmin;
+            
+            model.addAttribute("userId", String.valueOf(currentUserId));
+            model.addAttribute("admin", isAdmin);
+        }
+
+        model.addAttribute("hasEditPermission", hasEditPermission);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isAdmin", isAdmin);
+
         return "profile";
     }
 
@@ -80,10 +113,8 @@ public class UserController {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
         }
 
-     
         User currentUser = userService.findById(id).orElseThrow();
 
-       
         if (dto.getEmail() != null && !currentUser.getUserEmail().equalsIgnoreCase(dto.getEmail().trim())) {
             if (userService.existsByUserEmail(dto.getEmail().trim())) {
                 bindingResult.rejectValue("email", "error.email",
@@ -97,7 +128,6 @@ public class UserController {
             }
         }
 
-        
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", currentUser);
             model.addAttribute("hasErrors", true);
@@ -110,7 +140,6 @@ public class UserController {
             return "profile";
         }
 
-       
         boolean credentialsChanged = userService.updateProfile(id, dto);
 
         if (credentialsChanged && authentication != null) {
@@ -125,7 +154,7 @@ public class UserController {
     @PostMapping("/user/{id}/delete")
     public String deleteProfile(Model model, HttpServletRequest request, @PathVariable long id) {
         boolean admin = (boolean) model.getAttribute("admin");
-      
+
         Long userId = Long.valueOf((String) model.getAttribute("userId"));
 
         if (!admin && userId != id) {

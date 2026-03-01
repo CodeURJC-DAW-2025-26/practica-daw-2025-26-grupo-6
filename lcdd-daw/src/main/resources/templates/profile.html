@@ -118,7 +118,7 @@
                       readonly style="resize: none;">{{user.userInterests}}</textarea>
                   </div>
                 </div>
-
+                {{#hasEditPermission}}
                 <div class="d-grid gap-2 mt-2">
                   <button type="button" id="btn-edit-profile" class="btn btn-outline-dark rounded-pill">
                     <i class="bi bi-pencil-square me-2"></i> Editar Perfil
@@ -141,6 +141,7 @@
                     <i class="bi bi-exclamation-octagon me-1"></i> Eliminar Cuenta
                   </button>
                 </div>
+                {{/hasEditPermission}}
               </form>
 
               <form id="delete-form" action="/user/{{user.userId}}/delete" method="post" class="d-none">
@@ -221,12 +222,20 @@
                     {{/user.userOwnEvents}}
 
                     {{^user.userOwnEvents}}
+                    {{#isOwner}}
                     <div class="col-12 text-center py-5">
                       <i class="bi bi-calendar-plus fs-1 text-muted opacity-50"></i>
                       <p class="mt-3 text-muted">Aún no has organizado ningún evento.</p>
                       <a href="/event_form" class="btn btn-sm btn-outline-dark rounded-pill">Crear mi primer
                         evento</a>
                     </div>
+                    {{/isOwner}}
+                    {{^isOwner}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-calendar-plus fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">El usuario no ha organizado ningún evento.</p>
+                    </div>
+                    {{/isOwner}}
                     {{/user.userOwnEvents}}
                   </div>
                 </div>
@@ -263,11 +272,19 @@
                     {{/user.userRegisteredEvents}}
 
                     {{^user.userRegisteredEvents}}
+                    {{#isOwner}}
                     <div class="col-12 text-center py-5">
                       <i class="bi bi-ticket-detailed fs-1 text-muted opacity-50"></i>
                       <p class="mt-3 text-muted">Aún no te has inscrito a ningún evento.</p>
                       <a href="/events" class="btn btn-sm btn-outline-dark rounded-pill">Explorar eventos</a>
                     </div>
+                    {{/isOwner}}
+                    {{^isOwner}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-ticket-detailed fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">El usuario no se ha inscrito a ningún evento.</p>
+                    </div>
+                    {{/isOwner}}
                     {{/user.userRegisteredEvents}}
                   </div>
                 </div>
@@ -304,11 +321,19 @@
                     {{/user.userFavGames}}
 
                     {{^user.userFavGames}}
+                    {{#isOwner}}
                     <div class="col-12 text-center py-5">
                       <i class="bi bi-controller fs-1 text-muted opacity-50"></i>
                       <p class="mt-3 text-muted">No tienes ningún juego marcado como favorito.</p>
                       <a href="/games" class="btn btn-sm btn-outline-dark rounded-pill">Ir a la Ludoteca</a>
                     </div>
+                    {{/isOwner}}
+                    {{^isOwner}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-controller fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">El usuario no tiene ningún juego marcado como favorito.</p>
+                    </div>
+                    {{/isOwner}}
                     {{/user.userFavGames}}
                   </div>
                 </div>
@@ -353,11 +378,19 @@
                     {{/user.userNews}}
 
                     {{^user.userNews}}
+                    {{#isOwner}}
                     <div class="col-12 text-center py-5">
                       <i class="bi bi-journal-text fs-1 text-muted opacity-50"></i>
                       <p class="mt-3 text-muted">Aún no has redactado ninguna noticia.</p>
                       <a href="/new_form" class="btn btn-sm btn-outline-dark rounded-pill">Redactar noticia</a>
                     </div>
+                    {{/isOwner}}
+                    {{^isOwner}}
+                    <div class="col-12 text-center py-5">
+                      <i class="bi bi-journal-text fs-1 text-muted opacity-50"></i>
+                      <p class="mt-3 text-muted">El usuario no ha redactado ninguna noticia.</p>
+                    </div>
+                    {{/isOwner}}
                     {{/user.userNews}}
                   </div>
                 </div>
