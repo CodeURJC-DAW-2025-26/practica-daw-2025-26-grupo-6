@@ -220,7 +220,7 @@ public class DatabaseInitializer {
     
     if (eventRepository.findByEventName("Evento de juegos de mesa Octubre 2026").isEmpty()) {
       Event event1 = new Event("Evento de juegos de mesa Octubre 2026",
-          "¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟\nLa asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de juegos de mesa para que venga a jugar y divertirse todo el mundo.",
+          "🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟\nLa asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de juegos de mesa para que venga a jugar y divertirse todo el mundo.",
           "Cartas", true, LocalDate.now().plusDays(5), 50);
       setEventImage(event1, "/sample_images/events/event.jpg");
       eventService.save(event1);
@@ -228,7 +228,7 @@ public class DatabaseInitializer {
 
     if (eventRepository.findByEventName("Maratón 12h: Juegos de Mesa").isEmpty()) {
       Event event2 = new Event("Maratón 12h: Juegos de Mesa",
-          "¿Aguantarás 12 horas seguidas jugando? Desde los clásicos Catan y Carcassonne hasta los pesados como Terraforming Mars. ¡Ven cuando quieras!",
+          "📦🏰 ¿Aguantarás 12 horas seguidas jugando? Desde los clásicos Catan y Carcassonne hasta los pesados como Terraforming Mars. ¡Ven cuando quieras!",
           "Juego de mesa", true, LocalDate.now().plusDays(10), 30);
       setEventImage(event2, "/sample_images/events/maraton.jpg");
       eventService.save(event2);
@@ -236,7 +236,7 @@ public class DatabaseInitializer {
 
     if (eventRepository.findByEventName("Copa de Kanto: Pokémon TCG").isEmpty()) {
       Event event3 = new Event("Copa de Kanto: Pokémon TCG",
-          "¡Hazte con todos! Participa en nuestro torneo oficial de Pokémon. Habrá cartas promo para los participantes y sobres para el top 3.",
+          "⚡🐭 ¡Hazte con todos! Participa en nuestro torneo oficial de Pokémon. Habrá cartas promo para los participantes y sobres para el top 3.",
           "Cartas", true, LocalDate.now().plusDays(15), 16);
       setEventImage(event3, "/sample_images/events/pokemon_cup.jpg");
       eventService.save(event3);
@@ -244,7 +244,7 @@ public class DatabaseInitializer {
 
     if (eventRepository.findByEventName("Tarde de Juegos Rápidos").isEmpty()) {
       Event event4 = new Event("Tarde de Juegos Rápidos",
-          "Virus!, Taco Gato, ¡Mía! y más. Partidas rápidas y muchas risas en esta tarde dedicada a los juegos más dinámicos de la asociación.",
+          "💨🃏 Virus!, Taco Gato, ¡Mía! y más. Partidas rápidas y muchas risas en esta tarde dedicada a los juegos más dinámicos de la asociación.",
           "Juego de mesa", true, LocalDate.now().plusDays(20), 40);
       setEventImage(event4, "/sample_images/events/filler_afternoon.jpg");
       eventService.save(event4);
@@ -252,7 +252,7 @@ public class DatabaseInitializer {
 
     if (eventRepository.findByEventName("Liga de Estrategia: Temporada 1").isEmpty()) {
       Event event5 = new Event("Liga de Estrategia: Temporada 1",
-          "¿Eres el mejor estratega? Apúntate a nuestra liga trimestral de juegos de tablero. Suma puntos cada semana y encabeza el ranking.",
+          "👑🗺 ¿Eres el mejor estratega? Apúntate a nuestra liga trimestral de juegos de tablero. Suma puntos cada semana y encabeza el ranking.",
           "Juego de mesa", true, LocalDate.now().plusDays(25), 24);
       setEventImage(event5, "/sample_images/events/strategy_league.jpg");
       eventService.save(event5);
@@ -260,7 +260,7 @@ public class DatabaseInitializer {
 
     if (eventRepository.findByEventName("Duelo al Sol: Torneo de Bang!").isEmpty()) {
       Event event6 = new Event("Duelo al Sol: Torneo de Bang!",
-          "Sheriff, alguaciles o forajidos... ¿quién sobrevivirá? Ven a participar en este torneo del juego de cartas más famoso del Oeste.",
+          "🤠🔫 Sheriff, alguaciles o forajidos... ¿quién sobrevivirá? Ven a participar en este torneo del juego de cartas más famoso del Oeste.",
           "Cartas", true, LocalDate.now().plusMonths(1), 32);
       setEventImage(event6, "/sample_images/events/bang_tournament.jpg");
       eventService.save(event6);
@@ -268,7 +268,7 @@ public class DatabaseInitializer {
 
     if (eventRepository.findByEventName("Día del Novato: Aprende a Rolear").isEmpty()) {
       Event event7 = new Event("Día del Novato: Aprende a Rolear",
-          "¿Te da miedo empezar? No te preocupes. Evento diseñado exclusivamente para gente que nunca ha tocado un dado de 20 caras.",
+          "🎲🔰 ¿Te da miedo empezar? No te preocupes. Evento diseñado exclusivamente para gente que nunca ha tocado un dado de 20 caras.",
           "Rol", true, LocalDate.now().plusMonths(1).plusDays(5), 10);
       setEventImage(event7, "/sample_images/events/beginner_role.jpg");
       eventService.save(event7);
@@ -276,7 +276,7 @@ public class DatabaseInitializer {
 
     if (eventRepository.findByEventName("Campeonato de Carcassonne URJC").isEmpty()) {
       Event event8 = new Event("Campeonato de Carcassonne URJC",
-          "Coloca tus losetas y tus monjes estratégicamente. Torneo clasificatorio con reglamento de torneo nacional.",
+          "🧩🏰 Coloca tus losetas y tus monjes estratégicamente. Torneo clasificatorio con reglamento de torneo nacional.",
           "Juego de mesa", true, LocalDate.now().plusMonths(1).plusDays(10), 20);
       setEventImage(event8, "/sample_images/events/carcassonne_tourney.jpg");
       eventService.save(event8);
