@@ -51,6 +51,13 @@
                   {{#event.maxParticipants}} / {{event.maxParticipants}}{{/event.maxParticipants}}
                   {{^event.maxParticipants}} (Aforo ilimitado){{/event.maxParticipants}}
                 </span>
+
+                {{#hasEditPermission}}
+                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill ms-3 py-1 px-3 shadow-sm"
+                  data-bs-toggle="modal" data-bs-target="#attendeesModal">
+                  <i class="bi bi-eye-fill me-1"></i> Ver lista
+                </button>
+                {{/hasEditPermission}}
               </div>
             </div>
 
@@ -78,11 +85,20 @@
                     <i class="bi bi-person-dash-fill me-1"></i> Desapuntarme
                   </button>
                   {{/isRegistered}}
+
                   {{^isRegistered}}
+                  {{#isFull}}
+                  <button type="button" class="btn btn-secondary rounded-pill px-4 shadow-sm" disabled>
+                    <i class="bi bi-slash-circle me-1"></i> Aforo completo
+                  </button>
+                  {{/isFull}}
+                  {{^isFull}}
                   <button type="submit" class="btn btn-dark rounded-pill px-4 shadow-sm">
                     <i class="bi bi-person-plus-fill me-1"></i> Apuntarme
                   </button>
+                  {{/isFull}}
                   {{/isRegistered}}
+
                   <input type="hidden" name="_csrf" value="{{token}}" />
                 </form>
 
@@ -109,6 +125,54 @@
         </div>
       </div>
   </section>
+
+  {{#hasEditPermission}}
+  <div class="modal fade" id="attendeesModal" tabindex="-1" aria-labelledby="attendeesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header" style="background-color: #f8f9fa;">
+          <h5 class="modal-title fw-bold" id="attendeesModalLabel">
+            <i class="bi bi-card-checklist text-danger me-2"></i>Lista de Asistentes
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body p-0">
+          <ul class="list-group list-group-flush">
+            {{#event.eventRegisteredUsers}}
+            <li class="list-group-item d-flex justify-content-between align-items-start p-3">
+              <div class="ms-2 me-auto">
+                <div class="fw-bold" style="font-size: 1.1rem;">
+                  <a href="/user/{{userId}}" class="text-decoration-none"
+                    style="color: #a71b12; transition: color 0.2s ease-in-out;" onmouseover="this.style.color='#890f00'"
+                    onmouseout="this.style.color='#a71b12'">
+                    <i class="bi bi-person-badge me-1"></i> {{userNickname}}
+                  </a>
+                </div>
+                <div class="text-muted mt-1" style="font-size: 0.9rem;">
+                  <i class="bi bi-person me-1"></i> {{userName}} {{userSurname}}
+                </div>
+                <div class="text-muted" style="font-size: 0.9rem;">
+                  <i class="bi bi-envelope-at me-1"></i>
+                  <a href="mailto:{{userEmail}}" class="text-decoration-none text-secondary">{{userEmail}}</a>
+                </div>
+              </div>
+            </li>
+            {{/event.eventRegisteredUsers}}
+            {{^event.eventRegisteredUsers}}
+            <li class="list-group-item p-4 text-center text-muted bg-light">
+              <i class="bi bi-emoji-frown fs-1 d-block mb-2 opacity-50"></i>
+              Aún no hay nadie inscrito en este evento.
+            </li>
+            {{/event.eventRegisteredUsers}}
+          </ul>
+        </div>
+        <div class="modal-footer" style="background-color: #f8f9fa;">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/hasEditPermission}}
 </main>
 
 {{>footer}}
