@@ -2,6 +2,7 @@ package com.grupo6daw.lcdd_daw.service;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.dto.ProfileUpdateDTO;
 import com.grupo6daw.lcdd_daw.dto.UserRegistrationDto;
+import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.repository.UserRepository;
 
@@ -40,6 +43,12 @@ public class UserService {
 
     @Autowired
     MailService mailService;
+
+    @Autowired
+    EventService eventService;
+
+    @Autowired
+    NewService newService;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -135,6 +144,14 @@ public class UserService {
     public void deleteUser(long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
+            List<Event> eventsToDelete = new ArrayList<>(user.get().getUserOwnEvents());
+            for (Event event : eventsToDelete) {
+                eventService.delete(event.getEventId());
+            }
+            List<New> newsToDelete = new ArrayList<>(user.get().getUserNews());
+            for (New userNew : newsToDelete) {
+                newService.delete(userNew.getNewId());
+            }
             forceLogoutUser(id);
             userRepository.deleteById(id);
         }
