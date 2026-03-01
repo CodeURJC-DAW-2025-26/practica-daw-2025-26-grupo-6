@@ -186,11 +186,109 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 #### **Diagrama de Navegación**
 
-Solo si ha cambiado.
+Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicación:
+
+![Diagrama de Navegación](images/Navigation-diagramV2.jpg)
+
+> Se mantienen los permisos que tenia cada usuario.
 
 #### **Capturas de Pantalla Actualizadas**
 
-Solo si han cambiado.
+#### **1. Página Principal / Home**
+![Página Principal](images/Index-1-V2.PNG)
+
+
+> Página de inicio que muestra el evento destacado, categorías principales y un banner promocional. Incluye barra de navegación y acceso a registro/login para usuarios no autenticados.
+
+#### **2. Página Inicio de sesión / Login**
+![Página Inicio de sesión](images/Log-in-V2.PNG)
+
+
+> Página de inicio de sesión en el cual el usuario anónimo podrá introducir sus credenciales para poder iniciar sesión y si no tiene una cuenta lo puede crear redirigiendolo
+
+#### **3. Página Resgistro / Resgister**
+![Página Resgistro](images/Create-account-V2.PNG)
+
+
+> Página de registro en el cual el usuario anónimo podrá introducir sus datos para poder crear una cuenta y si ya tiene cuenta puede redirigirse a iniciar sesión
+
+#### **4. Página Perfil / Profile**
+![Página Perfil](images/Profile-V2.PNG)
+
+
+> Página del perfil del usuario registrado en el cual el usuario podrá modificar sus datos, ver sus eventos y noticias creadas y sus juegos favoritos
+
+#### **5. Página Admninistrador / Admin**
+![Página Admninistrador](images/Admin-panel-V2.PNG)
+
+
+> Página del administrador en el cual un usuario administrador puede ver todas las solicitudes de eventos y noticias pendientes de validar junto a varias gráficas como las de los juegos favoritos y la de los eventos con mas inscripciones
+
+#### **6. Página Principal Eventos/ Main Events**
+![Página Principal Eventos](images/Events-admin-V2.PNG)
+
+
+> Página principal de los eventos en el cual el usuario anónimo podrá ver todos los eventos realizados y a realizar de la asociación, junto con un buscador para filtrar eventos
+
+#### **7. Página Principal Noticias / Main News**
+![Página Principal Noticias](images/News-admin-V2.PNG)
+
+
+> Página principal de las noticias en el cual el usuario anónimo podrá ver todas las noticias publicadas, junto con un buscador para filtrar noticias
+
+#### **8. Página Principal Juegos sin ser administrador / Main Game**
+![Página Principal Juegos](images/Games-nonAdmin-V2.PNG)
+
+
+> Página principal de juegos donde el usuario anónimo podrá ver todos los juegos disponibles junto a un buscador para filtrar juegos
+
+#### **8.1 Página Principal Juegos siendo administrador / Main Game**
+![Página Principal Juegos](images/Games-admin-V2.PNG)
+
+
+> Para los administradores, se añade un botón de añadir juego.
+
+#### **9. Página Evento / Event**
+![Página Evento](images/Event-adminV2.PNG)
+
+
+> Página de un evento en concreto en el cual el usuario anónimo o registrado podrá apuntarse
+
+#### **10. Página Noticia / News**
+![Página Noticia](images/SingleNews-admin-V2.PNG)
+
+
+> Página de una noticia en concreto en el cual el usuario anónimo o registrado podrá leer su contenido
+
+#### **11. Página Juego / Game**
+![Página Juego](images/Game-admin-V2.PNG)
+
+
+> Página de un juego en concreto en el cual el usuario anónimo podrá ver su descripción y el usuario registrado podrá añadirlo como juego favorito
+
+#### **12. Página Modificación Eventos / Modify Events**
+![Página Modificación Eventos](images/Modify-Event-admin-V2.PNG)
+
+
+> Página de modificación o creación de eventos en el cual el usuario administrador o creador de dicho evento puede modificar o crear eventos
+
+#### **13. Página Modificación Noticias / Modify News**
+![Página Modificación Noticias](images/Modify-news-V2.PNG)
+
+
+> Página de modificación o creación de noticias en el cual el usuario administrador o creador de dicha noticia puede modificar o crear noticias
+
+#### **14. Página Modificación Juegos / Modify Game**
+![Página Modificación Juegos](images/Modify-game-admin-V2.PNG)
+
+
+> Página de modificación o creación de juegos en el cual el usuario administrador puede modificar o añadir juegos
+
+#### **15. Página de Error / Error**
+![Página Modificación Juegos](images/Error404.PNG)
+
+
+> Página de error cuya información cambia según que error ha ocurrido
 
 ### **Instrucciones de Ejecución**
 
