@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,177 +21,242 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.GameService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.ImageValidationService;
+import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
-import org.springframework.data.domain.Sort;
-
 @Controller
 public class GamesController {
 
-	@Autowired
-	private GameService gameService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private ImageService imageService;
+    @Autowired
+    private GameService gameService;
 
-	@Autowired
-	private ImageValidationService imageValidationService;
+    @Autowired
+    private ImageService imageService;
 
-	@GetMapping("/games")
-	public String games(Model model,
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String tag,
-			@RequestParam(required = false) Integer players,
-			@RequestParam(required = false) Integer duration,
-			@RequestParam(defaultValue = "0") int page) {
+    @Autowired
+    private ImageValidationService imageValidationService;
 
-		Page<Game> gamesPage = gameService.findByFilter(name, tag, players, duration,
-				PageRequest.of(page, 10, Sort.by("gameId").descending()));
+    @GetMapping("/games")
+    public String games(Model model,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) Integer players,
+            @RequestParam(required = false) Integer duration,
+            @RequestParam(defaultValue = "0") int page) {
 
-		model.addAttribute("game", gamesPage.getContent());
-		model.addAttribute("name", name == null ? "" : name);
-		model.addAttribute("tag", tag == null ? "" : tag);
-		model.addAttribute("hasNext", gamesPage.hasNext());
-		model.addAttribute("nextPage", page + 1);
+        Page<Game> gamesPage = gameService.findByFilter(name, tag, players, duration,
+                PageRequest.of(page, 10, Sort.by("gameId").descending()));
 
-		return "games";
-	}
+        model.addAttribute("game", gamesPage.getContent());
+        model.addAttribute("name", name == null ? "" : name);
+        model.addAttribute("tag", tag == null ? "" : tag);
+        model.addAttribute("hasNext", gamesPage.hasNext());
+        model.addAttribute("nextPage", page + 1);
 
-	@GetMapping("/game/{id}")
-	public String gameDetail(@PathVariable long id, Model model, HttpServletRequest request) {
-		Optional<Game> game = gameService.findById(id);
-		if (game.isPresent()) {
-			model.addAttribute("game", game.get());
+        return "games";
+    }
 
-			boolean hasEditPermission = false;
-			if (request.getUserPrincipal() != null) {
-				hasEditPermission = request.isUserInRole("ADMIN");
-			}
-			model.addAttribute("hasEditPermission", hasEditPermission);
-		}
-		return "detail_game_page";
-	}
+    @GetMapping("/game/{id}")
+    public String gameDetail(@PathVariable long id, Model model, HttpServletRequest request) {
 
-	@GetMapping("/game_form")
-	public String showGameForm(HttpServletRequest request, Model model) {
+        Optional<Game> game = gameService.findById(id);
+        if (game.isPresent()) {
+            model.addAttribute("game", game.get());
 
-		CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-		if (csrfToken != null) {
-			model.addAttribute("token", csrfToken.getToken());
-		}
+            boolean hasEditPermission = false;
+            boolean isFavorited = false;
 
-		Game game = new Game();
-		game.setGameName("");
-		game.setGameDescription("");
-		game.setGenre("");
+            if (request.getUserPrincipal() != null) {
+                hasEditPermission = request.isUserInRole("ADMIN");
+                String principalName = request.getUserPrincipal().getName();
+                User user = userService.findById(Long.valueOf(principalName)).orElse(null);
+                
+                if (user != null) {
+                    isFavorited = user.getUserFavGames().contains(game.get());
+                }
 
-		model.addAttribute("game", game);
+            }
+            model.addAttribute("hasEditPermission", hasEditPermission);
+            model.addAttribute("isFavorited", isFavorited);
 
-		model.addAttribute("hasErrors", false);
-		model.addAttribute("allErrors", new ArrayList<String>());
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            if (csrfToken != null) {
+                model.addAttribute("token", csrfToken.getToken());
+            }
 
-		return "game_form";
-	}
+        }
+        return "detail_game_page";
+    }
 
-	@GetMapping("/game_form/{id}")
-	public String editGameForm(@PathVariable long id, Model model, HttpServletRequest request) {
-		Optional<Game> game = gameService.findById(id);
-		if (game.isPresent()) {
-			model.addAttribute("game", game.get());
-			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-			if (csrfToken != null) {
-				model.addAttribute("token", csrfToken.getToken());
-			}
-			model.addAttribute("hasErrors", false);
-			model.addAttribute("allErrors", new ArrayList<String>());
-			return "game_form";
-		}
-		return "redirect:/games";
-	}
+    @GetMapping("/game_form")
+    public String showGameForm(HttpServletRequest request, Model model) {
 
-	@PostMapping("/game_form")
-	public String saveGame(HttpServletRequest request,
-			@Valid Game game,
-			BindingResult bindingResult,
-			@RequestParam("imageField") MultipartFile imageField,
-			Model model) throws IOException {
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (csrfToken != null) {
+            model.addAttribute("token", csrfToken.getToken());
+        }
 
-		List<String> errorMessages = new ArrayList<>();
-		boolean isNewGame = (game.getGameId() == null);
+        Game game = new Game();
+        game.setGameName("");
+        game.setGameDescription("");
+        game.setGenre("");
 
-		// logical validation for players and duration
-		if (game.getMinPlayers() != null && game.getMaxPlayers() != null) {
-			if (game.getMinPlayers() > game.getMaxPlayers()) {
-				bindingResult.rejectValue("maxPlayers", "error.maxPlayers",
-						"El máximo de jugadores no puede ser menor que el mínimo.");
-			}
-		}
+        model.addAttribute("game", game);
 
-		if (game.getMinDuration() != null && game.getMaxDuration() != null) {
-			if (game.getMinDuration() > game.getMaxDuration()) {
-				bindingResult.rejectValue("maxDuration", "error.maxDuration",
-						"La duración máxima no puede ser menor que la mínima.");
-			}
-		}
+        model.addAttribute("hasErrors", false);
+        model.addAttribute("allErrors", new ArrayList<String>());
 
-		// img validation
-		imageValidationService.validate(imageField, errorMessages, isNewGame);
+        return "game_form";
+    }
 
-		if (bindingResult.hasErrors() || !errorMessages.isEmpty()) {
+    @GetMapping("/game_form/{id}")
+    public String editGameForm(@PathVariable long id, Model model, HttpServletRequest request) {
+        Optional<Game> game = gameService.findById(id);
+        if (game.isPresent()) {
+            model.addAttribute("game", game.get());
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            if (csrfToken != null) {
+                model.addAttribute("token", csrfToken.getToken());
+            }
+            model.addAttribute("hasErrors", false);
+            model.addAttribute("allErrors", new ArrayList<String>());
+            return "game_form";
+        }
+        return "redirect:/games";
+    }
 
-			// passing annotation errors
-			if (bindingResult.hasFieldErrors("gameName"))
-				errorMessages.add(bindingResult.getFieldError("gameName").getDefaultMessage());
-			if (bindingResult.hasFieldErrors("gameDescription"))
-				errorMessages.add(bindingResult.getFieldError("gameDescription").getDefaultMessage());
-			if (bindingResult.hasFieldErrors("genre"))
-				errorMessages.add(bindingResult.getFieldError("genre").getDefaultMessage());
-			if (bindingResult.hasFieldErrors("minPlayers"))
-				errorMessages.add(bindingResult.getFieldError("minPlayers").getDefaultMessage());
-			if (bindingResult.hasFieldErrors("maxPlayers"))
-				errorMessages.add(bindingResult.getFieldError("maxPlayers").getDefaultMessage());
-			if (bindingResult.hasFieldErrors("minDuration"))
-				errorMessages.add(bindingResult.getFieldError("minDuration").getDefaultMessage());
-			if (bindingResult.hasFieldErrors("maxDuration"))
-				errorMessages.add(bindingResult.getFieldError("maxDuration").getDefaultMessage());
+    @PostMapping("/game_form")
+    public String saveGame(HttpServletRequest request,
+            @Valid Game game,
+            BindingResult bindingResult,
+            @RequestParam("imageField") MultipartFile imageField,
+            Model model) throws IOException {
 
-			// Token CSRF
-			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-			if (csrfToken != null)
-				model.addAttribute("token", csrfToken.getToken());
+        List<String> errorMessages = new ArrayList<>();
+        boolean isNewGame = (game.getGameId() == null);
 
-			model.addAttribute("hasErrors", true);
-			model.addAttribute("allErrors", errorMessages);
-			model.addAttribute("game", game);
+        // logical validation for players and duration
+        if (game.getMinPlayers() != null && game.getMaxPlayers() != null) {
+            if (game.getMinPlayers() > game.getMaxPlayers()) {
+                bindingResult.rejectValue("maxPlayers", "error.maxPlayers",
+                        "El máximo de jugadores no puede ser menor que el mínimo.");
+            }
+        }
 
-			return "game_form";
-		}
+        if (game.getMinDuration() != null && game.getMaxDuration() != null) {
+            if (game.getMinDuration() > game.getMaxDuration()) {
+                bindingResult.rejectValue("maxDuration", "error.maxDuration",
+                        "La duración máxima no puede ser menor que la mínima.");
+            }
+        }
 
-		// saving game and image
-		if (!imageField.isEmpty()) {
-			Image image = imageService.createImage(imageField.getInputStream());
-			game.setGameImage(image);
-		} else if (!isNewGame) {
-			Game oldGame = gameService.findById(game.getGameId()).get();
-			game.setGameImage(oldGame.getGameImage());
-		}
+        // img validation
+        imageValidationService.validate(imageField, errorMessages, isNewGame);
 
-		gameService.save(game);
-		return "redirect:/games";
-	}
+        if (bindingResult.hasErrors() || !errorMessages.isEmpty()) {
 
-	@PostMapping("/removeGame/{id}")
-	public String removeGame(@PathVariable long id, HttpServletRequest request) {
+            // passing annotation errors
+            if (bindingResult.hasFieldErrors("gameName")) {
+                errorMessages.add(bindingResult.getFieldError("gameName").getDefaultMessage());
+            }
+            if (bindingResult.hasFieldErrors("gameDescription")) {
+                errorMessages.add(bindingResult.getFieldError("gameDescription").getDefaultMessage());
+            }
+            if (bindingResult.hasFieldErrors("genre")) {
+                errorMessages.add(bindingResult.getFieldError("genre").getDefaultMessage());
+            }
+            if (bindingResult.hasFieldErrors("minPlayers")) {
+                errorMessages.add(bindingResult.getFieldError("minPlayers").getDefaultMessage());
+            }
+            if (bindingResult.hasFieldErrors("maxPlayers")) {
+                errorMessages.add(bindingResult.getFieldError("maxPlayers").getDefaultMessage());
+            }
+            if (bindingResult.hasFieldErrors("minDuration")) {
+                errorMessages.add(bindingResult.getFieldError("minDuration").getDefaultMessage());
+            }
+            if (bindingResult.hasFieldErrors("maxDuration")) {
+                errorMessages.add(bindingResult.getFieldError("maxDuration").getDefaultMessage());
+            }
 
-		if (request.isUserInRole("ADMIN")) {
-			gameService.delete(id);
-		}
-		return "redirect:/games";
-	}
+            // Token CSRF
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            if (csrfToken != null) {
+                model.addAttribute("token", csrfToken.getToken());
+            }
+
+            model.addAttribute("hasErrors", true);
+            model.addAttribute("allErrors", errorMessages);
+            model.addAttribute("game", game);
+
+            return "game_form";
+        }
+
+        // saving game and image
+        if (!imageField.isEmpty()) {
+            Image image = imageService.createImage(imageField.getInputStream());
+            game.setGameImage(image);
+        } else if (!isNewGame) {
+            Game oldGame = gameService.findById(game.getGameId()).get();
+            game.setGameImage(oldGame.getGameImage());
+        }
+
+        gameService.save(game);
+        return "redirect:/games";
+    }
+
+    @PostMapping("/removeGame/{id}")
+    public String removeGame(@PathVariable long id, HttpServletRequest request) {
+
+        if (request.isUserInRole("ADMIN")) {
+            gameService.delete(id);
+        }
+        return "redirect:/games";
+    }
+
+    @PostMapping("/game/{id}/toggle-fav")
+    public String toggleFavorite(@PathVariable long id, HttpServletRequest request) {
+        if (request.getUserPrincipal() == null) {
+            return "redirect:/login";
+        }
+
+        Game game = gameService.findById(id).orElse(null);
+        if (game == null) {
+            return "redirect:/games";
+        }
+
+        String principalName = request.getUserPrincipal().getName();
+        User user = null;
+
+        if (principalName != null && principalName.matches("\\d+")) {
+            user = userService.findById(Long.valueOf(principalName)).orElse(null);
+        }
+
+        if (user == null) {
+            user = userService.findByUserEmail(principalName).orElse(null);
+        }
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        if (user.getUserFavGames().contains(game)) {
+            user.removeFavoriteGame(game);
+        } else {
+            user.addFavoriteGame(game);
+        }
+
+        userService.save(user);
+
+        return "redirect:/game/" + id;
+    }
 
 }
