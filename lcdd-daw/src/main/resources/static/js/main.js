@@ -115,22 +115,52 @@
   /**
    * Timer
    */
-  const timers = document.querySelectorAll(".next-event-timer");
-  let date = new Date("2026-10-10 10:10:10");
-  timers.forEach(timer => {
+  const timers = document.querySelectorAll('.next-event-timer');
 
-    setInterval(function () {
-      // Get the current date and time
-      let now = new Date().getTime();
+    timers.forEach(timer => {
+    const startStr = timer.getAttribute('startDate');
 
-      // Calculate the distance between now and the countdown date
-      let distance = date - now;
+    const getMadridDate = (dateStr) => {
+      // 1. Create a formatter for the Madrid timezone
+      const dtf = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Madrid',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false
+      });
 
-      // Calculate days, hours, minutes and seconds
-      let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // 2. Parse the string as local time first
+      const localDate = new Date(dateStr);
+      
+      // 3. Calculate the difference between "Now" and "Now in Madrid"
+      // to find the offset, then apply it to your dateStr
+      const parts = dtf.formatToParts(new Date());
+      const map = new Map(parts.map(p => [p.type, p.value]));
+      const isoMadrid = `${map.get('year')}-${map.get('month')}-${map.get('day')}T${map.get('hour')}:${map.get('minute')}:${map.get('second')}`;
+      
+      const diff = new Date(isoMadrid) - new Date();
+      return new Date(localDate.getTime() - diff);
+    };
+
+    const startDate = getMadridDate(startStr);
+
+    const updateInterval = setInterval(() => {
+      const now = Date.now(); // Global UTC timestamp
+      const distanceStart = startDate - now;
+
+      if (distanceStart < 0) {
+        clearInterval(updateInterval);
+        timer.querySelector(".days").innerHTML = '00';
+        timer.querySelector(".hours").innerHTML = '00';
+        timer.querySelector(".minutes").innerHTML = '00';
+        timer.querySelector(".seconds").innerHTML = '00';
+        return;
+      }
+
+      const days = Math.floor(distanceStart / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distanceStart % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distanceStart % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distanceStart % (1000 * 60)) / 1000);
 
       // Display the result
       timer.querySelector(".days").innerHTML = days.
@@ -142,11 +172,6 @@
       timer.querySelector(".seconds").innerHTML = seconds.
         toString().padStart(2, '0');
 
-      // If the countdown is over, display a message
-      if (distance < 0) {
-        clearInterval(x);
-        document.getElementById("countdown").innerHTML = "EXPIRED";
-      }
     }, 1000);
   })
 

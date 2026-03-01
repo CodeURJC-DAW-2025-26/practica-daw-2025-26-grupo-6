@@ -1,5 +1,6 @@
 package com.grupo6daw.lcdd_daw.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByValidatedTrue();
     List<Event> findByValidatedFalse();
+    List<Event> findByEventEndDateAfterOrderByEventEndDateAsc(LocalDateTime date);
 
 
     
