@@ -260,17 +260,20 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - Javier Cai Lin**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Implementar las funciones de la pagina del administrador que seria: implementar la funcionalidad de las gráficas de juegos favoritos y eventos con mas participantes, creación de la lista de usuarios de la aplicación, validación por parte del administrador a la hora de crear eventos y noticias nuevas y funcionalidades sueltas como la de implementar la funcion de añadir juegos favoritos de un usuario y el ocultar los botones de edicion de los perfiles que no sea del usuario que ha iniciado sesion o administrador
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Se añade la gráfica para los juegos con mas favoritos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/d0faf5f6822f81af011612bcf3faeb20b962196e)  | [admin.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/resources/templates/admin.html)   |
+|2| [Se añade la gráfica para los eventos con mas participantes](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b5f656c23c73100f9464c218e827c29e6640e383)  | [AdministrationController.java
+](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationController.java)   |
+|3| [Implementado la funcionalidad de solo mostrar los eventos validados al público y los no validados en la pagina de administrador](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/f0d45a70079127e8f5d76e5b71524f962e4c9c69)  | [UserController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/UserController.java)   |
+|4| [Implementado la funcionalidad de solo mostrar las notiicas validadas al público y las no validadas en la pagina de administrador](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/ac6bb5b72aab14e40f5b18683f266109df8a0c35)  | [EventsController.java
+](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/EventsController.java)   |
+|5| [Implementado la lista de usuarios registrados en la pagina de administrador](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/32fb70885150892eaaa6b9537ccc871ff8f12f31)  | [profile.html
+](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/resources/templates/profile.html)   |
 
 ---
 
