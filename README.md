@@ -179,7 +179,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 ## 🛠 **Práctica 1: Web con HTML generado en servidor y AJAX**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
+📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=OTDyAIe8YP8)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Navegación y Capturas de Pantalla**
@@ -386,17 +386,17 @@ Preparar la configuración inicial de Spring en el proyecto. Implementar guardad
 
 ---
 
-#### **Alumno 5 - [Nombre Completo]**
+#### **Alumno 5 - Anthony Lattanzi Salas**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Principalmente añadir la estructuración de mustache para los html al igual que mantener las páginas limpias y visualmente agradables. He corregido pequeños errores a lo largo de las plantillas y filtros. Mi zona principal de trabajo a side con el header y el footer al igual que cualquier arreglo del mustache.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Adición de header y footer mediante mustache]([URL_commit_1](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/compare/de1e70213dca5baabf2b9fd01b20438d0c2ac066...37ee6e5902a0359dee1dfa4bf3a0701a5ed20d05))  | [profile.html]([URL_archivo_1](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/lcdd-daw/src/main/resources/templates/profile.html))   |
+|2| [Multiple entities modified plus log out button added]([URL_commit_2](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/compare/8fe76645a1db5471bc704bc364f63a490a7102df...c35a8ce73f641e9b0665c41f9f7e7e542b973db5))  | [games.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/lcdd-daw/src/main/resources/templates/games.html)   |
+|3| [Multiple mustache structures added](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/compare/ed485a5c4a48dc78004d5bc876eb35e631d98293...27349de5b5462fb60b7e0b30d025ebf3cd627836)  | [news.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/lcdd-daw/src/main/resources/templates/news.html)   |
+|4| [Social media links added and a filter problem fixed](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/compare/02e96ca6d99d1ce22dc7b81db17a568bafd51c26...10f68e6305b8fac579e46cf88edd90520fb613a0)  | [footer.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/lcdd-daw/src/main/resources/templates/footer.html)   |
+|5| [Added the first mustache structures](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/compare/84ddf4314a8795650caa3081be5f1ba3e3973941...0dce5b1a531d6aa02d81bd41e924ea0d8055471a)  | [admin.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/lcdd-daw/src/main/resources/templates/admin.html)   |
 
 ---
 
