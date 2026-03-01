@@ -58,6 +58,24 @@
                 <br>
 
                 <div class="form-field">
+                  <label for="startDate" class="required-label">Fecha de inicio:</label>
+                  <input type="datetime-local" class="form-control" name="eventStartDate" id="startDate" min="{{currentDatetime}}" value="{{eventStartDate}}" required>
+                  <div class="invalid-feedback">
+                    La fecha de inicio no puede ser anterior a la actual.
+                  </div>
+                </div>
+                <br>
+
+                <div class="form-field">
+                  <label for="endDate" class="required-label">Fecha de fin:</label>
+                  <input type="datetime-local" class="form-control" name="eventEndDate" id="endDate" value="{{eventEndDate}}" required>
+                  <div class="invalid-feedback">
+                    La fecha de fin debe ser posterior a la de inicio.
+                  </div>
+                </div>
+                <br>
+
+                <div class="form-field">
                   <label for="eventTag">Tag del evento:</label>
                   <input type="text" name="eventTag" id="eventTag" value="{{eventTag}}">
                 </div>

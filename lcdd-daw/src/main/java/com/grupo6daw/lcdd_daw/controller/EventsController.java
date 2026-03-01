@@ -1,6 +1,8 @@
 package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -92,6 +94,10 @@ public String events(Model model,
 				boolean isAdmin = request.isUserInRole("ADMIN");
 				hasEditPermission = isOwner || isAdmin;
 			}
+
+			model.addAttribute("formattedStartDate", event.get().getFormattedStartDate());
+			model.addAttribute("formattedEndDate", event.get().getFormattedEndDate());
+
 			model.addAttribute("hasEditPermission", hasEditPermission);
 		}
 		return "detail_event_page";
@@ -108,11 +114,15 @@ public String events(Model model,
 		Event event = new Event();
 		event.setEventName("");
 		event.setEventDescription("");
+		event.setEventStartDate(LocalDateTime.now().plusHours(1));
+		event.setEventEndDate(LocalDateTime.now().plusHours(2));
 		event.setEventTag("");
 		event.setLink("");
 		event.setRequiresRegistration(false);
 
 		model.addAttribute("event", event);
+
+		model.addAttribute("currentDatetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
 
 		model.addAttribute("hasErrors", false);
 		model.addAttribute("allErrors", new ArrayList<String>());
@@ -140,6 +150,8 @@ public String events(Model model,
 				model.addAttribute("token", csrfToken.getToken());
 			}
 
+			model.addAttribute("currentDatetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+
 			model.addAttribute("hasErrors", false);
 			model.addAttribute("allErrors", new ArrayList<String>());
 
@@ -164,6 +176,20 @@ public String events(Model model,
 		}
 		if (bindingResult.hasFieldErrors("eventDescription")) {
 			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
+		}
+		if (bindingResult.hasFieldErrors("eventStartDate")) {
+			errorMessages.add(bindingResult.getFieldError("eventStartDate").getDefaultMessage());
+		}
+		if (bindingResult.hasFieldErrors("eventEndDate")) {
+			errorMessages.add(bindingResult.getFieldError("eventEndDate").getDefaultMessage());
+		}
+
+		// Check if dates are valid
+		if (!event.getStartLocalDateTime().isBefore(event.getEndLocalDateTime())) {
+			errorMessages.add("La fecha de inicio debe ser anterior a la fecha de fin");
+		}
+		if (event.getStartLocalDateTime().isBefore(LocalDateTime.now())) {
+			errorMessages.add("La fecha de inicio debe ser posterior a la fecha actual");
 		}
 
 		// Checking the registration requirement and link)

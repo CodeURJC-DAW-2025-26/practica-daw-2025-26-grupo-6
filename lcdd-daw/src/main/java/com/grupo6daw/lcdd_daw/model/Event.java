@@ -1,8 +1,12 @@
 package com.grupo6daw.lcdd_daw.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -37,8 +42,17 @@ public class Event {
     @JoinColumn(name = "fk_image") // Forcing column to change name to 'fk_image'
     private Image eventImage;
 
-    private String eventTag;
+    @NotNull(message = "La fecha de inicio no puede estar vacía")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") 
+    LocalDateTime eventStartDate;
 
+    @NotNull(message = "La fecha de fin no puede estar vacía")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") 
+    LocalDateTime eventEndDate;
+
+    
+    private String eventTag;
+    
     private boolean requiresRegistration;
 
     @Size(max = 255, message = "El enlace no puede superar los 255 caracteres")
@@ -50,13 +64,13 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "fk_creator") // Forcing column to change name to 'fk_creator'
     private User eventCreator;
-
+    
     @OneToMany
     private List<New> eventNews;
 
     @Column(nullable = false)
     private boolean validated = false;
-
+    
     public boolean isValidated() {
         return validated;
     }
@@ -67,15 +81,18 @@ public class Event {
 
     public Event() {
     }
-
-    public Event(String eventName, String eventDescription, String eventTag, boolean validated) {
+    
+    public Event(String eventName, String eventDescription, String eventTag, LocalDateTime eventStartDate, LocalDateTime eventEndDate, boolean validated) {
         super();
         this.eventName = eventName;
         this.eventDescription = eventDescription;
         this.eventTag = eventTag;
+        this.eventStartDate = eventStartDate;
+        this.eventEndDate = eventEndDate;
+
         this.validated = validated;
     }
-
+    
     public Long getEventId() {
         return eventId;
     }
@@ -83,7 +100,7 @@ public class Event {
     public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
-
+    
     public String getEventName() {
         return eventName;
     }
@@ -95,11 +112,11 @@ public class Event {
     public String getEventDescription() {
         return eventDescription;
     }
-
+    
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
-
+    
     public Image getEventImage() {
         return eventImage;
     }
@@ -115,19 +132,19 @@ public class Event {
     public void setEventTag(String eventTag) {
         this.eventTag = eventTag;
     }
-
+    
     public Set<User> getEventRegisteredUsers() {
         return eventRegisteredUsers;
     }
-
+    
     public void setEventRegisteredUsers(Set<User> eventRegisteredUsers) {
         this.eventRegisteredUsers = eventRegisteredUsers;
     }
-
+    
     public User getEventCreator() {
         return eventCreator;
     }
-
+    
     public void setEventCreator(User eventCreator) {
         this.eventCreator = eventCreator;
     }
@@ -135,11 +152,11 @@ public class Event {
     public List<New> getEventNews() {
         return eventNews;
     }
-
+    
     public void setEventNews(List<New> eventNews) {
         this.eventNews = eventNews;
     }
-
+    
     public boolean isRequiresRegistration() {
         return requiresRegistration;
     }
@@ -147,12 +164,44 @@ public class Event {
     public void setRequiresRegistration(boolean requiresRegistration) {
         this.requiresRegistration = requiresRegistration;
     }
-
+    
     public String getLink() {
         return link;
     }
 
     public void setLink(String link) {
         this.link = link;
+    }
+    
+    public String getEventStartDate() {
+        return eventStartDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+    }
+    
+    public void setEventStartDate(LocalDateTime eventStartDate) {
+        this.eventStartDate = eventStartDate;
+    }
+    
+    public String getEventEndDate() {
+        return eventEndDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+    }
+    
+    public void setEventEndDate(LocalDateTime eventEndDate) {
+        this.eventEndDate = eventEndDate;
+    }
+
+    public String getFormattedStartDate() {
+        return eventStartDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
+    }
+
+    public String getFormattedEndDate() {
+        return eventEndDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
+    }
+
+    public LocalDateTime getStartLocalDateTime() {
+        return eventStartDate;
+    }
+
+    public LocalDateTime getEndLocalDateTime() {
+        return eventEndDate;
     }
 }

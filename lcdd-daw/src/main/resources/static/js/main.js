@@ -257,6 +257,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // EndDate validation
+  const startDate = document.getElementById('startDate');
+  const endDate = document.getElementById('endDate');
+  
+  function endDateValidation() {
+    const startInput = document.getElementById('startDate');
+    const endInput = document.getElementById('endDate');
+    const startDate = new Date(startInput.value);
+    const endDate = new Date(endInput.value);
+    if (startDate > endDate) {
+      endInput.setCustomValidity("La fecha de fin debe ser posterior a la de inicio.");
+    } else {
+      endInput.setCustomValidity("");
+    }
+  }
+  startDate.addEventListener("change", endDateValidation);
+  endDate.addEventListener("change", endDateValidation);
 });
 
 document.addEventListener('DOMContentLoaded', function () {

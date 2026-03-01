@@ -2,6 +2,7 @@ package com.grupo6daw.lcdd_daw.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -216,7 +217,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Evento de juegos de mesa Octubre 2026").isEmpty()) {
       Event event1 = new Event("Evento de juegos de mesa Octubre 2026",
           "🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟\nLa asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de juegos de mesa para que venga a jugar y divertirse todo el mundo.",
-          "Cartas", true);
+          "Cartas", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"), true);
       setEventImage(event1, "/sample_images/events/event.jpg");
       eventService.save(event1);
     }
@@ -224,7 +225,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Maratón 12h: Juegos de Mesa").isEmpty()) {
       Event event2 = new Event("Maratón 12h: Juegos de Mesa",
           "📦🏰 ¿Aguantarás 12 horas seguidas jugando? Desde los clásicos Catan y Carcassonne hasta los pesados como Terraforming Mars. ¡Ven cuando quieras!",
-          "Juego de mesa", true);
+          "Juego de mesa", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event2, "/sample_images/events/maraton.jpg");
       eventService.save(event2);
     }
@@ -232,7 +233,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Copa de Kanto: Pokémon TCG").isEmpty()) {
       Event event3 = new Event("Copa de Kanto: Pokémon TCG",
           "⚡🐭 ¡Hazte con todos! Participa en nuestro torneo oficial de Pokémon. Habrá cartas promo para los participantes y sobres para el top 3.",
-          "Cartas", true);
+          "Cartas", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event3, "/sample_images/events/pokemon_cup.jpg");
       eventService.save(event3);
     }
@@ -240,7 +241,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Tarde de Juegos Rápidos").isEmpty()) {
       Event event4 = new Event("Tarde de Juegos Rápidos",
           "💨🃏 Virus!, Taco Gato, ¡Mía! y más. Partidas rápidas y muchas risas en esta tarde dedicada a los juegos más dinámicos de la asociación.",
-          "Juego de mesa", true);
+          "Juego de mesa", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event4, "/sample_images/events/filler_afternoon.jpg");
       eventService.save(event4);
     }
@@ -248,7 +249,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Liga de Estrategia: Temporada 1").isEmpty()) {
       Event event5 = new Event("Liga de Estrategia: Temporada 1",
           "👑🗺 ¿Eres el mejor estratega? Apúntate a nuestra liga trimestral de juegos de tablero. Suma puntos cada semana y encabeza el ranking.",
-          "Juego de mesa", true);
+          "Juego de mesa", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event5, "/sample_images/events/strategy_league.jpg");
       eventService.save(event5);
     }
@@ -256,7 +257,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Duelo al Sol: Torneo de Bang!").isEmpty()) {
       Event event6 = new Event("Duelo al Sol: Torneo de Bang!",
           "🤠🔫 Sheriff, alguaciles o forajidos... ¿quién sobrevivirá? Ven a participar en este torneo del juego de cartas más famoso del Oeste.",
-          "Cartas", true);
+          "Cartas", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event6, "/sample_images/events/bang_tournament.jpg");
       eventService.save(event6);
     }
@@ -264,7 +265,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Día del Novato: Aprende a Rolear").isEmpty()) {
       Event event7 = new Event("Día del Novato: Aprende a Rolear",
           "🎲🔰 ¿Te da miedo empezar? No te preocupes. Evento diseñado exclusivamente para gente que nunca ha tocado un dado de 20 caras.",
-          "Rol", true);
+          "Rol", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event7, "/sample_images/events/beginner_role.jpg");
       eventService.save(event7);
     }
@@ -272,7 +273,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Campeonato de Carcassonne URJC").isEmpty()) {
       Event event8 = new Event("Campeonato de Carcassonne URJC",
           "🧩🏰 Coloca tus losetas y tus monjes estratégicamente. Torneo clasificatorio con reglamento de torneo nacional.",
-          "Juego de mesa", true);
+          "Juego de mesa", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event8, "/sample_images/events/carcassonne_tourney.jpg");
       eventService.save(event8);
     }
@@ -280,7 +281,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Torneo de Virus!: Epidemia en la URJC").isEmpty()) {
       Event event9 = new Event("Torneo de Virus!: Epidemia en la URJC",
           "☣️👨‍⚕️ ¡El laboratorio se ha descontrolado! Ven a participar en el torneo del juego más rápido de Tranjis. ¿Lograrás tener tus cuatro órganos sanos antes que nadie?",
-          "Juego de mesa", true);
+          "Juego de mesa", LocalDateTime.parse("2026-01-01T00:00"), LocalDateTime.parse("2026-02-01T02:32"),true);
       setEventImage(event9, "/sample_images/events/virus_torneo.jpg");
       eventService.save(event9);
     }
@@ -288,7 +289,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Yu-Gi-Oh!: Torneo Goat Format").isEmpty()) {
       Event event10 = new Event("Yu-Gi-Oh!: Torneo Goat Format",
           "🔙🃏 Volvemos a los orígenes. Un torneo nostálgico con las reglas y cartas del año 2005. ¡Saca tus viejas glorias del baúl!",
-          "Cartas", true);
+          "Cartas", LocalDateTime.parse("2026-10-02T15:00"), LocalDateTime.parse("2026-10-02T20:30"),true);
       setEventImage(event10, "/sample_images/events/ygo_goat.jpg");
       eventService.save(event10);
     }
@@ -296,7 +297,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("La Gran Gymkana de La Caverna").isEmpty()) {
       Event event11 = new Event("La Gran Gymkana de La Caverna",
           "🏃‍♂️🎲 Supera pruebas rápidas de distintos juegos de mesa para ganar puntos. Una competición por equipos loca y muy divertida.",
-          "Juego de mesa", true);
+          "Juego de mesa", LocalDateTime.parse("2026-03-05T10:00"), LocalDateTime.parse("2026-03-05T12:00"),true);
       setEventImage(event11, "/sample_images/events/gymkana_event.jpg");
       eventService.save(event11);
     }
