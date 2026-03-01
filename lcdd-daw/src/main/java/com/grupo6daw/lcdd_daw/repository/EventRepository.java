@@ -35,7 +35,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByValidatedTrue();
     List<Event> findByValidatedFalse();
-    List<Event> findByEventEndDateAfter(LocalDateTime date);
+    List<Event> findByEventEndDateAfterOrderByEventEndDateAsc(LocalDateTime date);
 
 
     

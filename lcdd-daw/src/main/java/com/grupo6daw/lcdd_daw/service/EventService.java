@@ -77,7 +77,7 @@ public class EventService {
     }
 
     public List<Event> findByEventEndDateAfter(LocalDateTime date) {
-        return repository.findByEventEndDateAfter(date);
+        return repository.findByEventEndDateAfterOrderByEventEndDateAsc(date);
     }
 
     public Page<Event> findValidatedByFilter(String name, String tag, Pageable page) {
