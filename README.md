@@ -232,17 +232,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ### **Participación de Miembros en la Práctica 1**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - Carlos García Pérez**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Hice todas las validaciones, en front y backend de los eventos, los juegos y las noticias. También he añadido validaciones al login, al registro, y al editar datos en el perfil. He cambiado visualmente casi todas las páginas para que tengan un look más moderno y que no parezca tanto una web plana. He añadido seguridad en las validaciones, por ejemplo en las imágenes, para cubrir que solo se puedan subir archivos específicos. También he estado a cargo de ordenar y estructurar los scripts de todas las páginas. He hecho la parte de poder apuntarse a eventos, con el visor a tiempo real del aforo y su propia limitación (no te deja apuntarte si está lleno) y la posibilidad para el creador y los admins de ver la lista de apuntados y poder entrar en sus perfiles desde ahi.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Añadidas validaciones front y back al login](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/afd532face33c8536d6da4efda2e0823091b0f96)  | [main.js](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/resources/static/js/main.js)   |
+|2| [Añadidas validaciones front y back en juegos y arreglado el formulario de eventos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/da4cec901b76769855620735ce229620bb7a32de)  | [EventsController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/EventsController.java)  |
+|3| [Añadidas validaciones front y back en eventos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/beaf34c2bbcf61a18c181bef9951d2da8513923e) | [event_form.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/resources/templates/event_form.html)   |
+|4| [Añadida la lógica de apuntarse a eventos, con toda su estructura](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/835fa81ddedb620cb787037c74ff3232dc1d46d2)  | [detail_event_page.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/resources/templates/detail_event_page.html)   |
+|5| [Añadida la posibilidad de previsualizar la imagen de perfil antes de guardarla, validaciones al modificar todo el perfil y varios cambios esteticos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b36ff20b5a45ddcf1e0cc593277a40e730a29423)  | [ImageValidationService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/service/ImageValidationService.java)   |
 
 ---
 
