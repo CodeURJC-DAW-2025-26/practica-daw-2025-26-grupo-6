@@ -8,10 +8,8 @@
         <div class="col-lg-5 col-md-12">
           <div class="project-hero-container"
             style="background-color: #f4f4f4; border-radius: 12px; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 450px; max-height: 650px; width: 100%; position: relative;">
-
             <img src="/images/{{event.eventImage.id}}" class="img-fluid"
               style="max-width: 100%; max-height: 650px; width: auto; height: auto; display: block; object-fit: contain;">
-
             <div style="position: absolute; top: 15px; right: 15px; z-index: 10;">
               <span class="badge rounded-pill px-3 py-2 shadow"
                 style="background-color: #a71b12; color: white; font-weight: 500; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.2);">
@@ -39,29 +37,39 @@
               </div>
             </div>
 
-            <div class="project-description mb-4"
-  style="font-size: 1.05rem; line-height: 1.6; color: #444; overflow-wrap: break-word; word-wrap: break-word; white-space: pre-wrap;">{{event.eventDescription}}</div>
-
-            <div class="row align-items-center mt-4">
-              {{#event.requiresRegistration}}
-              <div class="col-auto">
-                <a href="{{event.link}}" target="_blank" rel="noopener noreferrer"
-                  class="btn btn-danger rounded-pill px-4 shadow-sm" style="background-color: #a71b12; border: none;">
-                  <i class="bi bi-box-arrow-up-right me-1"></i> Enlace de inscripción
-                </a>
-              </div>
-              {{/event.requiresRegistration}}
+            <div class="project-description mb-4">
+              <p class="text-secondary"
+                style="font-size: 1.05rem; line-height: 1.6; overflow-wrap: break-word; word-wrap: break-word;">
+                {{event.eventDescription}}
+              </p>
             </div>
 
-            {{#hasEditPermission}}
-            <div class="row mt-5 pt-3 border-top align-items-center">
-              <div class="col-auto">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mt-5 pt-3 border-top gap-3">
+
+              <div class="d-flex flex-wrap align-items-center gap-2">
+
+                {{#event.requiresRegistration}}
+                <a href="{{event.link}}" target="_blank" rel="noopener noreferrer"
+                  class="btn btn-danger rounded-pill px-4 shadow-sm" style="background-color: #a71b12; border: none;">
+                  <i class="bi bi-box-arrow-up-right me-1"></i> Página de registro
+                </a>
+                {{/event.requiresRegistration}}
+
+                <form action="/event/{{event.eventId}}/join" method="post" class="m-0">
+                  <button type="submit" class="btn btn-dark rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-person-plus-fill me-1"></i> Apuntarme
+                  </button>
+                  <input type="hidden" name="_csrf" value="{{token}}" />
+                </form>
+
+              </div>
+
+              {{#hasEditPermission}}
+              <div class="d-flex flex-wrap align-items-center gap-3">
                 <a class="btn btn-link text-primary text-decoration-none p-0" href="/event_form/{{event.eventId}}">
                   <i class="bi bi-pencil-square me-1"></i> Modificar evento
                 </a>
-              </div>
 
-              <div class="col-auto ms-3">
                 <form action="/removeEvent/{{event.eventId}}" method="post" class="m-0"
                   onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?');">
                   <button type="submit" class="btn btn-link text-danger text-decoration-none p-0"
@@ -71,9 +79,9 @@
                   <input type="hidden" name="_csrf" value="{{token}}" />
                 </form>
               </div>
-            </div>
-            {{/hasEditPermission}}
+              {{/hasEditPermission}}
 
+            </div>
           </div>
         </div>
       </div>
