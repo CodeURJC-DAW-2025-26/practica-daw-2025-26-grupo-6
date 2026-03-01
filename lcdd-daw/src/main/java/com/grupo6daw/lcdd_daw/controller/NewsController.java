@@ -185,6 +185,11 @@ public class NewsController {
 		}
 
 		newService.save(newPost);
+
+		if (isNewPost) {
+        currentUser.getUserNews().add(newPost);
+        userService.save(currentUser); 
+    }
 		return "redirect:/news";
 	}
 

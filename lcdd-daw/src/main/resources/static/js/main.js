@@ -432,6 +432,25 @@ document.addEventListener('DOMContentLoaded', function () {
   const imagePreview = document.getElementById('profile-img-preview');
   const fileInput = document.getElementById('image');
 
+const emailInput = document.querySelector('input[name="email"]');
+const passwordInput = document.getElementById('new-password');
+
+if (updateForm) {
+  updateForm.addEventListener('submit', function(event) {
+    // Comprobamos si el email ha cambiado o si hay texto en la contraseña
+    const emailChanged = emailInput.value !== originalValues['email'];
+    const passwordChanged = passwordInput.value.trim() !== "";
+
+    if (emailChanged || passwordChanged) {
+      const confirmacion = confirm("Has cambiado tus credenciales de acceso (correo o contraseña). Por seguridad, se cerrará tu sesión y deberás entrar con los nuevos datos. ¿Deseas continuar?");
+      
+      if (!confirmacion) {
+        event.preventDefault(); // Si cancela, no se envía el formulario
+      }
+    }
+  });
+}
+
   // saving original image src to revert back if user cancels editing, only if the image preview element exists on the page (profile.html)
   let originalImageSrc = imagePreview ? imagePreview.src : '';
   const originalValues = {};

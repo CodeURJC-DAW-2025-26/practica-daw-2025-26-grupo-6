@@ -27,6 +27,8 @@ import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Sort;
+
 @Controller
 public class GamesController {
 
@@ -47,14 +49,15 @@ public class GamesController {
 			@RequestParam(required = false) Integer duration,
 			@RequestParam(defaultValue = "0") int page) {
 
-		Page<Game> gamesPage = gameService.findByFilter(name, tag, players, duration, PageRequest.of(page, 10));
+		Page<Game> gamesPage = gameService.findByFilter(name, tag, players, duration,
+				PageRequest.of(page, 10, Sort.by("gameId").descending()));
 
 		model.addAttribute("game", gamesPage.getContent());
 		model.addAttribute("name", name == null ? "" : name);
 		model.addAttribute("tag", tag == null ? "" : tag);
 		model.addAttribute("hasNext", gamesPage.hasNext());
 		model.addAttribute("nextPage", page + 1);
-		
+
 		return "games";
 	}
 
@@ -156,7 +159,7 @@ public class GamesController {
 			if (bindingResult.hasFieldErrors("maxDuration"))
 				errorMessages.add(bindingResult.getFieldError("maxDuration").getDefaultMessage());
 
-			// Token CSRF 
+			// Token CSRF
 			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 			if (csrfToken != null)
 				model.addAttribute("token", csrfToken.getToken());

@@ -12,6 +12,13 @@
               <p>Introduce tus credenciales para acceder a La Caverna del Dragón.</p>
             </div>
 
+            {{#loginMessage}}
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+              <i class="bi bi-info-circle-fill me-2"></i> {{loginMessage}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{/loginMessage}}
+
             {{#loginError}}
             <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert"
               style="border-left: 5px solid #890f00;">

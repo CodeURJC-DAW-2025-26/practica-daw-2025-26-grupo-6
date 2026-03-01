@@ -33,6 +33,8 @@ import com.grupo6daw.lcdd_daw.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Sort;
+
 @Controller
 public class EventsController {
 
@@ -67,7 +69,8 @@ public String events(Model model,
     @RequestParam(required = false) String tag,
     @RequestParam(defaultValue = "0") int page) {
 
-    Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag, PageRequest.of(page, 10));
+    Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag, 
+    PageRequest.of(page, 10, Sort.by("eventId").descending()));
 
     model.addAttribute("event", eventsPage.getContent());
     model.addAttribute("name", name == null ? "" : name);

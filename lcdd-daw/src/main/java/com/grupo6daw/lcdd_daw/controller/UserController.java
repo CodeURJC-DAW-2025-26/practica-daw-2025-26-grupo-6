@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo6daw.lcdd_daw.dto.ProfileUpdateDTO;
 import com.grupo6daw.lcdd_daw.model.User;
@@ -67,17 +68,14 @@ public class UserController {
     }
 
     @PostMapping("/user/{id}/update")
-    public String updateProfile(Model model,
-            @Valid ProfileUpdateDTO dto,
-            BindingResult bindingResult,
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication,
-            @PathVariable long id) throws IOException {
+    public String updateProfile(Model model, @Valid ProfileUpdateDTO dto, BindingResult bindingResult,
+            HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication, @PathVariable long id,
+            RedirectAttributes redirectAttributes) throws IOException {
 
         boolean admin = (boolean) model.getAttribute("admin");
-        // Usamos el valueOf de tu compañero
         Long userId = Long.valueOf((String) model.getAttribute("userId"));
+        boolean credentialsChanged = userService.updateProfile(id, dto);
 
         if (!admin && userId != id) {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
@@ -109,13 +107,13 @@ public class UserController {
             return "profile";
         }
 
-        boolean credentialsChanged = userService.updateProfile(id, dto);
-
         if (credentialsChanged && authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
-            return "redirect:/login?logout";
+            
+            redirectAttributes.addFlashAttribute("loginMessage",
+                    "Tus credenciales han cambiado correctamente. Por favor, inicia sesión con tus nuevos datos.");
+            return "redirect:/login";
         }
-
         return "redirect:/user/" + id;
     }
 
