@@ -13,8 +13,8 @@
                 un evento
               </h3>
               <p>
-                {{#event.eventId}}Modifica los datos del evento seleccionado (serán validados por un administrador).{{/event.eventId}}
-                {{^event.eventId}}Rellena los campos para registrar un nuevo evento (serán validados por un administrador).{{/event.eventId}}
+                {{#event.eventId}}Modifica los datos del evento seleccionado.{{/event.eventId}}
+                {{^event.eventId}}Rellena los campos para registrar un nuevo evento.{{/event.eventId}}
               </p>
             </div>
 
@@ -31,137 +31,153 @@
             </div>
             {{/hasErrors}}
 
+            {{#event}}
             <form method="post" action="/event_form" enctype="multipart/form-data"
               class="custom-login-form needs-validation" novalidate>
-              {{#event}}
-              <div class="form">
-                <input type="hidden" name="eventId" value="{{#eventId}}{{eventId}}{{/eventId}}" />
+              <div class="row g-4">
 
-                <div class="form-field">
-                  <label for="eventName" class="required-label">Nombre del evento:</label>
-                  <input type="text" class="form-control" name="eventName" id="eventName" value="{{eventName}}"
-                    minlength="5" maxlength="100" required>
-                  <div class="invalid-feedback">
-                    El nombre del evento debe tener entre 5 y 100 caracteres.
+                {{#eventId}}
+                <input type="hidden" name="eventId" value="{{eventId}}" />
+                {{/eventId}}
+
+                <div class="col-md-8">
+                  <div class="form-field">
+                    <label for="eventName" class="required-label fw-bold mb-2">Nombre del evento</label>
+                    <input type="text" class="form-control shadow-sm" name="eventName" id="eventName"
+                      value="{{eventName}}" placeholder="Ej: Torneo de Catán" minlength="5" maxlength="100" required>
+                    <div class="invalid-feedback">El nombre debe tener entre 5 y 100 caracteres.</div>
                   </div>
                 </div>
-                <br>
 
-                <div class="form-field full-width">
-                  <label for="eventDescription" class="required-label">Descripción:</label>
-                  <textarea name="eventDescription" id="eventDescription" rows="5" class="form-control" minlength="50"
-                    maxlength="3000" required>{{eventDescription}}</textarea>
-                  <div class="invalid-feedback">
-                    La descripción debe tener entre 50 y 3000 caracteres.
+                <div class="col-md-4">
+                  <div class="form-field">
+                    <label for="eventTag" class="fw-bold mb-2">Categoría (Tag)</label>
+                    <input type="text" class="form-control shadow-sm" name="eventTag" id="eventTag" value="{{eventTag}}"
+                      placeholder="Ej: Rol, Cartas...">
                   </div>
                 </div>
-                <br>
 
-                <div class="form-field">
-                  <label for="startDate" class="required-label">Fecha de inicio:</label>
-                  <input type="datetime-local" class="form-control" name="eventStartDate" id="startDate" min="{{currentDatetime}}" value="{{eventStartDate}}" required>
-                  <div class="invalid-feedback">
-                    La fecha de inicio no puede ser anterior a la actual.
+                <div class="col-12 mt-4">
+                  <div class="registration-box p-4 border rounded-4 bg-light shadow-sm">
+                    <label class="fw-bold mb-3 d-block text-dark"><i class="bi bi-calendar-event me-2"></i>Fecha y
+                      Aforo</label>
+
+                    <div class="row g-4 align-items-start">
+
+                      <div class="col-md-6">
+                        <label for="eventDate" class="required-label fw-bold mb-2 small text-muted">Día del
+                          evento</label>
+                        <input type="date" class="form-control shadow-sm" name="eventDate" id="eventDate"
+                          value="{{eventDateForForm}}" required>
+                        <div class="invalid-feedback">Selecciona una fecha válida.</div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="maxParticipants" class="fw-bold mb-2 small text-muted">Aforo Máximo <i
+                            class="bi bi-people"> </i></label>
+                        <div class="input-group shadow-sm">
+                          <input type="number" class="form-control" name="maxParticipants" id="maxParticipants"
+                            value="{{maxParticipantsForForm}}" placeholder="Ilimitado" min="1">
+                        </div>
+                      </div>
+
+                    </div>
                   </div>
                 </div>
-                <br>
 
-                <div class="form-field">
-                  <label for="endDate" class="required-label">Fecha de fin:</label>
-                  <input type="datetime-local" class="form-control" name="eventEndDate" id="endDate" value="{{eventEndDate}}" required>
-                  <div class="invalid-feedback">
-                    La fecha de fin debe ser posterior a la de inicio.
+                <div class="col-12 mt-4">
+                  <div class="form-field p-3 border rounded-3 bg-light h-100 d-flex flex-column justify-content-center">
+                    <label for="imageField" class="required-label">Imagen de cabecera:</label>
+
+                    {{^eventId}}
+                    <input type="file" name="imageField" id="imageField" class="form-control"
+                      accept=".jpg, .jpeg, .png, .webp" required>
+                    {{/eventId}}
+
+                    {{#eventId}}
+                    <input type="file" name="imageField" id="imageField" class="form-control"
+                      accept=".jpg, .jpeg, .png, .webp">
+                    {{/eventId}}
+                    <div class="invalid-feedback">
+                      Debes subir una imagen válida (JPG, PNG o WebP).
+                    </div>
                   </div>
                 </div>
-                <br>
 
-                <div class="form-field">
-                  <label for="eventTag">Tag del evento:</label>
-                  <input type="text" name="eventTag" id="eventTag" value="{{eventTag}}">
-                </div>
-                <br>
-
-                <div class="form-field">
-                  <label for="imageField" class="required-label">Imagen del evento:</label>
-                  {{#eventId}}
-                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*">
-                  {{/eventId}}
-
-                  {{^eventId}}
-                  <input type="file" name="imageField" id="imageField" class="form-control" accept="image/*"
-                    accept=".jpg, .jpeg, .png, .webp" required>
-                  {{/eventId}}
-                  <div class="invalid-feedback">
-                    Por favor, sube una imagen válida para el evento.
+                <div class="col-12">
+                  <div class="form-field">
+                    <label for="eventDescription" class="required-label fw-bold mb-2">Descripción del evento</label>
+                    <textarea name="eventDescription" id="eventDescription" rows="5" class="form-control shadow-sm"
+                      placeholder="Cuéntanos de qué trata el evento..." minlength="50" maxlength="3000"
+                      required>{{eventDescription}}</textarea>
+                    <div class="invalid-feedback">La descripción debe tener entre 50 y 3000 caracteres.</div>
                   </div>
                 </div>
-                <br>
 
-                <div class="form-field">
-                  <label class="mb-2">¿El evento requiere registro?</label>
-                  <div class="btn-group w-100" role="group">
+                <div class="col-12">
+                  <div class="registration-box p-4 border rounded-4 bg-white shadow-sm"
+                    style="border-left: 5px solid #a71b12 !important;">
+                    <label class="fw-bold mb-3 d-block"><i class="bi bi-ticket-perforated me-2"></i>Gestión de
+                      Inscripciones</label>
 
-                    {{#requiresRegistration}}
-                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-si"
-                      value="true" checked>
-                    {{/requiresRegistration}}
-                    {{^requiresRegistration}}
-                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-si"
-                      value="true">
-                    {{/requiresRegistration}}
-                    <label class="btn btn-outline-primary py-2" for="req-si">Sí</label>
+                    <div class="row align-items-center">
+                      <div class="col-md-5">
+                        <p class="small text-muted mb-3 mb-md-0">¿Es necesaria una inscripción externa?</p>
+                      </div>
+                      <div class="col-md-7">
+                        <div class="btn-group w-100" role="group">
+                          {{#requiresRegistration}}
+                          <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-si"
+                            value="true" checked>
+                          <label class="btn btn-outline-danger py-2" for="req-si">Sí, requiere registro externo</label>
+                          <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-no"
+                            value="false">
+                          <label class="btn btn-outline-secondary py-2" for="req-no">No, inscripción interna</label>
+                          {{/requiresRegistration}}
 
-                    {{#requiresRegistration}}
-                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-no"
-                      value="false">
-                    {{/requiresRegistration}}
-                    {{^requiresRegistration}}
-                    <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-no"
-                      value="false" checked>
-                    {{/requiresRegistration}}
-                    <label class="btn btn-outline-secondary py-2" for="req-no">No</label>
+                          {{^requiresRegistration}}
+                          <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-si"
+                            value="true">
+                          <label class="btn btn-outline-danger py-2" for="req-si">Sí, requiere registro externo</label>
+                          <input type="radio" class="btn-check radio-registro" name="requiresRegistration" id="req-no"
+                            value="false" checked>
+                          <label class="btn btn-outline-secondary py-2" for="req-no">No, inscripción interna</label>
+                          {{/requiresRegistration}}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="link-container" class="mt-4 {{^requiresRegistration}}d-none{{/requiresRegistration}}">
+                      <label for="link" class="required-label fw-bold mb-2">Enlace de registro oficial</label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text bg-white"><i class="bi bi-link-45deg"></i></span>
+                        <input type="url" name="link" id="link" value="{{link}}" class="form-control"
+                          placeholder="https://forms.gle/...">
+                        <div class="invalid-feedback">Por favor, introduce una URL válida (ej: https://...).</div>
+                      </div>
+                      <small class="text-muted mt-2 d-block">Introduce la URL del formulario o plataforma
+                        externa.</small>
+                    </div>
                   </div>
                 </div>
-                <br>
-
-                {{#requiresRegistration}}
-                <div id="link-container" class="form-field" style="display: block;">
-                  <label for="link" class="required-label">Enlace de registro:</label>
-                  <input type="url" name="link" id="link" value="{{link}}" class="form-control" required>
-                  <div class="invalid-feedback">
-                    Por favor, introduce un enlace web válido (ej: https://forms.gle/...).
-                  </div>
-                </div>
-                {{/requiresRegistration}}
-
-                {{^requiresRegistration}}
-                <div id="link-container" class="form-field" style="display: none;">
-                  <label for="link" class="required-label">Enlace de registro:</label>
-                  <input type="url" name="link" id="link" value="{{link}}" class="form-control">
-                  <div class="invalid-feedback">
-                    Por favor, introduce un enlace web válido (ej: https://forms.gle/...).
-                  </div>
-                </div>
-                {{/requiresRegistration}}
 
               </div>
-              {{/event}}
-
-              <div class="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-2">
-                <a href="/events" class="submit-btn"
-                  style="background: #6c757d; margin-top: 0; justify-content: center; display: flex; text-decoration: none;">
-                  <i class="bi bi-arrow-left"></i>
-                  <span class="ms-2">Atrás</span>
+              <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mt-5">
+                <a href="/events"
+                  class="btn btn-lg btn-light rounded-pill px-5 border shadow-sm text-decoration-none d-flex align-items-center justify-content-center">
+                  <i class="bi bi-arrow-left me-2"></i>Atrás
                 </a>
-                <button type="submit" class="submit-btn" style="margin-top: 0; justify-content: center; display: flex;">
+                <button type="submit"
+                  class="btn btn-lg btn-danger rounded-pill px-5 shadow d-flex align-items-center justify-content-center"
+                  style="background-color: #a71b12; border: none;">
                   <span class="me-2">Guardar Evento</span>
                   <i class="bi bi-check2-circle"></i>
                 </button>
               </div>
 
               <input type="hidden" name="_csrf" value="{{token}}" />
-
             </form>
+            {{/event}}
           </div>
         </div>
       </div>

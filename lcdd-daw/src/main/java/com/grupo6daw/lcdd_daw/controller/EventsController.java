@@ -1,8 +1,7 @@
 package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +9,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,8 +34,6 @@ import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
-import org.springframework.data.domain.Sort;
 
 @Controller
 public class EventsController {
@@ -65,23 +63,23 @@ public class EventsController {
 	@Autowired
 	private ImageValidationService imageValidationService;
 
-@GetMapping("/events")
-public String events(Model model,
-    @RequestParam(required = false) String name,
-    @RequestParam(required = false) String tag,
-    @RequestParam(defaultValue = "0") int page) {
+	@GetMapping("/events")
+	public String events(Model model,
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String tag,
+			@RequestParam(defaultValue = "0") int page) {
 
-    Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag, 
-    PageRequest.of(page, 10, Sort.by("eventId").descending()));
+		Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag,
+				PageRequest.of(page, 10, Sort.by("eventId").descending()));
 
-    model.addAttribute("event", eventsPage.getContent());
-    model.addAttribute("name", name == null ? "" : name);
-    model.addAttribute("tag", tag == null ? "" : tag);
-    model.addAttribute("hasNext", eventsPage.hasNext());
-    model.addAttribute("nextPage", page + 1);
+		model.addAttribute("event", eventsPage.getContent());
+		model.addAttribute("name", name == null ? "" : name);
+		model.addAttribute("tag", tag == null ? "" : tag);
+		model.addAttribute("hasNext", eventsPage.hasNext());
+		model.addAttribute("nextPage", page + 1);
 
-    return "events";
-}
+		return "events";
+	}
 
 	@GetMapping("/event/{id}")
 	public String eventDetail(@PathVariable long id, Model model, HttpServletRequest request) {
@@ -98,8 +96,8 @@ public String events(Model model,
 				hasEditPermission = isOwner || isAdmin;
 			}
 
-			model.addAttribute("formattedStartDate", event.get().getFormattedStartDate());
-			model.addAttribute("formattedEndDate", event.get().getFormattedEndDate());
+			// Provide formatted date for the view
+			model.addAttribute("formattedDate", event.get().getFormattedDate());
 
 			model.addAttribute("hasEditPermission", hasEditPermission);
 		}
@@ -114,19 +112,17 @@ public String events(Model model,
 			model.addAttribute("token", csrfToken.getToken());
 		}
 
+		// Initialize default values for the new event
 		Event event = new Event();
 		event.setEventName("");
 		event.setEventDescription("");
-		event.setEventStartDate(LocalDateTime.now().plusHours(1).withSecond(0).withNano(0));
-		event.setEventEndDate(LocalDateTime.now().plusHours(2).withSecond(0).withNano(0));
+		event.setEventDate(LocalDate.now().plusDays(1)); // Default to tomorrow
 		event.setEventTag("");
 		event.setLink("");
 		event.setRequiresRegistration(false);
 
 		model.addAttribute("event", event);
-
-		model.addAttribute("currentDatetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
-
+		model.addAttribute("currentDate", LocalDate.now().toString());
 		model.addAttribute("hasErrors", false);
 		model.addAttribute("allErrors", new ArrayList<String>());
 
@@ -138,7 +134,6 @@ public String events(Model model,
 		Optional<Event> event = eventService.findById(id);
 
 		if (event.isPresent()) {
-			model.addAttribute("event", event.get());
 			Event e = event.get();
 
 			if (e.getLink() == null)
@@ -153,8 +148,7 @@ public String events(Model model,
 				model.addAttribute("token", csrfToken.getToken());
 			}
 
-			model.addAttribute("currentDatetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
-
+			model.addAttribute("currentDate", LocalDate.now().toString());
 			model.addAttribute("hasErrors", false);
 			model.addAttribute("allErrors", new ArrayList<String>());
 
@@ -173,43 +167,36 @@ public String events(Model model,
 		Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 		User currentUser = userService.getUser(currentUserId).orElseThrow();
 
-		// Error check (@Valid)
+		// Check basic validation errors (@Valid)
 		if (bindingResult.hasFieldErrors("eventName")) {
 			errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
 		}
 		if (bindingResult.hasFieldErrors("eventDescription")) {
 			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
 		}
-		if (bindingResult.hasFieldErrors("eventStartDate")) {
-			errorMessages.add(bindingResult.getFieldError("eventStartDate").getDefaultMessage());
-		}
-		if (bindingResult.hasFieldErrors("eventEndDate")) {
-			errorMessages.add(bindingResult.getFieldError("eventEndDate").getDefaultMessage());
+		if (bindingResult.hasFieldErrors("eventDate")) {
+			errorMessages.add(bindingResult.getFieldError("eventDate").getDefaultMessage());
 		}
 
-		// Check if dates are valid
-		if (!event.getEventStartDate().isBefore(event.getEventEndDate())) {
-			errorMessages.add("La fecha de inicio debe ser anterior a la fecha de fin");
-		}
-		if (event.getEventStartDate().isBefore(LocalDateTime.now())) {
-			errorMessages.add("La fecha de inicio debe ser posterior a la fecha actual");
+		// Custom date validation
+		if (event.getEventDate() != null && event.getEventDate().isBefore(LocalDate.now())) {
+			errorMessages.add("La fecha del evento no puede ser anterior a hoy.");
 		}
 
-		// Checking the registration requirement and link)
+		// Registration requirements and link validation
 		if (event.isRequiresRegistration()) {
 			if (event.getLink() == null || event.getLink().trim().isEmpty()) {
 				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
 			}
 		} else {
-			// if the event doesn't require registration, we ignore any link provided and
-			// set it to null
+			// Ignore any link provided and set it to null if registration is not required
 			event.setLink(null);
 		}
 
+		// Image validation
 		imageValidationService.validate(imageField, errorMessages, isNewEvent);
 
-		// if the image is provided, we check if it's a valid image file (by checking
-		// the content type)
+		// If there are errors, return to the form view
 		if (!errorMessages.isEmpty()) {
 			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 			if (csrfToken != null) {
@@ -221,9 +208,7 @@ public String events(Model model,
 			return "event_form";
 		}
 
-		// OWNER CHECK (if it's a new event, we set the owner to the current user, if
-		// it's an existing event, we check if the current user is the owner or an
-		// admin, if not, we redirect to the events page with an error)
+		// Ownership check for editing existing events
 		if (!isNewEvent) {
 			Event existingEvent = eventService.findById(event.getEventId()).get();
 			boolean isOwner = existingEvent.getEventCreator() != null
@@ -239,13 +224,12 @@ public String events(Model model,
 			event.setEventCreator(currentUser);
 		}
 
-		// IMAGE HANDLING (if a new image is uploaded, we create a new Image entity and
-		// set it to the event, if it's an existing event and no new image is uploaded,
-		// we keep the old image)
+		// Handle tags
 		if (event.getEventTag() == null) {
 			event.setEventTag("");
 		}
 
+		// Image handling: save new image or keep existing one
 		if (!imageField.isEmpty()) {
 			Image image = imageService.createImage(imageField.getInputStream());
 			event.setEventImage(image);
@@ -254,13 +238,14 @@ public String events(Model model,
 			event.setEventImage(oldEvent.getEventImage());
 		}
 
-		// Finally, we save the event
+		// Save event to the database
 		eventService.save(event);
 
+		// Assign the event to the user's list if it is newly created
 		if (isNewEvent) {
-            currentUser.getUserOwnEvents().add(event);
-            userService.save(currentUser); 
-        }
+			currentUser.getUserOwnEvents().add(event);
+			userService.save(currentUser);
+		}
 
 		return "redirect:/events";
 	}
@@ -279,6 +264,7 @@ public String events(Model model,
 				isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);
 			}
 
+			// Ensure only authorized users can delete the event
 			if (isAdmin || isOwner) {
 				eventService.delete(id);
 			}

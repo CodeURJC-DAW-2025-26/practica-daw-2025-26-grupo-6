@@ -38,6 +38,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    MailService mailService;
+
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -65,6 +68,8 @@ public class UserService {
                 "REGISTERED_USER");
 
         userRepository.save(user);
+        mailService.sendRegisterEmail(user);
+        
     }
 
     public Optional<User> getUser(long id) {

@@ -1,5 +1,6 @@
 package com.grupo6daw.lcdd_daw.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class EventService {
 
     @Autowired
     private UserRepository userRepository;
+
 
     public void delete(long id) {
         Optional<Event> eventOpt = repository.findById(id);
@@ -76,8 +78,8 @@ public class EventService {
         return repository.findByValidatedTrue();
     }
 
-    public List<Event> findByEventEndDateAfter(LocalDateTime date) {
-        return repository.findByEventEndDateAfterOrderByEventEndDateAsc(date);
+    public List<Event> findUpcomingEvents(LocalDate date) {
+        return repository.findByEventDateGreaterThanEqualOrderByEventDateAsc(date);
     }
 
     public Page<Event> findValidatedByFilter(String name, String tag, Pageable page) {
