@@ -274,7 +274,21 @@ Implementar las funciones de la pagina del administrador que seria: implementar 
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - Jaime Esteban García**
+
+Preparar la configuración inicial de Spring en el proyecto. Implementar guardado y borrado de juegos, eventos y noticias en base de datos, además de la carga de estos en la web. Adición de filtros de búsqueda en la lista de juegos, eventos y noticias. Implementación de AJAX para cargar juegos, eventos y noticias en bloques de 10 elementos. He aplicado correcciones a las plantillas con Mustache. He añadido una página de error común que sigue el estilo del resto de la web. Implementación de envío de correo cuando un se crea un evento con tag igual a uno en el que un usuario se haya apuntado.
+
+| Nº    | Commits      | Files      |
+|:------------: |:------------:| :------------:|
+|1| [Adición de página de error común con estilo similar al resto de la web](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/05e9925e0d88f279618963a37eb6551b39606a1c)  | [CustomErrorController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/05e9925e0d88f279618963a37eb6551b39606a1c/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/CustomErrorController.java)   |
+|2| [Implementación de AJAX](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/f014b219c9ac878000c26058b9fd5efd12c9404a)  | [events.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/f014b219c9ac878000c26058b9fd5efd12c9404a/lcdd-daw/src/main/resources/templates/events.html)   |
+|3| [Adición de filtros de búsqueda](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b1f9d16282cf15973740f1f8621a09699c5f1f6b)  | [GameRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/b1f9d16282cf15973740f1f8621a09699c5f1f6b/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/repository/GameRepository.java)   |
+|4| [Envío de correos cuando se crea un evento de interés del usuario](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/2b10329c0825c875e34160f5ebe8bc8c2609df4a)  | [AdministrationController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/2b10329c0825c875e34160f5ebe8bc8c2609df4a/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationController.java)   |
+|5| [Adición y eliminación de juegos, eventos y noticias en bbdd](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/de1e70213dca5baabf2b9fd01b20438d0c2ac066)  | [GameController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/de1e70213dca5baabf2b9fd01b20438d0c2ac066/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/GamesController.java)   |
+
+---
+
+#### **Alumno 5 - [Nombre Completo]**
 
 [Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
 
