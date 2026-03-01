@@ -69,6 +69,7 @@ public class WebSecurityConfig {
 						.requestMatchers("/user/*/image").permitAll()
 						.requestMatchers("/userDeleted").permitAll()
 						// PRIVATE PAGES
+						.requestMatchers("/game/*/toggle-fav").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/profile").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/event_form").hasAnyRole("REGISTERED_USER")
 						.requestMatchers("/event_form/*").hasAnyRole("REGISTERED_USER")
