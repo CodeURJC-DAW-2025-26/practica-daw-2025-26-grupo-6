@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.EventService;
+import com.grupo6daw.lcdd_daw.service.MailService;
 import com.grupo6daw.lcdd_daw.service.NewService;
 import com.grupo6daw.lcdd_daw.service.StatsService;
 import com.grupo6daw.lcdd_daw.service.UserService;
@@ -41,6 +44,10 @@ public class AdministrationController {
     private final EventService eventService;
     private final NewService newService;
     private final UserService userService;
+
+    
+    @Autowired
+    MailService mailService;
 
     public AdministrationController(StatsService statsService, EventService eventService, NewService newService, UserService userService) {
         this.statsService = statsService;
@@ -126,6 +133,13 @@ public class AdministrationController {
             Event e = event.get();
             e.setValidated(true);
             eventService.save(e);
+            List<Event> sameTagEvents = eventService.findValidatedByTag(event.get().getEventTag());
+            for (Event ev : sameTagEvents) {
+                Set<User> participants = ev.getEventRegisteredUsers();
+                for (User user : participants) {
+                    mailService.sendEventEmail(user, e);
+                }
+            }
         }
         return "redirect:/admin";
     }

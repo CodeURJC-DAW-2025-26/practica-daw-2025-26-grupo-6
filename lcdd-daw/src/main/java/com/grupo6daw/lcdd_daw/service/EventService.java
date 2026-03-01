@@ -86,4 +86,7 @@ public class EventService {
         return repository.findValidatedByNameAndTag(name, tag, page);
     }
 
+    public List<Event> findValidatedByTag(String tag) {
+        return repository.findValidatedByTag(tag);
+    }
 }

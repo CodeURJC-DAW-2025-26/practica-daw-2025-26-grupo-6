@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.User;
 
 import jakarta.mail.MessagingException;
@@ -70,6 +71,26 @@ public class MailService {
             send(user.getUserEmail(), "Registro LCDD", htmlBody, inlines);
         } catch (MessagingException | IOException e) {
             logger.error("No se pudo enviar el correo de registro a: " + user.getUserEmail(), e);
+        }
+    }
+
+    @Async
+    public void sendEventEmail(User user, Event event) {
+        try {
+            ClassPathResource resource = new ClassPathResource("templates/event_email.html");
+            
+            String htmlBody = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            htmlBody = htmlBody
+                .replace("{{nickname}}", user.getUserNickname())
+                .replace("{{pageUrl}}", "https://localhost:8443")
+                .replace("{{eventName}}", event.getEventName());
+
+            Map<String, String> inlines = new HashMap<>();
+            inlines.put("logo", "static/img/logo.jpg");
+            
+            send(user.getUserEmail(), "Nuevo evento LCDD", htmlBody, inlines);
+        } catch (MessagingException | IOException e) {
+            logger.error("No se pudo enviar el correo de evento a: " + user.getUserEmail(), e);
         }
     }
 }
