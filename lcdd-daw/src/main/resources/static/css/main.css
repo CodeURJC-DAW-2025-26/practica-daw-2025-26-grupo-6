@@ -299,6 +299,28 @@ h6 {
   }
 }
 
+/*--------------------------------------------------------------
+# Global Footer
+--------------------------------------------------------------*/
+  .social-container {
+    display: flex;
+    gap: 20px;            
+    justify-content: center; 
+    align-items: center;
+    font-size: 1.5rem;    
+  }
+
+  .social-link {
+    color: #8f8b8b;          
+    transition: transform 0.2s, color 0.2s;
+    text-decoration: none;
+  }
+
+  .social-link:hover {
+    color: #e73225;       
+    transform: scale(1.2); 
+  }
+
 /* Navmenu - Mobile */
 @media (max-width: 1199px) {
   .mobile-nav-toggle {

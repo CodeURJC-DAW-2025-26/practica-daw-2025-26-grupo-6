@@ -229,7 +229,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Maratón 12h: Juegos de Mesa").isEmpty()) {
       Event event2 = new Event("Maratón 12h: Juegos de Mesa",
           "📦🏰 ¿Aguantarás 12 horas seguidas jugando? Desde los clásicos Catan y Carcassonne hasta los pesados como Terraforming Mars. ¡Ven cuando quieras!",
-          "Juego de mesa", true, LocalDate.now().plusDays(10), 30);
+          "Juegos de mesa", true, LocalDate.now().plusDays(10), 30);
       setEventImage(event2, "/sample_images/events/maraton.jpg");
       eventService.save(event2);
     }
@@ -245,7 +245,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Tarde de Juegos Rápidos").isEmpty()) {
       Event event4 = new Event("Tarde de Juegos Rápidos",
           "💨🃏 Virus!, Taco Gato, ¡Mía! y más. Partidas rápidas y muchas risas en esta tarde dedicada a los juegos más dinámicos de la asociación.",
-          "Juego de mesa", true, LocalDate.now().plusDays(20), 40);
+          "Juegos de mesa", true, LocalDate.now().plusDays(20), 40);
       setEventImage(event4, "/sample_images/events/filler_afternoon.jpg");
       eventService.save(event4);
     }
@@ -253,7 +253,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Liga de Estrategia: Temporada 1").isEmpty()) {
       Event event5 = new Event("Liga de Estrategia: Temporada 1",
           "👑🗺 ¿Eres el mejor estratega? Apúntate a nuestra liga trimestral de juegos de tablero. Suma puntos cada semana y encabeza el ranking.",
-          "Juego de mesa", true, LocalDate.now().plusDays(25), 24);
+          "Juegos de mesa", true, LocalDate.now().plusDays(25), 24);
       setEventImage(event5, "/sample_images/events/strategy_league.jpg");
       eventService.save(event5);
     }
@@ -277,7 +277,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Campeonato de Carcassonne URJC").isEmpty()) {
       Event event8 = new Event("Campeonato de Carcassonne URJC",
           "🧩🏰 Coloca tus losetas y tus monjes estratégicamente. Torneo clasificatorio con reglamento de torneo nacional.",
-          "Juego de mesa", true, LocalDate.now().plusMonths(1).plusDays(10), 20);
+          "Juegos de mesa", true, LocalDate.now().plusMonths(1).plusDays(10), 20);
       setEventImage(event8, "/sample_images/events/carcassonne_tourney.jpg");
       eventService.save(event8);
     }
@@ -285,7 +285,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("Torneo de Virus!: Epidemia en la URJC").isEmpty()) {
       Event event9 = new Event("Torneo de Virus!: Epidemia en la URJC",
           "☣️👨‍⚕️ ¡El laboratorio se ha descontrolado! Ven a participar en el torneo del juego más rápido de Tranjis. ¿Lograrás tener tus cuatro órganos sanos antes que nadie?",
-          "Juego de mesa", true, LocalDate.now().plusMonths(2), 32);
+          "Juegos de mesa", true, LocalDate.now().plusMonths(2), 32);
       setEventImage(event9, "/sample_images/events/virus_torneo.jpg");
       eventService.save(event9);
     }
@@ -301,7 +301,7 @@ public class DatabaseInitializer {
     if (eventRepository.findByEventName("La Gran Gymkana de La Caverna").isEmpty()) {
       Event event11 = new Event("La Gran Gymkana de La Caverna",
           "🏃‍♂️🎲 Supera pruebas rápidas de distintos juegos de mesa para ganar puntos. Una competición por equipos loca y muy divertida.",
-          "Juego de mesa", true, LocalDate.now().plusMonths(3), 50);
+          "Juegos de mesa", true, LocalDate.now().plusMonths(3), 50);
       setEventImage(event11, "/sample_images/events/gymkana_event.jpg");
       eventService.save(event11);
     }
