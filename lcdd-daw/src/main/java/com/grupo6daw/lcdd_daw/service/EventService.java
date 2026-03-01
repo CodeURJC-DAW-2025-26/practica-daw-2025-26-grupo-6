@@ -76,7 +76,6 @@ public class EventService {
     public List<Event> findByValidatedTrue() {
         return repository.findByValidatedTrue();
     }
-
     public List<Event> findUpcomingEvents(LocalDate date) {
         return repository.findByEventDateGreaterThanEqualOrderByEventDateAsc(date);
     }
