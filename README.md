@@ -302,11 +302,30 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 1. **Clonar el repositorio**
    ```bash
-   git clone https://github.com/[usuario]/[nombre-repositorio].git
-   cd [nombre-repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6.git
+   cd practica-daw-2025-26-grupo-6
+   ```
+2. **Iniciar MySQL y base de datos lcdd-daw**
+   ```bash
+   docker run --rm -e MYSQL_ROOT_PASSWORD=MySQLpassword \
+   -e MYSQL_DATABASE=lcdd-daw -p 3306:3306 -d mysql:9.5.0
    ```
 
-2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
+3. **Configuración de application.properties**
+   Edita lcdd-daw/src/main/resources/application.properties y configura spring.mail.username y spring.mail.password. Debes cambiar también spring.datasource.password y spring.datasource.url si no corresponde con tu configuración de MySQL.
+   ```properties
+   # Configuración de ejemplo:
+   spring.mail.username=tucorreo@gmail.com
+   spring.mail.password=aaaa bbbb cccc dddd
+   # Para cuentas de gmail, la contraseña debe ser una app password: https://myaccount.google.com/apppasswords
+   ```
+
+4. **Ejecutar aplicación**
+   ```bash
+   mvn spring-boot:run
+   ```
+   
+
 
 #### **Credenciales de prueba**
 - **Usuario Admin**: usuario: `admin`, contraseña: `admin`
@@ -316,17 +335,17 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 Diagrama mostrando las entidades, sus campos y relaciones:
 
-![Diagrama Entidad-Relación](images/database-diagram.png)
+![Diagrama Entidad-Relación](images/entityDiagram.jpg)
 
-> [Descripción opcional: Ej: "El diagrama muestra las 4 entidades principales: Usuario, Producto, Pedido y Categoría, con sus respectivos atributos y relaciones 1:N y N:M."]
+> El diagrama detalla el modelo físico de la base de datos con sus 5 tablas principales (User, Event, Game, New, Image), sus atributos y las relaciones 1:N (como el creador de una noticia) y N:M (como la inscripción de usuarios en eventos o juegos favoritos).
 
 ### **Diagrama de Clases y Templates**
 
 Diagrama de clases de la aplicación con diferenciación por colores o secciones:
 
-![Diagrama de Clases](images/classes-diagram.png)
+![Diagrama de Clases](images/classDiagram.png)
 
-> [Descripción opcional del diagrama y relaciones principales]
+> El diagrama representa la arquitectura MVC del sistema, detallando la interacción entre las Vistas (Mustache), los Controllers que gestionan las peticiones, los Services que contienen la lógica de negocio y los Repositories que acceden a las entidades de datos.
 
 ### **Participación de Miembros en la Práctica 1**
 
