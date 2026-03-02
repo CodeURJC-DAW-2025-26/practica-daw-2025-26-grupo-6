@@ -364,17 +364,17 @@ Hice todas las validaciones, en front y backend de los eventos, los juegos y las
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - Antonio Martín Carrizosa**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Subir la plantilla elegida por el grupo al repositorio y eliminar algunos archivos que venían con la plantilla y no necesitabamos. Carrusel de próximos eventos y sección de about us de la página principal. Implementación del servicio de correos. Foto de perfil en el header. Permitir al usuario la edición de sus atributos y el borrado del usuario. Aplicar Mustache a la página de perfil de usuario para mostrar sus elementos. Añadir los atributos admin, logged y userId a todas las páginas para utilizar con Mustache. Solución de errores.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Registro de usuarios](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/224cf472a8da80a04236edb656858dfeefe597d2)  | [MailService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/service/MailService.java)   |
+|2| [Actualización y borrado de usuarios](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b7b3b1febda0242ed31ac7419872138f39a654e7)  | [UserService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/service/UserService.java)   |
+|3| [Página de perfil de usuario con mustache](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/a8623480eaecc40de42b15d75dfbd1bd2c929ced)  | [GlobalControllerAdvice.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/GlobalControllerAdvice.java)   |
+|4| [Implementación del servicio de correos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/40e35d279f8455357673a0200ba79956e287f32d)  | [RegisterWebController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/RegisterWebController.java)   |
+|5| [Mostrar próximos eventos en el carrusel](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/d23409f023de153778d17922c1d2d541b5c29c50)  | [MainController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/lcdd-daw/src/main/java/com/grupo6daw/lcdd_daw/controller/MainController.java)   |
 
 ---
 
