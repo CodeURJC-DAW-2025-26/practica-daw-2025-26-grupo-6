@@ -329,8 +329,8 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 
 #### **Credenciales de prueba**
-- **Usuario Admin**: usuario: `admin`, contraseña: `adminpass`
-- **Usuario Registrado**: usuario: `user`, contraseña: `pass`
+- **Usuario Admin**: usuario: `admin@admin.com`, contraseña: `adminpass`
+- **Usuario Registrado**: usuario: `user@user.com`, contraseña: `pass`
 
 ### **Diagrama de Entidades de Base de Datos**
 
