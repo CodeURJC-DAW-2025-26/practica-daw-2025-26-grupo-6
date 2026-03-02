@@ -322,6 +322,7 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
 
 4. **Ejecutar aplicación**
    ```bash
+   cd lcdd-daw
    mvn spring-boot:run
    ```
    
