@@ -305,10 +305,10 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
    git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6.git
    cd practica-daw-2025-26-grupo-6
    ```
-2. **Iniciar MySQL y base de datos lcdd-daw**
+2. **Iniciar MySQL y base de datos lcdd_daw**
    ```bash
    docker run --rm -e MYSQL_ROOT_PASSWORD=MySQLpassword \
-   -e MYSQL_DATABASE=lcdd-daw -p 3306:3306 -d mysql:9.5.0
+   -e MYSQL_DATABASE=lcdd_daw -p 3306:3306 -d mysql:9.5.0
    ```
 
 3. **Configuración de application.properties**
