@@ -326,7 +326,8 @@ Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicac
    mvn spring-boot:run
    ```
    
-
+5. **Abrir en navegador**
+   - `https://localhost:8443`
 
 #### **Credenciales de prueba**
 - **Usuario Admin**: usuario: `admin@admin.com`, contraseña: `adminpass`
