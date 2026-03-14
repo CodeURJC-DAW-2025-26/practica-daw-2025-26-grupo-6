@@ -1,0 +1,28 @@
+services: 
+  web:
+    image: <docker_hub_username>/lcdd_daw:latest  # Change '<docker_hub_username>' to a group member Docker Hub username
+    ports:
+      - 8443:8443
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db/lcdd_daw
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=MySQLpassword
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql:9.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=MySQLpassword
+      - MYSQL_DATABASE=lcdd_daw
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+
+volumes:
+  db_data:
