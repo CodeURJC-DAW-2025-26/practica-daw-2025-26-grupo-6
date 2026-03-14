@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build Docker image
-docker build -t lcdd_daw .
+docker build -t lcdd_daw -f Dockerfile ..
 
 # Error check
 if [ $? -eq 0 ]
