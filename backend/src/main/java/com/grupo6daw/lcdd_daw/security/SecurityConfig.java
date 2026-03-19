@@ -85,23 +85,17 @@ public class SecurityConfig {
                         .hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/games/*/favourites")
                         .hasRole("REGISTERED_USER")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/games").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/games/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/games/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/games/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/games/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/games/**").hasRole("ADMIN")
                         // News
-                        .requestMatchers(HttpMethod.POST, "/api/v1/news")
-                        .hasRole("REGISTERED_USER")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/news/*")
-                        .hasRole("REGISTERED_USER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/news/*")
-                        .hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/news").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/news/*").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/news/*").hasRole("REGISTERED_USER")
                         // Events
-                        .requestMatchers(HttpMethod.POST, "/api/v1/events")
-                        .hasRole("REGISTERED_USER")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/events/*")
-                        .hasRole("REGISTERED_USER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/events/*")
-                        .hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/events").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/events/*").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/events/*").hasRole("REGISTERED_USER")
                         // PUBLIC ENDPOINTS
                         .anyRequest().permitAll());
 

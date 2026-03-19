@@ -17,22 +17,31 @@ import com.grupo6daw.lcdd_daw.repository.UserRepository;
 @Service
 public class RepositoryUserDetailsService implements UserDetailsService {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    @Override
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
 
-		User user = userRepository.findByUserEmail(email)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user;
 
-		List<GrantedAuthority> roles = new ArrayList<>();
-		for (String role : user.getUserRoles()) {
-			roles.add(new SimpleGrantedAuthority("ROLE_" + role));
-		}
+        if (identifier.matches("\\d+")) {
+            user = userRepository.findById(Long.parseLong(identifier))
+                    .orElseGet(() -> userRepository.findByUserEmail(identifier)
+                            .orElseThrow(() -> new UsernameNotFoundException(
+                                    "User not found with id or email: " + identifier)));
+        } else {
+            user = userRepository.findByUserEmail(identifier)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        }
 
-		return new org.springframework.security.core.userdetails.User(user.getUserId().toString(), 
-				user.getUserEncodedPassword(), roles);
+        List<GrantedAuthority> roles = new ArrayList<>();
+        for (String role : user.getUserRoles()) {
+            roles.add(new SimpleGrantedAuthority("ROLE_" + role));
+        }
 
-	}
+        return new org.springframework.security.core.userdetails.User(user.getUserId().toString(),
+                user.getUserEncodedPassword(), roles);
+
+    }
 }

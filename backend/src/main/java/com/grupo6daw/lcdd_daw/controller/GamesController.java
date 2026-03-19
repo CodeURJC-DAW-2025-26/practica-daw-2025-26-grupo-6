@@ -3,7 +3,6 @@ package com.grupo6daw.lcdd_daw.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,9 +67,9 @@ public class GamesController {
     @GetMapping("/game/{id}")
     public String gameDetail(@PathVariable long id, Model model, HttpServletRequest request) {
 
-        Optional<Game> game = gameService.findById(id);
-        if (game.isPresent()) {
-            model.addAttribute("game", game.get());
+        Game game = gameService.findById(id);
+        if (game != null) {
+            model.addAttribute("game", game);
 
             boolean hasEditPermission = false;
             boolean isFavorited = false;
@@ -79,9 +78,9 @@ public class GamesController {
                 hasEditPermission = request.isUserInRole("ADMIN");
                 String principalName = request.getUserPrincipal().getName();
                 User user = userService.findById(Long.valueOf(principalName)).orElse(null);
-                
+
                 if (user != null) {
-                    isFavorited = user.getUserFavGames().contains(game.get());
+                    isFavorited = user.getUserFavGames().contains(game);
                 }
 
             }
@@ -120,9 +119,9 @@ public class GamesController {
 
     @GetMapping("/game_form/{id}")
     public String editGameForm(@PathVariable long id, Model model, HttpServletRequest request) {
-        Optional<Game> game = gameService.findById(id);
-        if (game.isPresent()) {
-            model.addAttribute("game", game.get());
+        Game game = gameService.findById(id);
+        if (game != null) {
+            model.addAttribute("game", game);
             CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
             if (csrfToken != null) {
                 model.addAttribute("token", csrfToken.getToken());
@@ -205,7 +204,7 @@ public class GamesController {
             Image image = imageService.createImage(imageField.getInputStream());
             game.setGameImage(image);
         } else if (!isNewGame) {
-            Game oldGame = gameService.findById(game.getGameId()).get();
+            Game oldGame = gameService.findById(game.getGameId());
             game.setGameImage(oldGame.getGameImage());
         }
 
@@ -228,7 +227,7 @@ public class GamesController {
             return "redirect:/login";
         }
 
-        Game game = gameService.findById(id).orElse(null);
+        Game game = gameService.findById(id);
         if (game == null) {
             return "redirect:/games";
         }
