@@ -3,7 +3,6 @@ package com.grupo6daw.lcdd_daw.controller;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -63,7 +62,7 @@ public class GamesRestController {
     public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO gameDTO) {
 
         Game game = gameMapper.toDomain(gameDTO);
-        game = gameService.save(gameMapper.toDomain(gameDTO));
+        gameService.save(game);
         gameDTO = gameMapper.toDTO(game);
 
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(gameDTO.gameId()).toUri();
