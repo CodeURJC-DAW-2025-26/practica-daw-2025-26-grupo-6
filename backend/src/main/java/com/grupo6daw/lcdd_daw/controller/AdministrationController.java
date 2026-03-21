@@ -92,7 +92,6 @@ public class AdministrationController {
         model.addAttribute("nextPage", next);
         model.addAttribute("hasNext", hasNext);
 
-        // Numeración (0..total-1) para la barra de páginas
         List<Map<String, Object>> pages = new ArrayList<>();
         for (int i = 0; i < total; i++) {
             pages.add(Map.of(

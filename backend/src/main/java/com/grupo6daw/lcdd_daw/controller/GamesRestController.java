@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import com.grupo6daw.lcdd_daw.dto.GameDTO;
 import com.grupo6daw.lcdd_daw.dto.GameMapper;
@@ -28,12 +30,10 @@ import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.service.GameService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
-
 @RestController
 @RequestMapping("/api/v1/games")
 public class GamesRestController {
+
     @Autowired
     private GameService gameService;
 
@@ -49,7 +49,7 @@ public class GamesRestController {
     @GetMapping("/")
     public Page<GameDTO> findAll(Pageable pageable) {
 
-        return gameService.findAll(pageable);
+        return gameService.findAll(pageable).map(gameMapper::toDTO);
     }
 
     @GetMapping("/{id}")
@@ -100,7 +100,7 @@ public class GamesRestController {
             throws IOException {
 
         Image image = imageService.getImage(imageId);
-        gameService.removeImageFromGame(gameId);
+        gameService.removeImageFromGame(gameId, imageId);
         imageService.deleteImage(imageId);
 
         return imageMapper.toDTO(image);

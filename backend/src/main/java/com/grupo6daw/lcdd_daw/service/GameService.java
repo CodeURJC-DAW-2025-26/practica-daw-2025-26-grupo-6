@@ -2,26 +2,23 @@ package com.grupo6daw.lcdd_daw.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo6daw.lcdd_daw.dto.GameDTO;
 import com.grupo6daw.lcdd_daw.dto.GameMapper;
 import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.repository.GameRepository;
 import com.grupo6daw.lcdd_daw.repository.UserRepository;
-
-import org.springframework.data.domain.Sort;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import com.grupo6daw.lcdd_daw.model.User;
-import java.util.Set;
 
 @Service
 public class GameService {
@@ -51,8 +48,8 @@ public class GameService {
         return repository.findAll();
     }
 
-    public Page<GameDTO> findAll(Pageable pageable) {
-        return repository.findAll(pageable).map(this::toDTO);
+    public Page<Game> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Page<Game> findByFilter(String name, String tag, Integer players, Integer duration, Pageable pageable) {
@@ -96,8 +93,14 @@ public class GameService {
         return game;
     }
 
-    public Game removeImageFromGame(long gameId) {
+    public Game removeImageFromGame(long gameId, long imageId) {
+
         Game game = repository.findById(gameId).orElseThrow();
+
+        if (game.getGameImage() == null || game.getGameImage().getId() != imageId) {
+            throw new IllegalArgumentException("Image does not belong to this game");
+        }
+
         game.setGameImage(null);
         repository.save(game);
 
