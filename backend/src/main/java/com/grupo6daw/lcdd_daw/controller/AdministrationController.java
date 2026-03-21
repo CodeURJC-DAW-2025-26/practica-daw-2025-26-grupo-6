@@ -45,11 +45,11 @@ public class AdministrationController {
     private final NewService newService;
     private final UserService userService;
 
-    
     @Autowired
     MailService mailService;
 
-    public AdministrationController(StatsService statsService, EventService eventService, NewService newService, UserService userService) {
+    public AdministrationController(StatsService statsService, EventService eventService, NewService newService,
+            UserService userService) {
         this.statsService = statsService;
         this.eventService = eventService;
         this.newService = newService;
@@ -60,8 +60,7 @@ public class AdministrationController {
     public String admin(HttpServletRequest request, Model model,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "userNickname,asc") String sort
-    ) {
+            @RequestParam(defaultValue = "userNickname,asc") String sort) {
 
         model.addAttribute("events", eventService.findByValidatedFalse());
         model.addAttribute("news", newService.findByValidatedFalse());
@@ -69,7 +68,8 @@ public class AdministrationController {
         String[] parts = sort.split(",", 2);
         String field = parts[0];
         Sort.Direction direction = (parts.length > 1 && "desc".equalsIgnoreCase(parts[1]))
-                ? Sort.Direction.DESC : Sort.Direction.ASC;
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, field));
 
@@ -97,8 +97,7 @@ public class AdministrationController {
             pages.add(Map.of(
                     "index", i,
                     "display", i + 1,
-                    "active", i == current
-            ));
+                    "active", i == current));
         }
         model.addAttribute("pages", pages);
 
@@ -127,12 +126,12 @@ public class AdministrationController {
 
     @PostMapping("/approveEvent/{id}")
     public String approveEvent(@PathVariable long id) {
-        Optional<Event> event = eventService.findById(id);
-        if (event.isPresent()) {
-            Event e = event.get();
+        Event event = eventService.findById(id);
+        if (event != null) {
+            Event e = event;
             e.setValidated(true);
             eventService.save(e);
-            List<Event> sameTagEvents = eventService.findValidatedByTag(event.get().getEventTag());
+            List<Event> sameTagEvents = eventService.findValidatedByTag(event.getEventTag());
             for (Event ev : sameTagEvents) {
                 Set<User> participants = ev.getEventRegisteredUsers();
                 for (User user : participants) {
@@ -148,7 +147,7 @@ public class AdministrationController {
         eventService.delete(id);
         return "redirect:/admin";
     }
-    
+
     @PostMapping("/approveNew/{id}")
     public String approveNew(@PathVariable long id) {
         Optional<New> news = newService.findById(id);

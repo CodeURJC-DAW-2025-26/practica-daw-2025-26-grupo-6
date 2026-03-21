@@ -117,4 +117,21 @@ public class GamesRestController {
 
         return gameMapper.toDTO(updatedGame);
     }
+
+    @PutMapping("/{id}/images/")
+    public ResponseEntity<ImageDTO> updateGameImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+            throws IOException {
+
+        if (imageFile.isEmpty()) {
+            throw new IllegalArgumentException("Image file cannot be empty");
+        }
+
+        Image image = imageService.createImage(imageFile.getInputStream());
+        gameService.addImageToGame(id, image);
+
+        URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+    }
 }

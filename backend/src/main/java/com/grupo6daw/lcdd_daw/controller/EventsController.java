@@ -38,306 +38,307 @@ import jakarta.validation.Valid;
 @Controller
 public class EventsController {
 
-	@ControllerAdvice
-	public class GlobalExceptionHandler {
+    @ControllerAdvice
+    public class GlobalExceptionHandler {
 
-		@ExceptionHandler(MaxUploadSizeExceededException.class)
-		public String handleMaxSizeException(MaxUploadSizeExceededException exc,
-				RedirectAttributes redirectAttributes) {
-			redirectAttributes.addFlashAttribute("hasErrors", true);
-			redirectAttributes.addFlashAttribute("allErrors",
-					List.of("El archivo es demasiado grande o el formato es incompatible. El límite configurado es 10MB."));
-			return "redirect:/event_form";
-		}
-	}
+        @ExceptionHandler(MaxUploadSizeExceededException.class)
+        public String handleMaxSizeException(MaxUploadSizeExceededException exc,
+                RedirectAttributes redirectAttributes) {
+            redirectAttributes.addFlashAttribute("hasErrors", true);
+            redirectAttributes.addFlashAttribute("allErrors",
+                    List.of("El archivo es demasiado grande o el formato es incompatible. El límite configurado es 10MB."));
+            return "redirect:/event_form";
+        }
+    }
 
-	@Autowired
-	private EventService eventService;
+    @Autowired
+    private EventService eventService;
 
-	@Autowired
-	private ImageService imageService;
+    @Autowired
+    private ImageService imageService;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private ImageValidationService imageValidationService;
+    @Autowired
+    private ImageValidationService imageValidationService;
 
-	@GetMapping("/events")
-	public String events(Model model,
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String tag,
-			@RequestParam(defaultValue = "0") int page) {
+    @GetMapping("/events")
+    public String events(Model model,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String tag,
+            @RequestParam(defaultValue = "0") int page) {
 
-		Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag,
-				PageRequest.of(page, 10, Sort.by("eventId").descending()));
+        Page<Event> eventsPage = eventService.findValidatedByFilter(name, tag,
+                PageRequest.of(page, 10, Sort.by("eventId").descending()));
 
-		model.addAttribute("event", eventsPage.getContent());
-		model.addAttribute("name", name == null ? "" : name);
-		model.addAttribute("tag", tag == null ? "" : tag);
-		model.addAttribute("hasNext", eventsPage.hasNext());
-		model.addAttribute("nextPage", page + 1);
+        model.addAttribute("event", eventsPage.getContent());
+        model.addAttribute("name", name == null ? "" : name);
+        model.addAttribute("tag", tag == null ? "" : tag);
+        model.addAttribute("hasNext", eventsPage.hasNext());
+        model.addAttribute("nextPage", page + 1);
 
-		return "events";
-	}
+        return "events";
+    }
 
-	@GetMapping("/event/{id}")
-	public String eventDetail(@PathVariable long id, Model model, HttpServletRequest request) {
-		Optional<Event> event = eventService.findById(id);
-		if (event.isPresent()) {
-			model.addAttribute("event", event.get());
+    @GetMapping("/event/{id}")
+    public String eventDetail(@PathVariable long id, Model model, HttpServletRequest request) {
+        Event event = eventService.findById(id);
+        if (event != null) {
+            model.addAttribute("event", event);
 
-			boolean hasEditPermission = false;
-			if (request.getUserPrincipal() != null) {
-				Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-				boolean isOwner = event.get().getEventCreator() != null
-						&& event.get().getEventCreator().getUserId().equals(currentUserId);
-				boolean isAdmin = request.isUserInRole("ADMIN");
-				hasEditPermission = isOwner || isAdmin;
+            boolean hasEditPermission = false;
+            if (request.getUserPrincipal() != null) {
+                Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+                boolean isOwner = event.getEventCreator() != null
+                        && event.getEventCreator().getUserId().equals(currentUserId);
+                boolean isAdmin = request.isUserInRole("ADMIN");
+                hasEditPermission = isOwner || isAdmin;
 
-				boolean isRegistered = false;
-				if (request.getUserPrincipal() != null) {
-					Optional<User> currentUserOpt = userService.getUser(currentUserId);
-					if (currentUserOpt.isPresent()) {
-						isRegistered = currentUserOpt.get().getUserRegisteredEvents().contains(event.get());
-					}
-				}
-				model.addAttribute("isRegistered", isRegistered);
-			}
+                boolean isRegistered = false;
+                if (request.getUserPrincipal() != null) {
+                    Optional<User> currentUserOpt = userService.getUser(currentUserId);
+                    if (currentUserOpt.isPresent()) {
+                        isRegistered = currentUserOpt.get().getUserRegisteredEvents().contains(event);
+                    }
+                }
+                model.addAttribute("isRegistered", isRegistered);
+            }
 
-			int currentParticipants = event.get().getEventRegisteredUsers() != null 
-                                      ? event.get().getEventRegisteredUsers().size() 
-                                      : 0;
+            int currentParticipants = event.getEventRegisteredUsers() != null
+                    ? event.getEventRegisteredUsers().size()
+                    : 0;
             model.addAttribute("currentParticipants", currentParticipants);
 
-			boolean isFull = false;
-            if (event.get().getMaxParticipants() != null && event.get().getMaxParticipants() > 0) {
-                isFull = currentParticipants >= event.get().getMaxParticipants();
+            boolean isFull = false;
+            if (event.getMaxParticipants() != null && event.getMaxParticipants() > 0) {
+                isFull = currentParticipants >= event.getMaxParticipants();
             }
             model.addAttribute("isFull", isFull);
 
-			// Provide formatted date for the view
-			model.addAttribute("formattedDate", event.get().getFormattedDate());
+            // Provide formatted date for the view
+            model.addAttribute("formattedDate", event.getFormattedDate());
 
-			model.addAttribute("hasEditPermission", hasEditPermission);
-		}
-		return "detail_event_page";
-	}
+            model.addAttribute("hasEditPermission", hasEditPermission);
+        }
+        return "detail_event_page";
+    }
 
-	@GetMapping("/event_form")
-	public String showEventForm(HttpServletRequest request, Model model) {
+    @GetMapping("/event_form")
+    public String showEventForm(HttpServletRequest request, Model model) {
 
-		CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-		if (csrfToken != null) {
-			model.addAttribute("token", csrfToken.getToken());
-		}
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        if (csrfToken != null) {
+            model.addAttribute("token", csrfToken.getToken());
+        }
 
-		// Initialize default values for the new event
-		Event event = new Event();
-		event.setEventName("");
-		event.setEventDescription("");
-		event.setEventDate(LocalDate.now().plusDays(1)); // Default to tomorrow
-		event.setEventTag("");
-		event.setLink("");
-		event.setRequiresRegistration(false);
+        // Initialize default values for the new event
+        Event event = new Event();
+        event.setEventName("");
+        event.setEventDescription("");
+        event.setEventDate(LocalDate.now().plusDays(1)); // Default to tomorrow
+        event.setEventTag("");
+        event.setLink("");
+        event.setRequiresRegistration(false);
 
-		model.addAttribute("event", event);
-		model.addAttribute("currentDate", LocalDate.now().toString());
-		model.addAttribute("hasErrors", false);
-		model.addAttribute("allErrors", new ArrayList<String>());
+        model.addAttribute("event", event);
+        model.addAttribute("currentDate", LocalDate.now().toString());
+        model.addAttribute("hasErrors", false);
+        model.addAttribute("allErrors", new ArrayList<String>());
 
-		return "event_form";
-	}
+        return "event_form";
+    }
 
-	@GetMapping("/event_form/{id}")
-	public String editEventForm(@PathVariable long id, HttpServletRequest request, Model model) {
-		Optional<Event> event = eventService.findById(id);
+    @GetMapping("/event_form/{id}")
+    public String editEventForm(@PathVariable long id, HttpServletRequest request, Model model) {
+        Event event = eventService.findById(id);
 
-		if (event.isPresent()) {
-			Event e = event.get();
+        if (event != null) {
+            Event e = event;
 
-			if (e.getLink() == null)
-				e.setLink("");
-			if (e.getEventTag() == null)
-				e.setEventTag("");
+            if (e.getLink() == null)
+                e.setLink("");
+            if (e.getEventTag() == null)
+                e.setEventTag("");
 
-			model.addAttribute("event", e);
+            model.addAttribute("event", e);
 
-			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-			if (csrfToken != null) {
-				model.addAttribute("token", csrfToken.getToken());
-			}
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            if (csrfToken != null) {
+                model.addAttribute("token", csrfToken.getToken());
+            }
 
-			model.addAttribute("currentDate", LocalDate.now().toString());
-			model.addAttribute("hasErrors", false);
-			model.addAttribute("allErrors", new ArrayList<String>());
+            model.addAttribute("currentDate", LocalDate.now().toString());
+            model.addAttribute("hasErrors", false);
+            model.addAttribute("allErrors", new ArrayList<String>());
 
-			return "event_form";
-		}
-		return "redirect:/events";
-	}
+            return "event_form";
+        }
+        return "redirect:/events";
+    }
 
-	@PostMapping("/event_form")
-	public String saveEvent(Model model, @Valid Event event, BindingResult bindingResult,
-			@RequestParam("imageField") MultipartFile imageField, HttpServletRequest request) throws IOException {
+    @PostMapping("/event_form")
+    public String saveEvent(Model model, @Valid Event event, BindingResult bindingResult,
+            @RequestParam("imageField") MultipartFile imageField, HttpServletRequest request) throws IOException {
 
-		List<String> errorMessages = new ArrayList<>();
-		boolean isNewEvent = (event.getEventId() == null);
+        List<String> errorMessages = new ArrayList<>();
+        boolean isNewEvent = (event.getEventId() == null);
 
-		Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-		User currentUser = userService.getUser(currentUserId).orElseThrow();
+        Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+        User currentUser = userService.getUser(currentUserId).orElseThrow();
 
-		// Check basic validation errors (@Valid)
-		if (bindingResult.hasFieldErrors("eventName")) {
-			errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
-		}
-		if (bindingResult.hasFieldErrors("eventDescription")) {
-			errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
-		}
-		if (bindingResult.hasFieldErrors("eventDate")) {
-			errorMessages.add(bindingResult.getFieldError("eventDate").getDefaultMessage());
-		}
+        // Check basic validation errors (@Valid)
+        if (bindingResult.hasFieldErrors("eventName")) {
+            errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
+        }
+        if (bindingResult.hasFieldErrors("eventDescription")) {
+            errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
+        }
+        if (bindingResult.hasFieldErrors("eventDate")) {
+            errorMessages.add(bindingResult.getFieldError("eventDate").getDefaultMessage());
+        }
 
-		// Custom date validation
-		if (event.getEventDate() != null && event.getEventDate().isBefore(LocalDate.now())) {
-			errorMessages.add("La fecha del evento no puede ser anterior a hoy.");
-		}
+        // Custom date validation
+        if (event.getEventDate() != null && event.getEventDate().isBefore(LocalDate.now())) {
+            errorMessages.add("La fecha del evento no puede ser anterior a hoy.");
+        }
 
-		// Registration requirements and link validation
-		if (event.isRequiresRegistration()) {
-			if (event.getLink() == null || event.getLink().trim().isEmpty()) {
-				errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
-			}
-		} else {
-			// Ignore any link provided and set it to null if registration is not required
-			event.setLink(null);
-		}
+        // Registration requirements and link validation
+        if (event.isRequiresRegistration()) {
+            if (event.getLink() == null || event.getLink().trim().isEmpty()) {
+                errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
+            }
+        } else {
+            // Ignore any link provided and set it to null if registration is not required
+            event.setLink(null);
+        }
 
-		// Image validation
-		imageValidationService.validate(imageField, errorMessages, isNewEvent);
+        // Image validation
+        imageValidationService.validate(imageField, errorMessages, isNewEvent);
 
-		// If there are errors, return to the form view
-		if (!errorMessages.isEmpty()) {
-			CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-			if (csrfToken != null) {
-				model.addAttribute("token", csrfToken.getToken());
-			}
-			model.addAttribute("hasErrors", true);
-			model.addAttribute("allErrors", errorMessages);
-			model.addAttribute("event", event);
-			return "event_form";
-		}
+        // If there are errors, return to the form view
+        if (!errorMessages.isEmpty()) {
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            if (csrfToken != null) {
+                model.addAttribute("token", csrfToken.getToken());
+            }
+            model.addAttribute("hasErrors", true);
+            model.addAttribute("allErrors", errorMessages);
+            model.addAttribute("event", event);
+            return "event_form";
+        }
 
-		// Ownership check for editing existing events
-		if (!isNewEvent) {
-			Event existingEvent = eventService.findById(event.getEventId()).get();
-			boolean isOwner = existingEvent.getEventCreator() != null
-					&& existingEvent.getEventCreator().getUserId().equals(currentUserId);
-			boolean isAdmin = request.isUserInRole("ADMIN");
+        // Ownership check for editing existing events
+        if (!isNewEvent) {
+            Event existingEvent = eventService.findById(event.getEventId());
+            boolean isOwner = existingEvent.getEventCreator() != null
+                    && existingEvent.getEventCreator().getUserId().equals(currentUserId);
+            boolean isAdmin = request.isUserInRole("ADMIN");
 
-			if (!isOwner && !isAdmin) {
-				return "redirect:/events?error=unauthorized";
-			}
-			event.setEventCreator(existingEvent.getEventCreator());
-			event.setEventRegisteredUsers(existingEvent.getEventRegisteredUsers());
-			event.setValidated(false);
-			event.setValidated(existingEvent.isValidated());
+            if (!isOwner && !isAdmin) {
+                return "redirect:/events?error=unauthorized";
+            }
+            event.setEventCreator(existingEvent.getEventCreator());
+            event.setEventRegisteredUsers(existingEvent.getEventRegisteredUsers());
+            event.setValidated(false);
+            event.setValidated(existingEvent.isValidated());
 
-			 // Keep the existing validation status for admins, but set to false for regular users
-			 if (!isAdmin) {
-				 event.setValidated(false);
-			 }
+            // Keep the existing validation status for admins, but set to false for regular
+            // users
+            if (!isAdmin) {
+                event.setValidated(false);
+            }
 
-		} else {
-			event.setEventCreator(currentUser);
-			
-			event.setValidated(false);
-		}
+        } else {
+            event.setEventCreator(currentUser);
 
-		// Handle tags
-		if (event.getEventTag() == null) {
-			event.setEventTag("");
-		}
+            event.setValidated(false);
+        }
 
-		// Image handling: save new image or keep existing one
-		if (!imageField.isEmpty()) {
-			Image image = imageService.createImage(imageField.getInputStream());
-			event.setEventImage(image);
-		} else if (!isNewEvent) {
-			Event oldEvent = eventService.findById(event.getEventId()).get();
-			event.setEventImage(oldEvent.getEventImage());
-		}
+        // Handle tags
+        if (event.getEventTag() == null) {
+            event.setEventTag("");
+        }
 
-		// Save event to the database
-		eventService.save(event);
+        // Image handling: save new image or keep existing one
+        if (!imageField.isEmpty()) {
+            Image image = imageService.createImage(imageField.getInputStream());
+            event.setEventImage(image);
+        } else if (!isNewEvent) {
+            Event oldEvent = eventService.findById(event.getEventId());
+            event.setEventImage(oldEvent.getEventImage());
+        }
 
-		// Assign the event to the user's list if it is newly created
-		if (isNewEvent) {
-			currentUser.getUserOwnEvents().add(event);
-			userService.save(currentUser);
-		}
+        // Save event to the database
+        eventService.save(event);
 
-		return "redirect:/events";
-	}
+        // Assign the event to the user's list if it is newly created
+        if (isNewEvent) {
+            currentUser.getUserOwnEvents().add(event);
+            userService.save(currentUser);
+        }
 
-	@PostMapping("/removeEvent/{id}")
-	public String removeEvent(@PathVariable long id, HttpServletRequest request) {
-		Optional<Event> event = eventService.findById(id);
+        return "redirect:/events";
+    }
 
-		if (event.isPresent()) {
-			Event e = event.get();
-			boolean isAdmin = request.isUserInRole("ADMIN");
-			boolean isOwner = false;
+    @PostMapping("/removeEvent/{id}")
+    public String removeEvent(@PathVariable long id, HttpServletRequest request) {
+        Event event = eventService.findById(id);
 
-			if (request.getUserPrincipal() != null) {
-				Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-				isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);
-			}
+        if (event != null) {
+            Event e = event;
+            boolean isAdmin = request.isUserInRole("ADMIN");
+            boolean isOwner = false;
 
-			// Ensure only authorized users can delete the event
-			if (isAdmin || isOwner) {
-				eventService.delete(id);
-			}
-		}
-		return "redirect:/events";
-	}
+            if (request.getUserPrincipal() != null) {
+                Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+                isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);
+            }
 
-	@PostMapping("/event/{id}/join")
-	public String joinEvent(@PathVariable long id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+            // Ensure only authorized users can delete the event
+            if (isAdmin || isOwner) {
+                eventService.delete(id);
+            }
+        }
+        return "redirect:/events";
+    }
 
-		if (request.getUserPrincipal() == null) {
-			return "redirect:/login";
-		}
-		Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-		Optional<User> currentUserOpt = userService.getUser(currentUserId);
+    @PostMapping("/event/{id}/join")
+    public String joinEvent(@PathVariable long id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
-		Optional<Event> eventOpt = eventService.findById(id);
+        if (request.getUserPrincipal() == null) {
+            return "redirect:/login";
+        }
+        Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+        Optional<User> currentUserOpt = userService.getUser(currentUserId);
 
-		if (currentUserOpt.isPresent() && eventOpt.isPresent()) {
-			User currentUser = currentUserOpt.get();
-			Event event = eventOpt.get();
+        Event eventOpt = eventService.findById(id);
 
-			if (currentUser.getUserRegisteredEvents().contains(event)) {
+        if (currentUserOpt.isPresent() && eventOpt != null) {
+            User currentUser = currentUserOpt.get();
+            Event event = eventOpt;
 
-				currentUser.unregisterFromEvent(event);
-				userService.save(currentUser);
-				redirectAttributes.addFlashAttribute("message", "Te has desapuntado del evento.");
-				return "redirect:/event/" + id;
-			}
+            if (currentUser.getUserRegisteredEvents().contains(event)) {
 
-			if (event.getMaxParticipants() != null && event.getMaxParticipants() > 0) {
-				int participantesActuales = event.getEventRegisteredUsers().size();
-				if (participantesActuales >= event.getMaxParticipants()) {
-					redirectAttributes.addFlashAttribute("error", "El aforo de este evento está completo.");
-					return "redirect:/event/" + id;
-				}
-			}
+                currentUser.unregisterFromEvent(event);
+                userService.save(currentUser);
+                redirectAttributes.addFlashAttribute("message", "Te has desapuntado del evento.");
+                return "redirect:/event/" + id;
+            }
 
-			currentUser.registerToEvent(event);
-			userService.save(currentUser);
-			redirectAttributes.addFlashAttribute("message", "¡Te has apuntado al evento con éxito!");
-		}
+            if (event.getMaxParticipants() != null && event.getMaxParticipants() > 0) {
+                int participantesActuales = event.getEventRegisteredUsers().size();
+                if (participantesActuales >= event.getMaxParticipants()) {
+                    redirectAttributes.addFlashAttribute("error", "El aforo de este evento está completo.");
+                    return "redirect:/event/" + id;
+                }
+            }
 
-		return "redirect:/event/" + id;
-	}
+            currentUser.registerToEvent(event);
+            userService.save(currentUser);
+            redirectAttributes.addFlashAttribute("message", "¡Te has apuntado al evento con éxito!");
+        }
+
+        return "redirect:/event/" + id;
+    }
 }
