@@ -3,17 +3,22 @@ package com.grupo6daw.lcdd_daw.dto;
 import java.util.Collection;
 import java.util.List;
 
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import com.grupo6daw.lcdd_daw.model.New;
 
 @Mapper(componentModel = "spring")
 public interface NewMapper {
 
-    NewBasicDTO toDTO(New n);
+    // BASIC DTO
+    @Named("toBasicDTO")
+    NewBasicDTO toBasicDTO(New n);
 
-    List<NewBasicDTO> toDTOs(Collection<New> news);
+    @IterableMapping(qualifiedByName = "toBasicDTO")
+    List<NewBasicDTO> toBasicDTOs(Collection<New> news);
 
     @Mapping(target = "newDescription", ignore = true)
     @Mapping(target = "newImage", ignore = true)
@@ -22,5 +27,14 @@ public interface NewMapper {
     @Mapping(target = "newCreator", ignore = true)
     @Mapping(target = "validated", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
-    New toDomain(NewBasicDTO newDTO);
+    New toDomainFromBasicDTO(NewBasicDTO newDTO);
+
+    // FULL DTO
+    @Named("toFullDTO")
+    NewDTO toFullDTO(New n);
+
+    @IterableMapping(qualifiedByName = "toFullDTO")
+    List<NewDTO> toFullDTOs(Collection<New> news);
+
+    New toDomainFromFullDTO(NewDTO newDTO);
 }

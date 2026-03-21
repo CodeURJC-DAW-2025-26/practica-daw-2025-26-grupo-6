@@ -133,10 +133,10 @@ public class EventService {
     }
 
     private EventDTO toDTO(Event event) {
-        return mapper.toDTO(event);
+        return mapper.toFullDTO(event);
     }
 
     private Event toDomain(EventDTO eventDTO) {
-        return mapper.toDomain(eventDTO);
+        return mapper.toDomainFromFullDTO(eventDTO);
     }
 }

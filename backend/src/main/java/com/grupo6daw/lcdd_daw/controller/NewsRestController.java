@@ -23,59 +23,59 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.dto.ImageDTO;
 import com.grupo6daw.lcdd_daw.dto.ImageMapper;
-import com.grupo6daw.lcdd_daw.dto.EventDTO;
-import com.grupo6daw.lcdd_daw.dto.EventMapper;
+import com.grupo6daw.lcdd_daw.dto.NewDTO;
+import com.grupo6daw.lcdd_daw.dto.NewMapper;
 import com.grupo6daw.lcdd_daw.model.Image;
-import com.grupo6daw.lcdd_daw.model.Event;
-import com.grupo6daw.lcdd_daw.service.EventService;
+import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.service.ImageService;
+import com.grupo6daw.lcdd_daw.service.NewService;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
-@RequestMapping("/api/v1/events")
-public class EventsRestController {
+@RequestMapping("/api/v1/news")
+public class NewsRestController {
     @Autowired
-    private EventService eventService;
+    private NewService newService;
 
     @Autowired
     private ImageService imageService;
 
     @Autowired
-    private EventMapper eventMapper;
+    private NewMapper newMapper;
 
     @Autowired
     private ImageMapper imageMapper;
 
     @GetMapping("/")
-    public Page<EventDTO> findAll(Pageable pageable) {
+    public Page<NewDTO> findAll(Pageable pageable) {
 
-        return eventService.findAll(pageable);
+        return newService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public EventDTO getEvent(@PathVariable long id) {
+    public NewDTO getNew(@PathVariable long id) {
 
-        return eventMapper.toFullDTO(eventService.findById(id));
+        return newMapper.toFullDTO(newService.findById(id));
     }
 
     @PostMapping("/")
-    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO, Principal principal) {
+    public ResponseEntity<NewDTO> createNew(@RequestBody NewDTO newDTO, Principal principal) {
 
-        Event event = eventMapper.toDomainFromFullDTO(eventDTO);
+        New n = newMapper.toDomainFromFullDTO(newDTO);
         Long id = Long.parseLong(principal.getName());
         LocalDateTime date = LocalDateTime.now();
-        eventService.saveRest(event, id, date);
-        eventDTO = eventMapper.toFullDTO(event);
+        newService.saveRest(n, id, date);
+        newDTO = newMapper.toFullDTO(n);
 
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(event.getEventId()).toUri();
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(n.getNewId()).toUri();
 
-        return ResponseEntity.created(location).body(eventDTO);
+        return ResponseEntity.created(location).body(newDTO);
     }
 
     @PostMapping("/{id}/images/")
-    public ResponseEntity<ImageDTO> createEventImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+    public ResponseEntity<ImageDTO> createNewImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
             throws IOException {
 
         if (imageFile.isEmpty()) {
@@ -83,7 +83,7 @@ public class EventsRestController {
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        eventService.addImageToEvent(id, image);
+        newService.addImageToNew(id, image);
 
         URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
                 .toUri();
@@ -92,36 +92,36 @@ public class EventsRestController {
     }
 
     @DeleteMapping("/{id}")
-    public EventDTO deleteEvent(@PathVariable long id) {
+    public NewDTO deleteNew(@PathVariable long id) {
 
-        return eventMapper.toFullDTO(eventService.delete(id));
+        return newMapper.toFullDTO(newService.delete(id));
     }
 
-    @DeleteMapping("/{eventId}/images/{imageId}")
-    public ImageDTO deleteEventImage(@PathVariable long eventId, @PathVariable long imageId)
+    @DeleteMapping("/{newId}/images/{imageId}")
+    public ImageDTO deleteNewImage(@PathVariable long newId, @PathVariable long imageId)
             throws IOException {
 
         Image image = imageService.getImage(imageId);
-        eventService.removeImageFromEvent(eventId, imageId);
+        newService.removeImageFromNew(newId, imageId);
         imageService.deleteImage(imageId);
 
         return imageMapper.toDTO(image);
     }
 
     @PutMapping("/{id}")
-    public EventDTO replaceEvent(@PathVariable long id, @RequestBody EventDTO updatedEventDTO) throws SQLException {
+    public NewDTO replaceNew(@PathVariable long id, @RequestBody NewDTO updatedNewDTO) throws SQLException {
 
-        Event updatedEvent = eventMapper.toDomainFromFullDTO(updatedEventDTO);
+        New updatedNew = newMapper.toDomainFromFullDTO(updatedNewDTO);
 
-        updatedEvent.setEventId(id);
-        updatedEvent.setEventImage(eventService.findById(id).getEventImage());
-        eventService.save(updatedEvent);
+        updatedNew.setNewId(id);
+        updatedNew.setNewImage(newService.findById(id).getNewImage());
+        newService.save(updatedNew);
 
-        return eventMapper.toFullDTO(updatedEvent);
+        return newMapper.toFullDTO(updatedNew);
     }
 
     @PutMapping("/{id}/images/")
-    public ResponseEntity<ImageDTO> updateEventImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+    public ResponseEntity<ImageDTO> updateNewImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
             throws IOException {
 
         if (imageFile.isEmpty()) {
@@ -129,7 +129,7 @@ public class EventsRestController {
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        eventService.addImageToEvent(id, image);
+        newService.addImageToNew(id, image);
 
         URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
                 .toUri();

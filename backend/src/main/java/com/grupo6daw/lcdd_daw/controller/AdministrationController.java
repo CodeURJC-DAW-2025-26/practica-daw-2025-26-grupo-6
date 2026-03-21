@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,9 +149,9 @@ public class AdministrationController {
 
     @PostMapping("/approveNew/{id}")
     public String approveNew(@PathVariable long id) {
-        Optional<New> news = newService.findById(id);
-        if (news.isPresent()) {
-            New n = news.get();
+        New newElement = newService.findById(id);
+        if (newElement != null) {
+            New n = newElement;
             n.setValidated(true);
             newService.save(n);
         }

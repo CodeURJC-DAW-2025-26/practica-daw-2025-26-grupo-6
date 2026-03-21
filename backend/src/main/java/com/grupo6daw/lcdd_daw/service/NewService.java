@@ -1,13 +1,16 @@
 package com.grupo6daw.lcdd_daw.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.grupo6daw.lcdd_daw.dto.NewMapper;
+import com.grupo6daw.lcdd_daw.dto.NewDTO;
+import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.repository.NewRepository;
 
@@ -17,68 +20,113 @@ import com.grupo6daw.lcdd_daw.model.User;
 @Service
 public class NewService {
 
-	@Autowired
-	private NewRepository repository;
+    @Autowired
+    private NewRepository repository;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private NewMapper mapper;
 
-	public Optional<New> findById(long id) {
-		return repository.findById(id);
-	}
+    @Autowired
+    private UserRepository userRepository;
 
-	public List<New> findById(List<Long> ids) {
-		return repository.findAllById(ids);
-	}
+    public New findById(long id) {
+        return repository.findById(id).orElseThrow();
+    }
 
-	public boolean exist(long id) {
-		return repository.existsById(id);
-	}
+    public List<New> findById(List<Long> ids) {
+        return repository.findAllById(ids);
+    }
 
-	public List<New> findAll() {
-		return repository.findAll();
-	}
+    public boolean exist(long id) {
+        return repository.existsById(id);
+    }
 
-	public Page<New> findByFilter(String name, String tag, Pageable page) {
-		return repository.findByNameAndTag(name, tag, page);
-	}
+    public List<New> findAll() {
+        return repository.findAll();
+    }
 
-	public void save(New newEntity) {
-		repository.save(newEntity);
-	}
+    public Page<NewDTO> findAll(Pageable pageable) {
+        return repository.findAll(pageable).map(this::toDTO);
+    }
 
-	public void delete(long id) {
-		Optional<New> newOpt = repository.findById(id);
+    public Page<New> findByFilter(String name, String tag, Pageable page) {
+        return repository.findByNameAndTag(name, tag, page);
+    }
 
-		if (newOpt.isPresent()) {
-			New newsItem = newOpt.get();
+    public New save(New newEntity) {
+        repository.save(newEntity);
+        return newEntity;
+    }
 
-			
-			User creator = newsItem.getNewCreator();
-			if (creator != null) {
-				
-				creator.getUserNews().remove(newsItem);
-				userRepository.save(creator); 
-			}
+    public New saveRest(New n, Long id, LocalDateTime date) {
+        User author = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-		
-			repository.deleteById(id);
-		}
-	}
+        n.setNewCreator(author);
+        n.setCreationDate(date);
 
-	public List<New> findTop3() {
-		return repository.findTop3ByOrderByCreationDateDesc();
-	}
+        repository.save(n);
+        return n;
+    }
 
-	public List<New> findByValidatedFalse() {
-		return repository.findByValidatedFalse();
-	}
+    public New delete(long id) {
+        New newOpt = repository.findById(id).orElseThrow();
 
-	public List<New> findByValidatedTrue() {
-		return repository.findByValidatedTrue();
-	}
+        if (newOpt != null) {
+            New newsItem = newOpt;
 
-	public Page<New> findValidatedByFilter(String name, String tag, Pageable page) {
-		return repository.findValidatedByNameAndTag(name, tag, page);
-	}
+            User creator = newsItem.getNewCreator();
+            if (creator != null) {
+
+                creator.getUserNews().remove(newsItem);
+                userRepository.save(creator);
+            }
+
+            repository.deleteById(id);
+        }
+        return newOpt;
+    }
+
+    public List<New> findTop3() {
+        return repository.findTop3ByOrderByCreationDateDesc();
+    }
+
+    public List<New> findByValidatedFalse() {
+        return repository.findByValidatedFalse();
+    }
+
+    public List<New> findByValidatedTrue() {
+        return repository.findByValidatedTrue();
+    }
+
+    public Page<New> findValidatedByFilter(String name, String tag, Pageable page) {
+        return repository.findValidatedByNameAndTag(name, tag, page);
+    }
+
+    public New addImageToNew(long id, Image image) {
+        New n = repository.findById(id).orElseThrow();
+        n.setNewImage(image);
+        repository.save(n);
+
+        return n;
+    }
+
+    public New removeImageFromNew(long newId, long imageId) {
+        New n = repository.findById(newId).orElseThrow();
+        if (n.getNewImage() == null || n.getNewImage().getId() != imageId) {
+            throw new IllegalArgumentException("Image does not belong to this post");
+        }
+        n.setNewImage(null);
+        repository.save(n);
+
+        return n;
+    }
+
+    private NewDTO toDTO(New n) {
+        return mapper.toFullDTO(n);
+    }
+
+    private New toDomain(NewDTO newDTO) {
+        return mapper.toDomainFromFullDTO(newDTO);
+    }
 }
