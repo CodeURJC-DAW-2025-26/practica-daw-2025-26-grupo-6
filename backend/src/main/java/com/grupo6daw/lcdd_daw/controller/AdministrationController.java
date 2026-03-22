@@ -108,22 +108,6 @@ public class AdministrationController {
         return "admin";
     }
 
-    @GetMapping("/api/top-favorite-games")
-    @ResponseBody
-    public ResponseEntity<List<GameFavStatDTO>> topFavoriteGames(
-            @RequestParam(defaultValue = "10") int limit) {
-
-        List<GameFavStatDTO> data = statsService.topGamesByFavorites(limit);
-        return ResponseEntity.ok(data);
-    }
-
-    @GetMapping("/api/top-events-participants")
-    @ResponseBody
-    public ResponseEntity<List<EventParticipantsStatDTO>> topEventsParticipants(
-            @RequestParam(defaultValue = "10") int limit) {
-        return ResponseEntity.ok(statsService.topEventsByParticipants(limit));
-    }
-
     @PostMapping("/approveEvent/{id}")
     public String approveEvent(@PathVariable long id) {
         Event event = eventService.findById(id);
