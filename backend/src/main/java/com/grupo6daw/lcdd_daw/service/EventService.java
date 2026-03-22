@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo6daw.lcdd_daw.dto.EventDTO;
 import com.grupo6daw.lcdd_daw.dto.EventMapper;
@@ -28,6 +29,22 @@ public class EventService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Transactional
+    public Event addParticipant(long eventId, long userId) {
+
+        Event event = repository.findById(eventId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        if (!event.getEventRegisteredUsers().contains(user)) {
+            event.getEventRegisteredUsers().add(user);
+            user.getUserRegisteredEvents().add(event);
+        }
+
+        repository.save(event);
+        userRepository.save(user);
+        return event;
+    }
 
     public Event delete(long id) {
         Event eventOpt = repository.findById(id).orElseThrow();
@@ -67,8 +84,8 @@ public class EventService {
         return repository.findAll();
     }
 
-    public Page<EventDTO> findAll(Pageable pageable) {
-        return repository.findAll(pageable).map(this::toDTO);
+    public Page<Event> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public List<Event> findByFilter(String name, String tag) {

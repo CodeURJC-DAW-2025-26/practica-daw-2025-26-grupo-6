@@ -17,5 +17,7 @@ public record EventDTO(
         LocalDateTime creationDate,
         LocalDate eventDate,
         Integer maxParticipants,
-        boolean validated) {
+        boolean validated,
+        List<UserBasicDTO> participants) {
+
 }
