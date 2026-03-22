@@ -167,8 +167,7 @@ public class AdministrationController {
 
     @GetMapping("/user/{id}")
     public String viewUserProfile(@PathVariable Long id, Model model) {
-        User user = userService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+        User user = userService.findById(id);
 
         model.addAttribute("user", user);
         return "profile";

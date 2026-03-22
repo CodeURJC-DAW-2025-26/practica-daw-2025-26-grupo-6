@@ -63,8 +63,7 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public String userProfile(@PathVariable Long id, Model model, HttpServletRequest request) {
-        User user = userService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+        User user = userService.findById(id);
         model.addAttribute("user", user);
 
         boolean hasEditPermission = false;
@@ -110,7 +109,7 @@ public class UserController {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
         }
 
-        User user = userService.findById(id).orElseThrow();
+        User user = userService.findById(id);
         String oldEmail = user.getUserEmail();
 
         List<String> errors = new ArrayList<>();

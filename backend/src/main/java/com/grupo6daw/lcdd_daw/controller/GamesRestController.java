@@ -1,13 +1,16 @@
 package com.grupo6daw.lcdd_daw.controller;
 
+import com.grupo6daw.lcdd_daw.service.UserService;
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +49,9 @@ public class GamesRestController {
     @Autowired
     private ImageMapper imageMapper;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/")
     public Page<GameDTO> findByFilter(
             @RequestParam(required = false) String name,
@@ -58,7 +64,7 @@ public class GamesRestController {
     }
 
     @GetMapping("/{id}")
-    public GameDTO getGame(@RequestParam long id) {
+    public GameDTO getGame(@PathVariable long id) {
 
         return gameMapper.toDTO(gameService.findById(id));
     }
@@ -138,5 +144,35 @@ public class GamesRestController {
                 .toUri();
 
         return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+    }
+
+    @PostMapping("/{id}/favourites")
+    public GameDTO addFavorite(@PathVariable long id, Principal principal) {
+
+        Game game = gameService.findById(id);
+
+        if (principal != null) {
+            userService.findById(Long.parseLong(principal.getName())).addFavoriteGame(game);
+            userService.save(userService.findById(Long.parseLong(principal.getName())));
+        } else {
+            throw new AccessDeniedException("Debes iniciar sesión para añadir favoritos");
+        }
+
+        return gameMapper.toDTO(gameService.findById(id));
+    }
+
+    @DeleteMapping("/{id}/favourites")
+    public GameDTO removeFavorite(@PathVariable long id, Principal principal) {
+
+        Game game = gameService.findById(id);
+
+        if (principal != null) {
+            userService.findById(Long.parseLong(principal.getName())).removeFavoriteGame(game);
+            userService.save(userService.findById(Long.parseLong(principal.getName())));
+        } else {
+            throw new AccessDeniedException("Debes iniciar sesión para eliminar favoritos");
+        }
+
+        return gameMapper.toDTO(gameService.findById(id));
     }
 }

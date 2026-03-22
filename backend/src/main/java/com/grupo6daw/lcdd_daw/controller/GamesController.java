@@ -77,7 +77,7 @@ public class GamesController {
             if (request.getUserPrincipal() != null) {
                 hasEditPermission = request.isUserInRole("ADMIN");
                 String principalName = request.getUserPrincipal().getName();
-                User user = userService.findById(Long.valueOf(principalName)).orElse(null);
+                User user = userService.findById(Long.valueOf(principalName));
 
                 if (user != null) {
                     isFavorited = user.getUserFavGames().contains(game);
@@ -236,7 +236,7 @@ public class GamesController {
         User user = null;
 
         if (principalName != null && principalName.matches("\\d+")) {
-            user = userService.findById(Long.valueOf(principalName)).orElse(null);
+            user = userService.findById(Long.valueOf(principalName));
         }
 
         if (user == null) {

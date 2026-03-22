@@ -52,7 +52,7 @@ public class UsersRestController {
 
     @GetMapping("/{id}")
     public UserDTO getEvent(@PathVariable long id) {
-        return userMapper.toFullDTO(userService.findById(id).orElseThrow());
+        return userMapper.toFullDTO(userService.findById(id));
     }
 
     @PostMapping("/")
@@ -87,7 +87,7 @@ public class UsersRestController {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
         }
 
-        User user = userService.findById(id).orElseThrow();
+        User user = userService.findById(id);
 
         List<String> errors = new ArrayList<>();
 

@@ -73,8 +73,8 @@ public class UserService {
         return userRepository.findAll(pageable).map(this::toDTO);
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow();
     }
 
     public boolean existsByUserEmail(String email) {
