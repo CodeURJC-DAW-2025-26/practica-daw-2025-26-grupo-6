@@ -14,7 +14,7 @@ import com.grupo6daw.lcdd_daw.service.NewService;
 import com.grupo6daw.lcdd_daw.service.StatsService;
 
 @RestController
-@RequestMapping("/admin/api")
+@RequestMapping("/api/v1/admin")
 public class AdministrationRestController {
 
     @Autowired
@@ -39,7 +39,7 @@ public class AdministrationRestController {
 
     // ---Accept / Deny (Swagger) ---
 
-    @PutMapping("/events/{id}/approve")
+    @PutMapping("/events/{id}")
     public ResponseEntity<Void> approveEvent(@PathVariable long id) {
         Event event = eventService.findById(id);
         event.setValidated(true);
@@ -53,7 +53,7 @@ public class AdministrationRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/news/{id}/approve")
+    @PutMapping("/news/{id}")
     public ResponseEntity<Void> approveNew(@PathVariable long id) {
         New news = newService.findById(id);
         news.setValidated(true);

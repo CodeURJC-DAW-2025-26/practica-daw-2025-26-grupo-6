@@ -96,6 +96,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/events").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/events/*").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/*").hasRole("REGISTERED_USER")
+                        // Admin
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         // PUBLIC ENDPOINTS
                         .anyRequest().permitAll());
 
