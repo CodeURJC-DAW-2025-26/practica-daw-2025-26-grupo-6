@@ -49,9 +49,12 @@ public class EventsRestController {
     private ImageMapper imageMapper;
 
     @GetMapping("/")
-    public Page<EventDTO> findAll(Pageable pageable) {
+    public Page<EventDTO> findByFilter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String tag,
+            Pageable pageable) {
 
-        return eventService.findAll(pageable);
+        return eventService.findValidatedByFilter(name, tag, pageable).map(eventMapper::toFullDTO);
     }
 
     @GetMapping("/{id}")

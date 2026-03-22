@@ -49,9 +49,12 @@ public class NewsRestController {
     private ImageMapper imageMapper;
 
     @GetMapping("/")
-    public Page<NewDTO> findAll(Pageable pageable) {
+    public Page<NewDTO> findByFilter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String tag,
+            Pageable pageable) {
 
-        return newService.findAll(pageable);
+        return newService.findValidatedByFilter(name, tag, pageable).map(newMapper::toFullDTO);
     }
 
     @GetMapping("/{id}")

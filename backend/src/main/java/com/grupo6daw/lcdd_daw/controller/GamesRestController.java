@@ -47,13 +47,18 @@ public class GamesRestController {
     private ImageMapper imageMapper;
 
     @GetMapping("/")
-    public Page<GameDTO> findAll(Pageable pageable) {
+    public Page<GameDTO> findByFilter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) Integer players,
+            @RequestParam(required = false) Integer duration,
+            Pageable pageable) {
 
-        return gameService.findAll(pageable).map(gameMapper::toDTO);
+        return gameService.findByFilter(name, tag, players, duration, pageable).map(gameMapper::toDTO);
     }
 
     @GetMapping("/{id}")
-    public GameDTO getGame(@PathVariable long id) {
+    public GameDTO getGame(@RequestParam long id) {
 
         return gameMapper.toDTO(gameService.findById(id));
     }
