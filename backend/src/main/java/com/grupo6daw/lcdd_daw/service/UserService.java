@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
@@ -21,8 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.grupo6daw.lcdd_daw.dto.ProfileUpdateDTO;
-import com.grupo6daw.lcdd_daw.dto.UserRegistrationDto;
+import com.grupo6daw.lcdd_daw.controller.RegisterWebController;
+import com.grupo6daw.lcdd_daw.dto.UserDetailsDTO;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
@@ -50,6 +52,13 @@ public class UserService {
     @Autowired
     NewService newService;
 
+    @Autowired
+    ImageService imageService;
+
+    Logger logger = LoggerFactory.getLogger(RegisterWebController.class);
+
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -66,19 +75,34 @@ public class UserService {
         return userRepository.existsByUserEmail(email);
     }
 
-    public void register(UserRegistrationDto dto) {
+    public User register(UserDetailsDTO dto, List<String> errorMessages) {
+
+        if (!validRegister(dto, errorMessages)) {
+            return null;
+        }
+
         User user = new User(
-                dto.getName(),
-                dto.getSurnames(),
-                dto.getNickname(),
+                dto.userName(),
+                dto.userSurname(),
+                dto.userNickname(),
                 "",
-                dto.getEmail(),
-                passwordEncoder.encode(dto.getPassword()),
+                dto.userEmail(),
+                passwordEncoder.encode(dto.password()),
                 "REGISTERED_USER");
+
+        if (dto.userImage() != null && !dto.userImage().isEmpty()) {
+            try {
+                Image profileImage = imageService.createImage(dto.userImage().getInputStream());
+                user.setUserImage(profileImage);
+            } catch (Exception e) {
+                logger.error("Exception when creating image", e);
+            }
+        }
 
         userRepository.save(user);
         mailService.sendRegisterEmail(user);
-        
+
+        return user;
     }
 
     public Optional<User> getUser(long id) {
@@ -96,31 +120,24 @@ public class UserService {
         }
     }
 
-    public boolean updateProfile(long id, ProfileUpdateDTO dto) throws IOException {
+    public User updateProfile(User user, UserDetailsDTO dto, List<String> errorMessages) throws IOException {
         Exception error = null;
-        User user = userRepository.findById(id).orElseThrow();
-        boolean credentialsChanged = false;
 
-   
-        if (dto.getEmail() != null && !dto.getEmail().isEmpty() && !user.getUserEmail().equals(dto.getEmail())) {
-            user.setUserEmail(dto.getEmail());
-            credentialsChanged = true;
+        if (!validUpdate(user, dto, errorMessages)) {
+            return null;
         }
 
-    
-        if (dto.getPassword() != null && !dto.getPassword().trim().isEmpty()) {
-            user.setUserEncodedPassword(passwordEncoder.encode(dto.getPassword()));
-            credentialsChanged = true;
+        if (dto.password() != null && !dto.password().isEmpty()) {
+            user.setUserEncodedPassword(passwordEncoder.encode(dto.password()));
         }
 
-        
-        user.setUserNickname(dto.getNickname());
-        user.setUserName(dto.getName());
-        user.setUserSurname(dto.getSurnames());
-        user.setUserInterests(dto.getInterests());
+        user.setUserEmail(dto.userEmail());
+        user.setUserNickname(dto.userNickname());
+        user.setUserName(dto.userName());
+        user.setUserSurname(dto.userSurname());
+        user.setUserInterests(dto.userInterests());
 
-      
-        MultipartFile file = dto.getImage();
+        MultipartFile file = dto.userImage();
         if (file != null && !file.isEmpty()) {
             try {
                 user.setUserImage(new Image(new SerialBlob(file.getBytes())));
@@ -129,16 +146,13 @@ public class UserService {
             }
         }
 
-       
         userRepository.save(user);
 
-      
         if (error != null) {
             throw new IOException("Failed to create image blob", error);
         }
 
-    
-        return credentialsChanged;
+        return user;
     }
 
     public void deleteUser(long id) {
@@ -195,5 +209,84 @@ public class UserService {
     // RegisterWebController
     public boolean existsByUserNickname(String nickname) {
         return userRepository.existsByUserNickname(nickname);
+    }
+
+    // Return if the registerDto is valid or not and adds any errors to
+    // errorMessages list.
+    // errorMessages must be empty
+    private boolean validDTO(UserDetailsDTO dto, List<String> errorMessages) {
+
+        if (errorMessages == null) {
+            throw new IllegalArgumentException("errorMessages can't be null");
+        }
+
+        if (!errorMessages.isEmpty()) {
+            throw new IllegalArgumentException("errorMessages list must be empty");
+        }
+
+        if (dto.userEmail() == null || dto.userEmail().isEmpty()) {
+            errorMessages.add("El email es obligatorio.");
+        } else if (!dto.userEmail().matches(EMAIL_REGEX)) {
+            errorMessages.add("Email inválido.");
+        }
+
+        if (dto.userName() == null || dto.userName().isEmpty()) {
+            errorMessages.add("El nombre es obligatorio.");
+        }
+
+        if (dto.userSurname() == null || dto.userSurname().isEmpty()) {
+            errorMessages.add("Los apellidos son obligatorios.");
+        }
+
+        if (dto.userNickname() == null || dto.userNickname().isEmpty()) {
+            errorMessages.add("El nickname es obligatorio.");
+        }
+
+        if (!(dto.password() == null && dto.confirmPassword() == null)
+                && (dto.password() != null && !dto.password().equals(dto.confirmPassword()))) {
+            errorMessages.add("Las contraseñas no coinciden.");
+        }
+
+        return errorMessages.isEmpty();
+    }
+
+    private boolean validRegister(UserDetailsDTO dto, List<String> errorMessages) {
+
+        validDTO(dto, errorMessages);
+
+        if (dto.password() == null || dto.password().length() < 4) {
+            errorMessages.add("La contraseña debe tener por lo menos 4 caracteres.");
+        }
+
+        if (dto.userEmail() != null && existsByUserEmail(dto.userEmail())) {
+            errorMessages.add("Ya existe un usuario con ese correo electrónico.");
+        }
+
+        if (dto.userNickname() != null && existsByUserNickname(dto.userNickname())) {
+            errorMessages.add("El apodo '" + dto.userNickname() + "' ya está siendo usado por otro aventurero.");
+        }
+
+        return errorMessages.isEmpty();
+    }
+
+    private boolean validUpdate(User user, UserDetailsDTO dto, List<String> errorMessages) {
+
+        validDTO(dto, errorMessages);
+
+        if (dto.userNickname() != null && !dto.userNickname().equals(user.getUserNickname())
+                && existsByUserNickname(dto.userNickname())) {
+            errorMessages.add("El apodo '" + dto.userNickname() + "' ya está siendo usado por otro aventurero.");
+        }
+
+        if (dto.userEmail() != null && !dto.userEmail().equals(user.getUserEmail())
+                && existsByUserEmail(dto.userEmail())) {
+            errorMessages.add("Ya existe un usuario con ese correo electrónico.");
+        }
+
+        if (dto.password() != null && !dto.password().isEmpty() && dto.password().length() < 4) {
+            errorMessages.add("La contraseña debe tener por lo menos 4 caracteres.");
+        }
+
+        return errorMessages.isEmpty();
     }
 }

@@ -2,11 +2,10 @@ package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
@@ -16,19 +15,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.grupo6daw.lcdd_daw.dto.ProfileUpdateDTO;
+import com.grupo6daw.lcdd_daw.dto.UserDetailsDTO;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
@@ -46,12 +43,12 @@ public class UserController {
             throw new AccessDeniedException("No hay usuario autenticado");
         }
 
-        Long currentUserId = Long.valueOf(request.getUserPrincipal().getName()); 
+        Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
         User user = userService.getUser(currentUserId)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
 
         boolean isAdmin = request.isUserInRole("ADMIN");
-        boolean hasEditPermission = true; 
+        boolean hasEditPermission = true;
 
         model.addAttribute("user", user);
         model.addAttribute("hasEditPermission", hasEditPermission);
@@ -79,7 +76,7 @@ public class UserController {
             isOwner = user.getUserId() != null && user.getUserId().equals(currentUserId);
             isAdmin = request.isUserInRole("ADMIN");
             hasEditPermission = isOwner || isAdmin;
-            
+
             model.addAttribute("userId", String.valueOf(currentUserId));
             model.addAttribute("admin", isAdmin);
         }
@@ -101,7 +98,7 @@ public class UserController {
     }
 
     @PostMapping("/user/{id}/update")
-    public String updateProfile(Model model, @Valid ProfileUpdateDTO dto, BindingResult bindingResult,
+    public String updateProfile(Model model, UserDetailsDTO dto,
             HttpServletRequest request, HttpServletResponse response,
             Authentication authentication, @PathVariable long id,
             RedirectAttributes redirectAttributes) throws IOException {
@@ -113,34 +110,22 @@ public class UserController {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
         }
 
-        User currentUser = userService.findById(id).orElseThrow();
+        User user = userService.findById(id).orElseThrow();
+        String oldEmail = user.getUserEmail();
 
-        if (dto.getEmail() != null && !currentUser.getUserEmail().equalsIgnoreCase(dto.getEmail().trim())) {
-            if (userService.existsByUserEmail(dto.getEmail().trim())) {
-                bindingResult.rejectValue("email", "error.email",
-                        "Este correo electrónico ya está registrado por otro usuario.");
-            }
-        }
+        List<String> errors = new ArrayList<>();
 
-        if (dto.getNickname() != null && !currentUser.getUserNickname().equalsIgnoreCase(dto.getNickname().trim())) {
-            if (userService.existsByUserNickname(dto.getNickname().trim())) {
-                bindingResult.rejectValue("nickname", "error.nickname", "Este apodo ya está en uso. Elige otro.");
-            }
-        }
+        user = userService.updateProfile(user, dto, errors);
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("user", currentUser);
+        if (!errors.isEmpty()) {
+            model.addAttribute("user", user);
             model.addAttribute("hasErrors", true);
-
-            List<String> errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
             model.addAttribute("allErrors", errors);
-
             return "profile";
         }
 
-        boolean credentialsChanged = userService.updateProfile(id, dto);
+        boolean credentialsChanged = !dto.userEmail().equals(oldEmail) || (dto.password() != null
+                && !dto.password().isEmpty());
 
         if (credentialsChanged && authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
