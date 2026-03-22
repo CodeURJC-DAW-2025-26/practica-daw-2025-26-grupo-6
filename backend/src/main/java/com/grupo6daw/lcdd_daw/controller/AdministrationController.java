@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.grupo6daw.lcdd_daw.dto.EventParticipantsStatDTO;
 import com.grupo6daw.lcdd_daw.dto.GameFavStatDTO;
+import com.grupo6daw.lcdd_daw.dto.UserDTO;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.User;
@@ -72,7 +73,7 @@ public class AdministrationController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, field));
 
-        Page<User> usersPage = userService.findAll(pageable);
+        Page<UserDTO> usersPage = userService.findAll(pageable);
 
         model.addAttribute("users", usersPage.getContent());
         model.addAttribute("usersPage", usersPage);
