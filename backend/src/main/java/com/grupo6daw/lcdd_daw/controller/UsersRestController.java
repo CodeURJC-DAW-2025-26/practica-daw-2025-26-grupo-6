@@ -17,6 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.grupo6daw.lcdd_daw.dto.EventDTO;
 import com.grupo6daw.lcdd_daw.dto.UserDTO;
 import com.grupo6daw.lcdd_daw.dto.UserMapper;
 import com.grupo6daw.lcdd_daw.dto.UserDetailsDTO;
@@ -27,7 +31,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -38,6 +44,16 @@ public class UsersRestController {
 
     @Autowired
     UserMapper userMapper;
+
+    @GetMapping("/")
+    public Page<UserDTO> findAll(Pageable pageable) {
+        return userService.findAll(pageable);
+    }
+
+    @GetMapping("/{id}")
+    public UserDTO getEvent(@PathVariable long id) {
+        return userMapper.toFullDTO(userService.findById(id).orElseThrow());
+    }
 
     @PostMapping("/")
     public ResponseEntity<UserDTO> register(UserDetailsDTO dto) {
@@ -83,5 +99,21 @@ public class UsersRestController {
 
         UserDTO userDTO = userMapper.toFullDTO(user);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteProfile(@PathVariable long id, Authentication authentication) {
+        boolean admin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+
+        Long userId = Long.parseLong(authentication.getName());
+
+        if (!admin && userId != id) {
+            throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
+        }
+
+        userService.deleteUser(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

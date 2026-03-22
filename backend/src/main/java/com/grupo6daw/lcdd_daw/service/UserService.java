@@ -24,7 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.controller.RegisterWebController;
+import com.grupo6daw.lcdd_daw.dto.EventDTO;
+import com.grupo6daw.lcdd_daw.dto.UserDTO;
 import com.grupo6daw.lcdd_daw.dto.UserDetailsDTO;
+import com.grupo6daw.lcdd_daw.dto.UserMapper;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
@@ -55,6 +58,9 @@ public class UserService {
     @Autowired
     ImageService imageService;
 
+    @Autowired
+    UserMapper userMapper;
+
     Logger logger = LoggerFactory.getLogger(RegisterWebController.class);
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
@@ -63,8 +69,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserDTO> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(this::toDTO);
     }
 
     public Optional<User> findById(Long id) {
@@ -288,5 +294,9 @@ public class UserService {
         }
 
         return errorMessages.isEmpty();
+    }
+
+    private UserDTO toDTO(User user) {
+        return userMapper.toFullDTO(user);
     }
 }
