@@ -103,6 +103,10 @@ public class EventService {
         return repository.findByEventDateGreaterThanEqualOrderByEventDateAsc(date);
     }
 
+    public List<Event> findTop3UpcomingValidatedEvents(LocalDate date) {
+        return repository.findTop3ByValidatedTrueAndEventDateGreaterThanEqualOrderByEventDateAsc(date);
+    }
+
     public Page<Event> findValidatedByFilter(String name, String tag, Pageable page) {
         return repository.findValidatedByNameAndTag(name, tag, page);
     }

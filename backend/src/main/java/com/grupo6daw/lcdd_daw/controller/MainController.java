@@ -18,41 +18,39 @@ import com.grupo6daw.lcdd_daw.service.NewService;
 @Controller
 public class MainController {
 
-	@Autowired
-	private EventService eventService;
-	@Autowired
-	private GameService gameService;
-	@Autowired
-	private NewService newService;
+    @Autowired
+    private EventService eventService;
+    @Autowired
+    private GameService gameService;
+    @Autowired
+    private NewService newService;
 
-	@GetMapping("/")
-	public String main(Model model) {
-		
-		List<Event> nextEvents = eventService.findUpcomingEvents(LocalDate.now())
-				.stream()
-				.filter(Event::isValidated) 
-				.limit(3)
-				.toList(); 
+    @GetMapping("/")
+    public String main(Model model) {
 
-		if (!nextEvents.isEmpty()) {
-			List<Map<String, Object>> eventsWithActive = new ArrayList<>();
-			for (int i = 0; i < nextEvents.size(); i++) {
-				Map<String, Object> m = Map.of("event", nextEvents.get(i), "isActive", i == 0);
-				eventsWithActive.add(m);
-			}
-			model.addAttribute("nextEvents", eventsWithActive);
-		}
+        List<Event> nextEvents = eventService.findTop3UpcomingValidatedEvents(LocalDate.now());
 
-		model.addAttribute("noEvents", nextEvents.isEmpty());
-		model.addAttribute("moreThanOne", nextEvents.size() > 1);
-		model.addAttribute("latestNews", newService.findTop3());
-		model.addAttribute("featuredGames", gameService.findTop3());
+        if (!nextEvents.isEmpty()) {
+            List<Map<String, Object>> eventsWithActive = new ArrayList<>();
 
-		return "index";
-	}
+            for (int i = 0; i < nextEvents.size(); i++) {
+                Map<String, Object> m = Map.of("event", nextEvents.get(i), "isActive", i == 0);
+                eventsWithActive.add(m);
+            }
 
-	@GetMapping("/index")
-	public String index() {
-		return "redirect:/";
-	}
+            model.addAttribute("nextEvents", eventsWithActive);
+        }
+
+        model.addAttribute("noEvents", nextEvents.isEmpty());
+        model.addAttribute("moreThanOne", nextEvents.size() > 1);
+        model.addAttribute("latestNews", newService.findTop3());
+        model.addAttribute("featuredGames", gameService.findTop3());
+
+        return "index";
+    }
+
+    @GetMapping("/index")
+    public String index() {
+        return "redirect:/";
+    }
 }
