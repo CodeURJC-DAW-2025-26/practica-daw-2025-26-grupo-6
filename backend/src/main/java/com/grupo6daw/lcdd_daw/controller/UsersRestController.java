@@ -59,7 +59,7 @@ public class UsersRestController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO getEvent(@PathVariable long id) {
+    public UserDTO getUser(@PathVariable long id) {
         return userMapper.toFullDTO(userService.findById(id));
     }
 
@@ -160,7 +160,7 @@ public class UsersRestController {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
         }
 
-        return ResponseEntity.ok(userService.setUserImage(userId, userImage));
+        return ResponseEntity.ok(userService.setUserImage(id, userImage));
     }
 
 }

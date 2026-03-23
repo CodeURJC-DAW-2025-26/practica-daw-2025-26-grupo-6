@@ -89,11 +89,17 @@ public class UserService {
             return null;
         }
 
+        String userInterests = "";
+
+        if (dto.userInterests() != null) {
+            userInterests = dto.userInterests();
+        }
+
         User user = new User(
                 dto.userName(),
                 dto.userSurname(),
                 dto.userNickname(),
-                "",
+                userInterests,
                 dto.userEmail(),
                 passwordEncoder.encode(dto.password()),
                 "REGISTERED_USER");
@@ -156,7 +162,10 @@ public class UserService {
         user.setUserNickname(dto.userNickname());
         user.setUserName(dto.userName());
         user.setUserSurname(dto.userSurname());
-        user.setUserInterests(dto.userInterests());
+
+        if (dto.userInterests() != null) {
+            user.setUserInterests(dto.userInterests());
+        }
 
         userRepository.save(user);
 
