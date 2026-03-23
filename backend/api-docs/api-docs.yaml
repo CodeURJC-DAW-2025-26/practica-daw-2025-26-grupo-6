@@ -1,0 +1,1296 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://127.0.0.1:8443
+  description: Generated server url
+paths:
+  /api/v1/users/{id}:
+    get:
+      tags:
+      - users-rest-controller
+      operationId: getEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDTO"
+    put:
+      tags:
+      - users-rest-controller
+      operationId: updateProfile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDetailsDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDTO"
+    delete:
+      tags:
+      - users-rest-controller
+      operationId: deleteProfile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/users/{id}/image:
+    get:
+      tags:
+      - users-rest-controller
+      operationId: getUserImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+    put:
+      tags:
+      - users-rest-controller
+      operationId: putImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userImage:
+                  type: string
+                  format: binary
+              required:
+              - userImage
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+  /api/v1/news/{id}:
+    get:
+      tags:
+      - news-rest-controller
+      operationId: getNew
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NewDTO"
+    put:
+      tags:
+      - news-rest-controller
+      operationId: replaceNew
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NewDTO"
+    delete:
+      tags:
+      - news-rest-controller
+      operationId: deleteNew
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NewDTO"
+  /api/v1/news/{id}/images/:
+    put:
+      tags:
+      - news-rest-controller
+      operationId: updateNewImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageFile:
+                  type: string
+                  format: binary
+              required:
+              - imageFile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+    post:
+      tags:
+      - news-rest-controller
+      operationId: createNewImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageFile:
+                  type: string
+                  format: binary
+              required:
+              - imageFile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+  /api/v1/images/{id}/media:
+    get:
+      tags:
+      - image-rest-controller
+      operationId: getImageFile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - image-rest-controller
+      operationId: replaceImageFile
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageFile:
+                  type: string
+                  format: binary
+              required:
+              - imageFile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/games/{id}:
+    get:
+      tags:
+      - games-rest-controller
+      operationId: getGame
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GameDTO"
+    put:
+      tags:
+      - games-rest-controller
+      operationId: replaceGame
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GameDTO"
+    delete:
+      tags:
+      - games-rest-controller
+      operationId: deleteGame
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GameDTO"
+  /api/v1/games/{id}/images/:
+    put:
+      tags:
+      - games-rest-controller
+      operationId: updateGameImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageFile:
+                  type: string
+                  format: binary
+              required:
+              - imageFile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+    post:
+      tags:
+      - games-rest-controller
+      operationId: createGameImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageFile:
+                  type: string
+                  format: binary
+              required:
+              - imageFile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+  /api/v1/events/{id}:
+    get:
+      tags:
+      - events-rest-controller
+      operationId: getEvent_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventDTO"
+    put:
+      tags:
+      - events-rest-controller
+      operationId: replaceEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventDTO"
+    delete:
+      tags:
+      - events-rest-controller
+      operationId: deleteEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventDTO"
+  /api/v1/events/{id}/images:
+    put:
+      tags:
+      - events-rest-controller
+      operationId: updateEventImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageFile:
+                  type: string
+                  format: binary
+              required:
+              - imageFile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+    post:
+      tags:
+      - events-rest-controller
+      operationId: createEventImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageFile:
+                  type: string
+                  format: binary
+              required:
+              - imageFile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+  /api/v1/admin/news/{id}:
+    put:
+      tags:
+      - administration-rest-controller
+      operationId: approveNew
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+      - administration-rest-controller
+      operationId: rejectNew
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /api/v1/admin/events/{id}:
+    put:
+      tags:
+      - administration-rest-controller
+      operationId: approveEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+      - administration-rest-controller
+      operationId: rejectEvent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /api/v1/users/:
+    get:
+      tags:
+      - users-rest-controller
+      operationId: findAll
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelUserDTO"
+    post:
+      tags:
+      - users-rest-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDetailsDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/news/:
+    get:
+      tags:
+      - news-rest-controller
+      operationId: findByFilter
+      parameters:
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tag
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelNewDTO"
+    post:
+      tags:
+      - news-rest-controller
+      operationId: createNew
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NewDTO"
+  /api/v1/games/{id}/favourites:
+    post:
+      tags:
+      - games-rest-controller
+      operationId: addFavorite
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GameDTO"
+    delete:
+      tags:
+      - games-rest-controller
+      operationId: removeFavorite
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GameDTO"
+  /api/v1/games/:
+    get:
+      tags:
+      - games-rest-controller
+      operationId: findByFilter_1
+      parameters:
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tag
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: players
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: duration
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelGameDTO"
+    post:
+      tags:
+      - games-rest-controller
+      operationId: createGame
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GameDTO"
+  /api/v1/events:
+    get:
+      tags:
+      - events-rest-controller
+      operationId: findByFilter_2
+      parameters:
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tag
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelEventDTO"
+    post:
+      tags:
+      - events-rest-controller
+      operationId: createEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventDTO"
+  /api/v1/events/{eventId}/participants:
+    post:
+      tags:
+      - events-rest-controller
+      operationId: joinEvent
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventDTO"
+  /api/v1/auth/refresh:
+    post:
+      tags:
+      - login-controller
+      operationId: refreshToken
+      parameters:
+      - name: RefreshToken
+        in: cookie
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /api/v1/auth/logout:
+    post:
+      tags:
+      - login-controller
+      operationId: logOut
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /api/v1/auth/login:
+    post:
+      tags:
+      - login-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+  /userExists:
+    get:
+      tags:
+      - register-web-controller
+      operationId: userExists
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /api/v1/images/{id}:
+    get:
+      tags:
+      - image-rest-controller
+      operationId: getImage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+  /api/v1/admin/top-favorite-games:
+    get:
+      tags:
+      - administration-rest-controller
+      operationId: getTopGames
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GameFavStatDTO"
+  /api/v1/admin/top-events-participants:
+    get:
+      tags:
+      - administration-rest-controller
+      operationId: getTopEvents
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventParticipantsStatDTO"
+  /api/v1/news/{newId}/images/{imageId}:
+    delete:
+      tags:
+      - news-rest-controller
+      operationId: deleteNewImage
+      parameters:
+      - name: newId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: imageId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+  /api/v1/games/{gameId}/images/{imageId}:
+    delete:
+      tags:
+      - games-rest-controller
+      operationId: deleteGameImage
+      parameters:
+      - name: gameId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: imageId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+  /api/v1/events/{eventId}/images/{imageId}:
+    delete:
+      tags:
+      - events-rest-controller
+      operationId: deleteEventImage
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: imageId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ImageDTO"
+components:
+  schemas:
+    UserDetailsDTO:
+      type: object
+      properties:
+        userEmail:
+          type: string
+        userName:
+          type: string
+        userSurname:
+          type: string
+        userNickname:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+        userInterests:
+          type: string
+    EventBasicDTO:
+      type: object
+      properties:
+        eventId:
+          type: integer
+          format: int64
+        eventName:
+          type: string
+    GameDTO:
+      type: object
+      properties:
+        gameId:
+          type: integer
+          format: int64
+        gameName:
+          type: string
+        gameDescription:
+          type: string
+        gameImage:
+          $ref: "#/components/schemas/ImageDTO"
+        minPlayers:
+          type: integer
+          format: int64
+        maxPlayers:
+          type: integer
+          format: int64
+        minDuration:
+          type: integer
+          format: int64
+        maxDuration:
+          type: integer
+          format: int64
+        genre:
+          type: string
+    ImageDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    NewBasicDTO:
+      type: object
+      properties:
+        newId:
+          type: integer
+          format: int64
+        newName:
+          type: string
+    UserDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        userSurname:
+          type: string
+        userNickname:
+          type: string
+        userInterests:
+          type: string
+        userEmail:
+          type: string
+        userImage:
+          $ref: "#/components/schemas/ImageDTO"
+        userRoles:
+          type: array
+          items:
+            type: string
+        userRegisteredEvents:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventBasicDTO"
+        userOwnEvents:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventBasicDTO"
+        userFavGames:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameDTO"
+        userNews:
+          type: array
+          items:
+            $ref: "#/components/schemas/NewBasicDTO"
+    NewDTO:
+      type: object
+      properties:
+        newId:
+          type: integer
+          format: int64
+        newName:
+          type: string
+        newDescription:
+          type: string
+        newImage:
+          $ref: "#/components/schemas/ImageDTO"
+        newTag:
+          type: string
+        newEvents:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventBasicDTO"
+        newCreator:
+          $ref: "#/components/schemas/UserBasicDTO"
+        validated:
+          type: boolean
+        creationDate:
+          type: string
+          format: date-time
+    UserBasicDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        userEmail:
+          type: string
+        userNickname:
+          type: string
+    EventDTO:
+      type: object
+      properties:
+        eventId:
+          type: integer
+          format: int64
+        eventName:
+          type: string
+        eventDescription:
+          type: string
+        eventImage:
+          $ref: "#/components/schemas/ImageDTO"
+        eventTag:
+          type: string
+        requiresRegistration:
+          type: boolean
+        link:
+          type: string
+        eventCreator:
+          $ref: "#/components/schemas/UserBasicDTO"
+        eventNews:
+          type: array
+          items:
+            $ref: "#/components/schemas/NewBasicDTO"
+        creationDate:
+          type: string
+          format: date-time
+        eventDate:
+          type: string
+          format: date
+        maxParticipants:
+          type: integer
+          format: int32
+        validated:
+          type: boolean
+        participants:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserBasicDTO"
+    AuthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+        message:
+          type: string
+        error:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+    PagedModelUserDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserDTO"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    PagedModelNewDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/NewDTO"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    PagedModelGameDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameDTO"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    PagedModelEventDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventDTO"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    GameFavStatDTO:
+      type: object
+      properties:
+        gameId:
+          type: integer
+          format: int64
+        gameName:
+          type: string
+        favCount:
+          type: integer
+          format: int64
+    EventParticipantsStatDTO:
+      type: object
+      properties:
+        eventId:
+          type: integer
+          format: int64
+        eventName:
+          type: string
+        participantCount:
+          type: integer
+          format: int64
