@@ -558,17 +558,17 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - Javier Cai Lin**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Mover la logica de los controller a service de Games, Events y News y de implementar que se pueda apuntar un usuario a un evento y luego desapuntarse de dicho evento
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Mover la logica de los controller a service de Games](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/c2e10d81eba70f8a6afb2458d103cd5d136e06c8)  | [EventsRestController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/EventsRestController.java)   |
+|2| [Mover la logica de los controller a service de Events](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/7a3dfdb8bccf91f9fc13feb7d886ec18f83625e5)  | [EventService](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/service/EventService.java)   |
+|3| [Mover la logica de los controller a service de News](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/6a37d4bad455da4e3dfd1c9fb4f357b7b872e27f)  | [GamesRestController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/GamesRestController.java)   |
+|4| [Usuarios poder apuntarse a evento](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/dcc2c5ba1a45dc28a1a2da4a09b74620404869b5)  | [GameService](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/service/GameService.java)   |
+|5| [Usuarios poder desapuntarse de evento](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/89569147b97dc3f3b7cf065e29af078e9301207c)  | [NewsRestController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/NewsRestController.java)   |
 
 ---
 
