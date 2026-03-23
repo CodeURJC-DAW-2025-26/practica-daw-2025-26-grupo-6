@@ -76,7 +76,8 @@ public class NewService {
         if (newOpt != null) {
             New newsItem = newOpt;
 
-            // Initialize lazy associations required by NewDTO mapping after transaction ends
+            // Initialize lazy associations required by NewDTO mapping after transaction
+            // ends
             newsItem.getNewEvents().size();
             if (newsItem.getNewImage() != null) {
                 newsItem.getNewImage().getId();
@@ -136,5 +137,24 @@ public class NewService {
 
     public New toDomain(NewDTO newDTO) {
         return mapper.toDomainFromFullDTO(newDTO);
+    }
+
+    public boolean checkPermissions(New newPost, User currentUser, boolean isNewPost) {
+        if (!isNewPost) {
+            New existingNew = findById(newPost.getNewId());
+            boolean isOwner = existingNew.getNewCreator() != null
+                    && existingNew.getNewCreator().getUserId().equals(currentUser.getUserId());
+            boolean isAdmin = currentUser.getUserRoles().contains("ADMIN");
+
+            if (!isOwner && !isAdmin) {
+                return false;
+            }
+
+            newPost.setNewCreator(existingNew.getNewCreator());
+        } else {
+            newPost.setNewCreator(currentUser);
+        }
+
+        return true;
     }
 }
