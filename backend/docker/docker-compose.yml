@@ -4,17 +4,20 @@ services:
     ports:
       - 8443:8443
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db/lcdd_daw
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db/${DB_NAME:-lcdd_daw}
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=MySQLpassword
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD:-MySQLpassword}
+      - SPRING_MAIL_USERNAME=${EMAIL_USERNAME:-}
+      - SPRING_MAIL_PASSWORD=${EMAIL_PASSWORD:-}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=${DB_MODE:-none}
     depends_on:
       db:
         condition: service_healthy
   db:
     image: mysql:9.6
     environment:
-      - MYSQL_ROOT_PASSWORD=MySQLpassword
-      - MYSQL_DATABASE=lcdd_daw
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-MySQLpassword}
+      - MYSQL_DATABASE={DB_NAME:-lcdd_daw}
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
