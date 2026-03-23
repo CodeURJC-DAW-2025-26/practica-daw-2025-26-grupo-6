@@ -1,98 +1,86 @@
 package com.grupo6daw.lcdd_daw.controller;
 
 import com.grupo6daw.lcdd_daw.dto.ErrorDTO;
-import com.grupo6daw.lcdd_daw.dto.ErrorMapper;
-import com.grupo6daw.lcdd_daw.model.Error;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.ServletException;
+import java.util.NoSuchElementException;
+
+import org.springframework.boot.webmvc.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
-@RestControllerAdvice
-public class CustomErrorRestController {
+@RestControllerAdvice(annotations = RestController.class)
+@RestController
+public class CustomErrorRestController implements ErrorController {
 
-    private final ErrorMapper errorMapper;
+    private static final int UNAUTHORIZED = HttpStatus.UNAUTHORIZED.value();
+    private static final int BAD_REQUEST = HttpStatus.BAD_REQUEST.value();
+    private static final int FORBIDDEN = HttpStatus.FORBIDDEN.value();
+    private static final int NOT_FOUND = HttpStatus.NOT_FOUND.value();
+    private static final int INTERNAL_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR.value();
 
-    public CustomErrorRestController(ErrorMapper errorMapper) {
-        this.errorMapper = errorMapper;
+    private String getErrorMessage(int statusCode) {
+        return switch (statusCode) {
+            case 401 -> "Debes iniciar sesion para acceder a este recurso.";
+            case 404 -> "La página solicitada no existe o ha sido movida.";
+            case 403 -> "No tienes el rol necesario para ver este contenido.";
+            case 500 -> "Error interno del servidor. Lo estamos revisando.";
+            case 400 -> "La solicitud enviada no es válida.";
+            default -> "Ha ocurrido un error inesperado.";
+        };
     }
 
-    private ResponseEntity<ErrorDTO> buildErrorResponse(int statusCode, String message) {
-        Error error = new Error(message, statusCode);
-        ErrorDTO errorDTO = errorMapper.toDTO(error);
-        return ResponseEntity.status(HttpStatus.valueOf(statusCode)).body(errorDTO);
+    private ResponseEntity<ErrorDTO> buildErrorResponse(int statusCode) {
+        ErrorDTO errorDTO = new ErrorDTO(statusCode, getErrorMessage(statusCode));
+        return ResponseEntity.status(statusCode).body(errorDTO);
     }
 
-    /*
-     * @ExceptionHandler(Exception.class)
-     * 
-     * @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-     * public ResponseEntity<ErrorDTO> handleGeneralError(HttpServletRequest
-     * request, Exception ex) {
-     * return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-     * "Error interno del servidor. Lo estamos revisando.");
-     * }
-     */
-    @ExceptionHandler(org.springframework.web.servlet.NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorDTO> handleNotFoundError(HttpServletRequest request, Exception ex) {
-        return buildErrorResponse(HttpStatus.NOT_FOUND.value(), "La página solicitada no existe o ha sido movida.");
+    @ExceptionHandler({ IllegalArgumentException.class, ServletException.class })
+    public ResponseEntity<ErrorDTO> handleBadRequest() {
+        return buildErrorResponse(BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorDTO> handleUnauthorized() {
+        return buildErrorResponse(UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({ NoHandlerFoundException.class, NoSuchElementException.class })
+    public ResponseEntity<ErrorDTO> handleNotFound() {
+        return buildErrorResponse(NOT_FOUND);
     }
 
     @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<ErrorDTO> handleForbiddenError(HttpServletRequest request, Exception ex) {
-        return buildErrorResponse(HttpStatus.FORBIDDEN.value(), "No tienes el rol necesario para ver este contenido.");
+    public ResponseEntity<ErrorDTO> handleForbidden() {
+        return buildErrorResponse(FORBIDDEN);
     }
 
-    /*
-     * @ExceptionHandler(ServletException.class)
-     * 
-     * @ResponseStatus(HttpStatus.BAD_REQUEST)
-     * public ResponseEntity<ErrorDTO> handleBadRequestError(HttpServletRequest
-     * request, Exception ex) {
-     * return buildErrorResponse(HttpStatus.BAD_REQUEST.value(),
-     * "La solicitud enviada no es válida.");
-     * }
-     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDTO> handleGeneralError() {
+        return buildErrorResponse(INTERNAL_SERVER_ERROR);
+    }
+
     @RequestMapping(value = "/error", produces = "application/json")
     public ResponseEntity<ErrorDTO> handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
-        int statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
-        String errorMsg = "Ha ocurrido un error.";
+        int statusCode = INTERNAL_SERVER_ERROR;
 
         if (status != null) {
             try {
                 statusCode = Integer.parseInt(status.toString());
-                switch (statusCode) {
-                    case 404:
-                        errorMsg = "La página solicitada no existe o ha sido movida.";
-                        break;
-                    case 403:
-                        errorMsg = "No tienes el rol necesario para ver este contenido.";
-                        break;
-                    case 500:
-                        errorMsg = "Error interno del servidor. Lo estamos revisando.";
-                        break;
-                    case 400:
-                        errorMsg = "La solicitud enviada no es válida.";
-                        break;
-                    default:
-                        errorMsg = "Ha ocurrido un error inesperado.";
-                        break;
-                }
             } catch (NumberFormatException e) {
-                statusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
-                errorMsg = "Ha ocurrido un error inesperado.";
+                statusCode = INTERNAL_SERVER_ERROR;
             }
         }
 
-        return buildErrorResponse(statusCode, errorMsg);
+        return buildErrorResponse(statusCode);
     }
 }
