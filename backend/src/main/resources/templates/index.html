@@ -134,8 +134,14 @@
         <div class="col-lg-4 col-md-6" data-aos="fade-up">
           <div class="project-card h-100">
             <div class="project-image" style="height: 200px; overflow: hidden;">
-              <img src="/images/{{gameImage.id}}" alt="{{gameName}}" class="img-fluid w-100 h-100"
+              {{#gameImage}}
+              <img src="/images/{{id}}" alt="{{gameName}}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+              {{/gameImage}}
+
+              {{^gameImage}}
+              <img src="/images/default-game.png" alt="Sin imagen" class="img-fluid w-100 h-100"
                 style="object-fit: cover;">
+              {{/gameImage}}
             </div>
             <div class="project-info p-3">
               <div class="project-category mb-2">{{genre}}</div>
