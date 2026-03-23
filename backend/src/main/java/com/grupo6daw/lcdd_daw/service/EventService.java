@@ -33,6 +33,10 @@ public class EventService {
 
     public Object toDTO(Event event, User logged) {
 
+        if (logged == null) {
+            return mapper.toPublicDTO(event);
+        }
+
         boolean isOwner = event.getEventCreator() != null
                 && event.getEventCreator().getUserId().equals(logged.getUserId());
 
