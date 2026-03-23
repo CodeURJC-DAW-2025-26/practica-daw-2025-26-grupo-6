@@ -10,7 +10,7 @@ paths:
     get:
       tags:
       - users-rest-controller
-      operationId: getEvent
+      operationId: getUser
       parameters:
       - name: id
         in: path
@@ -408,7 +408,7 @@ paths:
     get:
       tags:
       - events-rest-controller
-      operationId: getEvent_1
+      operationId: getEvent
       parameters:
       - name: id
         in: path
@@ -422,7 +422,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/EventDTO"
+                type: object
     put:
       tags:
       - events-rest-controller
@@ -446,7 +446,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/EventDTO"
+                type: object
     delete:
       tags:
       - events-rest-controller
@@ -464,7 +464,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/EventDTO"
+                type: object
   /api/v1/events/{id}/images:
     put:
       tags:
@@ -783,7 +783,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PagedModelEventDTO"
+                $ref: "#/components/schemas/PagedModelObject"
     post:
       tags:
       - events-rest-controller
@@ -800,7 +800,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/EventDTO"
+                type: object
   /api/v1/events/{eventId}/participants:
     post:
       tags:
@@ -820,6 +820,24 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/EventDTO"
+    delete:
+      tags:
+      - events-rest-controller
+      operationId: leaveEvent
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
   /api/v1/auth/refresh:
     post:
       tags:
@@ -933,6 +951,50 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/EventParticipantsStatDTO"
+  /admin/api/top-favorite-games:
+    get:
+      tags:
+      - administration-controller
+      operationId: topFavoriteGames
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GameFavStatDTO"
+  /admin/api/top-events-participants:
+    get:
+      tags:
+      - administration-controller
+      operationId: topEventsParticipants
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventParticipantsStatDTO"
   /api/v1/news/{newId}/images/{imageId}:
     delete:
       tags:
@@ -1008,6 +1070,84 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ImageDTO"
+  /error:
+    get:
+      tags:
+      - custom-error-rest-controller
+      operationId: handleError
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    put:
+      tags:
+      - custom-error-rest-controller
+      operationId: handleError_2
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    post:
+      tags:
+      - custom-error-rest-controller
+      operationId: handleError_1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    delete:
+      tags:
+      - custom-error-rest-controller
+      operationId: handleError_3
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    options:
+      tags:
+      - custom-error-rest-controller
+      operationId: handleError_6
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    head:
+      tags:
+      - custom-error-rest-controller
+      operationId: handleError_5
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
+    patch:
+      tags:
+      - custom-error-rest-controller
+      operationId: handleError_4
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDTO"
 components:
   schemas:
     UserDetailsDTO:
@@ -1263,13 +1403,12 @@ components:
             $ref: "#/components/schemas/GameDTO"
         page:
           $ref: "#/components/schemas/PageMetadata"
-    PagedModelEventDTO:
+    PagedModelObject:
       type: object
       properties:
         content:
           type: array
-          items:
-            $ref: "#/components/schemas/EventDTO"
+          items: {}
         page:
           $ref: "#/components/schemas/PageMetadata"
     GameFavStatDTO:
@@ -1294,3 +1433,11 @@ components:
         participantCount:
           type: integer
           format: int64
+    ErrorDTO:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int32
+        errorMsg:
+          type: string
