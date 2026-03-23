@@ -433,7 +433,7 @@ Principalmente añadir la estructuración de mustache para los html al igual que
 📄 **[Especificación OpenAPI (YAML)](/api-docs/api-docs.yaml)**
 
 #### **Documentación HTML**
-📖 **[Documentación API REST (HTML)](https://raw.githack.com/[usuario]/[repositorio]/main/api-docs/api-docs.html)**
+📖 **[Documentación API REST (HTML)](https://raw.githack.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/main/api-docs/api-docs.html)**
 
 > La documentación de la API REST se encuentra en la carpeta `/api-docs` del repositorio. Se ha generado automáticamente con SpringDoc a partir de las anotaciones en el código Java.
 
@@ -453,12 +453,20 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 1. **Clonar el repositorio** (si no lo has hecho ya):
    ```bash
-   git clone https://github.com/[usuario]/[repositorio].git
-   cd [repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6.git
+   cd practica-daw-2025-26-grupo-6
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**:
+2. **Acceder al directorio donde se encuentra el docker-compose.yml**:
+   ```bash
+   cd backend/docker
+   ```
 
+3. **Configuración de docker-compose.yml**
+   ```bash
+   docker compose up
+   ```
+   
 ### **Construcción de la Imagen Docker**
 
 #### **Requisitos:**
@@ -468,12 +476,27 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 1. **Navegar al directorio de Docker**:
    ```bash
-   cd docker
+   cd backend/docker
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**
+2. **Dar permisos de ejecución a los scripts**
+   ```bash
+   chmod u+x *.sh
+   ```
 
-### **Despliegue en Máquina Virtual**
+3. **Ejecutar los scripts**
+   ```bash
+   # Construir imagen
+   ./create_image.sh lcdd_daw
+
+   # Publicar imagen
+   ./publish_image.sh <add_dockerhub_username_here> lcdd_daw
+   
+   # Publicar imagen
+   ./publish_docker-compose.sh <add_dockerhub_username_here> lcdd_daw
+   ```
+
+### **Deispliegue en Máquina Virtual**
 
 #### **Requisitos:**
 - Acceso a la máquina virtual (SSH)
@@ -502,9 +525,8 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 | Rol | Usuario | Contraseña |
 |:---|:---|:---|
-| Administrador | admin | admin123 |
-| Usuario Registrado | user1 | user123 |
-| Usuario Registrado | user2 | user123 |
+| Administrador | admin@admin.com | adminpass |
+| Usuario Registrado | user@user.com | pass |
 
 ### **Participación de Miembros en la Práctica 2**
 
