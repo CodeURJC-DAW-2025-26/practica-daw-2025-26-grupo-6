@@ -2,7 +2,6 @@ package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
 import java.net.URI;
-import java.security.Principal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -30,6 +29,8 @@ import com.grupo6daw.lcdd_daw.dto.ImageDTO;
 import com.grupo6daw.lcdd_daw.dto.ImageMapper;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.model.User;
+import com.grupo6daw.lcdd_daw.repository.UserRepository;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 
@@ -49,33 +50,54 @@ public class EventsRestController {
     @Autowired
     private ImageMapper imageMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping
-    public Page<EventDTO> findByFilter(
+    public Page<?> findByFilter(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String tag,
-            Pageable pageable) {
+            Pageable pageable,
+            Authentication authentication) {
 
-        return eventService.findValidatedByFilter(name, tag, pageable).map(eventMapper::toFullDTO);
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userRepository.findById(userId).orElseThrow();
+
+        return eventService.findValidatedByFilter(name, tag, pageable)
+                .map(event -> eventService.toDTO(event, logged));
     }
 
     @GetMapping("/{id}")
-    public EventDTO getEvent(@PathVariable long id) {
+    public ResponseEntity<?> getEvent(@PathVariable long id,
+            Authentication authentication) {
 
-        return eventMapper.toFullDTO(eventService.findById(id));
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userRepository.findById(userId).orElseThrow();
+
+        Event event = eventService.findById(id);
+
+        return ResponseEntity.ok(eventService.toDTO(event, logged));
     }
 
     @PostMapping
-    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO, Principal principal) {
+    public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO,
+            Authentication authentication) {
+
+        long userId = Long.parseLong(authentication.getName());
+        LocalDateTime date = LocalDateTime.now();
 
         Event event = eventMapper.toDomainFromFullDTO(eventDTO);
-        Long id = Long.parseLong(principal.getName());
-        LocalDateTime date = LocalDateTime.now();
-        eventService.saveRest(event, id, date);
-        eventDTO = eventMapper.toFullDTO(event);
+        eventService.saveRest(event, userId, date);
 
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(event.getEventId()).toUri();
+        User logged = userRepository.findById(userId).orElseThrow();
 
-        return ResponseEntity.created(location).body(eventDTO);
+        URI location = fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(event.getEventId())
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(eventService.toDTO(event, logged));
     }
 
     @PostMapping("/{id}/images")
@@ -96,9 +118,13 @@ public class EventsRestController {
     }
 
     @DeleteMapping("/{id}")
-    public EventDTO deleteEvent(@PathVariable long id) {
+    public ResponseEntity<?> deleteEvent(@PathVariable long id, Authentication authentication) {
 
-        return eventMapper.toFullDTO(eventService.delete(id));
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userRepository.findById(userId).orElseThrow();
+
+        Event deleted = eventService.delete(id);
+        return ResponseEntity.ok(eventService.toDTO(deleted, logged));
     }
 
     @DeleteMapping("/{eventId}/images/{imageId}")
@@ -113,7 +139,12 @@ public class EventsRestController {
     }
 
     @PutMapping("/{id}")
-    public EventDTO replaceEvent(@PathVariable long id, @RequestBody EventDTO updatedEventDTO) throws SQLException {
+    public ResponseEntity<?> replaceEvent(@PathVariable long id,
+            @RequestBody EventDTO updatedEventDTO,
+            Authentication authentication) throws SQLException {
+
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userRepository.findById(userId).orElseThrow();
 
         Event updatedEvent = eventMapper.toDomainFromFullDTO(updatedEventDTO);
 
@@ -121,7 +152,7 @@ public class EventsRestController {
         updatedEvent.setEventImage(eventService.findById(id).getEventImage());
         eventService.save(updatedEvent);
 
-        return eventMapper.toFullDTO(updatedEvent);
+        return ResponseEntity.ok(eventService.toDTO(updatedEvent, logged));
     }
 
     @PutMapping("/{id}/images")
@@ -149,6 +180,5 @@ public class EventsRestController {
         long userId = Long.parseLong(authentication.getName());
         return eventService.addParticipant(eventId, userId);
 
-        
     }
 }
