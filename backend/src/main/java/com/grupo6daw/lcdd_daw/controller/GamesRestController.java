@@ -1,9 +1,7 @@
 package com.grupo6daw.lcdd_daw.controller;
 
-import com.grupo6daw.lcdd_daw.service.UserService;
 import java.io.IOException;
 import java.net.URI;
-import java.security.Principal;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,8 +29,10 @@ import com.grupo6daw.lcdd_daw.dto.ImageDTO;
 import com.grupo6daw.lcdd_daw.dto.ImageMapper;
 import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.GameService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
+import com.grupo6daw.lcdd_daw.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/games")
@@ -58,32 +59,56 @@ public class GamesRestController {
             @RequestParam(required = false) String tag,
             @RequestParam(required = false) Integer players,
             @RequestParam(required = false) Integer duration,
-            Pageable pageable) {
+            Pageable pageable,
+            Authentication authentication) {
 
-        return gameService.findByFilter(name, tag, players, duration, pageable).map(gameMapper::toDTO);
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userService.findById(userId);
+
+        return gameService.findByFilter(name, tag, players, duration, pageable)
+                .map(game -> gameService.toDTO(game, logged));
     }
 
     @GetMapping("/{id}")
-    public GameDTO getGame(@PathVariable long id) {
+    public ResponseEntity<GameDTO> getGame(
+            @PathVariable long id,
+            Authentication authentication) {
 
-        return gameMapper.toDTO(gameService.findById(id));
+        User logged = null;
+
+        if (authentication != null) {
+            long userId = Long.parseLong(authentication.getName());
+            logged = userService.findById(userId);
+        }
+
+        Game game = gameService.findById(id);
+
+        return ResponseEntity.ok(gameService.toDTO(game, logged));
     }
 
     @PostMapping("/")
-    public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO gameDTO) {
+    public ResponseEntity<GameDTO> createGame(
+            @RequestBody GameDTO gameDTO,
+            Authentication authentication) {
 
-        Game game = gameMapper.toDomain(gameDTO);
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userService.findById(userId);
+
+        Game game = gameService.toDomain(gameDTO);
         gameService.save(game);
-        gameDTO = gameMapper.toDTO(game);
 
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(gameDTO.gameId()).toUri();
+        URI location
+                = fromCurrentRequest().path("/{id}")
+                        .buildAndExpand(game.getGameId()).toUri();
 
-        return ResponseEntity.created(location).body(gameDTO);
+        return ResponseEntity.created(location)
+                .body(gameService.toDTO(game, logged));
     }
 
     @PostMapping("/{id}/images/")
-    public ResponseEntity<ImageDTO> createGameImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
-            throws IOException {
+    public ResponseEntity<ImageDTO> createGameImage(
+            @PathVariable long id,
+            @RequestParam MultipartFile imageFile) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
@@ -97,41 +122,57 @@ public class GamesRestController {
                 .buildAndExpand(image.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+        return ResponseEntity.created(location).body(new ImageDTO(image.getId()));
     }
 
     @DeleteMapping("/{id}")
-    public GameDTO deleteGame(@PathVariable long id) {
+    public ResponseEntity<GameDTO> deleteGame(
+            @PathVariable long id,
+            Authentication authentication) {
 
-        return gameMapper.toDTO(gameService.delete(id));
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userService.findById(userId);
+
+        Game deleted = gameService.delete(id);
+
+        return ResponseEntity.ok(gameService.toDTO(deleted, logged));
     }
 
     @DeleteMapping("/{gameId}/images/{imageId}")
-    public ImageDTO deleteGameImage(@PathVariable long gameId, @PathVariable long imageId)
-            throws IOException {
+    public ResponseEntity<ImageDTO> deleteGameImage(
+            @PathVariable long gameId,
+            @PathVariable long imageId) throws IOException {
 
         Image image = imageService.getImage(imageId);
+
         gameService.removeImageFromGame(gameId, imageId);
         imageService.deleteImage(imageId);
 
-        return imageMapper.toDTO(image);
+        return ResponseEntity.ok(new ImageDTO(imageId));
     }
 
     @PutMapping("/{id}")
-    public GameDTO replaceGame(@PathVariable long id, @RequestBody GameDTO updatedGameDTO) throws SQLException {
+    public ResponseEntity<GameDTO> replaceGame(
+            @PathVariable long id,
+            @RequestBody GameDTO updatedGameDTO,
+            Authentication authentication) throws SQLException {
 
-        Game updatedGame = gameMapper.toDomain(updatedGameDTO);
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userService.findById(userId);
 
+        Game updatedGame = gameService.toDomain(updatedGameDTO);
         updatedGame.setGameId(id);
         updatedGame.setGameImage(gameService.findById(id).getGameImage());
+
         gameService.save(updatedGame);
 
-        return gameMapper.toDTO(updatedGame);
+        return ResponseEntity.ok(gameService.toDTO(updatedGame, logged));
     }
 
     @PutMapping("/{id}/images/")
-    public ResponseEntity<ImageDTO> updateGameImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
-            throws IOException {
+    public ResponseEntity<ImageDTO> updateGameImage(
+            @PathVariable long id,
+            @RequestParam MultipartFile imageFile) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
@@ -140,39 +181,46 @@ public class GamesRestController {
         Image image = imageService.createImage(imageFile.getInputStream());
         gameService.addImageToGame(id, image);
 
-        URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
+        URI location = fromCurrentContextPath()
+                .path("/api/images/{imageId}/media")
+                .buildAndExpand(image.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+        return ResponseEntity.created(location).body(new ImageDTO(image.getId()));
     }
 
     @PostMapping("/{id}/favourites")
-    public GameDTO addFavorite(@PathVariable long id, Principal principal) {
+    public ResponseEntity<GameDTO> addFavorite(
+            @PathVariable long id,
+            Authentication authentication) {
 
-        Game game = gameService.findById(id);
-
-        if (principal != null) {
-            userService.findById(Long.parseLong(principal.getName())).addFavoriteGame(game);
-            userService.save(userService.findById(Long.parseLong(principal.getName())));
-        } else {
+        if (authentication == null) {
             throw new AccessDeniedException("Debes iniciar sesión para añadir favoritos");
         }
 
-        return gameMapper.toDTO(gameService.findById(id));
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userService.findById(userId);
+
+        Game game = gameService.addFavorite(id, userId);
+
+        return ResponseEntity.ok(gameService.toDTO(game, logged));
     }
 
     @DeleteMapping("/{id}/favourites")
-    public GameDTO removeFavorite(@PathVariable long id, Principal principal) {
+    public ResponseEntity<GameDTO> removeFavorite(
+            @PathVariable long id,
+            Authentication authentication) {
 
-        Game game = gameService.findById(id);
-
-        if (principal != null) {
-            userService.findById(Long.parseLong(principal.getName())).removeFavoriteGame(game);
-            userService.save(userService.findById(Long.parseLong(principal.getName())));
-        } else {
+        if (authentication == null) {
             throw new AccessDeniedException("Debes iniciar sesión para eliminar favoritos");
         }
 
-        return gameMapper.toDTO(gameService.findById(id));
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userService.findById(userId);
+
+        Game game = gameService.removeFavorite(id, userId);
+
+        return ResponseEntity.ok(gameService.toDTO(game, logged));
     }
+
 }
