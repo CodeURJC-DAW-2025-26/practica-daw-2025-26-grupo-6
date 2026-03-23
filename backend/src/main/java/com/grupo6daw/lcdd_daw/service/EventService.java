@@ -31,7 +31,7 @@ public class EventService {
     private UserRepository userRepository;
 
     @Transactional
-    public Event addParticipant(long eventId, long userId) {
+    public EventDTO addParticipant(long eventId, long userId) {
 
         Event event = repository.findById(eventId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
@@ -39,11 +39,37 @@ public class EventService {
         if (!event.getEventRegisteredUsers().contains(user)) {
             event.getEventRegisteredUsers().add(user);
             user.getUserRegisteredEvents().add(event);
+            repository.save(event);
+            userRepository.save(user);
         }
 
-        repository.save(event);
-        userRepository.save(user);
-        return event;
+        EventDTO dto = mapper.toFullDTO(event);
+
+        boolean isCreator = event.getEventCreator() != null
+                && event.getEventCreator().getUserId().equals(userId);
+
+        boolean isAdmin = user.getUserRoles().contains("ADMIN");
+
+        if (!isCreator && !isAdmin) {
+            dto = new EventDTO(
+                    dto.eventId(),
+                    dto.eventName(),
+                    dto.eventDescription(),
+                    dto.eventImage(),
+                    dto.eventTag(),
+                    dto.requiresRegistration(),
+                    dto.link(),
+                    dto.eventCreator(),
+                    dto.eventNews(),
+                    dto.creationDate(),
+                    dto.eventDate(),
+                    dto.maxParticipants(),
+                    dto.validated(),
+                    List.of()
+            );
+        }
+
+        return dto;
     }
 
     @Transactional

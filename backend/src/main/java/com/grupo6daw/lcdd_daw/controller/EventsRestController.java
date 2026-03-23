@@ -147,8 +147,8 @@ public class EventsRestController {
             Authentication authentication) {
 
         long userId = Long.parseLong(authentication.getName());
-        Event event = eventService.addParticipant(eventId, userId);
+        return eventService.addParticipant(eventId, userId);
 
-        return eventMapper.toFullDTO(event);
+        
     }
 }
