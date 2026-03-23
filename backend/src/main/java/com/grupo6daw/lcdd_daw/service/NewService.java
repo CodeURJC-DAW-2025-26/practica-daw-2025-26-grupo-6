@@ -9,14 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.grupo6daw.lcdd_daw.dto.NewMapper;
 import com.grupo6daw.lcdd_daw.dto.NewDTO;
+import com.grupo6daw.lcdd_daw.dto.NewMapper;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
-import com.grupo6daw.lcdd_daw.repository.NewRepository;
-
-import com.grupo6daw.lcdd_daw.repository.UserRepository;
 import com.grupo6daw.lcdd_daw.model.User;
+import com.grupo6daw.lcdd_daw.repository.NewRepository;
+import com.grupo6daw.lcdd_daw.repository.UserRepository;
 
 @Service
 public class NewService {
@@ -131,11 +130,11 @@ public class NewService {
         return n;
     }
 
-    private NewDTO toDTO(New n) {
+    public NewDTO toDTO(New n) {
         return mapper.toFullDTO(n);
     }
 
-    private New toDomain(NewDTO newDTO) {
+    public New toDomain(NewDTO newDTO) {
         return mapper.toDomainFromFullDTO(newDTO);
     }
 }

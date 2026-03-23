@@ -79,8 +79,15 @@
         <div class="col-lg-4 col-md-6" data-aos="fade-up">
           <div class="project-card h-100">
             <div class="project-image" style="height: 200px; overflow: hidden;">
-              <img src="/images/{{newImage.id}}" alt="{{newName}}" class="img-fluid w-100 h-100"
-                style="object-fit: cover;">
+              {{#newImage}}
+              <img src="/images/{{id}}" alt="{{newName}}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+              {{/newImage}}
+
+              {{^newImage}}
+              <div class="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
+                <i class="bi bi-newspaper fs-1"></i>
+              </div>
+              {{/newImage}}
             </div>
             <div class="project-info p-3">
               <div class="project-category mb-2">{{newTag}}</div>

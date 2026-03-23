@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import com.grupo6daw.lcdd_daw.dto.ImageDTO;
 import com.grupo6daw.lcdd_daw.dto.ImageMapper;
@@ -30,12 +32,10 @@ import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.NewService;
 
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
-
 @RestController
 @RequestMapping("/api/v1/news")
 public class NewsRestController {
+
     @Autowired
     private NewService newService;
 
@@ -54,32 +54,41 @@ public class NewsRestController {
             @RequestParam(required = false) String tag,
             Pageable pageable) {
 
-        return newService.findValidatedByFilter(name, tag, pageable).map(newMapper::toFullDTO);
+        return newService.findValidatedByFilter(name, tag, pageable)
+                .map(newService::toDTO);
     }
 
     @GetMapping("/{id}")
-    public NewDTO getNew(@PathVariable long id) {
+    public ResponseEntity<NewDTO> getNew(@PathVariable long id) {
 
-        return newMapper.toFullDTO(newService.findById(id));
+        New n = newService.findById(id);
+        return ResponseEntity.ok(newService.toDTO(n));
     }
 
     @PostMapping("/")
-    public ResponseEntity<NewDTO> createNew(@RequestBody NewDTO newDTO, Principal principal) {
+    public ResponseEntity<NewDTO> createNew(
+            @RequestBody NewDTO newDTO,
+            Principal principal) {
 
-        New n = newMapper.toDomainFromFullDTO(newDTO);
-        Long id = Long.parseLong(principal.getName());
-        LocalDateTime date = LocalDateTime.now();
-        newService.saveRest(n, id, date);
-        newDTO = newMapper.toFullDTO(n);
+        Long userId = Long.parseLong(principal.getName());
+        LocalDateTime now = LocalDateTime.now();
 
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(n.getNewId()).toUri();
+        New news = newService.toDomain(newDTO);
+        newService.saveRest(news, userId, now);
 
-        return ResponseEntity.created(location).body(newDTO);
+        URI location = fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(news.getNewId())
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(newService.toDTO(news));
     }
 
     @PostMapping("/{id}/images/")
-    public ResponseEntity<ImageDTO> createNewImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
-            throws IOException {
+    public ResponseEntity<ImageDTO> createNewImage(
+            @PathVariable long id,
+            @RequestParam MultipartFile imageFile) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
@@ -88,44 +97,54 @@ public class NewsRestController {
         Image image = imageService.createImage(imageFile.getInputStream());
         newService.addImageToNew(id, image);
 
-        URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
+        URI location = fromCurrentContextPath()
+                .path("/api/images/{imageId}/media")
+                .buildAndExpand(image.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+        return ResponseEntity.created(location)
+                .body(imageMapper.toDTO(image));
     }
 
     @DeleteMapping("/{id}")
-    public NewDTO deleteNew(@PathVariable long id) {
+    public ResponseEntity<NewDTO> deleteNew(@PathVariable long id) {
 
-        return newMapper.toFullDTO(newService.delete(id));
+        New deleted = newService.delete(id);
+        return ResponseEntity.ok(newService.toDTO(deleted));
     }
 
     @DeleteMapping("/{newId}/images/{imageId}")
-    public ImageDTO deleteNewImage(@PathVariable long newId, @PathVariable long imageId)
+    public ResponseEntity<ImageDTO> deleteNewImage(@PathVariable long newId, @PathVariable long imageId)
             throws IOException {
 
         Image image = imageService.getImage(imageId);
+
         newService.removeImageFromNew(newId, imageId);
         imageService.deleteImage(imageId);
 
-        return imageMapper.toDTO(image);
+        return ResponseEntity.ok(imageMapper.toDTO(image));
     }
 
     @PutMapping("/{id}")
-    public NewDTO replaceNew(@PathVariable long id, @RequestBody NewDTO updatedNewDTO) throws SQLException {
+    public ResponseEntity<NewDTO> replaceNew(
+            @PathVariable long id,
+            @RequestBody NewDTO updatedNewDTO) throws SQLException {
 
-        New updatedNew = newMapper.toDomainFromFullDTO(updatedNewDTO);
+        New updated = newService.toDomain(updatedNewDTO);
 
-        updatedNew.setNewId(id);
-        updatedNew.setNewImage(newService.findById(id).getNewImage());
-        newService.save(updatedNew);
+        updated.setNewId(id);
+        updated.setNewImage(newService.findById(id).getNewImage());
+        updated.setNewCreator(newService.findById(id).getNewCreator());
 
-        return newMapper.toFullDTO(updatedNew);
+        newService.save(updated);
+
+        return ResponseEntity.ok(newService.toDTO(updated));
     }
 
     @PutMapping("/{id}/images/")
-    public ResponseEntity<ImageDTO> updateNewImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
-            throws IOException {
+    public ResponseEntity<ImageDTO> updateNewImage(
+            @PathVariable long id,
+            @RequestParam MultipartFile imageFile) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
@@ -134,7 +153,9 @@ public class NewsRestController {
         Image image = imageService.createImage(imageFile.getInputStream());
         newService.addImageToNew(id, image);
 
-        URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
+        URI location = fromCurrentContextPath()
+                .path("/api/images/{imageId}/media")
+                .buildAndExpand(image.getId())
                 .toUri();
 
         return ResponseEntity.created(location).body(imageMapper.toDTO(image));

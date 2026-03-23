@@ -66,8 +66,17 @@
             <div class="project-card shadow-sm border-0 h-100">
               <a class="d-block text-decoration-none" href="/news/{{newId}}">
                 <div class="project-image" style="height: 180px; overflow: hidden;">
-                  <img src="/images/{{newImage.id}}" alt="Noticia" class="img-fluid w-100 h-100"
-                    style="object-fit: cover;">
+
+                  {{#newImage}}
+                  <img src="/images/{{id}}" alt="Noticia" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                  {{/newImage}}
+
+                  {{^newImage}}
+                  <div class="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
+                    <i class="bi bi-newspaper fs-1"></i>
+                  </div>
+                  {{/newImage}}
+
                 </div>
                 <div class="project-info p-3">
                   <div class="project-category mb-2">{{newTag}}</div>
