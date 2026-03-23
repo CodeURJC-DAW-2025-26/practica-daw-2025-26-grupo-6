@@ -128,7 +128,6 @@ public class UserController {
 
         // if no errors, set image
         if (!userImage.isEmpty()) {
-            System.out.println(userImage + "wtf");
             userService.setUserImage(user.getUserId(), userImage);
         }
 
