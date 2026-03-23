@@ -59,7 +59,7 @@ public class UsersRestController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO getEvent(@PathVariable long id) {
+    public UserDTO getUser(@PathVariable long id) {
         return userMapper.toFullDTO(userService.findById(id));
     }
 

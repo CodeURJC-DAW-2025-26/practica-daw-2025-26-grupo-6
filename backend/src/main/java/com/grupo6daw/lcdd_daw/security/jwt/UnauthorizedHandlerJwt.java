@@ -1,6 +1,7 @@
 package com.grupo6daw.lcdd_daw.security.jwt;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +23,10 @@ public class UnauthorizedHandlerJwt implements AuthenticationEntryPoint {
             throws IOException {
         logger.info("Unauthorized error: {}", authException.getMessage());
 
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                "message: %s, path: %s".formatted(authException.getMessage(), request.getServletPath()));
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.getWriter()
+                .write("{\"errorCode\":401,\"errorMsg\":\"No tienes autorizacion para acceder a este recurso.\"}");
     }
 }

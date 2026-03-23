@@ -61,8 +61,34 @@ public class GameService {
         return repository.findByNameAndTagAndPlayersAndDuration(name, tag, players, duration, sortedPageable);
     }
 
+    public GameDTO toDTO(Game game, User logged) {
+        return mapper.toDTO(game);
+    }
+
     public Game save(Game game) {
         repository.save(game);
+        return game;
+    }
+
+    @Transactional
+    public Game addFavorite(long gameId, long userId) {
+        Game game = repository.findById(gameId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        user.addFavoriteGame(game);
+        userRepository.save(user);
+
+        return game;
+    }
+
+    @Transactional
+    public Game removeFavorite(long gameId, long userId) {
+        Game game = repository.findById(gameId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        user.removeFavoriteGame(game);
+        userRepository.save(user);
+
         return game;
     }
 
@@ -107,11 +133,7 @@ public class GameService {
         return game;
     }
 
-    private GameDTO toDTO(Game game) {
-        return mapper.toDTO(game);
-    }
-
-    private Game toDomain(GameDTO gameDTO) {
+    public Game toDomain(GameDTO gameDTO) {
         return mapper.toDomain(gameDTO);
     }
 }
