@@ -1,6 +1,6 @@
 services: 
   web:
-    image: <docker_hub_username>/lcdd_daw:latest  # Change '<docker_hub_username>' to a group member Docker Hub username
+    image: amartinca2023/lcdd_daw:latest
     ports:
       - 8443:8443
     environment:
