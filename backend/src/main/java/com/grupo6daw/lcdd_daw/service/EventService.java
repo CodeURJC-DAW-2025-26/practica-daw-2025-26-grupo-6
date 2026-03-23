@@ -46,14 +46,23 @@ public class EventService {
         return event;
     }
 
+    @Transactional
     public Event delete(long id) {
         Event eventOpt = repository.findById(id).orElseThrow();
 
         if (eventOpt != null) {
             Event event = eventOpt;
 
+            // Initialize lazy associations required by EventDTO mapping after transaction ends
+            event.getEventNews().size();
+            event.getEventRegisteredUsers().size();
+            if (event.getEventImage() != null) {
+                event.getEventImage().getId();
+            }
+
             User creator = event.getEventCreator();
             if (creator != null) {
+                creator.getUserId();
                 creator.getUserOwnEvents().remove(event);
                 userRepository.save(creator);
             }

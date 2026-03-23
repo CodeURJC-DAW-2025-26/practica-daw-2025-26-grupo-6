@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo6daw.lcdd_daw.dto.NewMapper;
 import com.grupo6daw.lcdd_daw.dto.NewDTO;
@@ -69,14 +70,22 @@ public class NewService {
         return n;
     }
 
+    @Transactional
     public New delete(long id) {
         New newOpt = repository.findById(id).orElseThrow();
 
         if (newOpt != null) {
             New newsItem = newOpt;
 
+            // Initialize lazy associations required by NewDTO mapping after transaction ends
+            newsItem.getNewEvents().size();
+            if (newsItem.getNewImage() != null) {
+                newsItem.getNewImage().getId();
+            }
+
             User creator = newsItem.getNewCreator();
             if (creator != null) {
+                creator.getUserId();
 
                 creator.getUserNews().remove(newsItem);
                 userRepository.save(creator);
