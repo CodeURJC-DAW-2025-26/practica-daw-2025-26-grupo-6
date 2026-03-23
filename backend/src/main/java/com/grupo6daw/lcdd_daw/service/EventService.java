@@ -57,7 +57,25 @@ public class EventService {
             userRepository.save(user);
         }
 
-        return mapper.toFullDTO(event); 
+        return mapper.toFullDTO(event);
+    }
+
+    @Transactional
+    public Event removeParticipant(long eventId, long userId) {
+
+        Event event = repository.findById(eventId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+
+        if (event.getEventRegisteredUsers().contains(user)) {
+
+            event.getEventRegisteredUsers().remove(user);
+            user.getUserRegisteredEvents().remove(event);
+
+            repository.save(event);
+            userRepository.save(user);
+        }
+
+        return event;
     }
 
     @Transactional
@@ -67,7 +85,6 @@ public class EventService {
         if (eventOpt != null) {
             Event event = eventOpt;
 
-            // Initialize lazy associations required by EventDTO mapping after transaction ends
             event.getEventNews().size();
             event.getEventRegisteredUsers().size();
             if (event.getEventImage() != null) {

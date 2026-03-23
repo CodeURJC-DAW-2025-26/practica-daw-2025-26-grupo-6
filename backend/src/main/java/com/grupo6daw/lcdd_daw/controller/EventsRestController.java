@@ -181,4 +181,18 @@ public class EventsRestController {
         return eventService.addParticipant(eventId, userId);
 
     }
+
+    @DeleteMapping("/{eventId}/participants")
+    public ResponseEntity<?> leaveEvent(
+            @PathVariable long eventId,
+            Authentication authentication) {
+
+        long userId = Long.parseLong(authentication.getName());
+        User logged = userRepository.findById(userId).orElseThrow();
+
+        Event updated = eventService.removeParticipant(eventId, userId);
+
+        return ResponseEntity.ok(eventService.toDTO(updated, logged));
+    }
+
 }
