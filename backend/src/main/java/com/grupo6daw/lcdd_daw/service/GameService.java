@@ -61,7 +61,7 @@ public class GameService {
         return repository.findByNameAndTagAndPlayersAndDuration(name, tag, players, duration, sortedPageable);
     }
 
-    public GameDTO toDTO(Game game, User logged) {
+    public GameDTO toDTO(Game game) {
         return mapper.toDTO(game);
     }
 

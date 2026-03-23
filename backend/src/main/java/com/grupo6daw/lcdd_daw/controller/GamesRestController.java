@@ -59,31 +59,19 @@ public class GamesRestController {
             @RequestParam(required = false) String tag,
             @RequestParam(required = false) Integer players,
             @RequestParam(required = false) Integer duration,
-            Pageable pageable,
-            Authentication authentication) {
-
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userService.findById(userId);
+            Pageable pageable) {
 
         return gameService.findByFilter(name, tag, players, duration, pageable)
-                .map(game -> gameService.toDTO(game, logged));
+                .map(game -> gameService.toDTO(game));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GameDTO> getGame(
-            @PathVariable long id,
-            Authentication authentication) {
-
-        User logged = null;
-
-        if (authentication != null) {
-            long userId = Long.parseLong(authentication.getName());
-            logged = userService.findById(userId);
-        }
+            @PathVariable long id) {
 
         Game game = gameService.findById(id);
 
-        return ResponseEntity.ok(gameService.toDTO(game, logged));
+        return ResponseEntity.ok(gameService.toDTO(game));
     }
 
     @PostMapping("/")
@@ -91,18 +79,14 @@ public class GamesRestController {
             @RequestBody GameDTO gameDTO,
             Authentication authentication) {
 
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userService.findById(userId);
-
         Game game = gameService.toDomain(gameDTO);
         gameService.save(game);
 
-        URI location
-                = fromCurrentRequest().path("/{id}")
-                        .buildAndExpand(game.getGameId()).toUri();
+        URI location = fromCurrentRequest().path("/{id}")
+                .buildAndExpand(game.getGameId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(gameService.toDTO(game, logged));
+                .body(gameService.toDTO(game));
     }
 
     @PostMapping("/{id}/images/")
@@ -130,12 +114,9 @@ public class GamesRestController {
             @PathVariable long id,
             Authentication authentication) {
 
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userService.findById(userId);
-
         Game deleted = gameService.delete(id);
 
-        return ResponseEntity.ok(gameService.toDTO(deleted, logged));
+        return ResponseEntity.ok(gameService.toDTO(deleted));
     }
 
     @DeleteMapping("/{gameId}/images/{imageId}")
@@ -157,16 +138,13 @@ public class GamesRestController {
             @RequestBody GameDTO updatedGameDTO,
             Authentication authentication) throws SQLException {
 
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userService.findById(userId);
-
         Game updatedGame = gameService.toDomain(updatedGameDTO);
         updatedGame.setGameId(id);
         updatedGame.setGameImage(gameService.findById(id).getGameImage());
 
         gameService.save(updatedGame);
 
-        return ResponseEntity.ok(gameService.toDTO(updatedGame, logged));
+        return ResponseEntity.ok(gameService.toDTO(updatedGame));
     }
 
     @PutMapping("/{id}/images/")
@@ -199,11 +177,10 @@ public class GamesRestController {
         }
 
         long userId = Long.parseLong(authentication.getName());
-        User logged = userService.findById(userId);
 
         Game game = gameService.addFavorite(id, userId);
 
-        return ResponseEntity.ok(gameService.toDTO(game, logged));
+        return ResponseEntity.ok(gameService.toDTO(game));
     }
 
     @DeleteMapping("/{id}/favourites")
@@ -216,11 +193,10 @@ public class GamesRestController {
         }
 
         long userId = Long.parseLong(authentication.getName());
-        User logged = userService.findById(userId);
 
         Game game = gameService.removeFavorite(id, userId);
 
-        return ResponseEntity.ok(gameService.toDTO(game, logged));
+        return ResponseEntity.ok(gameService.toDTO(game));
     }
 
 }
