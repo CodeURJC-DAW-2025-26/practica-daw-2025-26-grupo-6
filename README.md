@@ -530,17 +530,17 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ### **Participación de Miembros en la Práctica 2**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - Carlos García Pérez**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+He implementado la API REST del panel de administración, desarrollando los endpoints transaccionales para la moderación (aceptar y rechazar) de eventos y noticias, además de migrar y adaptar las rutas de estadísticas. He llevado a cabo la optimización de las consultas a la base de datos de la página principal, reemplazando filtros ineficientes en memoria por queries nativas para evitar la saturación de RAM.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Creación de AdministrationRestController para gestionar las peticiones a la API del panel de administración](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/942571670c63e3ba704753cfc606642b2cdc13d8)  | [AdministrationRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationRestController.java)  |
+|2| [Adición de endpoints PUT y DELETE para aprobar y rechazar eventos y noticias](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/942571670c63e3ba704753cfc606642b2cdc13d8)  | [AdministrationController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationController.java)   |
+|3| [Migración de los endpoints de estadísticas (top juegos y eventos) desde AdministrationController al nuevo controlador REST para separar la lógica web y de API](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/942571670c63e3ba704753cfc606642b2cdc13d8)  | [EventRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/repository/EventRepository.java)   |
+|4| [Estandarización de los endpoints REST para seguir la arquitectura del proyecto utilizando ResponseEntity](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/942571670c63e3ba704753cfc606642b2cdc13d8)  | [MainController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/MainController.java)   |
+|5| [Reemplazo del filtrado y limitación en memoria (Stream) en MainController por una consulta directa y optimizada a la base de datos en EventRepository](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/8d5d488f90b6a87925fc074213ccea8e0dbef39e)  | [EventService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/main/backend/src/main/java/com/grupo6daw/lcdd_daw/service/EventService.java)   |
 
 ---
 
