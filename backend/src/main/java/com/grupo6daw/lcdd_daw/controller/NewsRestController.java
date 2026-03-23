@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.NewService;
+import com.grupo6daw.lcdd_daw.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/news")
@@ -41,6 +43,9 @@ public class NewsRestController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private NewMapper newMapper;
@@ -107,9 +112,18 @@ public class NewsRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<NewDTO> deleteNew(@PathVariable long id) {
+    public ResponseEntity<NewDTO> deleteNew(@PathVariable long id,
+            Principal principal) throws SQLException {
 
-        New deleted = newService.delete(id);
+        Long userId = Long.parseLong(principal.getName());
+
+        New deleted;
+
+        if (newService.checkPermissions(newService.findById(id), userService.findById(userId), false)) {
+            deleted = newService.delete(id);
+        } else {
+            throw new AccessDeniedException("No tienes permiso para borrar esta noticia");
+        }
         return ResponseEntity.ok(newService.toDTO(deleted));
     }
 
@@ -128,15 +142,21 @@ public class NewsRestController {
     @PutMapping("/{id}")
     public ResponseEntity<NewDTO> replaceNew(
             @PathVariable long id,
-            @RequestBody NewDTO updatedNewDTO) throws SQLException {
+            @RequestBody NewDTO updatedNewDTO,
+            Principal principal) throws SQLException {
 
+        Long userId = Long.parseLong(principal.getName());
         New updated = newService.toDomain(updatedNewDTO);
 
         updated.setNewId(id);
         updated.setNewImage(newService.findById(id).getNewImage());
         updated.setNewCreator(newService.findById(id).getNewCreator());
 
-        newService.save(updated);
+        if (newService.checkPermissions(updated, userService.findById(userId), false)) {
+            newService.save(updated);
+        } else {
+            throw new AccessDeniedException("No tienes permiso para editar esta noticia");
+        }
 
         return ResponseEntity.ok(newService.toDTO(updated));
     }

@@ -286,17 +286,10 @@ public class EventsController {
         Event event = eventService.findById(id);
 
         if (event != null) {
-            Event e = event;
-            boolean isAdmin = request.isUserInRole("ADMIN");
-            boolean isOwner = false;
-
-            if (request.getUserPrincipal() != null) {
-                Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-                isOwner = e.getEventCreator() != null && e.getEventCreator().getUserId().equals(currentUserId);
-            }
-
-            // Ensure only authorized users can delete the event
-            if (isAdmin || isOwner) {
+            Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+            User currentUser = userService.getUser(currentUserId).orElseThrow();
+            boolean isNewPost = (event.getEventId() == null);
+            if (eventService.checkPermissions(event, currentUser, isNewPost)) {
                 eventService.delete(id);
             }
         }

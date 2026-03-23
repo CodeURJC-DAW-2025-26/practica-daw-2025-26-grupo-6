@@ -157,22 +157,6 @@ public class NewsController {
             return "new_form";
         }
 
-        if (!isNewPost) {
-            New existingNew = newService.findById(newPost.getNewId());
-            boolean isOwner = existingNew.getNewCreator() != null
-                    && existingNew.getNewCreator().getUserId().equals(currentUserId);
-            boolean isAdmin = request.isUserInRole("ADMIN");
-
-            if (!isOwner && !isAdmin) {
-                return "redirect:/news?error=unauthorized";
-            }
-
-            newPost.setNewCreator(existingNew.getNewCreator());
-        } else {
-
-            newPost.setNewCreator(currentUser);
-        }
-
         if (!imageField.isEmpty()) {
             Image image = imageService.createImage(imageField.getInputStream());
             newPost.setNewImage(image);
@@ -181,7 +165,9 @@ public class NewsController {
             newPost.setNewImage(oldNew.getNewImage());
         }
 
-        newService.save(newPost);
+        if (newService.checkPermissions(newPost, currentUser, isNewPost)) {
+            newService.save(newPost);
+        }
 
         if (isNewPost) {
             currentUser.getUserNews().add(newPost);
@@ -194,12 +180,10 @@ public class NewsController {
     public String removeNew(@PathVariable long id, HttpServletRequest request) {
         New newPost = newService.findById(id);
         if (newPost != null) {
-            New n = newPost;
-            boolean isAdmin = request.isUserInRole("ADMIN");
             Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-            boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
-
-            if (isAdmin || isOwner) {
+            User currentUser = userService.getUser(currentUserId).orElseThrow();
+            boolean isNewPost = (newPost.getNewId() == null);
+            if (newService.checkPermissions(newPost, currentUser, isNewPost)) {
                 newService.delete(id);
             }
         }

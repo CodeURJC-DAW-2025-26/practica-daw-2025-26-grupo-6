@@ -2,6 +2,7 @@ package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,7 @@ import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.repository.UserRepository;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
+import com.grupo6daw.lcdd_daw.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -43,6 +46,9 @@ public class EventsRestController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private EventMapper eventMapper;
@@ -148,7 +154,8 @@ public class EventsRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> replaceEvent(@PathVariable long id,
+    public ResponseEntity<?> replaceEvent(
+            @PathVariable long id,
             @RequestBody EventDTO updatedEventDTO,
             Authentication authentication) throws SQLException {
 

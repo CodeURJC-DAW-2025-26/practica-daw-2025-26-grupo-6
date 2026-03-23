@@ -484,7 +484,7 @@
                             }
                         },
                         "url": {
-                            "raw": "{{baseUrl}}/api/v1/news/13",
+                            "raw": "{{baseUrl}}/api/v1/news/12",
                             "host": [
                                 "{{baseUrl}}"
                             ],
@@ -492,7 +492,7 @@
                                 "api",
                                 "v1",
                                 "news",
-                                "13"
+                                "12"
                             ]
                         }
                     },
@@ -744,7 +744,7 @@
                         "method": "DELETE",
                         "header": [],
                         "url": {
-                            "raw": "{{baseUrl}}/api/v1/events/11",
+                            "raw": "{{baseUrl}}/api/v1/events/12",
                             "host": [
                                 "{{baseUrl}}"
                             ],
@@ -752,7 +752,49 @@
                                 "api",
                                 "v1",
                                 "events",
-                                "11"
+                                "12"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "POST joinEvent",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/events/1/participants",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "events",
+                                "1",
+                                "participants"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "DELETE leaveEvent",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/events/1/participants",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "events",
+                                "1",
+                                "participants"
                             ]
                         }
                     },
@@ -862,7 +904,12 @@
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"userEmail\": \"grupo6daw.lcdd@gmail.com\",\r\n    \"userName\": \"grupo6\",\r\n    \"userSurname\": \"daw\",\r\n    \"userNickname\": \"lcdd\",\r\n    \"password\": \"grupo6pass\",\r\n    \"confirmPassword\": \"grupo6pass\"\r\n}"
+                            "raw": "{\r\n    \"userEmail\": \"grupo6daw.lcdd@gmail.com\",\r\n    \"userName\": \"grupo6\",\r\n    \"userSurname\": \"daw\",\r\n    \"userNickname\": \"lcdd\",\r\n    \"password\": \"grupo6pass\",\r\n    \"confirmPassword\": \"grupo6pass\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/users/1",
@@ -1130,7 +1177,7 @@
                             ]
                         },
                         "url": {
-                            "raw": "{{baseUrl}}/api/v1/games/13/images/38",
+                            "raw": "{{baseUrl}}/api/v1/games/1/images/13",
                             "host": [
                                 "{{baseUrl}}"
                             ],
@@ -1138,9 +1185,9 @@
                                 "api",
                                 "v1",
                                 "games",
-                                "13",
+                                "1",
                                 "images",
-                                "38"
+                                "13"
                             ]
                         }
                     },
@@ -1152,7 +1199,7 @@
                         "method": "DELETE",
                         "header": [],
                         "url": {
-                            "raw": "{{baseUrl}}/api/v1/games/13",
+                            "raw": "{{baseUrl}}/api/v1/games/11",
                             "host": [
                                 "{{baseUrl}}"
                             ],
@@ -1160,7 +1207,7 @@
                                 "api",
                                 "v1",
                                 "games",
-                                "13"
+                                "11"
                             ]
                         }
                     },
@@ -1227,7 +1274,12 @@
                         "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"userEmail\": \"grupo6daw.lcdd@gmail.com\",\r\n    \"userName\": \"grupo6\",\r\n    \"userSurname\": \"daw\",\r\n    \"userNickname\": \"lcdd\",\r\n    \"password\": \"grupo6pass\",\r\n    \"confirmPassword\": \"grupo6pass\"\r\n}"
+                            "raw": "{\r\n    \"userEmail\": \"grupo6daw.lcdd@gmail.com\",\r\n    \"userName\": \"grupo6\",\r\n    \"userSurname\": \"daw\",\r\n    \"userNickname\": \"lcdd\",\r\n    \"password\": \"grupo6pass\",\r\n    \"confirmPassword\": \"grupo6pass\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/v1/users/1",
@@ -1346,16 +1398,15 @@
                         "method": "PUT",
                         "header": [],
                         "url": {
-                            "raw": "{{baseUrl}}/api/v1/admin/events/12",
+                            "raw": "{{baseUrl}}/api/v1/events/11",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
                                 "api",
                                 "v1",
-                                "admin",
                                 "events",
-                                "12"
+                                "11"
                             ]
                         }
                     },

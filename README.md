@@ -433,7 +433,7 @@ Principalmente añadir la estructuración de mustache para los html al igual que
 📄 **[Especificación OpenAPI (YAML)](/api-docs/api-docs.yaml)**
 
 #### **Documentación HTML**
-📖 **[Documentación API REST (HTML)](https://raw.githack.com/[usuario]/[repositorio]/main/api-docs/api-docs.html)**
+📖 **[Documentación API REST (HTML)](https://raw.githack.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/main/api-docs/api-docs.html)**
 
 > La documentación de la API REST se encuentra en la carpeta `/api-docs` del repositorio. Se ha generado automáticamente con SpringDoc a partir de las anotaciones en el código Java.
 
@@ -453,12 +453,20 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 1. **Clonar el repositorio** (si no lo has hecho ya):
    ```bash
-   git clone https://github.com/[usuario]/[repositorio].git
-   cd [repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6.git
+   cd practica-daw-2025-26-grupo-6
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**:
+2. **Acceder al directorio donde se encuentra el docker-compose.yml**:
+   ```bash
+   cd backend/docker
+   ```
 
+3. **Configuración de docker-compose.yml**
+   ```bash
+   docker compose up
+   ```
+   
 ### **Construcción de la Imagen Docker**
 
 #### **Requisitos:**
@@ -468,12 +476,27 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 1. **Navegar al directorio de Docker**:
    ```bash
-   cd docker
+   cd backend/docker
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**
+2. **Dar permisos de ejecución a los scripts**
+   ```bash
+   chmod u+x *.sh
+   ```
 
-### **Despliegue en Máquina Virtual**
+3. **Ejecutar los scripts**
+   ```bash
+   # Construir imagen
+   ./create_image.sh lcdd_daw
+
+   # Publicar imagen
+   ./publish_image.sh <add_dockerhub_username_here> lcdd_daw
+   
+   # Publicar imagen
+   ./publish_docker-compose.sh <add_dockerhub_username_here> lcdd_daw
+   ```
+
+### **Deispliegue en Máquina Virtual**
 
 #### **Requisitos:**
 - Acceso a la máquina virtual (SSH)
@@ -502,9 +525,8 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 | Rol | Usuario | Contraseña |
 |:---|:---|:---|
-| Administrador | admin | admin123 |
-| Usuario Registrado | user1 | user123 |
-| Usuario Registrado | user2 | user123 |
+| Administrador | admin@admin.com | adminpass |
+| Usuario Registrado | user@user.com | pass |
 
 ### **Participación de Miembros en la Práctica 2**
 
@@ -550,17 +572,17 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - Jaime Esteban García**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+He implementado la creación, modificación, borrado y consulta de las entidades Games, Events y News, así como sus controles por rol y por dueño. He añadido los filtros de búsqueda de las mismas entidades, así como la función de dar favorito a juegos. Adición de JSON para mostrar errores. He generado la mayor parte de la colección de peticiones de Postman y generado la documentación de la API.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Adición, borrado, modificación y consulta de juegos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/5d93c87f9f96aee16710e7e801a76146bbcc4469)  | [GameRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/5d93c87f9f96aee16710e7e801a76146bbcc4469/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/GamesRestController.java)   |
+|2| [Adición, borrado, modificación y consulta de eventos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/02e6315bb83963af3632b381d286babe991d13b8)  | [EventsRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/02e6315bb83963af3632b381d286babe991d13b8/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/EventsRestController.java)   |
+|3| [Adición, borrado, modificación y consulta de noticias](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/6ab879848f22d77feee95869429a0b6404990d50)  | [NewsRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/NewsRestController.java)   |
+|4| [Generación de errores con JSON](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/60d214f03eda47394d63d05342765be395db71ae)  | [CustomErrorRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/60d214f03eda47394d63d05342765be395db71ae/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/CustomErrorRestController.java)   |
+|5| [Limitación de edición y borrado de eventos y noticias a los dueños y administradores](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9)  | [NewsRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/NewsRestController.java)   |
 
 ---
 

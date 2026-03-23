@@ -14,6 +14,7 @@ import com.grupo6daw.lcdd_daw.dto.EventDTO;
 import com.grupo6daw.lcdd_daw.dto.EventMapper;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.repository.EventRepository;
 import com.grupo6daw.lcdd_daw.repository.UserRepository;
@@ -193,11 +194,30 @@ public class EventService {
         return event;
     }
 
-    private EventDTO toDTO(Event event) {
+    public EventDTO toDTO(Event event) {
         return mapper.toFullDTO(event);
     }
 
     public Event toDomain(EventDTO eventDTO) {
         return mapper.toDomainFromFullDTO(eventDTO);
+    }
+
+    public boolean checkPermissions(Event event, User currentUser, boolean isNewEvent) {
+        if (!isNewEvent) {
+            Event existingEvent = findById(event.getEventId());
+            boolean isOwner = existingEvent.getEventCreator() != null
+                    && existingEvent.getEventCreator().getUserId().equals(currentUser.getUserId());
+            boolean isAdmin = currentUser.getUserRoles().contains("ADMIN");
+
+            if (!isOwner && !isAdmin) {
+                return false;
+            }
+
+            event.setEventCreator(existingEvent.getEventCreator());
+        } else {
+            event.setEventCreator(currentUser);
+        }
+
+        return true;
     }
 }
