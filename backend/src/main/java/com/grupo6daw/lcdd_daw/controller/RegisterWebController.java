@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.dto.UserDetailsDTO;
+import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.UserService;
 
@@ -45,11 +47,12 @@ public class RegisterWebController {
     }
 
     @PostMapping("/register")
-    public String register(Model model, UserDetailsDTO dto, HttpServletRequest request) {
+    public String register(Model model, UserDetailsDTO dto, HttpServletRequest request,
+            @RequestParam(value = "userImage", required = false) MultipartFile userImage) {
 
         List<String> errorMessages = new ArrayList<>();
 
-        userService.register(dto, errorMessages);
+        User user = userService.register(dto, errorMessages);
 
         // if there are errors, we return to the register page with the error messages
         // and the data already written (except password)
@@ -63,6 +66,11 @@ public class RegisterWebController {
             model.addAttribute("surnames", dto.userSurname());
             model.addAttribute("nickname", dto.userNickname());
             return "register";
+        }
+
+        // if no errors, set image
+        if (!userImage.isEmpty()) {
+            userService.setUserImage(user.getUserId(), userImage);
         }
 
         // login to registered user
