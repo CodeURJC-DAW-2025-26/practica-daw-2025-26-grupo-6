@@ -96,8 +96,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/events").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/events/*").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/*").hasRole("REGISTERED_USER")
+                        // User
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/*/").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/*/image").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/*/image").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/*/").hasRole("REGISTERED_USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*/").hasRole("REGISTERED_USER")
                         // Admin
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/").hasRole("ADMIN")
                         // PUBLIC ENDPOINTS
                         .anyRequest().permitAll());
 
