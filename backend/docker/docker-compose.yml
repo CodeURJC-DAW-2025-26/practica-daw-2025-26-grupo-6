@@ -4,7 +4,7 @@ services:
     ports:
       - 8443:8443
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db/${DB_NAME:-lcdd_daw}
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db/${DB_NAME:-lcdd_daw}?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD:-MySQLpassword}
       - SPRING_MAIL_USERNAME=${EMAIL_USERNAME:-}
