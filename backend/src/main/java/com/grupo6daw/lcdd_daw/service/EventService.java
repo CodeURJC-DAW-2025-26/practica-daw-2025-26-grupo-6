@@ -197,7 +197,7 @@ public class EventService {
         return mapper.toFullDTO(event);
     }
 
-    private Event toDomain(EventDTO eventDTO) {
+    public Event toDomain(EventDTO eventDTO) {
         return mapper.toDomainFromFullDTO(eventDTO);
     }
 }

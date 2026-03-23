@@ -60,8 +60,9 @@ public class EventsRestController {
             Pageable pageable,
             Authentication authentication) {
 
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userRepository.findById(userId).orElseThrow();
+        User logged = (authentication != null)
+                ? userRepository.findById(Long.parseLong(authentication.getName())).orElse(null)
+                : null;
 
         return eventService.findValidatedByFilter(name, tag, pageable)
                 .map(event -> eventService.toDTO(event, logged));
@@ -71,8 +72,9 @@ public class EventsRestController {
     public ResponseEntity<?> getEvent(@PathVariable long id,
             Authentication authentication) {
 
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userRepository.findById(userId).orElseThrow();
+        User logged = (authentication != null)
+                ? userRepository.findById(Long.parseLong(authentication.getName())).orElse(null)
+                : null;
 
         Event event = eventService.findById(id);
 
@@ -83,13 +85,17 @@ public class EventsRestController {
     public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO,
             Authentication authentication) {
 
+        if (authentication == null) {
+            throw new SecurityException("Must be authenticated");
+        }
+
         long userId = Long.parseLong(authentication.getName());
         LocalDateTime date = LocalDateTime.now();
 
-        Event event = eventMapper.toDomainFromFullDTO(eventDTO);
+        Event event = eventService.toDomain(eventDTO);
         eventService.saveRest(event, userId, date);
 
-        User logged = userRepository.findById(userId).orElseThrow();
+        User logged = userRepository.findById(userId).orElse(null);
 
         URI location = fromCurrentRequest()
                 .path("/{id}")
@@ -118,12 +124,15 @@ public class EventsRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEvent(@PathVariable long id, Authentication authentication) {
+    public ResponseEntity<?> deleteEvent(@PathVariable long id,
+            Authentication authentication) {
 
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userRepository.findById(userId).orElseThrow();
+        User logged = (authentication != null)
+                ? userRepository.findById(Long.parseLong(authentication.getName())).orElse(null)
+                : null;
 
         Event deleted = eventService.delete(id);
+
         return ResponseEntity.ok(eventService.toDTO(deleted, logged));
     }
 
@@ -143,13 +152,15 @@ public class EventsRestController {
             @RequestBody EventDTO updatedEventDTO,
             Authentication authentication) throws SQLException {
 
-        long userId = Long.parseLong(authentication.getName());
-        User logged = userRepository.findById(userId).orElseThrow();
+        User logged = (authentication != null)
+                ? userRepository.findById(Long.parseLong(authentication.getName())).orElse(null)
+                : null;
 
-        Event updatedEvent = eventMapper.toDomainFromFullDTO(updatedEventDTO);
+        Event updatedEvent = eventService.toDomain(updatedEventDTO);
 
         updatedEvent.setEventId(id);
         updatedEvent.setEventImage(eventService.findById(id).getEventImage());
+
         eventService.save(updatedEvent);
 
         return ResponseEntity.ok(eventService.toDTO(updatedEvent, logged));
@@ -173,22 +184,29 @@ public class EventsRestController {
     }
 
     @PostMapping("/{eventId}/participants")
-    public EventDTO joinEvent(
-            @PathVariable long eventId,
+    public EventDTO joinEvent(@PathVariable long eventId,
             Authentication authentication) {
 
-        long userId = Long.parseLong(authentication.getName());
-        return eventService.addParticipant(eventId, userId);
+        if (authentication == null) {
+            throw new SecurityException("Must be authenticated");
+        }
 
+        long userId = Long.parseLong(authentication.getName());
+
+        return eventService.addParticipant(eventId, userId);
     }
 
     @DeleteMapping("/{eventId}/participants")
-    public ResponseEntity<?> leaveEvent(
-            @PathVariable long eventId,
+    public ResponseEntity<?> leaveEvent(@PathVariable long eventId,
             Authentication authentication) {
 
+        if (authentication == null) {
+            throw new SecurityException("Must be authenticated");
+        }
+
         long userId = Long.parseLong(authentication.getName());
-        User logged = userRepository.findById(userId).orElseThrow();
+
+        User logged = userRepository.findById(userId).orElse(null);
 
         Event updated = eventService.removeParticipant(eventId, userId);
 
