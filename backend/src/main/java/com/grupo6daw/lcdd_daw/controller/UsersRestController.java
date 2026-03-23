@@ -92,8 +92,7 @@ public class UsersRestController {
             throw new AccessDeniedException("Autenticación necesaria");
         }
 
-        boolean admin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+        boolean admin = request.isUserInRole("ADMIN");
 
         Long userId = Long.parseLong(authentication.getName());
 
@@ -116,14 +115,14 @@ public class UsersRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteProfile(@PathVariable long id, Authentication authentication) {
+    public ResponseEntity<Object> deleteProfile(@PathVariable long id, Authentication authentication,
+            HttpServletRequest request) {
 
         if (authentication == null) {
             throw new AccessDeniedException("Autenticación necesaria");
         }
 
-        boolean admin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+        boolean admin = request.isUserInRole("ADMIN");
 
         Long userId = Long.parseLong(authentication.getName());
 
@@ -147,18 +146,15 @@ public class UsersRestController {
 
     @PutMapping("/{id}/image")
     public ResponseEntity<ImageDTO> putImage(@RequestParam MultipartFile userImage, @PathVariable long id,
-            Authentication authentication) {
+            Authentication authentication, HttpServletRequest request) {
 
-        boolean admin = false;
-        Long userId = null;
         if (authentication == null) {
             throw new AccessDeniedException("Autenticación necesaria");
         }
 
-        admin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+        boolean admin = request.isUserInRole("ADMIN");
 
-        userId = Long.parseLong(authentication.getName());
+        Long userId = Long.parseLong(authentication.getName());
 
         if (!admin && userId != id) {
             throw new AccessDeniedException("No tienes permiso para cambiar ese usuario");
