@@ -36,7 +36,9 @@ public interface EventMapper {
 
     // FULL DTO
     @Named("toFullDTO")
+    @Mapping(target = "participants", source = "eventRegisteredUsers")
     EventDTO toFullDTO(Event event);
+
 
     @IterableMapping(qualifiedByName = "toFullDTO")
     List<EventDTO> toFullDTOs(Collection<Event> events);

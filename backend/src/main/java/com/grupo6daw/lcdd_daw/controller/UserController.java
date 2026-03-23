@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo6daw.lcdd_daw.dto.UserDetailsDTO;
@@ -100,7 +102,8 @@ public class UserController {
     public String updateProfile(Model model, UserDetailsDTO dto,
             HttpServletRequest request, HttpServletResponse response,
             Authentication authentication, @PathVariable long id,
-            RedirectAttributes redirectAttributes) throws IOException {
+            RedirectAttributes redirectAttributes,
+            @RequestParam(value = "userImage", required = false) MultipartFile userImage) {
 
         boolean admin = (boolean) model.getAttribute("admin");
         Long userId = Long.valueOf((String) model.getAttribute("userId"));
@@ -121,6 +124,12 @@ public class UserController {
             model.addAttribute("hasErrors", true);
             model.addAttribute("allErrors", errors);
             return "profile";
+        }
+
+        // if no errors, set image
+        if (!userImage.isEmpty()) {
+            System.out.println(userImage + "wtf");
+            userService.setUserImage(user.getUserId(), userImage);
         }
 
         boolean credentialsChanged = !dto.userEmail().equals(oldEmail) || (dto.password() != null

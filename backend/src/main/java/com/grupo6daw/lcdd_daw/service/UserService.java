@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.sql.rowset.serial.SerialBlob;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.controller.RegisterWebController;
-import com.grupo6daw.lcdd_daw.dto.EventDTO;
+import com.grupo6daw.lcdd_daw.dto.ImageDTO;
+import com.grupo6daw.lcdd_daw.dto.ImageMapper;
 import com.grupo6daw.lcdd_daw.dto.UserDTO;
 import com.grupo6daw.lcdd_daw.dto.UserDetailsDTO;
 import com.grupo6daw.lcdd_daw.dto.UserMapper;
@@ -57,6 +56,9 @@ public class UserService {
 
     @Autowired
     ImageService imageService;
+
+    @Autowired
+    ImageMapper imageMapper;
 
     @Autowired
     UserMapper userMapper;
@@ -96,15 +98,6 @@ public class UserService {
                 passwordEncoder.encode(dto.password()),
                 "REGISTERED_USER");
 
-        if (dto.userImage() != null && !dto.userImage().isEmpty()) {
-            try {
-                Image profileImage = imageService.createImage(dto.userImage().getInputStream());
-                user.setUserImage(profileImage);
-            } catch (Exception e) {
-                logger.error("Exception when creating image", e);
-            }
-        }
-
         userRepository.save(user);
         mailService.sendRegisterEmail(user);
 
@@ -114,6 +107,29 @@ public class UserService {
     public Optional<User> getUser(long id) {
         return userRepository.findById(id);
     }
+
+    public ImageDTO setUserImage(long id, MultipartFile file) {
+        try {
+
+            User user = getUser(id).orElseThrow();
+
+            Image image;
+            if (user.getUserImage() == null) {
+                image = imageService.createImage(file.getInputStream());
+            } else {
+                image = imageService.replaceImageFile(user.getUserImage().getId(), file.getInputStream());
+            }
+
+            user.setUserImage(image);
+
+            userRepository.save(user);
+
+            return imageMapper.toDTO(image);
+        } catch (IOException e) {
+            logger.error("IOException when getting InputStream in setUserImage");
+            return null;
+        }
+    };
 
     public Resource getImageFile(long id) throws SQLException {
 
@@ -126,8 +142,7 @@ public class UserService {
         }
     }
 
-    public User updateProfile(User user, UserDetailsDTO dto, List<String> errorMessages) throws IOException {
-        Exception error = null;
+    public User updateProfile(User user, UserDetailsDTO dto, List<String> errorMessages) {
 
         if (!validUpdate(user, dto, errorMessages)) {
             return null;
@@ -143,20 +158,7 @@ public class UserService {
         user.setUserSurname(dto.userSurname());
         user.setUserInterests(dto.userInterests());
 
-        MultipartFile file = dto.userImage();
-        if (file != null && !file.isEmpty()) {
-            try {
-                user.setUserImage(new Image(new SerialBlob(file.getBytes())));
-            } catch (Exception e) {
-                error = e;
-            }
-        }
-
         userRepository.save(user);
-
-        if (error != null) {
-            throw new IOException("Failed to create image blob", error);
-        }
 
         return user;
     }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,22 +21,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.grupo6daw.lcdd_daw.dto.ImageDTO;
-import com.grupo6daw.lcdd_daw.dto.ImageMapper;
-import com.grupo6daw.lcdd_daw.dto.EventDTO;
-import com.grupo6daw.lcdd_daw.dto.EventMapper;
-import com.grupo6daw.lcdd_daw.model.Image;
-import com.grupo6daw.lcdd_daw.model.Event;
-import com.grupo6daw.lcdd_daw.service.EventService;
-import com.grupo6daw.lcdd_daw.service.ImageService;
-
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+
+import com.grupo6daw.lcdd_daw.dto.EventDTO;
+import com.grupo6daw.lcdd_daw.dto.EventMapper;
+import com.grupo6daw.lcdd_daw.dto.ImageDTO;
+import com.grupo6daw.lcdd_daw.dto.ImageMapper;
+import com.grupo6daw.lcdd_daw.model.Event;
+import com.grupo6daw.lcdd_daw.model.Image;
+import com.grupo6daw.lcdd_daw.service.EventService;
+import com.grupo6daw.lcdd_daw.service.ImageService;
 
 @RestController
 @RequestMapping("/api/v1/events")
 public class EventsRestController {
+
     @Autowired
     private EventService eventService;
 
@@ -48,7 +49,7 @@ public class EventsRestController {
     @Autowired
     private ImageMapper imageMapper;
 
-    @GetMapping("/")
+    @GetMapping
     public Page<EventDTO> findByFilter(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String tag,
@@ -63,7 +64,7 @@ public class EventsRestController {
         return eventMapper.toFullDTO(eventService.findById(id));
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO, Principal principal) {
 
         Event event = eventMapper.toDomainFromFullDTO(eventDTO);
@@ -77,7 +78,7 @@ public class EventsRestController {
         return ResponseEntity.created(location).body(eventDTO);
     }
 
-    @PostMapping("/{id}/images/")
+    @PostMapping("/{id}/images")
     public ResponseEntity<ImageDTO> createEventImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
             throws IOException {
 
@@ -123,7 +124,7 @@ public class EventsRestController {
         return eventMapper.toFullDTO(updatedEvent);
     }
 
-    @PutMapping("/{id}/images/")
+    @PutMapping("/{id}/images")
     public ResponseEntity<ImageDTO> updateEventImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
             throws IOException {
 
@@ -140,4 +141,14 @@ public class EventsRestController {
         return ResponseEntity.created(location).body(imageMapper.toDTO(image));
     }
 
+    @PostMapping("/{eventId}/participants")
+    public EventDTO joinEvent(
+            @PathVariable long eventId,
+            Authentication authentication) {
+
+        long userId = Long.parseLong(authentication.getName());
+        Event event = eventService.addParticipant(eventId, userId);
+
+        return eventMapper.toFullDTO(event);
+    }
 }
