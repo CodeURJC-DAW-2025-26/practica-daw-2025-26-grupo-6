@@ -550,15 +550,15 @@ He implementado la API REST del panel de administración, desarrollando los endp
 
 #### **Alumno 2 - Antonio Martín Carrizosa**
 
-Gestión de usuarios: login, creación (registro), modificación, borrado y consulta. Solución de errores e instrucciones de uso en el readme
+Gestión de usuarios: login, creación (registro), modificación, borrado y consulta. Solución de errores en el código y el docker. Instrucciones de uso en el readme. Subir archivo de configuración para que todos utilicemos el mismo estilo al guardar. Añadir la configuración de seguridad para la API. 
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [PUT y POST para /users](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/6cf221cda37cc64196db1e877f7eec5e0ef689be)  | [UsersRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/UsersRestController.java)   |
+|2| [GET para /users y /users/{id}](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/6c366aa9197b1a4350bd21f07eb9e3b306ab395d)  | [UserService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/service/UserService.java)   |
+|3| [añadir GET y PUT para las imágenes de los usuarios](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/a3d591773216c609c18cf5e7a28f6207c22c0b97)  | [RegisterWebController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/RegisterWebController.java)   |
+|4| [cambio del docker compose para permitir variables de entorno](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/df63a362320c3be806141eda5c6b01eaf27c2a59)  | [UserController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/UserController.java)   |
+|5| [Configuración de seguridad para la API](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/e8a3593b7901f55344f13f38e035d272beee91a4)  | [SecurityConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/security/SecurityConfig.java)   |
 
 ---
 
