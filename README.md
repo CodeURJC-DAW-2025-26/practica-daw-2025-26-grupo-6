@@ -424,16 +424,16 @@ Principalmente añadir la estructuración de mustache para los html al igual que
 ## 🛠 **Práctica 2: Incorporación de una API REST a la aplicación web, despliegue con Docker y despliegue remoto**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
-> Vídeo mostrando las principales funcionalidades de la aplicación web.
+📹 **[Enlace al vídeo en YouTube]()**
+> Vídeo (falta) mostrando las principales funcionalidades de la aplicación web.
 
 ### **Documentación de la API REST**
 
 #### **Especificación OpenAPI**
-📄 **[Especificación OpenAPI (YAML)](/api-docs/api-docs.yaml)**
+📄 **[Especificación OpenAPI (YAML)](backend/api-docs/api-docs.yaml)**
 
 #### **Documentación HTML**
-📖 **[Documentación API REST (HTML)](https://raw.githack.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/main/api-docs/api-docs.html)**
+📖 **[Documentación API REST (HTML)](https://raw.githack.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/main/backend/api-docs/api-docs.html)**
 
 > La documentación de la API REST se encuentra en la carpeta `/api-docs` del repositorio. Se ha generado automáticamente con SpringDoc a partir de las anotaciones en el código Java.
 
@@ -441,7 +441,7 @@ Principalmente añadir la estructuración de mustache para los html al igual que
 
 Diagrama actualizado incluyendo los @RestController y su relación con los @Service compartidos:
 
-![Diagrama de Clases Actualizado](images/complete-classes-diagram.png)
+![Diagrama de Clases Actualizado](images/diagram-p2.png)
 
 ### **Instrucciones de Ejecución con Docker**
 
@@ -515,7 +515,11 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
    ssh -i ssh-keys/app.key vmuser@10.100.139.XXX
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**:
+2. **Ejecutar a través de docker compose**:
+   La primera vez la variable de entorno DB_MODE debe ser create, el resto none (valor por defecto)
+   ```bash
+   EMAIL_PASSWORD=[gmail app token] EMAIL_USERNAME=[gmail@gmail.com] DB_MODE=[create|none] docker-compose -f oci://amartinca2023/lcdd_daw-compose up
+   ```
 
 ### **URL de la Aplicación Desplegada**
 
@@ -544,9 +548,9 @@ He implementado la API REST del panel de administración, desarrollando los endp
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - Antonio Martín Carrizosa**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Gestión de usuarios: login, creación (registro), modificación, borrado y consulta. Solución de errores e instrucciones de uso en el readme
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
