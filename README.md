@@ -584,6 +584,17 @@ He implementado la creación, modificación, borrado y consulta de las entidades
 |4| [Generación de errores con JSON](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/60d214f03eda47394d63d05342765be395db71ae)  | [CustomErrorRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/60d214f03eda47394d63d05342765be395db71ae/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/CustomErrorRestController.java)   |
 |5| [Limitación de edición y borrado de eventos y noticias a los dueños y administradores](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9)  | [NewsRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/NewsRestController.java)   |
 
+#### **Alumno 5 - [Anthony Lattanzi Salas]**
+
+He creado las funciones para generar errores con JSON y resuelto algunos problemas.
+
+| Nº    | Commits      | Files      |
+|:------------: |:------------:| :------------:|
+|1| [JSON para errores](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/3d0ef7c81740080b67ac239e57e386bcdcf456bf#diff-7e9f782c16059d3a6a7df68ae8ca947fe1d45ed3aad55320789cfe2286fce34e)  | [CustomerErrorRestController.java](backend/src/main/java/com/grupo6daw/lcdd_daw/controller/CustomErrorRestController.java)   |
+|2| [Solucionado un problema en el que los gráficos de la administración no aparecían](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/db45e0e78d9e2de201eee8819d2a2bff80e81722)  | [AdministrationController.java](backend/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationController.java)   |
+|3| [Algunos permisos de acceso a rutas](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/9aff8fff45b0011d66b8a6775ff422f8d7e92965)  | [SecurityConfig.java](backend/src/main/java/com/grupo6daw/lcdd_daw/security/SecurityConfig.java)   |
+|4| [-](URL_commit_4)  | [-](URL_archivo_4)   |
+|5| [-](URL_commit_5)  | [-](URL_archivo_5)   |
 ---
 
 ## 🛠 **Práctica 3: Implementación de la web con arquitectura SPA**
