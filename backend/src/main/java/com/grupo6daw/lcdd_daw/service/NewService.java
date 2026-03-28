@@ -1,11 +1,12 @@
 package com.grupo6daw.lcdd_daw.service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,15 +59,78 @@ public class NewService {
         return newEntity;
     }
 
-    public New saveRest(New n, Long id, LocalDateTime date) {
-        User author = userRepository.findById(id)
+    public List<String> validateContent(New newPost) {
+        final int MIN_NAME_LENGTH = 10;
+        final int MAX_NAME_LENGTH = 100;
+        final int MIN_DESCRIPTION_LENGTH = 50;
+        final int MAX_DESCRIPTION_LENGTH = 3000;
+
+        if (newPost == null) {
+            return List.of("La noticia es obligatoria");
+        }
+
+        List<String> errors = new ArrayList<>();
+
+        String name = newPost.getNewName();
+        if (name == null || name.isBlank()) {
+            errors.add("El nombre/título de la noticia es obligatorio");
+        } else if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
+            errors.add("El título debe tener entre 10 y 100 caracteres");
+        }
+
+        String description = newPost.getNewDescription();
+        if (description == null || description.isBlank()) {
+            errors.add("La descripción no puede estar vacía");
+        } else if (description.length() < MIN_DESCRIPTION_LENGTH || description.length() > MAX_DESCRIPTION_LENGTH) {
+            errors.add("La descripción debe tener entre 50 y 3000 caracteres");
+        }
+
+        String tag = newPost.getNewTag();
+        if (tag == null || tag.isBlank()) {
+            errors.add("La etiqueta de la noticia es obligatoria");
+        }
+
+        return errors;
+    }
+
+    public boolean hasEditPermission(New newPost, Long currentUserId, boolean isAdmin) {
+        return isAdmin || (newPost.getNewCreator() != null
+                && newPost.getNewCreator().getUserId().equals(currentUserId));
+    }
+
+    public New save(New newPost, Long currentUserId) {
+        List<String> errors = validateContent(newPost);
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException(String.join(" | ", errors));
+        }
+
+        User currentUser = userRepository.findById(currentUserId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        n.setNewCreator(author);
-        n.setCreationDate(date);
+        boolean isNewPost = (newPost.getNewId() == null);
 
-        repository.save(n);
-        return n;
+        if (!isNewPost) {
+            New existingNew = findById(newPost.getNewId());
+            if (newPost.getNewImage() == null) {
+                newPost.setNewImage(existingNew.getNewImage());
+            }
+        }
+
+        if (checkPermissions(newPost, currentUser, isNewPost)) {
+            New savedNew = save(newPost);
+
+            if (isNewPost) {
+                if (currentUser.getUserNews() == null) {
+                    currentUser.setUserNews(new ArrayList<>());
+                }
+                currentUser.getUserNews().add(savedNew);
+                userRepository.save(currentUser);
+            }
+
+            return savedNew;
+        }
+
+        return null;
     }
 
     @Transactional
@@ -96,6 +160,18 @@ public class NewService {
         return newOpt;
     }
 
+    public New deleteAuthorized(Long id, Long currentUserId) {
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        New newPost = findById(id);
+
+        if (checkPermissions(newPost, currentUser, false)) {
+            return delete(id);
+        }
+
+        return null;
+    }
+
     public List<New> findTop3() {
         return repository.findTop3ByOrderByCreationDateDesc();
     }
@@ -112,21 +188,32 @@ public class NewService {
         return repository.findValidatedByNameAndTag(name, tag, page);
     }
 
-    public New addImageToNew(long id, Image image) {
+    public New addImageToNew(long id, Image image, Long currentUserId) {
         New n = repository.findById(id).orElseThrow();
-        n.setNewImage(image);
-        repository.save(n);
+
+        if (checkPermissions(n, userRepository.findById(currentUserId).orElseThrow(), (n.getNewId() == null))) {
+            n.setNewImage(image);
+            repository.save(n);
+        } else {
+            throw new AccessDeniedException("No tienes permiso para modificar esta noticia");
+        }
 
         return n;
     }
 
-    public New removeImageFromNew(long newId, long imageId) {
+    public New removeImageFromNew(long newId, long imageId, Long currentUserId) {
         New n = repository.findById(newId).orElseThrow();
+
         if (n.getNewImage() == null || n.getNewImage().getId() != imageId) {
             throw new IllegalArgumentException("Image does not belong to this post");
         }
-        n.setNewImage(null);
-        repository.save(n);
+
+        if (checkPermissions(n, userRepository.findById(currentUserId).orElseThrow(), (n.getNewId() == null))) {
+            n.setNewImage(null);
+            repository.save(n);
+        } else {
+            throw new AccessDeniedException("No tienes permiso para eliminar contenido de esta noticia");
+        }
 
         return n;
     }

@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
-import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 import com.grupo6daw.lcdd_daw.service.NewService;
-import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @Controller
 public class NewsController {
@@ -36,9 +32,6 @@ public class NewsController {
 
     @Autowired
     private ImageService imageService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ImageValidationService imageValidationService;
@@ -69,10 +62,7 @@ public class NewsController {
             boolean hasEditPermission = false;
             if (request.getUserPrincipal() != null) {
                 Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-                boolean isOwner = newPost.getNewCreator() != null
-                        && newPost.getNewCreator().getUserId().equals(currentUserId);
-                boolean isAdmin = request.isUserInRole("ADMIN");
-                hasEditPermission = isOwner || isAdmin;
+                hasEditPermission = newService.hasEditPermission(newPost, currentUserId, request.isUserInRole("ADMIN"));
             }
             model.addAttribute("hasEditPermission", hasEditPermission);
         }
@@ -106,11 +96,10 @@ public class NewsController {
         if (newPost != null) {
             New n = newPost;
 
-            boolean isAdmin = request.isUserInRole("ADMIN");
             Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-            boolean isOwner = n.getNewCreator() != null && n.getNewCreator().getUserId().equals(currentUserId);
+            boolean hasEditPermission = newService.hasEditPermission(n, currentUserId, request.isUserInRole("ADMIN"));
 
-            if (isAdmin || isOwner) {
+            if (hasEditPermission) {
                 model.addAttribute("newPost", n);
                 CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
                 if (csrfToken != null)
@@ -122,7 +111,7 @@ public class NewsController {
     }
 
     @PostMapping("/new_form")
-    public String newNewProcess(Model model, @Valid New newPost, BindingResult bindingResult,
+    public String newNewProcess(Model model, New newPost,
             @RequestParam("imageField") MultipartFile imageField,
             HttpServletRequest request) throws IOException {
 
@@ -130,19 +119,8 @@ public class NewsController {
         boolean isNewPost = (newPost.getNewId() == null);
 
         Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-        User currentUser = userService.getUser(currentUserId).orElseThrow();
 
-        if (bindingResult.hasErrors()) {
-            if (bindingResult.hasFieldErrors("newName")) {
-                errorMessages.add(bindingResult.getFieldError("newName").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("newDescription")) {
-                errorMessages.add(bindingResult.getFieldError("newDescription").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("newTag")) {
-                errorMessages.add(bindingResult.getFieldError("newTag").getDefaultMessage());
-            }
-        }
+        errorMessages.addAll(newService.validateContent(newPost));
 
         imageValidationService.validate(imageField, errorMessages, isNewPost);
 
@@ -160,33 +138,16 @@ public class NewsController {
         if (!imageField.isEmpty()) {
             Image image = imageService.createImage(imageField.getInputStream());
             newPost.setNewImage(image);
-        } else if (!isNewPost) {
-            New oldNew = newService.findById(newPost.getNewId());
-            newPost.setNewImage(oldNew.getNewImage());
         }
 
-        if (newService.checkPermissions(newPost, currentUser, isNewPost)) {
-            newService.save(newPost);
-        }
-
-        if (isNewPost) {
-            currentUser.getUserNews().add(newPost);
-            userService.save(currentUser);
-        }
+        newService.save(newPost, currentUserId);
         return "redirect:/news";
     }
 
     @PostMapping("/removeNew/{id}")
     public String removeNew(@PathVariable long id, HttpServletRequest request) {
-        New newPost = newService.findById(id);
-        if (newPost != null) {
-            Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-            User currentUser = userService.getUser(currentUserId).orElseThrow();
-            boolean isNewPost = (newPost.getNewId() == null);
-            if (newService.checkPermissions(newPost, currentUser, isNewPost)) {
-                newService.delete(id);
-            }
-        }
+        Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+        newService.deleteAuthorized(id, currentUserId);
         return "redirect:/news";
     }
 }

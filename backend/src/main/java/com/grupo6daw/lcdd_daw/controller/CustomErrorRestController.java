@@ -30,7 +30,7 @@ public class CustomErrorRestController implements ErrorController {
         return switch (statusCode) {
             case 401 -> "Debes iniciar sesion para acceder a este recurso.";
             case 404 -> "La página solicitada no existe o ha sido movida.";
-            case 403 -> "No tienes el rol necesario para ver este contenido.";
+            case 403 -> "No tienes el permiso necesario para ver este contenido.";
             case 500 -> "Error interno del servidor. Lo estamos revisando.";
             case 400 -> "La solicitud enviada no es válida.";
             default -> "Ha ocurrido un error inesperado.";

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,12 +26,10 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 import com.grupo6daw.lcdd_daw.dto.ImageDTO;
 import com.grupo6daw.lcdd_daw.dto.ImageMapper;
 import com.grupo6daw.lcdd_daw.dto.NewDTO;
-import com.grupo6daw.lcdd_daw.dto.NewMapper;
 import com.grupo6daw.lcdd_daw.model.Image;
 import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.service.ImageService;
 import com.grupo6daw.lcdd_daw.service.NewService;
-import com.grupo6daw.lcdd_daw.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/news")
@@ -43,12 +40,6 @@ public class NewsRestController {
 
     @Autowired
     private ImageService imageService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private NewMapper newMapper;
 
     @Autowired
     private ImageMapper imageMapper;
@@ -76,10 +67,9 @@ public class NewsRestController {
             Principal principal) {
 
         Long userId = Long.parseLong(principal.getName());
-        LocalDateTime now = LocalDateTime.now();
 
         New news = newService.toDomain(newDTO);
-        newService.saveRest(news, userId, now);
+        newService.save(news, userId);
 
         URI location = fromCurrentRequest()
                 .path("/{id}")
@@ -93,14 +83,15 @@ public class NewsRestController {
     @PostMapping("/{id}/images/")
     public ResponseEntity<ImageDTO> createNewImage(
             @PathVariable long id,
-            @RequestParam MultipartFile imageFile) throws IOException {
+            @RequestParam MultipartFile imageFile,
+            Principal principal) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        newService.addImageToNew(id, image);
+        newService.addImageToNew(id, image, Long.parseLong(principal.getName()));
 
         URI location = fromCurrentContextPath()
                 .path("/api/images/{imageId}/media")
@@ -117,23 +108,21 @@ public class NewsRestController {
 
         Long userId = Long.parseLong(principal.getName());
 
-        New deleted;
-
-        if (newService.checkPermissions(newService.findById(id), userService.findById(userId), false)) {
-            deleted = newService.delete(id);
-        } else {
+        New deleted = newService.deleteAuthorized(id, userId);
+        if (deleted == null) {
             throw new AccessDeniedException("No tienes permiso para borrar esta noticia");
         }
         return ResponseEntity.ok(newService.toDTO(deleted));
     }
 
     @DeleteMapping("/{newId}/images/{imageId}")
-    public ResponseEntity<ImageDTO> deleteNewImage(@PathVariable long newId, @PathVariable long imageId)
+    public ResponseEntity<ImageDTO> deleteNewImage(@PathVariable long newId, @PathVariable long imageId,
+            Principal principal)
             throws IOException {
 
         Image image = imageService.getImage(imageId);
 
-        newService.removeImageFromNew(newId, imageId);
+        newService.removeImageFromNew(newId, imageId, Long.parseLong(principal.getName()));
         imageService.deleteImage(imageId);
 
         return ResponseEntity.ok(imageMapper.toDTO(image));
@@ -149,29 +138,27 @@ public class NewsRestController {
         New updated = newService.toDomain(updatedNewDTO);
 
         updated.setNewId(id);
-        updated.setNewImage(newService.findById(id).getNewImage());
-        updated.setNewCreator(newService.findById(id).getNewCreator());
 
-        if (newService.checkPermissions(updated, userService.findById(userId), false)) {
-            newService.save(updated);
-        } else {
+        New saved = newService.save(updated, userId);
+        if (saved == null) {
             throw new AccessDeniedException("No tienes permiso para editar esta noticia");
         }
 
-        return ResponseEntity.ok(newService.toDTO(updated));
+        return ResponseEntity.ok(newService.toDTO(saved));
     }
 
     @PutMapping("/{id}/images/")
     public ResponseEntity<ImageDTO> updateNewImage(
             @PathVariable long id,
-            @RequestParam MultipartFile imageFile) throws IOException {
+            @RequestParam MultipartFile imageFile,
+            Principal principal) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        newService.addImageToNew(id, image);
+        newService.addImageToNew(id, image, Long.parseLong(principal.getName()));
 
         URI location = fromCurrentContextPath()
                 .path("/api/images/{imageId}/media")

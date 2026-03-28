@@ -27,7 +27,7 @@ public class CustomErrorController implements ErrorController {
           errorMsg = "La página solicitada no existe o ha sido movida.";
           break;
         case 403:
-          errorMsg = "No tienes el rol necesario para ver este contenido.";
+          errorMsg = "No tienes el permiso necesario para ver este contenido.";
           break;
         case 500:
           errorMsg = "Error interno del servidor. Lo estamos revisando.";
