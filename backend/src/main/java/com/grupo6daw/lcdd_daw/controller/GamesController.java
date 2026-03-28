@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +26,6 @@ import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @Controller
 public class GamesController {
@@ -134,59 +132,19 @@ public class GamesController {
     }
 
     @PostMapping("/game_form")
-    public String saveGame(HttpServletRequest request,
-            @Valid Game game,
-            BindingResult bindingResult,
+    public String saveGame(HttpServletRequest request, Game game,
             @RequestParam("imageField") MultipartFile imageField,
             Model model) throws IOException {
 
         List<String> errorMessages = new ArrayList<>();
         boolean isNewGame = (game.getGameId() == null);
 
-        // logical validation for players and duration
-        if (game.getMinPlayers() != null && game.getMaxPlayers() != null) {
-            if (game.getMinPlayers() > game.getMaxPlayers()) {
-                bindingResult.rejectValue("maxPlayers", "error.maxPlayers",
-                        "El máximo de jugadores no puede ser menor que el mínimo.");
-            }
-        }
-
-        if (game.getMinDuration() != null && game.getMaxDuration() != null) {
-            if (game.getMinDuration() > game.getMaxDuration()) {
-                bindingResult.rejectValue("maxDuration", "error.maxDuration",
-                        "La duración máxima no puede ser menor que la mínima.");
-            }
-        }
+        errorMessages.addAll(gameService.validateContent(game));
 
         // img validation
         imageValidationService.validate(imageField, errorMessages, isNewGame);
 
-        if (bindingResult.hasErrors() || !errorMessages.isEmpty()) {
-
-            // passing annotation errors
-            if (bindingResult.hasFieldErrors("gameName")) {
-                errorMessages.add(bindingResult.getFieldError("gameName").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("gameDescription")) {
-                errorMessages.add(bindingResult.getFieldError("gameDescription").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("genre")) {
-                errorMessages.add(bindingResult.getFieldError("genre").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("minPlayers")) {
-                errorMessages.add(bindingResult.getFieldError("minPlayers").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("maxPlayers")) {
-                errorMessages.add(bindingResult.getFieldError("maxPlayers").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("minDuration")) {
-                errorMessages.add(bindingResult.getFieldError("minDuration").getDefaultMessage());
-            }
-            if (bindingResult.hasFieldErrors("maxDuration")) {
-                errorMessages.add(bindingResult.getFieldError("maxDuration").getDefaultMessage());
-            }
-
-            // Token CSRF
+        if (!errorMessages.isEmpty()) {
             CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
             if (csrfToken != null) {
                 model.addAttribute("token", csrfToken.getToken());
@@ -203,9 +161,6 @@ public class GamesController {
         if (!imageField.isEmpty()) {
             Image image = imageService.createImage(imageField.getInputStream());
             game.setGameImage(image);
-        } else if (!isNewGame) {
-            Game oldGame = gameService.findById(game.getGameId());
-            game.setGameImage(oldGame.getGameImage());
         }
 
         gameService.save(game);

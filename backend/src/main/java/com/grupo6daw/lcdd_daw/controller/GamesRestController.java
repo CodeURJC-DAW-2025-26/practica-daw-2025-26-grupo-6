@@ -24,15 +24,11 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import com.grupo6daw.lcdd_daw.dto.GameDTO;
-import com.grupo6daw.lcdd_daw.dto.GameMapper;
 import com.grupo6daw.lcdd_daw.dto.ImageDTO;
-import com.grupo6daw.lcdd_daw.dto.ImageMapper;
 import com.grupo6daw.lcdd_daw.model.Game;
 import com.grupo6daw.lcdd_daw.model.Image;
-import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.GameService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
-import com.grupo6daw.lcdd_daw.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/games")
@@ -43,15 +39,6 @@ public class GamesRestController {
 
     @Autowired
     private ImageService imageService;
-
-    @Autowired
-    private GameMapper gameMapper;
-
-    @Autowired
-    private ImageMapper imageMapper;
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping("/")
     public Page<GameDTO> findByFilter(
