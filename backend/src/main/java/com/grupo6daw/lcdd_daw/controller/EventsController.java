@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,6 @@ import com.grupo6daw.lcdd_daw.service.ImageValidationService;
 import com.grupo6daw.lcdd_daw.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @Controller
 public class EventsController {
@@ -90,10 +88,7 @@ public class EventsController {
             boolean hasEditPermission = false;
             if (request.getUserPrincipal() != null) {
                 Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-                boolean isOwner = event.getEventCreator() != null
-                        && event.getEventCreator().getUserId().equals(currentUserId);
-                boolean isAdmin = request.isUserInRole("ADMIN");
-                hasEditPermission = isOwner || isAdmin;
+                hasEditPermission = eventService.hasEditPermission(event, currentUserId, request.isUserInRole("ADMIN"));
 
                 boolean isRegistered = false;
                 if (request.getUserPrincipal() != null) {
@@ -155,17 +150,21 @@ public class EventsController {
 
         if (event != null) {
             Event e = event;
+            Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
 
             if (e.getLink() == null)
                 e.setLink("");
             if (e.getEventTag() == null)
                 e.setEventTag("");
 
-            model.addAttribute("event", e);
+            boolean hasEditPermission = eventService.hasEditPermission(e, currentUserId, request.isUserInRole("ADMIN"));
 
-            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-            if (csrfToken != null) {
-                model.addAttribute("token", csrfToken.getToken());
+            if (hasEditPermission) {
+                model.addAttribute("event", e);
+                CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+                if (csrfToken != null)
+                    model.addAttribute("token", csrfToken.getToken());
+                return "event_form";
             }
 
             model.addAttribute("currentDate", LocalDate.now().toString());
@@ -178,40 +177,16 @@ public class EventsController {
     }
 
     @PostMapping("/event_form")
-    public String saveEvent(Model model, @Valid Event event, BindingResult bindingResult,
-            @RequestParam("imageField") MultipartFile imageField, HttpServletRequest request) throws IOException {
+    public String saveEvent(Model model, Event event,
+            @RequestParam("imageField") MultipartFile imageField,
+            HttpServletRequest request) throws IOException {
 
         List<String> errorMessages = new ArrayList<>();
         boolean isNewEvent = (event.getEventId() == null);
 
         Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-        User currentUser = userService.getUser(currentUserId).orElseThrow();
 
-        // Check basic validation errors (@Valid)
-        if (bindingResult.hasFieldErrors("eventName")) {
-            errorMessages.add(bindingResult.getFieldError("eventName").getDefaultMessage());
-        }
-        if (bindingResult.hasFieldErrors("eventDescription")) {
-            errorMessages.add(bindingResult.getFieldError("eventDescription").getDefaultMessage());
-        }
-        if (bindingResult.hasFieldErrors("eventDate")) {
-            errorMessages.add(bindingResult.getFieldError("eventDate").getDefaultMessage());
-        }
-
-        // Custom date validation
-        if (event.getEventDate() != null && event.getEventDate().isBefore(LocalDate.now())) {
-            errorMessages.add("La fecha del evento no puede ser anterior a hoy.");
-        }
-
-        // Registration requirements and link validation
-        if (event.isRequiresRegistration()) {
-            if (event.getLink() == null || event.getLink().trim().isEmpty()) {
-                errorMessages.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
-            }
-        } else {
-            // Ignore any link provided and set it to null if registration is not required
-            event.setLink(null);
-        }
+        errorMessages.addAll(eventService.validateContent(event));
 
         // Image validation
         imageValidationService.validate(imageField, errorMessages, isNewEvent);
@@ -228,71 +203,22 @@ public class EventsController {
             return "event_form";
         }
 
-        // Ownership check for editing existing events
-        if (!isNewEvent) {
-            Event existingEvent = eventService.findById(event.getEventId());
-            boolean isOwner = existingEvent.getEventCreator() != null
-                    && existingEvent.getEventCreator().getUserId().equals(currentUserId);
-            boolean isAdmin = request.isUserInRole("ADMIN");
-
-            if (!isOwner && !isAdmin) {
-                return "redirect:/events?error=unauthorized";
-            }
-            event.setEventCreator(existingEvent.getEventCreator());
-            event.setEventRegisteredUsers(existingEvent.getEventRegisteredUsers());
-            event.setValidated(false);
-            event.setValidated(existingEvent.isValidated());
-
-            // Keep the existing validation status for admins, but set to false for regular
-            // users
-            if (!isAdmin) {
-                event.setValidated(false);
-            }
-
-        } else {
-            event.setEventCreator(currentUser);
-
-            event.setValidated(false);
-        }
-
-        // Handle tags
-        if (event.getEventTag() == null) {
-            event.setEventTag("");
-        }
-
         // Image handling: save new image or keep existing one
         if (!imageField.isEmpty()) {
             Image image = imageService.createImage(imageField.getInputStream());
             event.setEventImage(image);
-        } else if (!isNewEvent) {
-            Event oldEvent = eventService.findById(event.getEventId());
-            event.setEventImage(oldEvent.getEventImage());
         }
 
         // Save event to the database
-        eventService.save(event);
-
-        // Assign the event to the user's list if it is newly created
-        if (isNewEvent) {
-            currentUser.getUserOwnEvents().add(event);
-            userService.save(currentUser);
-        }
+        eventService.save(event, currentUserId);
 
         return "redirect:/events";
     }
 
     @PostMapping("/removeEvent/{id}")
     public String removeEvent(@PathVariable long id, HttpServletRequest request) {
-        Event event = eventService.findById(id);
-
-        if (event != null) {
-            Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
-            User currentUser = userService.getUser(currentUserId).orElseThrow();
-            boolean isNewPost = (event.getEventId() == null);
-            if (eventService.checkPermissions(event, currentUser, isNewPost)) {
-                eventService.delete(id);
-            }
-        }
+        Long currentUserId = Long.valueOf(request.getUserPrincipal().getName());
+        eventService.deleteAuthorized(id, currentUserId);
         return "redirect:/events";
     }
 

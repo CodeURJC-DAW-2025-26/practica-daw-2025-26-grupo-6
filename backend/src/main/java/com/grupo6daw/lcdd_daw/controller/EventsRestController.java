@@ -2,9 +2,7 @@ package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
 import java.net.URI;
-import java.security.Principal;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +24,6 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import com.grupo6daw.lcdd_daw.dto.EventDTO;
-import com.grupo6daw.lcdd_daw.dto.EventMapper;
 import com.grupo6daw.lcdd_daw.dto.ImageDTO;
 import com.grupo6daw.lcdd_daw.dto.ImageMapper;
 import com.grupo6daw.lcdd_daw.model.Event;
@@ -35,7 +32,6 @@ import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.repository.UserRepository;
 import com.grupo6daw.lcdd_daw.service.EventService;
 import com.grupo6daw.lcdd_daw.service.ImageService;
-import com.grupo6daw.lcdd_daw.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -46,12 +42,6 @@ public class EventsRestController {
 
     @Autowired
     private ImageService imageService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private EventMapper eventMapper;
 
     @Autowired
     private ImageMapper imageMapper;
@@ -96,10 +86,9 @@ public class EventsRestController {
         }
 
         long userId = Long.parseLong(authentication.getName());
-        LocalDateTime date = LocalDateTime.now();
 
         Event event = eventService.toDomain(eventDTO);
-        eventService.saveRest(event, userId, date);
+        eventService.save(event, userId);
 
         User logged = userRepository.findById(userId).orElse(null);
 
@@ -113,15 +102,16 @@ public class EventsRestController {
     }
 
     @PostMapping("/{id}/images")
-    public ResponseEntity<ImageDTO> createEventImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
-            throws IOException {
+    public ResponseEntity<ImageDTO> createEventImage(@PathVariable long id,
+            @RequestParam MultipartFile imageFile,
+            Authentication authentication) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        eventService.addImageToEvent(id, image);
+        eventService.addImageToEvent(id, image, Long.parseLong(authentication.getName()));
 
         URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
                 .toUri();
@@ -130,27 +120,30 @@ public class EventsRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEvent(@PathVariable long id,
+    public ResponseEntity<EventDTO> deleteEvent(@PathVariable long id,
             Authentication authentication) {
 
-        User logged = (authentication != null)
-                ? userRepository.findById(Long.parseLong(authentication.getName())).orElse(null)
-                : null;
+        Long userId = Long.parseLong(authentication.getName());
 
-        Event deleted = eventService.delete(id);
+        Event deleted = eventService.deleteAuthorized(id, userId);
 
-        return ResponseEntity.ok(eventService.toDTO(deleted, logged));
+        if (deleted == null) {
+            throw new AccessDeniedException("No tienes permiso para borrar este evento");
+        }
+
+        return ResponseEntity.ok(eventService.toDTO(deleted));
     }
 
     @DeleteMapping("/{eventId}/images/{imageId}")
-    public ImageDTO deleteEventImage(@PathVariable long eventId, @PathVariable long imageId)
+    public ResponseEntity<ImageDTO> deleteEventImage(@PathVariable long eventId, @PathVariable long imageId,
+            Authentication authentication)
             throws IOException {
 
         Image image = imageService.getImage(imageId);
-        eventService.removeImageFromEvent(eventId, imageId);
+        eventService.removeImageFromEvent(eventId, imageId, Long.parseLong(authentication.getName()));
         imageService.deleteImage(imageId);
 
-        return imageMapper.toDTO(image);
+        return ResponseEntity.ok(imageMapper.toDTO(image));
     }
 
     @PutMapping("/{id}")
@@ -159,22 +152,22 @@ public class EventsRestController {
             @RequestBody EventDTO updatedEventDTO,
             Authentication authentication) throws SQLException {
 
-        User logged = (authentication != null)
-                ? userRepository.findById(Long.parseLong(authentication.getName())).orElse(null)
-                : null;
-
+        Long userId = Long.parseLong(authentication.getName());
         Event updatedEvent = eventService.toDomain(updatedEventDTO);
 
         updatedEvent.setEventId(id);
-        updatedEvent.setEventImage(eventService.findById(id).getEventImage());
 
-        eventService.save(updatedEvent);
+        Event saved = eventService.save(updatedEvent, userId);
+        if (saved == null) {
+            throw new AccessDeniedException("No tienes permiso para editar este evento");
+        }
 
-        return ResponseEntity.ok(eventService.toDTO(updatedEvent, logged));
+        return ResponseEntity.ok(eventService.toDTO(saved));
     }
 
     @PutMapping("/{id}/images")
-    public ResponseEntity<ImageDTO> updateEventImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
+    public ResponseEntity<ImageDTO> updateEventImage(@PathVariable long id, @RequestParam MultipartFile imageFile,
+            Authentication authentication)
             throws IOException {
 
         if (imageFile.isEmpty()) {
@@ -182,7 +175,7 @@ public class EventsRestController {
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        eventService.addImageToEvent(id, image);
+        eventService.addImageToEvent(id, image, Long.parseLong(authentication.getName()));
 
         URI location = fromCurrentContextPath().path("/api/images/{imageId}/media").buildAndExpand(image.getId())
                 .toUri();

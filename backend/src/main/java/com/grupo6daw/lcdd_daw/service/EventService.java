@@ -1,12 +1,13 @@
 package com.grupo6daw.lcdd_daw.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,6 @@ import com.grupo6daw.lcdd_daw.dto.EventDTO;
 import com.grupo6daw.lcdd_daw.dto.EventMapper;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.Image;
-import com.grupo6daw.lcdd_daw.model.New;
 import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.repository.EventRepository;
 import com.grupo6daw.lcdd_daw.repository.UserRepository;
@@ -113,6 +113,18 @@ public class EventService {
         return eventOpt;
     }
 
+    public Event deleteAuthorized(Long id, Long currentUserId) {
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Event newEvent = findById(id);
+
+        if (checkPermissions(newEvent, currentUser, false)) {
+            return delete(id);
+        }
+
+        return null;
+    }
+
     public Event findById(long id) {
         return repository.findById(id).orElseThrow();
     }
@@ -142,15 +154,93 @@ public class EventService {
         return event;
     }
 
-    public Event saveRest(Event event, Long id, LocalDateTime date) {
-        User author = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public List<String> validateContent(Event newEvent) {
+        final int MIN_NAME_LENGTH = 5;
+        final int MAX_NAME_LENGTH = 100;
+        final int MIN_DESCRIPTION_LENGTH = 50;
+        final int MAX_DESCRIPTION_LENGTH = 3000;
 
-        event.setEventCreator(author);
-        event.setCreationDate(date);
+        if (newEvent == null) {
+            return List.of("El evento es obligatorio");
+        }
 
-        repository.save(event);
-        return event;
+        List<String> errors = new ArrayList<>();
+
+        String name = newEvent.getEventName();
+        if (name == null || name.isBlank()) {
+            errors.add("El nombre/título del evento es obligatorio");
+        } else if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH) {
+            errors.add("El título debe tener entre 5 y 100 caracteres");
+        }
+
+        String description = newEvent.getEventDescription();
+        if (description == null || description.isBlank()) {
+            errors.add("La descripción no puede estar vacía");
+        } else if (description.length() < MIN_DESCRIPTION_LENGTH || description.length() > MAX_DESCRIPTION_LENGTH) {
+            errors.add("La descripción debe tener entre 50 y 3000 caracteres");
+        }
+
+        String tag = newEvent.getEventTag();
+        if (tag == null || tag.isBlank()) {
+            errors.add("La etiqueta del evento es obligatoria");
+        }
+
+        LocalDate eventDate = newEvent.getEventDate();
+        if (eventDate == null) {
+            errors.add("La fecha del evento es obligatoria");
+        }
+
+        if (eventDate != null && eventDate.isBefore(LocalDate.now())) {
+            errors.add("La fecha del evento no puede ser anterior a hoy.");
+        }
+
+        if (newEvent.isRequiresRegistration()) {
+            if (newEvent.getLink() == null || newEvent.getLink().trim().isEmpty()) {
+                errors.add("El enlace de registro es obligatorio si el evento requiere inscripción.");
+            }
+        }
+
+        return errors;
+    }
+
+    public boolean hasEditPermission(Event newEvent, Long currentUserId, boolean isAdmin) {
+        return isAdmin || (newEvent.getEventCreator() != null
+                && newEvent.getEventCreator().getUserId().equals(currentUserId));
+    }
+
+    public Event save(Event newEvent, Long currentUserId) {
+        List<String> errors = validateContent(newEvent);
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException(String.join(" | ", errors));
+        }
+
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        boolean isNewEvent = (newEvent.getEventId() == null);
+
+        if (!isNewEvent) {
+            Event existingEvent = findById(newEvent.getEventId());
+            if (newEvent.getEventImage() == null) {
+                newEvent.setEventImage(existingEvent.getEventImage());
+            }
+        }
+
+        if (checkPermissions(newEvent, currentUser, isNewEvent)) {
+            Event savedEvent = save(newEvent);
+
+            if (isNewEvent) {
+                if (currentUser.getUserOwnEvents() == null) {
+                    currentUser.setUserOwnEvents(new ArrayList<>());
+                }
+                currentUser.getUserOwnEvents().add(savedEvent);
+                userRepository.save(currentUser);
+            }
+
+            return savedEvent;
+        }
+
+        return null;
     }
 
     public List<Event> findByValidatedFalse() {
@@ -177,23 +267,33 @@ public class EventService {
         return repository.findValidatedByTag(tag);
     }
 
-    public Event addImageToEvent(long id, Image image) {
+    public Event addImageToEvent(long id, Image image, Long currentUserId) {
         Event event = repository.findById(id).orElseThrow();
-        event.setEventImage(image);
-        repository.save(event);
+        if (checkPermissions(event, userRepository.findById(currentUserId).orElseThrow(),
+                (event.getEventId() == null))) {
+            event.setEventImage(image);
+            repository.save(event);
+        } else {
+            throw new AccessDeniedException("No tienes permiso para modificar este evento");
+        }
 
         return event;
     }
 
-    public Event removeImageFromEvent(long eventId, long imageId) {
+    public Event removeImageFromEvent(long eventId, long imageId, Long currentUserId) {
         Event event = repository.findById(eventId).orElseThrow();
 
         if (event.getEventImage() == null || event.getEventImage().getId() != imageId) {
             throw new IllegalArgumentException("Image does not belong to this event");
         }
 
-        event.setEventImage(null);
-        repository.save(event);
+        if (checkPermissions(event, userRepository.findById(currentUserId).orElseThrow(),
+                (event.getEventId() == null))) {
+            event.setEventImage(null);
+            repository.save(event);
+        } else {
+            throw new AccessDeniedException("No tienes permiso para eliminar contenido de este evento");
+        }
 
         return event;
     }

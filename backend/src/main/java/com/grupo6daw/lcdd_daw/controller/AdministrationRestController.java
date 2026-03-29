@@ -1,6 +1,8 @@
 package com.grupo6daw.lcdd_daw.controller;
 
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +11,9 @@ import com.grupo6daw.lcdd_daw.dto.EventParticipantsStatDTO;
 import com.grupo6daw.lcdd_daw.dto.GameFavStatDTO;
 import com.grupo6daw.lcdd_daw.model.Event;
 import com.grupo6daw.lcdd_daw.model.New;
+import com.grupo6daw.lcdd_daw.model.User;
 import com.grupo6daw.lcdd_daw.service.EventService;
+import com.grupo6daw.lcdd_daw.service.MailService;
 import com.grupo6daw.lcdd_daw.service.NewService;
 import com.grupo6daw.lcdd_daw.service.StatsService;
 
@@ -25,6 +29,9 @@ public class AdministrationRestController {
 
     @Autowired
     private NewService newService;
+
+    @Autowired
+    MailService mailService;
 
     // --- Graphics ---
     @GetMapping("/top-favorite-games")
@@ -44,6 +51,13 @@ public class AdministrationRestController {
         Event event = eventService.findById(id);
         event.setValidated(true);
         eventService.save(event);
+        List<Event> sameTagEvents = eventService.findValidatedByTag(event.getEventTag());
+        for (Event ev : sameTagEvents) {
+            Set<User> participants = ev.getEventRegisteredUsers();
+            for (User user : participants) {
+                mailService.sendEventEmail(user, event);
+            }
+        }
         return ResponseEntity.ok().build();
     }
 

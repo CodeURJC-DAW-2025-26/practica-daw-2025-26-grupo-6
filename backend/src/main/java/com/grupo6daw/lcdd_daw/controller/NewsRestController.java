@@ -2,7 +2,6 @@ package com.grupo6daw.lcdd_daw.controller;
 
 import java.io.IOException;
 import java.net.URI;
-import java.security.Principal;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,9 +64,9 @@ public class NewsRestController {
     @PostMapping("/")
     public ResponseEntity<NewDTO> createNew(
             @RequestBody NewDTO newDTO,
-            Principal principal) {
+            Authentication authentication) {
 
-        Long userId = Long.parseLong(principal.getName());
+        Long userId = Long.parseLong(authentication.getName());
 
         New news = newService.toDomain(newDTO);
         newService.save(news, userId);
@@ -84,14 +84,14 @@ public class NewsRestController {
     public ResponseEntity<ImageDTO> createNewImage(
             @PathVariable long id,
             @RequestParam MultipartFile imageFile,
-            Principal principal) throws IOException {
+            Authentication authentication) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        newService.addImageToNew(id, image, Long.parseLong(principal.getName()));
+        newService.addImageToNew(id, image, Long.parseLong(authentication.getName()));
 
         URI location = fromCurrentContextPath()
                 .path("/api/images/{imageId}/media")
@@ -104,9 +104,9 @@ public class NewsRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<NewDTO> deleteNew(@PathVariable long id,
-            Principal principal) throws SQLException {
+            Authentication authentication) throws SQLException {
 
-        Long userId = Long.parseLong(principal.getName());
+        Long userId = Long.parseLong(authentication.getName());
 
         New deleted = newService.deleteAuthorized(id, userId);
         if (deleted == null) {
@@ -117,12 +117,12 @@ public class NewsRestController {
 
     @DeleteMapping("/{newId}/images/{imageId}")
     public ResponseEntity<ImageDTO> deleteNewImage(@PathVariable long newId, @PathVariable long imageId,
-            Principal principal)
+            Authentication authentication)
             throws IOException {
 
         Image image = imageService.getImage(imageId);
 
-        newService.removeImageFromNew(newId, imageId, Long.parseLong(principal.getName()));
+        newService.removeImageFromNew(newId, imageId, Long.parseLong(authentication.getName()));
         imageService.deleteImage(imageId);
 
         return ResponseEntity.ok(imageMapper.toDTO(image));
@@ -132,9 +132,9 @@ public class NewsRestController {
     public ResponseEntity<NewDTO> replaceNew(
             @PathVariable long id,
             @RequestBody NewDTO updatedNewDTO,
-            Principal principal) throws SQLException {
+            Authentication authentication) throws SQLException {
 
-        Long userId = Long.parseLong(principal.getName());
+        Long userId = Long.parseLong(authentication.getName());
         New updated = newService.toDomain(updatedNewDTO);
 
         updated.setNewId(id);
@@ -151,14 +151,14 @@ public class NewsRestController {
     public ResponseEntity<ImageDTO> updateNewImage(
             @PathVariable long id,
             @RequestParam MultipartFile imageFile,
-            Principal principal) throws IOException {
+            Authentication authentication) throws IOException {
 
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
         }
 
         Image image = imageService.createImage(imageFile.getInputStream());
-        newService.addImageToNew(id, image, Long.parseLong(principal.getName()));
+        newService.addImageToNew(id, image, Long.parseLong(authentication.getName()));
 
         URI location = fromCurrentContextPath()
                 .path("/api/images/{imageId}/media")
