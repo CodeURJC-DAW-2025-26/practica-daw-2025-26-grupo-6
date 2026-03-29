@@ -74,8 +74,16 @@ public class SecurityConfig {
 
         http
                 .securityMatcher("/api/**")
-                .exceptionHandling(
-                        handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
+                .exceptionHandling(handling -> {
+                    handling.authenticationEntryPoint(unauthorizedHandlerJwt);
+                    handling.accessDeniedHandler((request, response, accessDeniedException) -> {
+                        response.setStatus(403);
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().write(
+                                "{\"errorCode\":403,\"errorMsg\":\"No tienes el permiso necesario para acceder a este recurso.\"}");
+                    });
+                });
 
         http
                 .authorizeHttpRequests(authorize -> authorize
