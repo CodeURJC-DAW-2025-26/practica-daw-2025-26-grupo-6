@@ -464,7 +464,7 @@ paths:
           content:
             '*/*':
               schema:
-                type: object
+                $ref: "#/components/schemas/EventDTO"
   /api/v1/events/{id}/images:
     put:
       tags:

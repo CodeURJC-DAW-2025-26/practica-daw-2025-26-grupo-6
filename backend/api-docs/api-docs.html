@@ -7450,7 +7450,7 @@ public class EventsRestControllerApiExample {
         Long id = 789; // Long | 
 
         try {
-            Object result = apiInstance.deleteEvent(id);
+            EventDTO result = apiInstance.deleteEvent(id);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling EventsRestControllerApi#deleteEvent");
@@ -7487,7 +7487,7 @@ public class EventsRestControllerApiExample {
         Long id = 789; // Long | 
 
         try {
-            Object result = apiInstance.deleteEvent(id);
+            EventDTO result = apiInstance.deleteEvent(id);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling EventsRestControllerApi#deleteEvent");
@@ -7508,7 +7508,7 @@ EventsRestControllerApi *apiInstance = [[EventsRestControllerApi alloc] init];
 Long *id = 789; //  (default to null)
 
 [apiInstance deleteEventWith:id
-              completionHandler: ^(Object output, NSError* error) {
+              completionHandler: ^(EventDTO output, NSError* error) {
     if (output) {
         NSLog(@"%@", output);
     }
@@ -7559,7 +7559,7 @@ namespace Example
             var id = 789;  // Long |  (default to null)
 
             try {
-                Object result = apiInstance.deleteEvent(id);
+                EventDTO result = apiInstance.deleteEvent(id);
                 Debug.WriteLine(result);
             } catch (Exception e) {
                 Debug.Print("Exception when calling EventsRestControllerApi.deleteEvent: " + e.Message );
@@ -7716,7 +7716,7 @@ pub fn main() {
   "content" : {
     "*/*" : {
       "schema" : {
-        "type" : "object"
+        "$ref" : "#/components/schemas/EventDTO"
       }
     }
   }
