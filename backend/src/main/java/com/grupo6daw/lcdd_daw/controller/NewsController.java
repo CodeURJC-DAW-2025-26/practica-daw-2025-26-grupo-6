@@ -53,7 +53,7 @@ public class NewsController {
         return "news";
     }
 
-    @GetMapping("/new/{id}")
+    @GetMapping("/news/{id}")
     public String newDetail(@PathVariable long id, Model model, HttpServletRequest request) {
         New newPost = newService.findById(id);
         if (newPost != null) {
