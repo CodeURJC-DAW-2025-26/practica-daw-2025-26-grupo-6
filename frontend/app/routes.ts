@@ -1,13 +1,14 @@
 import { type RouteConfig, index, layout, route } from "@react-router/dev/routes";
 
 export default [
-  layout("routes/home.tsx", [
-    index("routes/index.tsx"),
-    route("/new/news", "routes/news.tsx"),
-    route("/new/news/:id", "routes/news-detail.tsx"),
-    route("/new/news-create", "routes/news-create.tsx"),
-    route("/new/news-edit/:id", "routes/news-edit.tsx"),
-    route("/new/games", "routes/games.tsx"),
-    route("/new/games/:id", "routes/games-detail.tsx"),
-  ]),
+    layout("routes/home.tsx", [
+        route("/new", "routes/index.tsx"),
+        route("/new/login", "routes/login.tsx"),
+        route("/new/news", "routes/news.tsx"),
+        route("/new/news/:id", "routes/news-detail.tsx"),
+        route("/new/news-create", "routes/news-create.tsx"),
+        route("/new/news-edit/:id", "routes/news-edit.tsx"),
+        route("/new/games", "routes/games.tsx"),
+        route("/new/games/:id", "routes/games-detail.tsx"),
+    ]),
 ] satisfies RouteConfig;
