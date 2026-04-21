@@ -11,10 +11,12 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -163,4 +165,16 @@ public class UsersRestController {
         return ResponseEntity.ok(userService.setUserImage(id, userImage));
     }
 
+    @GetMapping("/me")
+    public UserDTO me(HttpServletRequest request) {
+
+        Principal principal = request.getUserPrincipal();
+
+        if (principal != null) {
+            User user = userService.getUser(Long.parseLong(principal.getName())).orElseThrow();
+            return userMapper.toFullDTO(user);
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
 }
