@@ -7,5 +7,7 @@ export default [
     route("/new/news/:id", "routes/news-detail.tsx"),
     route("/new/news-create", "routes/news-create.tsx"),
     route("/new/news-edit/:id", "routes/news-edit.tsx"),
+    route("/new/games", "routes/games.tsx"),
+    route("/new/games/:id", "routes/games-detail.tsx"),
   ]),
 ] satisfies RouteConfig;

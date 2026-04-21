@@ -10,7 +10,7 @@ export default function Header() {
                 </a>
                 <nav id="navmenu" className="navmenu">
                     <ul>
-                        <li><Link to="/game/games">Juegos</Link></li>
+                        <li><Link to="/new/games">Juegos</Link></li>
                         <li><Link to="/event/events">Eventos</Link></li>
                         <li><Link to="/new/news">Noticias</Link></li>
                     </ul>
