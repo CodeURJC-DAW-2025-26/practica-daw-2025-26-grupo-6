@@ -31,3 +31,89 @@ export async function getNew(id: number): Promise<NewDTO> {
   }
   return await res.json();
 }
+
+export async function createNew(name: string, tag: string, description: string): Promise<NewDTO> {
+  const response = await fetch(`${API_URL}/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      newName: name,
+      newDescription: description,
+      newTag: tag,
+      validated: false,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error adding post");
+  }
+
+  return await response.json();
+}
+
+export async function uploadNewImage(id: number, imageFile: File): Promise<void> {
+  const formData = new FormData();
+  formData.append("imageFile", imageFile);
+
+  const response = await fetch(`${API_URL}/${id}/images/`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Error uploading image");
+  }
+}
+
+export async function removeNew(id: number): Promise<void> {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error removing post");
+  }
+}
+
+export async function deleteNewImage(newId: number, imageId: number): Promise<void> {
+  const response = await fetch(`${API_URL}/${newId}/images/${imageId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error deleting image");
+  }
+}
+
+export async function updateNew(id: number, name: string, tag: string, description: string): Promise<NewDTO> {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      newName: name,
+      newTag: tag,
+      newDescription: description,
+      validated: false,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error updating post");
+  }
+
+  return await response.json();
+}
+
+export async function replaceNewImage(imageId: number, imageFile: File): Promise<void> {
+  const formData = new FormData();
+  formData.append("imageFile", imageFile);
+
+  const response = await fetch(`${API_IMAGES_URL}/${imageId}/media`, {
+    method: "PUT",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Error replacing image");
+  }
+}
