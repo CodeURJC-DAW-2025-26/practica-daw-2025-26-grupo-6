@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Alert, Image, Button, Modal } from "react-bootstrap";
 import type { Route } from "./+types/news-detail";
-import { getNew } from "~/services/news-service";
+import { getNew, removeNew } from "~/services/news-service";
 //import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
@@ -21,6 +21,35 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
       day: "numeric",
     })
     : "";
+
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isPendingDelete, setPendingDelete] = useState(false);
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  async function handleDelete() {
+    setPendingDelete(true);
+    setDeleteError(null);
+    try {
+      await removeNew(post.newId);
+      navigate("/new/news");
+    } catch (err) {
+      console.error(err);
+      setDeleteError("Hubo un error al borrar la noticia.");
+      setPendingDelete(false);
+    }
+  }
+
+  function handleOpenDeleteDialog() {
+    setDeleteDialogOpen(true);
+  }
+
+  function handleCloseDeleteDialog() {
+    if (isPendingDelete) {
+      return;
+    }
+    setDeleteDialogOpen(false);
+    setDeleteError(null);
+  }
 
   return (
     <>
@@ -159,6 +188,26 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
           </div>
         </section>
       </main>
+      <Modal show={isDeleteDialogOpen} onHide={handleCloseDeleteDialog}>
+        <Modal.Header closeButton>
+          <Modal.Title>Eliminar Noticia</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            ¿Estás seguro de que quieres eliminar <b>"{post.newName}"</b>?
+          </p>
+          <p className="text-muted">Esta acción no se puede deshacer.</p>
+          {deleteError && <Alert variant="danger">{deleteError}</Alert>}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteDialog} disabled={isPendingDelete}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleDelete} disabled={isPendingDelete}>
+            {isPendingDelete ? "Deleting..." : "Borrar"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
