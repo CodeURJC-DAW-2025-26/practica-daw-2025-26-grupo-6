@@ -11,7 +11,7 @@ export default function Header() {
                 <nav id="navmenu" className="navmenu">
                     <ul>
                         <li><Link to="/new/games">Juegos</Link></li>
-                        <li><Link to="/event/events">Eventos</Link></li>
+                        <li><Link to="/new/events">Eventos</Link></li>
                         <li><Link to="/new/news">Noticias</Link></li>
                     </ul>
                 </nav>
