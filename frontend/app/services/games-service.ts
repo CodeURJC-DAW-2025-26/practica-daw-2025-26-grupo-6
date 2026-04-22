@@ -46,3 +46,95 @@ export async function getGame(id: number): Promise<GameDTO> {
   }
   return await res.json();
 }
+
+export async function createGame(name: string, description: string, minPlayers: number, maxPlayers: number, minDuration: number, maxDuration: number, genre: string): Promise<GameDTO> {
+  const response = await fetch(`${API_URL}/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      gameName: name,
+      gameDescription: description,
+      minPlayers: minPlayers.toString(),
+      maxPlayers: maxPlayers.toString(),
+      minDuration: minDuration.toString(),
+      maxDuration: maxDuration.toString(),
+      genre: genre
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error adding game");
+  }
+
+  return await response.json();
+}
+
+export async function uploadGameImage(id: number, imageFile: File): Promise<void> {
+  const formData = new FormData();
+  formData.append("imageFile", imageFile);
+
+  const response = await fetch(`${API_URL}/${id}/images/`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Error uploading image");
+  }
+}
+
+export async function removeGame(id: number): Promise<void> {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error removing game");
+  }
+}
+
+export async function deleteGameImage(gameId: number, imageId: number): Promise<void> {
+  const response = await fetch(`${API_URL}/${gameId}/images/${imageId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error deleting image");
+  }
+}
+
+export async function updateGame(id: number, name: string, description: string, minPlayers: number, maxPlayers: number, minDuration: number, maxDuration: number, genre: string): Promise<GameDTO> {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      gameName: name,
+      gameDescription: description,
+      minPlayers: minPlayers.toString(),
+      maxPlayers: maxPlayers.toString(),
+      minDuration: minDuration.toString(),
+      maxDuration: maxDuration.toString(),
+      genre: genre
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error updating game");
+  }
+
+  return await response.json();
+}
+
+export async function replaceGameImage(imageId: number, imageFile: File): Promise<void> {
+  const formData = new FormData();
+  formData.append("imageFile", imageFile);
+
+  const response = await fetch(`${API_IMAGES_URL}/${imageId}/media`, {
+    method: "PUT",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Error replacing image");
+  }
+}

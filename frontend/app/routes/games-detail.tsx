@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router";
-import { Image, Button, Form } from "react-bootstrap";
+import { Image, Button, Form, Alert, Modal } from "react-bootstrap";
 import type { Route } from "./+types/games-detail";
-import { getGame } from "~/services/games-service";
+import { getGame, removeGame } from "~/services/games-service";
+import { useState } from "react";
 //import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
@@ -12,6 +13,36 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
   // let { user } = useUserStore();
   const game = loaderData;
   const navigate = useNavigate();
+
+
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isPendingDelete, setPendingDelete] = useState(false);
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  async function handleDelete() {
+    setPendingDelete(true);
+    setDeleteError(null);
+    try {
+      await removeGame(game.gameId);
+      navigate("/new/games");
+    } catch (err) {
+      console.error(err);
+      setDeleteError("Hubo un error al borrar el juego.");
+      setPendingDelete(false);
+    }
+  }
+
+  function handleOpenDeleteDialog() {
+    setDeleteDialogOpen(true);
+  }
+
+  function handleCloseDeleteDialog() {
+    if (isPendingDelete) {
+      return;
+    }
+    setDeleteDialogOpen(false);
+    setDeleteError(null);
+  }
 
   return (
     <>
@@ -119,9 +150,9 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                         <Link
                           className="btn btn-link text-decoration-none p-0"
                           style={{ color: "#890f00" }}
-                          to={`/new/news-edit/${post.newId}`}
+                          to={`/new/games-edit/${game.gameId}`}
                         >
-                          <i className="bi bi-pencil-square me-1"></i> Modificar noticia
+                          <i className="bi bi-pencil-square me-1"></i> Modificar juego
                         </Link>
                       </div>
 
@@ -145,6 +176,26 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
           </div>
         </section>
       </main>
+      <Modal show={isDeleteDialogOpen} onHide={handleCloseDeleteDialog}>
+        <Modal.Header closeButton>
+          <Modal.Title>Eliminar Juego</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            ¿Estás seguro de que quieres eliminar <b>"{game.gameName}"</b>?
+          </p>
+          <p className="text-muted">Esta acción no se puede deshacer.</p>
+          {deleteError && <Alert variant="danger">{deleteError}</Alert>}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteDialog} disabled={isPendingDelete}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleDelete} disabled={isPendingDelete}>
+            {isPendingDelete ? "Deleting..." : "Borrar"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
