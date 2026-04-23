@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 import type { Route } from "./+types/events";
 import { getEvents } from "~/services/events-service";
 import { Button, Form } from "react-bootstrap";
-//import { useUserStore } from "~/stores/user-store";
+import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     const url = new URL(request.url);
@@ -53,7 +53,7 @@ export default function Events({ loaderData }: Route.ComponentProps) {
         }
     };
 
-    //let { user } = useUserStore();
+    let { user } = useUserStore();
 
     const navigate = useNavigate();
 
@@ -118,7 +118,7 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                         <i className="bi bi-search me-2"></i> Buscar
                                     </Button>
                                 </div>
-                                {/* 
+
                                 {user && (
                                     <div className="col-lg-2 col-md-2">
                                         <Button
@@ -130,7 +130,7 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                         </Button>
                                     </div>
                                 )}
-                                */}
+
                             </div>
                         </form>
                     </div>

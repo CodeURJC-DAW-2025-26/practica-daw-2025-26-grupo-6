@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 import type { Route } from "./+types/games";
 import { getGames } from "~/services/games-service";
 import { Button, Form, Image } from "react-bootstrap";
-//import { useUserStore } from "~/stores/user-store";
+import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
@@ -55,7 +55,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
     }
   };
 
-  //let { user } = useUserStore();
+  let { user } = useUserStore();
 
   const navigate = useNavigate();
 
@@ -118,8 +118,8 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                     <i className="bi bi-search me-2"></i> Buscar
                   </Button>
                 </div>
-                {/*
-                {user && (
+
+                {user?.userRoles?.includes("ADMIN") && (
                   <div className="col-lg-2 col-md-6">
                     <Button
                       onClick={() => navigate("/new/games-create")}
@@ -130,7 +130,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                     </Button>
                   </div>
                 )}
-                */}
+
               </div>
             </Form>
           </div>

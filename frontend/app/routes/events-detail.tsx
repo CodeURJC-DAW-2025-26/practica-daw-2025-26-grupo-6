@@ -3,14 +3,14 @@ import { Link, useNavigate } from "react-router";
 import { Alert, Image, Button, Modal, ListGroup } from "react-bootstrap";
 import type { Route } from "./+types/events-detail";
 import { getEvent, removeEvent } from "~/services/events-service";
-// import { useUserStore } from "~/stores/user-store";
+import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     return await getEvent(Number(params.id));
 }
 
 export default function EventsDetail({ loaderData }: Route.ComponentProps) {
-    //let { user } = useUserStore();
+    let { user } = useUserStore();
     const event = loaderData;
     const navigate = useNavigate();
 
@@ -139,8 +139,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 )}
                                             </span>
 
-                                            {/* 
-                                            {user && (
+                                            {(user?.userRoles?.includes("ADMIN") || user?.userOwnEvents?.some(e => e.eventId === event.eventId)) && (
                                                 <Button
                                                     type="button"
                                                     className="btn btn-sm rounded-pill ms-3 py-1 px-3 shadow-sm"
@@ -167,7 +166,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                     <i className="bi bi-eye-fill me-1"></i> Ver lista
                                                 </Button>
                                             )}
-                                            */}
+
                                         </div>
                                     </div>
 
@@ -176,7 +175,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                             {event.eventDescription}
                                         </p>
                                     </div>
-                                    {/*
+
                                     <div className="d-flex flex-wrap align-items-center justify-content-between mt-5 pt-3 border-top gap-3">
                                         <div className="d-flex flex-wrap align-items-center gap-2">
                                             {event.requiresRegistration && (
@@ -186,7 +185,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 </a>
                                             )}
 
-                                            <form onSubmit={joinToEvent} method="post" className="m-0">
+                                            <form method="post" className="m-0">
                                                 {user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && (
                                                     <button type="submit" className="btn btn-outline-dark rounded-pill px-4 shadow-sm">
                                                         <i className="bi bi-person-dash-fill me-1"></i> Desapuntarme
@@ -206,7 +205,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 )}
                                             </form>
 
-                                            {user && (
+                                            {(user?.userRoles?.includes("ADMIN") || user?.userOwnEvents?.some(e => e.eventId === event.eventId)) && (
                                                 <div className="d-flex flex-wrap align-items-center gap-3">
                                                     <Link
                                                         className="btn btn-link text-primary text-decoration-none p-0"
@@ -228,7 +227,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                             )}
                                         </div>
                                     </div>
-                                    */}
+
                                 </div>
                             </div>
                         </div>

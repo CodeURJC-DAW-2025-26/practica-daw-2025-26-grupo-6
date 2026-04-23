@@ -3,14 +3,14 @@ import { Link, useNavigate } from "react-router";
 import { Alert, Image, Button, Modal } from "react-bootstrap";
 import type { Route } from "./+types/news-detail";
 import { getNew, removeNew } from "~/services/news-service";
-//import { useUserStore } from "~/stores/user-store";
+import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return await getNew(Number(params.id));
 }
 
 export default function NewsDetail({ loaderData }: Route.ComponentProps) {
-  // let { user } = useUserStore();
+  let { user } = useUserStore();
   const post = loaderData;
   const navigate = useNavigate();
 
@@ -155,8 +155,8 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                   >
                     {post.newDescription}
                   </div>
-                  {/*
-                  {user && (
+
+                  {(user?.userRoles?.includes("ADMIN") || user?.userNews?.some(n => n.newId === post.newId)) && (
                     <div className="row mt-5 pt-3 border-top align-items-center">
                       <div className="col-auto">
                         <Link
@@ -181,7 +181,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                       </div>
                     </div>
                   )}
-                  */}
+
                 </div>
               </div>
             </div>

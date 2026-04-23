@@ -3,17 +3,16 @@ import { Image, Button, Form, Alert, Modal } from "react-bootstrap";
 import type { Route } from "./+types/games-detail";
 import { getGame, removeGame } from "~/services/games-service";
 import { useState } from "react";
-//import { useUserStore } from "~/stores/user-store";
+import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return await getGame(Number(params.id));
 }
 
 export default function GamesDetail({ loaderData }: Route.ComponentProps) {
-  // let { user } = useUserStore();
+  let { user } = useUserStore();
   const game = loaderData;
   const navigate = useNavigate();
-
 
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isPendingDelete, setPendingDelete] = useState(false);
@@ -143,8 +142,8 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
 
                   </div>
 
-                  {/*
-                  {user && (
+
+                  {user?.userRoles?.includes("ADMIN") && (
                     <div className="row mt-5 pt-3 border-top align-items-center">
                       <div className="col-auto">
                         <Link
@@ -169,7 +168,7 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                       </div>
                     </div>
                   )}
-                  */}
+
                 </div>
               </div>
             </div>
