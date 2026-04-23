@@ -22,14 +22,16 @@ export default function EventsForm({
     const [requiresRegistration, setRequiresRegistration] = useState(event?.requiresRegistration ?? false);
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
         const form = event.currentTarget;
 
         if (!form.checkValidity()) {
-            event.preventDefault();
             event.stopPropagation();
+            form.classList.add("was-validated");
+        } else {
+            form.classList.add("was-validated");
+            formAction(new FormData(form));
         }
-
-        form.classList.add("was-validated");
     }
 
     return (
@@ -74,6 +76,8 @@ export default function EventsForm({
                                 <Form
                                     className="custom-login-form needs-validation"
                                     action={formAction}
+                                    onSubmit={handleSubmit}
+                                    noValidate
                                 >
                                     <div className="row g-4">
                                         {isEditing && (<input type="hidden" name="eventId" value={event?.eventId ?? ""} />)}

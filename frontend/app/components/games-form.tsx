@@ -20,14 +20,16 @@ export default function GamesForm({
   const isEditing = game?.gameId;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     const form = event.currentTarget;
 
     if (!form.checkValidity()) {
-      event.preventDefault();
       event.stopPropagation();
+      form.classList.add("was-validated");
+    } else {
+      form.classList.add("was-validated");
+      formAction(new FormData(form));
     }
-
-    form.classList.add("was-validated");
   }
 
   return (
@@ -72,6 +74,8 @@ export default function GamesForm({
                 <Form
                   className="custom-login-form needs-validation"
                   action={formAction}
+                  onSubmit={handleSubmit}
+                  noValidate
                 >
                   <div className="form">
                     {isEditing && (<input type="hidden" name="gameId" value={game?.gameId ?? ""} />)}
