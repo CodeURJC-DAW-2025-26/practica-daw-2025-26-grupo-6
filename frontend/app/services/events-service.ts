@@ -31,3 +31,97 @@ export async function getEvent(id: number): Promise<EventDTO> {
     }
     return await res.json();
 }
+
+export async function createEvent(name: string, description: string, tag: string, requiresRegistration: boolean, registerLink: string, eventDate: string, maxParticipants: number | null): Promise<EventDTO> {
+    const response = await fetch(`${API_URL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            eventName: name,
+            eventDescription: description,
+            eventTag: tag,
+            requiresRegistration: requiresRegistration,
+            link: registerLink,
+            eventDate: eventDate,
+            maxParticipants: maxParticipants,
+            validated: false,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error adding event");
+    }
+
+    return await response.json();
+}
+
+export async function uploadEventImage(id: number, imageFile: File): Promise<void> {
+    const formData = new FormData();
+    formData.append("imageFile", imageFile);
+
+    const response = await fetch(`${API_URL}/${id}/images`, {
+        method: "POST",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("Error uploading image");
+    }
+}
+
+export async function removeEvent(id: number): Promise<void> {
+    const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error("Error removing event");
+    }
+}
+
+export async function deleteEventImage(eventId: number, imageId: number): Promise<void> {
+    const response = await fetch(`${API_URL}/${eventId}/images/${imageId}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error("Error deleting image");
+    }
+}
+
+export async function updateEvent(id: number, name: string, description: string, tag: string, requiresRegistration: boolean, registerLink: string, eventDate: string, maxParticipants: number | null): Promise<EventDTO> {
+    const response = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            eventName: name,
+            eventDescription: description,
+            eventTag: tag,
+            requiresRegistration: requiresRegistration,
+            link: registerLink,
+            eventDate: eventDate,
+            maxParticipants: maxParticipants,
+            validated: false,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Error updating event");
+    }
+
+    return await response.json();
+}
+
+export async function replaceEventImage(imageId: number, imageFile: File): Promise<void> {
+    const formData = new FormData();
+    formData.append("imageFile", imageFile);
+
+    const response = await fetch(`${API_IMAGES_URL}/${imageId}/media`, {
+        method: "PUT",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("Error replacing image");
+    }
+}

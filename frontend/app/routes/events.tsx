@@ -118,8 +118,8 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                         <i className="bi bi-search me-2"></i> Buscar
                                     </Button>
                                 </div>
-
-                                {true && (
+                                {/* 
+                                {user && (
                                     <div className="col-lg-2 col-md-2">
                                         <Button
                                             onClick={() => navigate("/new/events-create")}
@@ -130,7 +130,7 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                         </Button>
                                     </div>
                                 )}
-
+                                */}
                             </div>
                         </form>
                     </div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Alert, Image, Button, Modal, ListGroup } from "react-bootstrap";
 import type { Route } from "./+types/events-detail";
-import { getEvent } from "~/services/events-service";
+import { getEvent, removeEvent } from "~/services/events-service";
 // import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
@@ -14,13 +14,38 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
     const event = loaderData;
     const navigate = useNavigate();
 
-    const formattedDate = event.creationDate
-        ? new Date(event.creationDate).toLocaleDateString("es-ES", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        })
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [isPendingDelete, setPendingDelete] = useState(false);
+    const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const formattedDate = event.eventDate
+        ? new Intl.DateTimeFormat("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(event.eventDate))
         : "";
+
+    async function handleDelete() {
+        setPendingDelete(true);
+        setDeleteError(null);
+        try {
+            await removeEvent(event.eventId);
+            navigate("/new/events");
+        } catch (err) {
+            console.error(err);
+            setDeleteError("Hubo un error al borrar el evento.");
+            setPendingDelete(false);
+        }
+    }
+
+    function handleOpenDeleteDialog() {
+        setDeleteDialogOpen(true);
+    }
+
+    function handleCloseDeleteDialog() {
+        if (isPendingDelete) {
+            return;
+        }
+        setDeleteDialogOpen(false);
+        setDeleteError(null);
+    }
 
     const [isListDialogOpen, setListDialogOpen] = useState(false);
     function handleShowListModal() {
@@ -97,12 +122,10 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                     </h2>
 
                                     <div className="d-flex flex-wrap gap-4 mb-4 pb-3 border-bottom text-muted" style={{ fontSize: "0.95rem" }}>
-                                        {formattedDate && (
-                                            <div className="d-flex align-items-center">
-                                                <i className="bi bi-calendar-event text-danger fs-5 me-2"></i>
-                                                <span className="fw-medium text-dark">{formattedDate}</span>
-                                            </div>
-                                        )}
+                                        <div className="d-flex align-items-center">
+                                            <i className="bi bi-calendar-event text-danger fs-5 me-2"></i>
+                                            <span className="fw-medium text-dark">{formattedDate}</span>
+                                        </div>
 
                                         <div className="d-flex align-items-center">
                                             <i className="bi bi-people text-danger fs-5 me-2"></i>
@@ -247,6 +270,26 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                         </ListGroup>
                     </div>
                 </Modal.Body>
+            </Modal>
+            <Modal show={isDeleteDialogOpen} onHide={handleCloseDeleteDialog}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Eliminar Evento</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>
+                        ¿Estás seguro de que quieres eliminar <b>"{event.eventName}"</b>?
+                    </p>
+                    <p className="text-muted">Esta acción no se puede deshacer.</p>
+                    {deleteError && <Alert variant="danger">{deleteError}</Alert>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseDeleteDialog} disabled={isPendingDelete}>
+                        Cancelar
+                    </Button>
+                    <Button variant="danger" onClick={handleDelete} disabled={isPendingDelete}>
+                        {isPendingDelete ? "Deleting..." : "Borrar"}
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </>
     );
