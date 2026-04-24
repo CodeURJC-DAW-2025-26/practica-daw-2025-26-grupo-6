@@ -10,7 +10,7 @@ export type EventsPageResult = {
 };
 
 export async function getEvents(name: string, tag: string, page: number,): Promise<EventsPageResult> {
-    const res = await fetch(`${API_URL}?page=${page}&size=${PAGE_SIZE}&name=${encodeURIComponent(name)}&tag=${encodeURIComponent(tag)}`);
+    const res = await fetch(`${API_URL}?page=${page}&size=${PAGE_SIZE}&name=${encodeURIComponent(name)}&tag=${encodeURIComponent(tag)}&sort=eventId,desc`);
     if (!res.ok) {
         throw new Error("Error fetching events");
     }
