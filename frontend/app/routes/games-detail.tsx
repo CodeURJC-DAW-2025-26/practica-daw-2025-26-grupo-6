@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router";
 import { Image, Button, Form, Alert, Modal } from "react-bootstrap";
 import type { Route } from "./+types/games-detail";
-import { getGame, removeGame } from "~/services/games-service";
-import { useState } from "react";
+import { getGame, removeGame, putFav, removeFav } from "~/services/games-service";
+import { useEffect, useState } from "react";
 import { useUserStore } from "~/stores/user-store";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
@@ -15,8 +15,13 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
 
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isFavourite, setIsFavourite] = useState(() => user?.userFavGames.some(g => g.gameId === game.gameId));
   const [isPendingDelete, setPendingDelete] = useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  useEffect(() => {
+    setIsFavourite(user?.userFavGames.some(g => g.gameId === game.gameId));
+  }, [user, game.gameId]);
 
   async function handleDelete() {
     setPendingDelete(true);
@@ -41,6 +46,21 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
     }
     setDeleteDialogOpen(false);
     setDeleteError(null);
+  }
+
+  async function toggleFav() {
+    try {
+      if (isFavourite) {
+        await removeFav(game.gameId);
+      } else {
+        await putFav(game.gameId);
+      }
+
+      setIsFavourite(!isFavourite);
+
+    } catch (error) {
+      console.error("Error al actualizar favorito", error);
+    }
   }
 
   return (
@@ -84,21 +104,20 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                       <i className="bi bi-newspaper fs-1"></i>
                     </div>
                   )}
-                  {/*
-                  <div style={{ position: "absolute", top: "15px", left: "15px", zIndex: 10 }}>
-                    <Form action={`/new/game/${game.gameId}/toggle-fav`} method="post" className="m-0">
+                  {user && (
+                    <div style={{ position: "absolute", top: "15px", left: "15px", zIndex: 10 }}>
                       <Button className="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center"
                         style={{ width: "42px", height: "42px", border: "none" }}
-                        title={isFavourite ? "Quitar de favoritos" : "Anadir a favoritos"}>
+                        onClick={toggleFav}
+                        title={isFavourite ? "Quitar de favoritos" : "Añadir a favoritos"}>
                         {isFavourite ? (
                           <i className="bi bi-heart-fill text-danger fs-5"></i>
                         ) : (
                           <i className="bi bi-heart text-danger fs-5"></i>
                         )}
                       </Button>
-                    </Form>
-                  </div>
-                  */}
+                    </div>
+                  )}
                 </div>
               </div>
 

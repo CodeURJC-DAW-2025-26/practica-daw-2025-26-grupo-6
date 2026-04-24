@@ -1,6 +1,14 @@
+import { useEffect } from "react";
 import { Link } from "react-router";
+import { useUserStore } from "~/stores/user-store";
 
 export default function Header() {
+    let { loadLoggedUser } = useUserStore();
+
+    useEffect(() => {
+        loadLoggedUser();
+    }, [loadLoggedUser]);
+
     return <>
         <header id="header" className="header d-flex align-items-center sticky-top">
             <div className="container-fluid container-xl position-relative d-flex align-items-center">

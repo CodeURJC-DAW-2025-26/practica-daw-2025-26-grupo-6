@@ -138,3 +138,25 @@ export async function replaceGameImage(imageId: number, imageFile: File): Promis
     throw new Error("Error replacing image");
   }
 }
+
+export async function putFav(gameId: number): Promise<void> {
+
+  const response = await fetch(`${API_URL}/${gameId}/favourites`, {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error adding game to favourites");
+  }
+}
+
+export async function removeFav(gameId: number): Promise<void> {
+
+  const response = await fetch(`${API_URL}/${gameId}/favourites`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error removing game from favourites");
+  }
+}
