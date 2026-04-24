@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 
 import com.grupo6daw.lcdd_daw.model.Event;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ImageMapper.class})
 public interface EventMapper {
 
     // BASIC DTO
