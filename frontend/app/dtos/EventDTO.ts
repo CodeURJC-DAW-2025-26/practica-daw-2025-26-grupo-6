@@ -16,5 +16,6 @@ export default interface EventDTO {
     eventDate: string;
     maxParticipants: number;
     validated: boolean;
-    participants: Array<UserBasicDTO>;
+    participantCount?: number;
+    participants?: Array<UserBasicDTO>;
 }

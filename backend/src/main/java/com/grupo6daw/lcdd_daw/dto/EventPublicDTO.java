@@ -15,5 +15,6 @@ public record EventPublicDTO(
         LocalDateTime creationDate,
         LocalDate eventDate,
         Integer maxParticipants,
-        boolean validated
-) {}
+        Long participantCount,
+        boolean validated) {
+}

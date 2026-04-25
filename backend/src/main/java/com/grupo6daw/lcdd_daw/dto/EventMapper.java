@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 
 import com.grupo6daw.lcdd_daw.model.Event;
 
-@Mapper(componentModel = "spring", uses = {ImageMapper.class})
+@Mapper(componentModel = "spring", uses = { ImageMapper.class })
 public interface EventMapper {
 
     // BASIC DTO
@@ -45,6 +45,7 @@ public interface EventMapper {
     Event toDomainFromFullDTO(EventDTO eventDTO);
 
     @Named("toPublicDTO")
+    @Mapping(target = "participantCount", expression = "java(event.getEventRegisteredUsers() != null ? (long) event.getEventRegisteredUsers().size() : 0L)")
     EventPublicDTO toPublicDTO(Event event);
 
 }

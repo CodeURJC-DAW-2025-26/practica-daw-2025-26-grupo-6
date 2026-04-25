@@ -22,6 +22,8 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
         ? new Intl.DateTimeFormat("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(event.eventDate))
         : "";
 
+    const participantsCount = event.participants?.length ?? event.participantCount ?? 0;
+
     async function handleDelete() {
         setPendingDelete(true);
         setDeleteError(null);
@@ -130,7 +132,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                         <div className="d-flex align-items-center">
                                             <i className="bi bi-people text-danger fs-5 me-2"></i>
                                             <span className="fw-medium text-dark">
-                                                Apuntados: <span className="text-danger fw-bold">{event.participants?.length ?? 0}</span>
+                                                Apuntados: <span className="text-danger fw-bold">{participantsCount}</span>
                                                 {event.maxParticipants && (
                                                     <span> / {event.maxParticipants}</span>
                                                 )}
@@ -192,13 +194,13 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                     </button>
                                                 )}
 
-                                                {!user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants === event.participants?.length && (
+                                                {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants === participantsCount && (
                                                     <button type="button" className="btn btn-secondary rounded-pill px-4 shadow-sm" disabled>
                                                         <i className="bi bi-slash-circle me-1"></i> Aforo completo
                                                     </button>
                                                 )}
 
-                                                {!user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants !== event.participants?.length && (
+                                                {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants !== participantsCount && (
                                                     <button type="submit" className="btn btn-dark rounded-pill px-4 shadow-sm">
                                                         <i className="bi bi-person-plus-fill me-1"></i> Apuntarme
                                                     </button>
