@@ -7,6 +7,7 @@ import { BoxArrowRight, Person, ShieldLock } from "react-bootstrap-icons";
 export default function Header() {
 
     let { user, loadLoggedUser, logoutUser } = useUserStore();
+    let lastImageChange = useUserStore(state => state.lastImageChange);
     const navigate = useNavigate();
 
     const [isMobileNavActive, setIsMobileNavActive] = useState(false);
@@ -80,7 +81,7 @@ export default function Header() {
                         <Dropdown align="end">
                             <Dropdown.Toggle as="a" className="submit-btn rounded-circle p-0" id="dropdown-user" style={{ cursor: 'pointer' }}>
                                 <Image
-                                    src={`/api/v1/users/${user.userId}/image`}
+                                    src={`/api/v1/users/${user.userId}/image?${lastImageChange}`}
                                     roundedCircle
                                     width="45"
                                     height="45"

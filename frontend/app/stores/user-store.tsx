@@ -6,6 +6,8 @@ import { HttpError, logIn, logOut, reqIsLogged } from "~/services/login-service"
 interface UserState {
     user: UserDTO | null;
     errorMessage: string | null;
+    lastImageChange: number;
+    updateLastImageChange: () => void;
     loadLoggedUser: () => Promise<void>;
     loginUser: (username: string, password: string) => Promise<void>;
     logoutUser: () => Promise<void>;
@@ -14,9 +16,12 @@ interface UserState {
 export const useUserStore = create<UserState>((set, get) => ({
     user: null,
     errorMessage: null,
+    lastImageChange: 0,
+
+    updateLastImageChange: () => set({ lastImageChange: Date.now() }),
 
     loadLoggedUser: async () => {
-        set({ user: null, errorMessage: null });
+        set({ user: null, errorMessage: null, lastImageChange: Date.now() });
 
         try {
             const user = await reqIsLogged();
