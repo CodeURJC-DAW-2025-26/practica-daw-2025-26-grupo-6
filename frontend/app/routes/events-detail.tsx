@@ -1,22 +1,61 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { Alert, Image, Button, Modal, ListGroup } from "react-bootstrap";
+import { Link, useNavigate, useRevalidator } from "react-router";
+import { Alert, Image, Button, Modal, ListGroup, Spinner } from "react-bootstrap";
 import type { Route } from "./+types/events-detail";
-import { getEvent, removeEvent } from "~/services/events-service";
+import { getEvent, removeEvent, joinEvent, leaveEvent } from "~/services/events-service";
 import { useUserStore } from "~/stores/user-store";
+import { BoxArrowUpRight, CalendarEvent, CardChecklist, EmojiFrown, EnvelopeAt, EyeFill, Newspaper, PencilSquare, People, PersonBadge, PersonDashFill, PersonPlusFill, SlashCircle, TagFill, Trash } from "react-bootstrap-icons";
+
+
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     return await getEvent(Number(params.id));
 }
 
 export default function EventsDetail({ loaderData }: Route.ComponentProps) {
-    let { user } = useUserStore();
+    let { user, loadLoggedUser } = useUserStore();
     const event = loaderData;
     const navigate = useNavigate();
+    const revalidator = useRevalidator();
 
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isPendingDelete, setPendingDelete] = useState(false);
     const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const [actionError, setActionError] = useState<string | null>(null);
+    const [isPendingAction, setPendingAction] = useState(false);
+
+    async function handleJoinEvent(e: React.MouseEvent) {
+        e.preventDefault();
+        setPendingAction(true);
+        setActionError(null);
+        try {
+            await joinEvent(event.eventId);
+            await loadLoggedUser(); // Update user data to reflect new registration
+            revalidator.revalidate(); // Revalidate loader to get updated participant count and list
+        } catch (err) {
+            console.error(err);
+            setActionError("Hubo un error al apuntarse al evento.");
+        } finally {
+            setPendingAction(false);
+        }
+    }
+
+    async function handleLeaveEvent(e: React.MouseEvent) {
+        e.preventDefault();
+        setPendingAction(true);
+        setActionError(null);
+        try {
+            await leaveEvent(event.eventId);
+            await loadLoggedUser();
+            revalidator.revalidate();
+        } catch (err) {
+            console.error(err);
+            setActionError("Hubo un error al desapuntarse del evento.");
+        } finally {
+            setPendingAction(false);
+        }
+    }
 
     const formattedDate = event.eventDate
         ? new Intl.DateTimeFormat("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(event.eventDate))
@@ -96,7 +135,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                         />
                                     ) : (
                                         <div className="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
-                                            <i className="bi bi-newspaper fs-1"></i>
+                                            <Newspaper />
                                         </div>
                                     )}
 
@@ -111,7 +150,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 border: "1px solid rgba(255,255,255,0.2)",
                                             }}
                                         >
-                                            <i className="bi bi-tag-fill me-1"></i> {event.eventTag}
+                                            <TagFill className="me-2" /> {event.eventTag}
                                         </span>
                                     </div>
                                 </div>
@@ -125,12 +164,12 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
 
                                     <div className="d-flex flex-wrap gap-4 mb-4 pb-3 border-bottom text-muted" style={{ fontSize: "0.95rem" }}>
                                         <div className="d-flex align-items-center">
-                                            <i className="bi bi-calendar-event text-danger fs-5 me-2"></i>
+                                            <CalendarEvent className="me-2" />
                                             <span className="fw-medium text-dark">{formattedDate}</span>
                                         </div>
 
                                         <div className="d-flex align-items-center">
-                                            <i className="bi bi-people text-danger fs-5 me-2"></i>
+                                            <People className="me-2" />
                                             <span className="fw-medium text-dark">
                                                 Apuntados: <span className="text-danger fw-bold">{participantsCount}</span>
                                                 {event.maxParticipants && (
@@ -165,7 +204,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                         e.currentTarget.style.color = "#a71b12";
                                                     }}
                                                 >
-                                                    <i className="bi bi-eye-fill me-1"></i> Ver lista
+                                                    <EyeFill className="me-2" /> Ver lista
                                                 </Button>
                                             )}
 
@@ -178,43 +217,77 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                         </p>
                                     </div>
 
+                                    {actionError && (
+                                        <Alert variant="danger" className="mb-0 shadow-sm border-0 d-flex align-items-center mt-3">
+                                            <EmojiFrown className="me-2" /> {actionError}
+                                        </Alert>
+                                    )}
+
                                     <div className="d-flex flex-wrap align-items-center justify-content-between mt-5 pt-3 border-top gap-3">
                                         <div className="d-flex flex-wrap align-items-center gap-2">
                                             {event.requiresRegistration && (
                                                 <a href={event.link} target="_blank" rel="noopener noreferrer"
                                                     className="btn btn-danger rounded-pill px-4 shadow-sm" style={{ backgroundColor: "#a71b12", border: "none" }}>
-                                                    <i className="bi bi-box-arrow-up-right me-1"></i> Página de registro
+                                                    <BoxArrowUpRight className="me-2" /> Página de registro
                                                 </a>
                                             )}
 
-                                            <form method="post" className="m-0">
+                                            <form className="m-0">
                                                 {user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && (
-                                                    <button type="submit" className="btn btn-outline-dark rounded-pill px-4 shadow-sm">
-                                                        <i className="bi bi-person-dash-fill me-1"></i> Desapuntarme
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-dark rounded-pill px-4 shadow-sm d-flex align-items-center"
+                                                        onClick={handleLeaveEvent}
+                                                        disabled={isPendingAction}
+                                                    >
+                                                        {isPendingAction ? (
+                                                            <>
+                                                                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                                                Procesando...
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <PersonDashFill className="me-2" /> Desapuntarme
+                                                            </>
+                                                        )}
                                                     </button>
                                                 )}
 
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants === participantsCount && (
-                                                    <button type="button" className="btn btn-secondary rounded-pill px-4 shadow-sm" disabled>
-                                                        <i className="bi bi-slash-circle me-1"></i> Aforo completo
+                                                    <button type="button" className="btn btn-secondary rounded-pill px-4 shadow-sm d-flex align-items-center" disabled>
+                                                        <SlashCircle className="me-2" /> Aforo completo
                                                     </button>
                                                 )}
 
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants !== participantsCount && (
-                                                    <button type="submit" className="btn btn-dark rounded-pill px-4 shadow-sm">
-                                                        <i className="bi bi-person-plus-fill me-1"></i> Apuntarme
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-dark rounded-pill px-4 shadow-sm d-flex align-items-center"
+                                                        onClick={handleJoinEvent}
+                                                        disabled={isPendingAction}
+                                                    >
+                                                        {isPendingAction ? (
+                                                            <>
+                                                                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                                                Procesando...
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <PersonPlusFill className="me-2" /> Apuntarme
+                                                            </>
+                                                        )}
                                                     </button>
                                                 )}
                                             </form>
 
                                             {(user?.userRoles?.includes("ADMIN") || user?.userOwnEvents?.some(e => e.eventId === event.eventId)) && (
                                                 <div className="d-flex flex-wrap align-items-center gap-3">
-                                                    <Link
+                                                    <a
                                                         className="btn btn-link text-primary text-decoration-none p-0"
-                                                        to={`/new/events-edit/${event.eventId}`}
+                                                        href={`/new/events-edit/${event.eventId}`}
                                                     >
-                                                        <i className="bi bi-pencil-square me-1"></i> Modificar evento
-                                                    </Link>
+                                                        <PencilSquare className="me-2" /> Modificar evento
+                                                    </a>
 
                                                     <Button
                                                         type="button"
@@ -223,7 +296,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                         onClick={handleOpenDeleteDialog}
                                                         disabled={isPendingDelete}
                                                     >
-                                                        <i className="bi bi-trash me-1"></i> Eliminar
+                                                        <Trash /> Eliminar
                                                     </Button>
                                                 </div>
                                             )}
@@ -238,7 +311,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
             </main >
             <Modal show={isListDialogOpen} onHide={handleCloseListModal}>
                 <Modal.Header closeButton>
-                    <i className="bi bi-card-checklist text-danger me-2"></i>Lista de Asistentes
+                    <CardChecklist className="me-2" />Lista de Asistentes
                 </Modal.Header>
                 <Modal.Body>
                     <div className="modal-body p-0">
@@ -250,11 +323,11 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                             <Link to={`new/user/${participant.userId}`} className="text-decoration-none"
                                                 style={{ color: '#a71b12', transition: 'color 0.2s ease-in-out' }} onMouseOver={(e) => e.currentTarget.style.color = '#890f00'}
                                                 onMouseOut={(e) => e.currentTarget.style.color = '#a71b12'}>
-                                                <i className="bi bi-person-badge me-1"></i> {participant.userNickname}
+                                                <PersonBadge className="me-2" /> {participant.userNickname}
                                             </Link>
                                         </div>
                                         <div className="text-muted" style={{ fontSize: '0.9rem' }}>
-                                            <i className="bi bi-envelope-at me-1"></i>
+                                            <EnvelopeAt className="me-2" />
                                             <Link to={`mailto:${participant.userEmail}`} className="text-decoration-none text-secondary">
                                                 {participant.userEmail}
                                             </Link>
@@ -264,7 +337,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                             ))}
                             {event.participants?.length === 0 && (
                                 <ListGroup.Item className="p-4 text-center text-muted bg-light">
-                                    <i className="bi bi-emoji-frown fs-1 d-block mb-2 opacity-50"></i>
+                                    <EmojiFrown className="me-2" />
                                     Aún no hay nadie inscrito en este evento.
                                 </ListGroup.Item>
                             )}

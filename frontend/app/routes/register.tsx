@@ -1,18 +1,18 @@
-import { useActionState, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useActionState, useRef, useState, startTransition } from "react";
+import type { FormEvent } from "react";
+import { Form, Link, useNavigate } from "react-router";
 import { useUserStore } from "~/stores/user-store";
 import { register } from "~/services/user-service";
+import { ArrowLeft, BoxArrowInRight, ExclamationTriangleFill, PersonPlusFill } from "react-bootstrap-icons";
+import { Button, FormControl, FormLabel, ListGroup, ListGroupItem, Spinner } from "react-bootstrap";
 
 export default function Register() {
 
     const userStore = useUserStore()
-
     const navigate = useNavigate()
 
     const [wasValidated, setWasValidated] = useState(false)
-
     const formRef = useRef<HTMLFormElement>(null);
-
     const [registerErrors, setRegisterErrors] = useState<string[]>([])
 
 
@@ -25,7 +25,6 @@ export default function Register() {
         const userNickname = (formData.get("userNickname") as string) ?? "";
 
         const form = formRef.current;
-
         const errors: string[] = []
 
         setWasValidated(true)
@@ -63,6 +62,22 @@ export default function Register() {
         { userEmail: "", password: "", confirmPassword: "", userName: "", userSurname: "", userNickname: "" }
     )
 
+
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const form = event.currentTarget;
+
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+            setWasValidated(true);
+        } else {
+            setWasValidated(true);
+            startTransition(() => {
+                formAction(new FormData(form));
+            });
+        }
+    }
+
     return (
         <main className="main">
             <section id="quote" className="quote section pt-0">
@@ -76,20 +91,20 @@ export default function Register() {
                                 </div>
                                 {registerErrors.length > 0 && (
                                     <div className="alert alert-danger alert-dismissible fade show mb-4" role="alert" style={{ borderLeft: '5px solid #890f00' }}>
-                                        <strong><i className="bi bi-exclamation-triangle-fill me-2" /> Ups! Revisa los datos:</strong>
-                                        <ul className="mt-2 mb-0">
+                                        <strong><ExclamationTriangleFill /> Ups! Revisa los datos:</strong>
+                                        <ListGroup className="mt-2 mb-0">
                                             {registerErrors.map((error, index) => (
-                                                <li key={index}>{error}</li>
+                                                <ListGroupItem key={index}>{error}</ListGroupItem>
                                             ))}
-                                        </ul>
-                                        <button type="button" className="btn-close" onClick={() => setRegisterErrors([])} aria-label="Close" />
+                                        </ListGroup>
+                                        <Button type="button" className="btn-close" onClick={() => setRegisterErrors([])} aria-label="Close" />
                                     </div>
                                 )}
-                                <form method="post" id="registerForm" action={formAction} ref={formRef} encType="multipart/form-data" className={`custom-login-form needs-validation ${wasValidated && "was-validated"}`} noValidate>
+                                <form id="registerForm" ref={formRef} onSubmit={handleSubmit} encType="multipart/form-data" className={`custom-login-form needs-validation ${wasValidated && "was-validated"}`} noValidate>
                                     <div className="form">
                                         <div className="form-field">
-                                            <label htmlFor="email" className="required-label">Correo electrónico:</label>
-                                            <input type="email" name="userEmail" id="email" defaultValue={state.userEmail} className="form-control" required />
+                                            <FormLabel htmlFor="email" className="required-label">Correo electrónico:</FormLabel>
+                                            <FormControl type="email" name="userEmail" id="email" disabled={isPending} defaultValue={state.userEmail} className="form-control" required />
                                             <div className="invalid-feedback">
                                                 Por favor, introduce un correo electrónico válido.
                                             </div>
@@ -97,15 +112,15 @@ export default function Register() {
                                         <br />
                                         <div className="row">
                                             <div className="col-md-6 form-field mb-3 mb-md-0">
-                                                <label htmlFor="password" className="required-label">Contraseña:</label>
-                                                <input type="password" name="password" id="password" defaultValue={state.password} className="form-control" minLength={4} maxLength={20} required />
+                                                <FormLabel htmlFor="password" className="required-label">Contraseña:</FormLabel>
+                                                <FormControl type="password" name="password" id="password" disabled={isPending} defaultValue={state.password} className="form-control" minLength={4} maxLength={20} required />
                                                 <div className="invalid-feedback">La contraseña debe tener entre 4 y 20 caracteres.
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-field">
-                                                <label htmlFor="confirm-password" className="required-label">Confirmar
-                                                    contraseña:</label>
-                                                <input type="password" name="confirmPassword" id="confirm-password" defaultValue={state.confirmPassword} className="form-control" minLength={4} maxLength={20} required />
+                                                <FormLabel htmlFor="confirm-password" className="required-label">Confirmar
+                                                    contraseña:</FormLabel>
+                                                <FormControl type="password" name="confirmPassword" id="confirm-password" disabled={isPending} defaultValue={state.confirmPassword} className="form-control" minLength={4} maxLength={20} required />
                                                 <div className="invalid-feedback">
                                                     Las contraseñas deben coincidir.
                                                 </div>
@@ -114,37 +129,53 @@ export default function Register() {
                                         <br />
                                         <div className="row">
                                             <div className="col-md-6 form-field mb-3 mb-md-0">
-                                                <label htmlFor="name" className="required-label">Nombre:</label>
-                                                <input type="text" name="userName" id="name" defaultValue={state.userName} className="form-control" required />
+                                                <FormLabel htmlFor="name" className="required-label">Nombre:</FormLabel>
+                                                <FormControl type="text" name="userName" id="name" disabled={isPending} defaultValue={state.userName} className="form-control" required />
                                                 <div className="invalid-feedback">El nombre es obligatorio.</div>
                                             </div>
                                             <div className="col-md-6 form-field">
-                                                <label htmlFor="surnames" className="required-label">Apellidos:</label>
-                                                <input type="text" name="userSurname" id="surnames" defaultValue={state.userSurname} className="form-control" required />
+                                                <FormLabel htmlFor="surnames" className="required-label">Apellidos:</FormLabel>
+                                                <FormControl type="text" name="userSurname" id="surnames" disabled={isPending} defaultValue={state.userSurname} className="form-control" required />
                                                 <div className="invalid-feedback">Los apellidos son obligatorios.</div>
                                             </div>
                                         </div>
                                         <br />
                                         <div className="form-field">
-                                            <label htmlFor="nickname" className="required-label">Nickname (Apodo):</label>
-                                            <input type="text" name="userNickname" id="nickname" defaultValue={state.userNickname} className="form-control" minLength={3} maxLength={15} required />
+                                            <FormLabel htmlFor="nickname" className="required-label">Nickname (Apodo):</FormLabel>
+                                            <FormControl type="text" name="userNickname" id="nickname" disabled={isPending} defaultValue={state.userNickname} className="form-control" minLength={3} maxLength={15} required />
                                             <div className="invalid-feedback">El nickname debe tener entre 3 y 15 caracteres.</div>
                                         </div>
                                     </div>
                                     <div className="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
                                         <Link to="/new" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
-                                            <i className="bi bi-arrow-left" />
+                                            <ArrowLeft />
                                             <span className="ms-2">Volver al inicio</span>
                                         </Link>
-                                        <button type="submit" className="submit-btn" style={{ marginTop: 0, justifyContent: 'center', display: 'flex' }}>
-                                            <span className="me-2">Completar Registro</span>
-                                            <i className="bi bi-person-plus-fill" />
-                                        </button>
+
+                                        <Button
+                                            type="submit"
+                                            className="submit-btn"
+                                            style={{ marginTop: 0, justifyContent: 'center', display: 'flex' }}
+                                            disabled={isPending}
+                                        >
+                                            {isPending ? (
+                                                <>
+                                                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                                    Registrando...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span className="me-2">Completar Registro</span>
+                                                    <PersonPlusFill />
+                                                </>
+                                            )}
+                                        </Button>
+
                                     </div>
                                     <div className="text-center pt-4 border-top">
                                         <p className="mb-2 text-muted">¿Ya tienes cuenta en La Caverna del Dragón?</p>
-                                        <Link to="/new/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
-                                            <i className="bi bi-box-arrow-in-right me-1" /> Iniciar sesión
+                                        <Link to="/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
+                                            <BoxArrowInRight className="me-2" /> Iniciar sesión
                                         </Link>
                                     </div>
                                 </form>

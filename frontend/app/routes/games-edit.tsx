@@ -9,9 +9,14 @@ import {
   updateGame,
   uploadGameImage,
 } from "~/services/games-service";
+import { requireAdminUser } from "~/services/route-guards";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
-  const game = await getGame(Number(params.id!));
+  const [game] = await Promise.all([
+    getGame(Number(params.id!)),
+    requireAdminUser(),
+  ]);
+
   return { game };
 }
 

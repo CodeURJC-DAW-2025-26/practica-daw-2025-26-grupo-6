@@ -4,6 +4,7 @@ import type { Route } from "./+types/games-detail";
 import { getGame, removeGame, putFav, removeFav } from "~/services/games-service";
 import { useEffect, useState } from "react";
 import { useUserStore } from "~/stores/user-store";
+import { ClockFill, Controller, Heart, HeartFill, Newspaper, PencilSquare, PeopleFill, Trash } from "react-bootstrap-icons";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   return await getGame(Number(params.id));
@@ -101,7 +102,7 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                     />
                   ) : (
                     <div className="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
-                      <i className="bi bi-newspaper fs-1"></i>
+                      <Newspaper />
                     </div>
                   )}
                   {user && (
@@ -111,9 +112,9 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                         onClick={toggleFav}
                         title={isFavourite ? "Quitar de favoritos" : "Añadir a favoritos"}>
                         {isFavourite ? (
-                          <i className="bi bi-heart-fill text-danger fs-5"></i>
+                          <HeartFill color="red" />
                         ) : (
-                          <i className="bi bi-heart text-danger fs-5"></i>
+                          <Heart color="red" />
                         )}
                       </Button>
                     </div>
@@ -145,17 +146,17 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                   <div className="row bg-light rounded p-3 mb-4 mx-0 border text-center text-sm-start">
 
                     <div className="col-sm-4 mb-3 mb-sm-0">
-                      <strong className="text-primary d-block mb-1"><i className="bi bi-people-fill me-2"></i>Jugadores</strong>
+                      <strong className="text-primary d-block mb-1"><PeopleFill className="me-2" />Jugadores</strong>
                       <span className="text-dark fs-5">{game.minPlayers} - {game.maxPlayers}</span>
                     </div>
 
                     <div className="col-sm-4 mb-3 mb-sm-0">
-                      <strong className="text-primary d-block mb-1"><i className="bi bi-clock-fill me-2"></i>Duración</strong>
+                      <strong className="text-primary d-block mb-1"><ClockFill className="me-2" />Duración</strong>
                       <span className="text-dark fs-5">{game.minDuration} - {game.maxDuration}'</span>
                     </div>
 
                     <div className="col-sm-4">
-                      <strong className="text-primary d-block mb-1"><i className="bi bi-controller me-2"></i>Género</strong>
+                      <strong className="text-primary d-block mb-1"><Controller className="me-2" />Género</strong>
                       <span className="text-dark fs-5">{game.genre}</span>
                     </div>
 
@@ -170,7 +171,7 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                           style={{ color: "#890f00" }}
                           to={`/new/games-edit/${game.gameId}`}
                         >
-                          <i className="bi bi-pencil-square me-1"></i> Modificar juego
+                          <PencilSquare className="me-2" /> Modificar juego
                         </Link>
                       </div>
 
@@ -182,7 +183,7 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                           onClick={handleOpenDeleteDialog}
                           disabled={isPendingDelete}
                         >
-                          <i className="bi bi-trash me-1"></i> Eliminar
+                          <Trash className="me-2" /> Eliminar
                         </Button>
                       </div>
                     </div>

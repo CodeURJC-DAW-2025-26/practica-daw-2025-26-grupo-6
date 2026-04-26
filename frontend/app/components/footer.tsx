@@ -1,34 +1,41 @@
+import {
+    Envelope,
+    TwitterX,
+    Instagram,
+    Twitch,
+    Youtube
+} from 'react-bootstrap-icons';
 
 export default function Footer() {
     return <footer id="footer" className="footer dark-background">
         <div className="social-container">
             <div className="col-1 text-center">
                 <a href="mailto:lcddoficial@gmail.com" className="social-link" title="Email">
-                    <i className="bi bi-envelope"></i>
+                    <Envelope />
                 </a>
             </div>
 
             <div className="col-1 text-center">
                 <a href="https://x.com/lcdd_urjc" target="_blank" className="social-link" title="Twitter/X">
-                    <i className="bi bi-twitter-x"></i>
+                    <TwitterX />
                 </a>
             </div>
 
             <div className="col-1 text-center">
                 <a href="https://www.instagram.com/lcdd_urjc" target="_blank" className="social-link" title="Instagram">
-                    <i className="bi bi-instagram"></i>
+                    <Instagram />
                 </a>
             </div>
 
             <div className="col-1 text-center">
                 <a href="https://www.twitch.tv/lcdd_oficial" target="_blank" className="social-link" title="Twitch">
-                    <i className="bi bi-twitch"></i>
+                    <Twitch />
                 </a>
             </div>
 
             <div className="col-1 text-center">
                 <a href="https://youtube.com/@lcddurjc" target="_blank" className="social-link" title="YouTube">
-                    <i className="bi bi-youtube"></i>
+                    <Youtube />
                 </a>
             </div>
 
