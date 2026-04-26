@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useRevalidator } from "react-router";
-import { Alert, Image, Button, Modal, ListGroup } from "react-bootstrap";
+import { Alert, Image, Button, Modal, ListGroup, Spinner } from "react-bootstrap";
 import type { Route } from "./+types/events-detail";
 import { getEvent, removeEvent, joinEvent, leaveEvent } from "~/services/events-service";
 import { useUserStore } from "~/stores/user-store";
@@ -236,17 +236,25 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 {user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && (
                                                     <button
                                                         type="button"
-                                                        className="btn btn-outline-dark rounded-pill px-4 shadow-sm"
+                                                        className="btn btn-outline-dark rounded-pill px-4 shadow-sm d-flex align-items-center"
                                                         onClick={handleLeaveEvent}
                                                         disabled={isPendingAction}
                                                     >
-                                                        <PersonDashFill className="me-2" />
-                                                        {isPendingAction ? "Procesando..." : "Desapuntarme"}
+                                                        {isPendingAction ? (
+                                                            <>
+                                                                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                                                Procesando...
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <PersonDashFill className="me-2" /> Desapuntarme
+                                                            </>
+                                                        )}
                                                     </button>
                                                 )}
 
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants === participantsCount && (
-                                                    <button type="button" className="btn btn-secondary rounded-pill px-4 shadow-sm" disabled>
+                                                    <button type="button" className="btn btn-secondary rounded-pill px-4 shadow-sm d-flex align-items-center" disabled>
                                                         <SlashCircle className="me-2" /> Aforo completo
                                                     </button>
                                                 )}
@@ -254,12 +262,20 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants !== participantsCount && (
                                                     <button
                                                         type="button"
-                                                        className="btn btn-dark rounded-pill px-4 shadow-sm"
+                                                        className="btn btn-dark rounded-pill px-4 shadow-sm d-flex align-items-center"
                                                         onClick={handleJoinEvent}
                                                         disabled={isPendingAction}
                                                     >
-                                                        <PersonPlusFill className="me-2" />
-                                                        {isPendingAction ? "Procesando..." : "Apuntarme"}
+                                                        {isPendingAction ? (
+                                                            <>
+                                                                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                                                Procesando...
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <PersonPlusFill className="me-2" /> Apuntarme
+                                                            </>
+                                                        )}
                                                     </button>
                                                 )}
                                             </form>
