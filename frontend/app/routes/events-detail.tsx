@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Alert, Image, Button, Modal, ListGroup } from "react-bootstrap";
 import type { Route } from "./+types/events-detail";
-import { getEvent, removeEvent } from "~/services/events-service";
+import { getEvent, removeEvent, joinEvent, leaveEvent } from "~/services/events-service";
 import { useUserStore } from "~/stores/user-store";
 import { BoxArrowUpRight, CalendarEvent, CardChecklist, EmojiFrown, EnvelopeAt, EyeFill, Newspaper, PencilSquare, People, PersonBadge, PersonDashFill, PersonPlusFill, SlashCircle, TagFill, Trash } from "react-bootstrap-icons";
+
+
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     return await getEvent(Number(params.id));
@@ -18,6 +20,39 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isPendingDelete, setPendingDelete] = useState(false);
     const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+    const [actionError, setActionError] = useState<string | null>(null);
+    const [isPendingAction, setPendingAction] = useState(false);
+
+    async function handleJoinEvent(e: React.MouseEvent) {
+        e.preventDefault();
+        setPendingAction(true);
+        setActionError(null);
+        try {
+            await joinEvent(event.eventId);
+
+        } catch (err) {
+            console.error(err);
+            setActionError("Hubo un error al apuntarse al evento.");
+        } finally {
+            setPendingAction(false);
+        }
+    }
+
+    async function handleLeaveEvent(e: React.MouseEvent) {
+        e.preventDefault();
+        setPendingAction(true);
+        setActionError(null);
+        try {
+            await leaveEvent(event.eventId);
+
+        } catch (err) {
+            console.error(err);
+            setActionError("Hubo un error al desapuntarse del evento.");
+        } finally {
+            setPendingAction(false);
+        }
+    }
 
     const formattedDate = event.eventDate
         ? new Intl.DateTimeFormat("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(event.eventDate))
