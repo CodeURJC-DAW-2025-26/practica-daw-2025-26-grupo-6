@@ -174,7 +174,7 @@ export default function Register() {
                                     </div>
                                     <div className="text-center pt-4 border-top">
                                         <p className="mb-2 text-muted">¿Ya tienes cuenta en La Caverna del Dragón?</p>
-                                        <Link to="/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
+                                        <Link to="/new/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
                                             <BoxArrowInRight className="me-2" /> Iniciar sesión
                                         </Link>
                                     </div>
