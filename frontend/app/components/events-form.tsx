@@ -1,6 +1,6 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import type EventDTO from "~/dtos/EventDTO";
 import {
     ExclamationTriangleFill,
@@ -239,14 +239,19 @@ export default function EventsForm({
                                                 }}
                                                 disabled={isPending}
                                             >
-                                                <span className="me-2">
-                                                    {isPending
-                                                        ? "Guardando..."
-                                                        : isEditing
-                                                            ? "Actualizar Evento"
-                                                            : "Guardar Evento"}
-                                                </span>
-                                                <Check2Circle size={20} />
+                                                {isPending ? (
+                                                    <>
+                                                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                                        Guardando...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <span className="me-2">
+                                                            {isEditing ? "Actualizar Evento" : "Guardar Evento"}
+                                                        </span>
+                                                        <Check2Circle size={20} />
+                                                    </>
+                                                )}
                                             </Button>
                                         </div>
                                     </div>
