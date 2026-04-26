@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import type { Route } from "./+types/events";
 import { getEvents } from "~/services/events-service";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import { useUserStore } from "~/stores/user-store";
 import { JournalX, Newspaper, PlusCircle, Search } from "react-bootstrap-icons";
 
@@ -199,18 +199,16 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                 disabled={isLoadingMore}
                                 type="button"
                             >
-                                <span id="btn-events-text">
-                                    {isLoadingMore
-                                        ? "Cargando..."
-                                        : loadMoreError
-                                            ? "Error. Reintentar"
-                                            : "Cargar más eventos"}
-                                </span>
-                                <span
-                                    id="btn-events-spinner"
-                                    className={`spinner-border spinner-border-sm ${isLoadingMore ? "" : "d-none"}`}
-                                    role="status"
-                                ></span>
+                                {isLoadingMore ? (
+                                    <>
+                                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                                        Cargando...
+                                    </>
+                                ) : loadMoreError ? (
+                                    "Error. Reintentar"
+                                ) : (
+                                    "Cargar más eventos"
+                                )}
                             </Button>
                         </div>
                     )}
