@@ -10,7 +10,14 @@ import {
 import { useEffect } from "react";
 
 import type { Route } from "./+types/root";
-import "./app.css";
+import appHref from "./app.css?url";
+
+export function links() {
+    return [
+        { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" },
+        { rel: "stylesheet", href: appHref }
+    ];
+}
 
 const ERROR_PATH = "/new/error";
 
@@ -22,10 +29,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
-                <link
-                    rel="stylesheet"
-                    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-                />
             </head>
             <body>
                 {children}
