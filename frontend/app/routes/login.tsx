@@ -16,7 +16,7 @@ export default function Login() {
 
 
     async function loginAction(prevState: {}, formData: FormData) {
-        const email = (formData.get("userEmail") as string) ?? "";
+        const email = (formData.get("email") as string) ?? "";
         const password = (formData.get("password") as string) ?? "";
 
         const form = formRef.current;
