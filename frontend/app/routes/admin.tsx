@@ -97,7 +97,7 @@ export default function AdminDashboard() {
                         <h1 style={{ fontWeight: 700, color: "#212529" }}>Panel de Administración</h1>
                         <nav aria-label="breadcrumb">
                             <Breadcrumb className="breadcrumb justify-content-center">
-                                <BreadcrumbItem className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Inicio</Link></BreadcrumbItem>
+                                <BreadcrumbItem className="breadcrumb-item"><Link to="/new" className="text-decoration-none text-muted">Inicio</Link></BreadcrumbItem>
                                 <BreadcrumbItem className="breadcrumb-item active" style={{ color: "#a71b12", fontWeight: 600 }}>Administración</BreadcrumbItem>
                             </Breadcrumb>
                         </nav>
