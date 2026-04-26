@@ -27,11 +27,10 @@ export default function Header() {
         }
     };
 
-
-    const handleLogout = async () => {
-        await logoutUser();
-        closeMobileNav();
-        navigate("/new/");
+    const handleLogout = () => {
+        logoutUser();      // Calls the logout function from the user store
+        closeMobileNav();  // Closes the mobile navigation if it's open
+        navigate("/new/"); // Redirects the user to the home page after logging out
     };
 
     return <>
