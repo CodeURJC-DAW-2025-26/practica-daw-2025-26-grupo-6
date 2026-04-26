@@ -125,3 +125,27 @@ export async function replaceEventImage(imageId: number, imageFile: File): Promi
         throw new Error("Error replacing image");
     }
 }
+
+export async function joinEvent(eventId: number): Promise<EventDTO> {
+    const response = await fetch(`${API_URL}/${eventId}/participants`, {
+        method: "POST",
+    });
+
+    if (!response.ok) {
+        throw new Error("Error joining event");
+    }
+
+    return await response.json();
+}
+
+export async function leaveEvent(eventId: number): Promise<EventDTO> {
+    const response = await fetch(`${API_URL}/${eventId}/participants`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error("Error leaving event");
+    }
+
+    return await response.json();
+}
