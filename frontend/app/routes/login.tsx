@@ -28,7 +28,7 @@ export default function Login() {
                 if (error) {
                     setErrorMessage(error)
                 } else {
-                    navigate(-1)
+                    navigate(`/new`);
                 }
             } catch (error) {
                 setErrorMessage("Error al iniciar sesión.");
