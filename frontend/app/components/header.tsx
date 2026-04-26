@@ -5,7 +5,8 @@ import { Button, Dropdown, Form, Image, ListGroup, ListGroupItem } from "react-b
 import { BoxArrowRight, Person, ShieldLock } from "react-bootstrap-icons";
 
 export default function Header() {
-    let { user, loadLoggedUser } = useUserStore();
+
+    let { user, loadLoggedUser, logoutUser } = useUserStore();
     const navigate = useNavigate();
 
     const [isMobileNavActive, setIsMobileNavActive] = useState(false);
@@ -26,11 +27,19 @@ export default function Header() {
         }
     };
 
+
+    const handleLogout = async () => {
+        await logoutUser();
+        closeMobileNav();
+        navigate("/new/");
+    };
+
     return <>
         <header id="header" className="header d-flex align-items-center sticky-top">
             <div className="container-fluid container-xl position-relative d-flex align-items-center">
                 <Link to="/new" className="logo d-flex align-items-center me-auto">
-                    <Image src="/public/favicon.ico" width="64" height="64" />
+
+                    <Image src="/favicon.ico" width="64" height="64" />
                     <h1 className="sitename">La Caverna Del Dragón</h1>
                 </Link>
                 <nav id="navmenu" className="navmenu">
@@ -48,7 +57,7 @@ export default function Header() {
                                     <Button
                                         className="btn btn-link d-xl-none nav-link"
                                         style={{ textAlign: 'left', border: 'none' }}
-                                        onClick={() => { closeMobileNav(); }}
+                                        onClick={handleLogout}
                                     >
                                         Cerrar sesión
                                     </Button>
@@ -93,8 +102,7 @@ export default function Header() {
                                 )}
 
                                 <Dropdown.Divider />
-                                {/*Dentro del onClick hay que poner el comando de logout cuando este listo*/}
-                                <Dropdown.Item /*onClick={ }*/ className="text-danger">
+                                <Dropdown.Item onClick={handleLogout} className="text-danger">
                                     <BoxArrowRight className="me-2" /> Cerrar sesión
                                 </Dropdown.Item>
                             </Dropdown.Menu>

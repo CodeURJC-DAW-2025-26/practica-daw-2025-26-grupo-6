@@ -200,7 +200,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                             </div>
                         </Col>
                         <Col lg={5} className="order-1 order-lg-2 text-center">
-                            <Image src="/public/poster.jpg" alt="La Caverna Del Dragón" className="img-fluid rounded shadow-lg" style={{ maxWidth: "85%" }} />
+                            <Image src="/poster.jpg" alt="La Caverna Del Dragón" className="img-fluid rounded shadow-lg" style={{ maxWidth: "85%" }} />
                         </Col>
                     </Row>
                 </Container>
