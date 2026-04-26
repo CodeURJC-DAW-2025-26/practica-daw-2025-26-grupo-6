@@ -217,6 +217,12 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                         </p>
                                     </div>
 
+                                    {actionError && (
+                                        <Alert variant="danger" className="mb-0 shadow-sm border-0 d-flex align-items-center mt-3">
+                                            <EmojiFrown className="me-2" /> {actionError}
+                                        </Alert>
+                                    )}
+
                                     <div className="d-flex flex-wrap align-items-center justify-content-between mt-5 pt-3 border-top gap-3">
                                         <div className="d-flex flex-wrap align-items-center gap-2">
                                             {event.requiresRegistration && (
