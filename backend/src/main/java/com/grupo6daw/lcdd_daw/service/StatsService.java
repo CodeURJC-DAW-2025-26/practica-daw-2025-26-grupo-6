@@ -40,7 +40,7 @@ public class StatsService {
     public List<EventParticipantsStatDTO> topEventsByParticipants(int limit) {
         int pageSize = Math.max(1, limit);
         
-        var page = eventRepository.findEventsOrderedByParticipants(PageRequest.of(0, pageSize));
+        var page = eventRepository.findValidatedEventsOrderedByParticipants(PageRequest.of(0, pageSize));
         
         return page.stream()
                 .map(row -> {

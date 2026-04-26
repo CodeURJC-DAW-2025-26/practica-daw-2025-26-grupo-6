@@ -59,4 +59,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                AND (LOWER(e.eventTag) = LOWER(:tag))
             """)
     List<Event> findValidatedByTag(String tag);
+
+    @Query("""
+            SELECT e AS event, COUNT(DISTINCT u) AS participantCount
+            FROM Event e
+            LEFT JOIN e.eventRegisteredUsers u
+            WHERE e.validated = true
+            GROUP BY e
+            ORDER BY COUNT(DISTINCT u) DESC, e.eventName ASC
+            """)
+    Page<Object[]> findValidatedEventsOrderedByParticipants(Pageable pageable);
 }
