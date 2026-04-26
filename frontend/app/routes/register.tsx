@@ -1,9 +1,9 @@
 import { useActionState, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useUserStore } from "~/stores/user-store";
 import { register } from "~/services/user-service";
 
-export default function Login() {
+export default function Register() {
 
     const userStore = useUserStore()
 
@@ -132,10 +132,10 @@ export default function Login() {
                                         </div>
                                     </div>
                                     <div className="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
-                                        <a href="/" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
+                                        <Link to="/new" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
                                             <i className="bi bi-arrow-left" />
                                             <span className="ms-2">Volver al inicio</span>
-                                        </a>
+                                        </Link>
                                         <button type="submit" className="submit-btn" style={{ marginTop: 0, justifyContent: 'center', display: 'flex' }}>
                                             <span className="me-2">Completar Registro</span>
                                             <i className="bi bi-person-plus-fill" />
@@ -143,9 +143,9 @@ export default function Login() {
                                     </div>
                                     <div className="text-center pt-4 border-top">
                                         <p className="mb-2 text-muted">¿Ya tienes cuenta en La Caverna del Dragón?</p>
-                                        <a href="/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
+                                        <Link to="/new/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
                                             <i className="bi bi-box-arrow-in-right me-1" /> Iniciar sesión
-                                        </a>
+                                        </Link>
                                     </div>
                                 </form>
                             </div>

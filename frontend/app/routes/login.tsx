@@ -1,5 +1,5 @@
 import { useActionState, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useUserStore } from "~/stores/user-store";
 
 export default function Login() {
@@ -85,10 +85,10 @@ export default function Login() {
                                         </div>
                                     </div>
                                     <div className="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
-                                        <a href="/new" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
+                                        <Link to="/new" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
                                             <i className="bi bi-arrow-left" />
                                             <span className="ms-2">Volver</span>
-                                        </a>
+                                        </Link>
                                         {isPending && (<div style={{ marginTop: 0, justifyContent: 'center', display: 'flex' }}>
                                             <div className="spinner-border" role="status">
                                                 <span className="visually-hidden">Loading...</span>
@@ -102,9 +102,9 @@ export default function Login() {
                                     </div>
                                     <div className="text-center pt-4 border-top">
                                         <p className="mb-2 text-muted">¿No tienes cuenta en La Caverna del Dragón?</p>
-                                        <a href="/new/register" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
+                                        <Link to="/new/register" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
                                             <i className="bi bi-person-plus me-1" /> Click aquí para crear una
-                                        </a>
+                                        </Link>
                                     </div>
                                 </form>
                             </div>
