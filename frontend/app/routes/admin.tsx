@@ -4,7 +4,7 @@ import type { PendingContent } from "../services/admin-service";
 import type UserDTO from "~/dtos/UserDTO";
 import AdminChart from "../components/AdminCharts";
 import { CalendarCheck, ClipboardCheck, Controller, GraphUp, Newspaper, People } from "react-bootstrap-icons";
-import { Breadcrumb, BreadcrumbItem, Button, Image } from "react-bootstrap";
+import { Breadcrumb, BreadcrumbItem, Button, Image, Spinner } from "react-bootstrap";
 import { Link } from "react-router";
 
 export default function AdminDashboard() {
@@ -12,6 +12,9 @@ export default function AdminDashboard() {
     const [users, setUsers] = useState<UserDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({ games: [], events: [] });
+
+
+    const [processingAction, setProcessingAction] = useState<string | null>(null);
 
     useEffect(() => {
         const loadAllData = async () => {
@@ -35,30 +38,48 @@ export default function AdminDashboard() {
     }, []);
 
     const handleApproveEvent = async (id: number) => {
+        setProcessingAction(`approve-event-${id}`);
         if (await AdminService.approveEvent(id)) {
             setPending(prev => ({ ...prev, events: prev.events.filter(e => e.eventId !== id) }));
         }
+        setProcessingAction(null);
     };
 
     const handleRejectEvent = async (id: number) => {
-        if (window.confirm("¿Estás seguro de que deseas rechazar este evento?") && await AdminService.rejectEvent(id)) {
-            setPending(prev => ({ ...prev, events: prev.events.filter(e => e.eventId !== id) }));
+        if (window.confirm("¿Estás seguro de que deseas rechazar este evento?")) {
+            setProcessingAction(`reject-event-${id}`);
+            if (await AdminService.rejectEvent(id)) {
+                setPending(prev => ({ ...prev, events: prev.events.filter(e => e.eventId !== id) }));
+            }
+            setProcessingAction(null);
         }
     };
 
     const handleApproveNews = async (id: number) => {
+        setProcessingAction(`approve-news-${id}`);
         if (await AdminService.approveNews(id)) {
             setPending(prev => ({ ...prev, news: prev.news.filter(n => n.newId !== id) }));
         }
+        setProcessingAction(null);
     };
 
     const handleRejectNews = async (id: number) => {
-        if (window.confirm("¿Estás seguro de que deseas rechazar esta noticia?") && await AdminService.rejectNews(id)) {
-            setPending(prev => ({ ...prev, news: prev.news.filter(n => n.newId !== id) }));
+        if (window.confirm("¿Estás seguro de que deseas rechazar esta noticia?")) {
+            setProcessingAction(`reject-news-${id}`);
+            if (await AdminService.rejectNews(id)) {
+                setPending(prev => ({ ...prev, news: prev.news.filter(n => n.newId !== id) }));
+            }
+            setProcessingAction(null);
         }
     };
 
-    if (loading) return <div className="container py-5 text-center">Cargando panel...</div>;
+
+    if (loading) return (
+        <div className="container py-5 text-center my-5">
+            <Spinner animation="border" style={{ color: "#a71b12" }} />
+            <p className="mt-3 text-muted fw-bold">Cargando panel de administración...</p>
+        </div>
+    );
 
     return (
         <main className="main">
@@ -100,8 +121,20 @@ export default function AdminDashboard() {
                                             </div>
                                         </a>
                                         <div className="p-3 pt-0 d-flex gap-2">
-                                            <Button onClick={() => handleApproveEvent(event.eventId)} className="btn btn-success w-100 rounded-pill btn-sm">Aprobar</Button>
-                                            <Button onClick={() => handleRejectEvent(event.eventId)} className="btn btn-danger w-100 rounded-pill btn-sm">Rechazar</Button>
+                                            <Button
+                                                onClick={() => handleApproveEvent(event.eventId)}
+                                                className="btn btn-success w-100 rounded-pill btn-sm d-flex justify-content-center align-items-center"
+                                                disabled={processingAction !== null}
+                                            >
+                                                {processingAction === `approve-event-${event.eventId}` ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Aprobar"}
+                                            </Button>
+                                            <Button
+                                                onClick={() => handleRejectEvent(event.eventId)}
+                                                className="btn btn-danger w-100 rounded-pill btn-sm d-flex justify-content-center align-items-center"
+                                                disabled={processingAction !== null}
+                                            >
+                                                {processingAction === `reject-event-${event.eventId}` ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Rechazar"}
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>
@@ -135,8 +168,20 @@ export default function AdminDashboard() {
                                             </div>
                                         </Link>
                                         <div className="p-3 pt-0 d-flex gap-2">
-                                            <Button onClick={() => handleApproveNews(n.newId)} className="btn btn-success w-100 rounded-pill btn-sm">Aprobar</Button>
-                                            <Button onClick={() => handleRejectNews(n.newId)} className="btn btn-danger w-100 rounded-pill btn-sm">Rechazar</Button>
+                                            <Button
+                                                onClick={() => handleApproveNews(n.newId)}
+                                                className="btn btn-success w-100 rounded-pill btn-sm d-flex justify-content-center align-items-center"
+                                                disabled={processingAction !== null}
+                                            >
+                                                {processingAction === `approve-news-${n.newId}` ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Aprobar"}
+                                            </Button>
+                                            <Button
+                                                onClick={() => handleRejectNews(n.newId)}
+                                                className="btn btn-danger w-100 rounded-pill btn-sm d-flex justify-content-center align-items-center"
+                                                disabled={processingAction !== null}
+                                            >
+                                                {processingAction === `reject-news-${n.newId}` ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : "Rechazar"}
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>
