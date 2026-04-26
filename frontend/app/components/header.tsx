@@ -48,7 +48,7 @@ export default function Header() {
                         <ListGroupItem as="li"><Link to="/new/news" onClick={closeMobileNav}>Noticias</Link></ListGroupItem>
                         {user && (
                             <>
-                                <ListGroupItem as="li"><Link className="d-xl-none" to="/new/profile" onClick={closeMobileNav}>Mi perfil</Link></ListGroupItem>
+                                <ListGroupItem as="li"><Link className="d-xl-none" to={`/new/users/${user.userId}`} onClick={closeMobileNav}>Mi perfil</Link></ListGroupItem>
                                 {user.userRoles?.includes("ADMIN") && (
                                     <ListGroupItem as="li"><Link className="d-xl-none" to="/new/admin" onClick={closeMobileNav}>Administración</Link></ListGroupItem>
                                 )}
@@ -90,7 +90,7 @@ export default function Header() {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                <Dropdown.Item as={Link} to="/new/profile">
+                                <Dropdown.Item as={Link} to={`/new/users/${user.userId}`}>
                                     <Person className="me-2" /> Mi perfil
                                 </Dropdown.Item>
 
