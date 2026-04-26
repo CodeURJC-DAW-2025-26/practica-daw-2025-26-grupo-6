@@ -9,9 +9,18 @@ import {
     updateEvent,
     uploadEventImage,
 } from "~/services/events-service";
+import { ensureOwnerOrAdmin, requireLoggedUser } from "~/services/route-guards";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
-    const event = await getEvent(Number(params.id!));
+    const eventId = Number(params.id);
+
+    const [event, user] = await Promise.all([
+        getEvent(eventId),
+        requireLoggedUser(),
+    ]);
+
+    ensureOwnerOrAdmin(user, event.eventCreator?.userId);
+
     return { event };
 }
 

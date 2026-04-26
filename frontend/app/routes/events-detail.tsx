@@ -282,12 +282,12 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
 
                                             {(user?.userRoles?.includes("ADMIN") || user?.userOwnEvents?.some(e => e.eventId === event.eventId)) && (
                                                 <div className="d-flex flex-wrap align-items-center gap-3">
-                                                    <Link
+                                                    <a
                                                         className="btn btn-link text-primary text-decoration-none p-0"
-                                                        to={`/new/events-edit/${event.eventId}`}
+                                                        href={`/new/events-edit/${event.eventId}`}
                                                     >
                                                         <PencilSquare className="me-2" /> Modificar evento
-                                                    </Link>
+                                                    </a>
 
                                                     <Button
                                                         type="button"

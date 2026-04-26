@@ -3,6 +3,12 @@ import { useActionState } from "react";
 import type { Route } from "./+types/news-create";
 import NewsForm from "../components/news-form";
 import { createNew, uploadNewImage } from "~/services/news-service";
+import { requireLoggedUser } from "~/services/route-guards";
+
+export async function clientLoader(_: Route.ClientLoaderArgs) {
+  await requireLoggedUser();
+  return null;
+}
 
 export default function NewSave({ }: Route.ComponentProps) {
   const navigate = useNavigate();

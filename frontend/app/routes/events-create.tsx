@@ -3,6 +3,12 @@ import { useActionState } from "react";
 import type { Route } from "./+types/events-create";
 import EventsForm from "../components/events-form";
 import { createEvent, uploadEventImage } from "~/services/events-service";
+import { requireLoggedUser } from "~/services/route-guards";
+
+export async function clientLoader(_: Route.ClientLoaderArgs) {
+    await requireLoggedUser();
+    return null;
+}
 
 export default function EventSave({ }: Route.ComponentProps) {
     const navigate = useNavigate();

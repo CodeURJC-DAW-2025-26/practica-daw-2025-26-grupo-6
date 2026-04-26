@@ -3,6 +3,12 @@ import { useActionState } from "react";
 import type { Route } from "./+types/games-create";
 import GamesForm from "../components/games-form";
 import { createGame, uploadGameImage } from "~/services/games-service";
+import { requireAdminUser } from "~/services/route-guards";
+
+export async function clientLoader(_: Route.ClientLoaderArgs) {
+  await requireAdminUser();
+  return null;
+}
 
 export default function GameSave({ }: Route.ComponentProps) {
   const navigate = useNavigate();

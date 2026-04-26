@@ -6,6 +6,13 @@ import AdminChart from "../components/AdminCharts";
 import { CalendarCheck, ClipboardCheck, Controller, GraphUp, Newspaper, People } from "react-bootstrap-icons";
 import { Breadcrumb, BreadcrumbItem, Button, Image, Spinner } from "react-bootstrap";
 import { Link } from "react-router";
+import type { Route } from "./+types/admin";
+import { requireAdminUser } from "~/services/route-guards";
+
+export async function clientLoader(_: Route.ClientLoaderArgs) {
+    await requireAdminUser();
+    return null;
+}
 
 export default function AdminDashboard() {
     const [pending, setPending] = useState<PendingContent>({ news: [], events: [] });
@@ -229,7 +236,7 @@ export default function AdminDashboard() {
                         <div className="row gy-4">
                             <div className="col-lg-6">
                                 <div className="card border-0 shadow-sm p-3">
-                                    <h6 className="fw-bold mb-3"><Controller />Juegos Favoritos</h6>
+                                    <h6 className="fw-bold mb-3"><Controller className="me-2" />Juegos Favoritos</h6>
                                     <AdminChart
                                         title="Juegos Favoritos"
                                         data={stats.games}
@@ -242,7 +249,7 @@ export default function AdminDashboard() {
                             </div>
                             <div className="col-lg-6">
                                 <div className="card border-0 shadow-sm p-3">
-                                    <h6 className="fw-bold mb-3"><CalendarCheck />Participación en Eventos</h6>
+                                    <h6 className="fw-bold mb-3"><CalendarCheck className="me-2" />Participación en Eventos</h6>
                                     <AdminChart
                                         title="Participantes"
                                         data={stats.events}
