@@ -24,7 +24,7 @@ import {
 } from "react-bootstrap-icons";
 import { useState, useRef, useActionState } from "react";
 
-const API_URL = "https://localhost:8443/api/v1";
+const API_URL = "/api/v1";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     return await getUser(Number(params.id));
