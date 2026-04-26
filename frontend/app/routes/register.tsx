@@ -62,7 +62,7 @@ export default function Login() {
         { userEmail: "", password: "", confirmPassword: "", userName: "", userSurname: "", userNickname: "" }
     )
 
-    // Manejador para la transición de React 19
+
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = event.currentTarget;

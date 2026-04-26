@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import type { Route } from "./+types/games";
 import { getGames } from "~/services/games-service";
-import { Button, Form, Image, Spinner } from "react-bootstrap"; // <-- Añadido Spinner
+import { Button, Form, Image, Spinner } from "react-bootstrap";
 import { useUserStore } from "~/stores/user-store";
 import { JournalX, Newspaper, PlusCircle, Search } from "react-bootstrap-icons";
 

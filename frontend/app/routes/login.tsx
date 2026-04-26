@@ -43,7 +43,7 @@ export default function Login() {
         { email: "", password: "" }
     )
 
-    // Añadimos el manejador para evitar el warning de React 19
+
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = event.currentTarget;
