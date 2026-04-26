@@ -342,7 +342,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                         <Col xs={12} className="text-center py-5">
                                                             <CalendarPlus className="fs-1 text-muted opacity-50" />
                                                             <p className="mt-3 text-muted">Aún no has organizado ningún evento.</p>
-                                                            <Link to="/event_form" className="btn btn-sm btn-outline-dark rounded-pill">Crear
+                                                            <Link to="/new/events-create" className="btn btn-sm btn-outline-dark rounded-pill">Crear
                                                                 mi primer
                                                                 evento
                                                             </Link>
@@ -502,7 +502,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                         <Col xs={12} className="text-center py-5">
                                                             <JournalText className="fs-1 text-muted opacity-50" />
                                                             <p className="mt-3 text-muted">Aún no has redactado ninguna noticia.</p>
-                                                            <Link to="/new/new_form" className="btn btn-sm btn-outline-dark rounded-pill">Redactar noticia</Link>
+                                                            <Link to="/new/news-create" className="btn btn-sm btn-outline-dark rounded-pill">Redactar noticia</Link>
                                                         </Col>
                                                     ) : (
                                                         <Col xs={12} className="text-center py-5">
