@@ -32,7 +32,7 @@ export default function Login() {
                 if (error) {
                     setErrorMessage(error)
                 } else {
-                    navigate("/new/")
+                    navigate(-1)
                 }
 
             } catch (error) {
@@ -63,7 +63,7 @@ export default function Login() {
                                     <div className="alert alert-danger alert-dismissible fade show mb-4" role="alert" style={{ borderLeft: '5px solid #890f00' }}>
                                         <strong><i className="bi bi-exclamation-circle-fill me-2" /> Error de acceso:</strong>
                                         <p className="mb-0 mt-1">{errorMessage}</p>
-                                        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
+                                        <button type="button" className="btn-close" onClick={() => setErrorMessage("")} aria-label="Close" />
                                     </div>
                                 )}
                                 <form action={formAction} ref={formRef} method="post" className={`custom-login-form needs-validation ${wasValidated && "was-validated"}`} noValidate>
@@ -87,7 +87,7 @@ export default function Login() {
                                     <div className="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
                                         <Link to="/new" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
                                             <i className="bi bi-arrow-left" />
-                                            <span className="ms-2">Volver</span>
+                                            <span className="ms-2">Volver al inicio</span>
                                         </Link>
                                         {isPending && (<div style={{ marginTop: 0, justifyContent: 'center', display: 'flex' }}>
                                             <div className="spinner-border" role="status">

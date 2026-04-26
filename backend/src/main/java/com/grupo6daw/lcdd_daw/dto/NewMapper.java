@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 
 import com.grupo6daw.lcdd_daw.model.New;
 
-@Mapper(componentModel = "spring", uses = {ImageMapper.class})
+@Mapper(componentModel = "spring", uses = { ImageMapper.class })
 public interface NewMapper {
 
     // BASIC DTO
@@ -25,7 +25,6 @@ public interface NewMapper {
     @Mapping(target = "newTag", ignore = true)
     @Mapping(target = "newEvents", ignore = true)
     @Mapping(target = "newCreator", ignore = true)
-    @Mapping(target = "validated", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     New toDomainFromBasicDTO(NewBasicDTO newDTO);
 

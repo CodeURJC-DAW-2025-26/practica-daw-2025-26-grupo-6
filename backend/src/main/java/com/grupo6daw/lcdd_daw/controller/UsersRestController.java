@@ -85,7 +85,7 @@ public class UsersRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateProfile(@RequestBody UserDetailsDTO dto,
+    public ResponseEntity<Object> updateProfile(@RequestBody UserDetailsDTO dto,
             HttpServletRequest request, HttpServletResponse response,
             Authentication authentication, @PathVariable long id,
             RedirectAttributes redirectAttributes) throws IOException {
@@ -109,7 +109,9 @@ public class UsersRestController {
         user = userService.updateProfile(user, dto, errors);
 
         if (!errors.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            HashMap<String, Object> body = new HashMap<>();
+            body.put("errors", errors);
+            return ResponseEntity.badRequest().body(body);
         }
 
         UserDTO userDTO = userMapper.toFullDTO(user);

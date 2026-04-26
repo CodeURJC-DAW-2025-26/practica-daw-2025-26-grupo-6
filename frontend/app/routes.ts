@@ -5,6 +5,7 @@ export default [
         route("/new", "routes/index.tsx"),
         route("/new/login", "routes/login.tsx"),
         route("/new/register", "routes/register.tsx"),
+        route("/new/users/:id", "routes/profile.tsx"),
         route("/new/news", "routes/news.tsx"),
         route("/new/news/:id", "routes/news-detail.tsx"),
         route("/new/news-create", "routes/news-create.tsx"),

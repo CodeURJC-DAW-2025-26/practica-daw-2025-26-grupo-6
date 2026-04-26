@@ -82,7 +82,7 @@ export default function Register() {
                                                 <li key={index}>{error}</li>
                                             ))}
                                         </ul>
-                                        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
+                                        <button type="button" className="btn-close" onClick={() => setRegisterErrors([])} aria-label="Close" />
                                     </div>
                                 )}
                                 <form method="post" id="registerForm" action={formAction} ref={formRef} encType="multipart/form-data" className={`custom-login-form needs-validation ${wasValidated && "was-validated"}`} noValidate>

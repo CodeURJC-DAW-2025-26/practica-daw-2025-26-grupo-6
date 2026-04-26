@@ -37,8 +37,8 @@ export async function getUser(id: number): Promise<UserDTO> {
     return await res.json();
 }
 
-export async function updateProfile(id: number, userEmail: string, password: string, confirmPassword: string, userName: string, userSurname: string, userNickname: string, userInterests: string): Promise<UserDTO> {
-    const res = await fetch(`${USERS_API_URL}/${id}`, {
+export async function updateProfile(id: number, userEmail: string, password: string, confirmPassword: string, userName: string, userSurname: string, userNickname: string, userInterests: string): Promise<string[]> {
+    const response = await fetch(`${USERS_API_URL}/${id}`, {
         method: 'PUT',
         headers: {
             "Content-Type": "application/json",
@@ -53,8 +53,16 @@ export async function updateProfile(id: number, userEmail: string, password: str
             userInterests
         })
     });
-    if (!res.ok) throw new Error("Error al actualizar el usuario");
-    return await res.json();
+
+    if (!response.ok) {
+        if (response.status === 400) {
+            const errorBody = await response.json();
+            return errorBody.errors;
+        }
+        throw new Error("Error al actualizar el usuario");
+    }
+
+    return [];
 }
 
 export async function deleteProfile(id: number): Promise<void> {
@@ -70,7 +78,7 @@ export async function getUserImage(id: number): Promise<Blob> {
     return await res.blob();
 }
 
-export async function putImage(id: number, image: File): Promise<ImageDTO> {
+export async function updateUserImage(id: number, image: File): Promise<ImageDTO> {
     const formData = new FormData();
     formData.append('userImage', image);
 

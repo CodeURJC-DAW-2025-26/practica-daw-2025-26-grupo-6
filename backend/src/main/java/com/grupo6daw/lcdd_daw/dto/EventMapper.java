@@ -31,7 +31,6 @@ public interface EventMapper {
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "eventDate", ignore = true)
     @Mapping(target = "maxParticipants", ignore = true)
-    @Mapping(target = "validated", ignore = true)
     Event toDomainFromBasicDTO(EventBasicDTO eventDTO);
 
     // FULL DTO
