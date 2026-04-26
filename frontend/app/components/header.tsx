@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useUserStore } from "~/stores/user-store";
 import { Button, Dropdown, Form, Image, ListGroup, ListGroupItem } from "react-bootstrap";
-import { BoxArrowRight, Person, ShieldLock } from "react-bootstrap-icons";
+import { BoxArrowRight, List, Person, ShieldLock, X } from "react-bootstrap-icons";
 
 export default function Header() {
 
@@ -15,9 +15,18 @@ export default function Header() {
         loadLoggedUser();
     }, [loadLoggedUser]);
 
+    useEffect(() => {
+        return () => {
+            document.body.classList.remove('mobile-nav-active');
+        };
+    }, []);
+
     const toggleMobileNav = () => {
-        setIsMobileNavActive(!isMobileNavActive);
-        document.body.classList.toggle('mobile-nav-active');
+        setIsMobileNavActive((prev) => {
+            const next = !prev;
+            document.body.classList.toggle('mobile-nav-active', next);
+            return next;
+        });
     };
 
     const closeMobileNav = () => {
@@ -64,10 +73,15 @@ export default function Header() {
                             </>
                         )}
                     </ul >
-                    <i
-                        className={`mobile-nav-toggle d-xl-none bi ${isMobileNavActive ? 'bi-x' : 'bi-list'}`}
+                    <button
+                        type="button"
+                        className="mobile-nav-toggle d-xl-none"
                         onClick={toggleMobileNav}
-                    ></i>
+                        aria-label={isMobileNavActive ? "Cerrar menu" : "Abrir menu"}
+                        aria-expanded={isMobileNavActive}
+                    >
+                        {isMobileNavActive ? <X /> : <List />}
+                    </button>
                 </nav>
                 {!user && (
                     <Link className="btn-getstarted d-none d-sm-block" to="/new/login">

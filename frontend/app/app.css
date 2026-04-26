@@ -319,12 +319,25 @@ h6 {
 /* Navmenu - Mobile */
 @media (max-width: 1199px) {
     .mobile-nav-toggle {
+        background: transparent;
+        border: 0;
+        padding: 0;
         color: var(--nav-color);
         font-size: 28px;
         line-height: 0;
         margin-right: 10px;
         cursor: pointer;
         transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navmenu .mobile-nav-toggle {
+        color: var(--nav-color);
+        padding: 0;
+        font-size: 28px;
+        line-height: 0;
     }
 
     .navmenu {
