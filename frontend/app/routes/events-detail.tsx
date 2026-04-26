@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useRevalidator } from "react-router";
 import { Alert, Image, Button, Modal, ListGroup } from "react-bootstrap";
 import type { Route } from "./+types/events-detail";
 import { getEvent, removeEvent, joinEvent, leaveEvent } from "~/services/events-service";
@@ -13,9 +13,10 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 }
 
 export default function EventsDetail({ loaderData }: Route.ComponentProps) {
-    let { user } = useUserStore();
+    let { user, loadLoggedUser } = useUserStore();
     const event = loaderData;
     const navigate = useNavigate();
+    const revalidator = useRevalidator();
 
     const [deleteError, setDeleteError] = useState<string | null>(null);
     const [isPendingDelete, setPendingDelete] = useState(false);
@@ -30,7 +31,8 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
         setActionError(null);
         try {
             await joinEvent(event.eventId);
-
+            await loadLoggedUser(); // Update user data to reflect new registration
+            revalidator.revalidate(); // Revalidate loader to get updated participant count and list
         } catch (err) {
             console.error(err);
             setActionError("Hubo un error al apuntarse al evento.");
@@ -45,7 +47,8 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
         setActionError(null);
         try {
             await leaveEvent(event.eventId);
-
+            await loadLoggedUser();
+            revalidator.revalidate();
         } catch (err) {
             console.error(err);
             setActionError("Hubo un error al desapuntarse del evento.");
@@ -223,22 +226,34 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 </a>
                                             )}
 
-                                            <form method="post" className="m-0">
+                                            <form className="m-0">
                                                 {user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && (
-                                                    <button type="submit" className="btn btn-outline-dark rounded-pill px-4 shadow-sm">
-                                                        <PersonDashFill className="me-2" /> Desapuntarme
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-dark rounded-pill px-4 shadow-sm"
+                                                        onClick={handleLeaveEvent}
+                                                        disabled={isPendingAction}
+                                                    >
+                                                        <PersonDashFill className="me-2" />
+                                                        {isPendingAction ? "Procesando..." : "Desapuntarme"}
                                                     </button>
                                                 )}
 
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants === participantsCount && (
                                                     <button type="button" className="btn btn-secondary rounded-pill px-4 shadow-sm" disabled>
-                                                        <SlashCircle /> Aforo completo
+                                                        <SlashCircle className="me-2" /> Aforo completo
                                                     </button>
                                                 )}
 
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants !== participantsCount && (
-                                                    <button type="submit" className="btn btn-dark rounded-pill px-4 shadow-sm">
-                                                        <PersonPlusFill className="me-2" /> Apuntarme
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-dark rounded-pill px-4 shadow-sm"
+                                                        onClick={handleJoinEvent}
+                                                        disabled={isPendingAction}
+                                                    >
+                                                        <PersonPlusFill className="me-2" />
+                                                        {isPendingAction ? "Procesando..." : "Apuntarme"}
                                                     </button>
                                                 )}
                                             </form>
