@@ -3,6 +3,9 @@ import * as AdminService from "../services/admin-service";
 import type { PendingContent } from "../services/admin-service";
 import type UserDTO from "~/dtos/UserDTO";
 import AdminChart from "../components/AdminCharts";
+import { CalendarCheck, ClipboardCheck, Controller, GraphUp, Newspaper, People } from "react-bootstrap-icons";
+import { Breadcrumb, BreadcrumbItem, Button, Image } from "react-bootstrap";
+import { Link } from "react-router";
 
 export default function AdminDashboard() {
     const [pending, setPending] = useState<PendingContent>({ news: [], events: [] });
@@ -65,16 +68,16 @@ export default function AdminDashboard() {
                     <div className="form-intro text-center mb-5">
                         <h1 style={{ fontWeight: 700, color: "#212529" }}>Panel de Administración</h1>
                         <nav aria-label="breadcrumb">
-                            <ol className="breadcrumb justify-content-center">
-                                <li className="breadcrumb-item"><a href="/" className="text-decoration-none text-muted">Inicio</a></li>
-                                <li className="breadcrumb-item active" style={{ color: "#a71b12", fontWeight: 600 }}>Administración</li>
-                            </ol>
+                            <Breadcrumb className="breadcrumb justify-content-center">
+                                <BreadcrumbItem className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Inicio</Link></BreadcrumbItem>
+                                <BreadcrumbItem className="breadcrumb-item active" style={{ color: "#a71b12", fontWeight: 600 }}>Administración</BreadcrumbItem>
+                            </Breadcrumb>
                         </nav>
                     </div>
 
                     <div className="admin-section mb-5">
                         <div className="d-flex align-items-center mb-4 border-bottom pb-2">
-                            <i className="bi bi-clipboard-check text-primary fs-3 me-3"></i>
+                            <ClipboardCheck className="me-2" />
                             <h3 className="mb-0" style={{ fontWeight: 700 }}>Solicitudes Pendientes</h3>
                         </div>
 
@@ -85,7 +88,7 @@ export default function AdminDashboard() {
                                     <div className="project-card shadow-sm border-0 h-100">
                                         <a className="d-block text-decoration-none" href={`/event/${event.eventId}`}>
                                             <div className="project-image" style={{ height: "180px", overflow: "hidden" }}>
-                                                <img
+                                                <Image
                                                     src={event.eventImage ? `/api/v1/images/${event.eventImage.id}/media` : "/img/placeholder.png"}
                                                     alt="Evento"
                                                     className="img-fluid w-100 h-100"
@@ -97,8 +100,8 @@ export default function AdminDashboard() {
                                             </div>
                                         </a>
                                         <div className="p-3 pt-0 d-flex gap-2">
-                                            <button onClick={() => handleApproveEvent(event.eventId)} className="btn btn-success w-100 rounded-pill btn-sm">Aprobar</button>
-                                            <button onClick={() => handleRejectEvent(event.eventId)} className="btn btn-outline-danger w-100 rounded-pill btn-sm">Rechazar</button>
+                                            <Button onClick={() => handleApproveEvent(event.eventId)} className="btn btn-success w-100 rounded-pill btn-sm">Aprobar</Button>
+                                            <Button onClick={() => handleRejectEvent(event.eventId)} className="btn btn-danger w-100 rounded-pill btn-sm">Rechazar</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -112,7 +115,7 @@ export default function AdminDashboard() {
                             {pending.news.length > 0 ? pending.news.map(n => (
                                 <div key={n.newId} className="col-lg-4 col-md-6">
                                     <div className="project-card shadow-sm border-0 h-100">
-                                        <a className="d-block text-decoration-none" href={`/news/${n.newId}`}>
+                                        <Link className="d-block text-decoration-none" to={`/news/${n.newId}`}>
                                             <div className="project-image" style={{ height: "180px", overflow: "hidden" }}>
                                                 {n.newImage ? (
                                                     <img
@@ -123,17 +126,17 @@ export default function AdminDashboard() {
                                                     />
                                                 ) : (
                                                     <div className="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
-                                                        <i className="bi bi-newspaper fs-1"></i>
+                                                        <Newspaper />
                                                     </div>
                                                 )}
                                             </div>
                                             <div className="project-info p-3">
                                                 <h4 className="project-title text-dark">{n.newName}</h4>
                                             </div>
-                                        </a>
+                                        </Link>
                                         <div className="p-3 pt-0 d-flex gap-2">
-                                            <button onClick={() => handleApproveNews(n.newId)} className="btn btn-success w-100 rounded-pill btn-sm">Aprobar</button>
-                                            <button onClick={() => handleRejectNews(n.newId)} className="btn btn-outline-danger w-100 rounded-pill btn-sm">Rechazar</button>
+                                            <Button onClick={() => handleApproveNews(n.newId)} className="btn btn-success w-100 rounded-pill btn-sm">Aprobar</Button>
+                                            <Button onClick={() => handleRejectNews(n.newId)} className="btn btn-danger w-100 rounded-pill btn-sm">Rechazar</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,15 +150,15 @@ export default function AdminDashboard() {
 
                     <div className="admin-section mb-5">
                         <div className="d-flex align-items-center mb-4 border-bottom pb-2">
-                            <i className="bi bi-people text-primary fs-3 me-3"></i>
+                            <People className="me-2" />
                             <h3 className="mb-0" style={{ fontWeight: 700 }}>Usuarios Registrados</h3>
                         </div>
                         <div className="row gy-3">
                             {users.length > 0 ? users.map(user => (
                                 <div key={user.userId} className="col-xl-3 col-lg-4 col-md-6">
-                                    <a href={`/user/${user.userId}`} className="d-flex align-items-center p-2 shadow-sm border rounded text-decoration-none bg-white h-100">
+                                    <Link to={`/user/${user.userId}`} className="d-flex align-items-center p-2 shadow-sm border rounded text-decoration-none bg-white h-100">
                                         <div className="flex-shrink-0" style={{ width: "50px", height: "50px" }}>
-                                            <img
+                                            <Image
                                                 src={user.userImage ? `/api/v1/users/${user.userId}/image` : "/img/person/Portrait_Placeholder.png"}
                                                 className="rounded-circle w-100 h-100"
                                                 style={{ objectFit: "cover" }}
@@ -165,7 +168,7 @@ export default function AdminDashboard() {
                                             <h6 className="mb-0 text-dark fw-bold text-truncate">{user.userNickname}</h6>
                                             <small className="text-muted text-truncate d-block">{user.userEmail}</small>
                                         </div>
-                                    </a>
+                                    </Link>
                                 </div>
                             )) : (
                                 <div className="col-12 text-center py-3 text-muted">No hay usuarios para mostrar.</div>
@@ -175,13 +178,13 @@ export default function AdminDashboard() {
 
                     <div className="admin-section">
                         <div className="d-flex align-items-center mb-4 border-bottom pb-2">
-                            <i className="bi bi-graph-up-arrow text-primary fs-3 me-3"></i>
+                            <GraphUp className="me-2" />
                             <h3 className="mb-0" style={{ fontWeight: 700 }}>Estadísticas</h3>
                         </div>
                         <div className="row gy-4">
                             <div className="col-lg-6">
                                 <div className="card border-0 shadow-sm p-3">
-                                    <h6 className="fw-bold mb-3"><i className="bi bi-controller me-2"></i>Juegos Favoritos</h6>
+                                    <h6 className="fw-bold mb-3"><Controller />Juegos Favoritos</h6>
                                     <AdminChart
                                         title="Juegos Favoritos"
                                         data={stats.games}
@@ -194,7 +197,7 @@ export default function AdminDashboard() {
                             </div>
                             <div className="col-lg-6">
                                 <div className="card border-0 shadow-sm p-3">
-                                    <h6 className="fw-bold mb-3"><i className="bi bi-calendar-check me-2"></i>Participación en Eventos</h6>
+                                    <h6 className="fw-bold mb-3"><CalendarCheck />Participación en Eventos</h6>
                                     <AdminChart
                                         title="Participantes"
                                         data={stats.events}

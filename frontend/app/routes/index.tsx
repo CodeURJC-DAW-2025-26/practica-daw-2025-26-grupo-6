@@ -4,9 +4,10 @@ import type { Route } from "./+types/index";
 import { getGames } from "~/services/games-service";
 import { getNews } from "~/services/news-service";
 import { getEvents } from "~/services/events-service";
+import { ArrowRight, Envelope, HourglassSplit, InfoCircle, Instagram, Newspaper, TwitterX } from "react-bootstrap-icons";
 
 export async function clientLoader() {
-    // Cargamos los datos en paralelo para mejorar el rendimiento
+
     const [gamesRes, newsRes, eventsRes] = await Promise.all([
         getGames("", "", 0, 0, 0),
         getNews("", "", 0),
@@ -25,7 +26,6 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 
     return (
         <main className="main">
-            {/*Eventos*/}
             {nextEvents.length > 0 && (
                 <section id="next-events" className="next-events section light-background">
                     <Carousel
@@ -52,7 +52,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                                 <h1 className="project-title fw-bold">{event.eventName}</h1>
 
                                                 <div className="d-inline-block bg-danger text-white rounded-pill px-3 py-1 mb-3 fw-bold">
-                                                    <i className="bi bi-hourglass-split me-1"></i>
+                                                    <HourglassSplit className="me-2" />
                                                     {new Date(event.eventDate).toLocaleDateString()}
                                                 </div>
 
@@ -64,7 +64,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                                 </div>
 
                                                 <Link to={`/new/events/${event.eventId}`} className="btn btn-outline-dark rounded-pill shadow-sm">
-                                                    <i className="bi bi-info-circle me-1"></i> Ver detalles
+                                                    <InfoCircle className="me-2" /> Ver detalles
                                                 </Link>
                                             </div>
                                         </Col>
@@ -76,7 +76,6 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                 </section>
             )}
 
-            {/*Noticias*/}
             <section id="latest-news" className="projects section py-5">
                 <Container>
                     <div className="section-header text-center mb-5">
@@ -94,7 +93,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                                 <Image src={`/api/v1/images/${news.newImage.id}/media`} className="img-fluid w-100 h-100" style={{ objectFit: "cover" }} />
                                             ) : (
                                                 <div className="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
-                                                    <i className="bi bi-newspaper fs-1"></i>
+                                                    <Newspaper />
                                                 </div>
                                             )}
                                         </div>
@@ -105,7 +104,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                                 {news.newDescription}
                                             </p>
                                             <Link to={`/new/news/${news.newId}`} className="btn btn-outline-danger rounded-pill btn-sm mt-2">
-                                                Leer más <i className="bi bi-arrow-right ms-1"></i>
+                                                Leer más <ArrowRight />
                                             </Link>
                                         </div>
                                     </div>
@@ -114,7 +113,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                         ) : (
                             <Col lg={4} md={6}>
                                 <div className="project-card shadow-sm border-0 p-4 text-center text-muted" style={{ border: "2px dashed #ccc !important" }}>
-                                    <i className="bi bi-newspaper fs-1 mb-2"></i>
+                                    <Newspaper />
                                     <h4>Próxima noticia</h4>
                                     <p>Estamos preparando novedades.</p>
                                 </div>
@@ -124,13 +123,12 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 
                     <div className="text-center mt-5">
                         <Link to="/new/news" className="btn btn-outline-dark rounded-pill px-4">
-                            Todas las noticias <i className="bi bi-arrow-right ms-2"></i>
+                            Todas las noticias <ArrowRight />
                         </Link>
                     </div>
                 </Container>
             </section>
 
-            {/*Juegos*/}
             <section id="featured-games" className="projects section light-background py-5">
                 <Container>
                     <div className="section-header text-center mb-5">
@@ -156,7 +154,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                             {game.gameDescription}
                                         </p>
                                         <Link to={`/new/games/${game.gameId}`} className="btn btn-outline-danger rounded-pill btn-sm mt-2">
-                                            Ver Detalles <i className="bi bi-arrow-right ms-1"></i>
+                                            Ver Detalles <ArrowRight />
                                         </Link>
                                     </div>
                                 </div>
@@ -166,31 +164,43 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 
                     <div className="text-center mt-5">
                         <Link to="/new/games" className="btn btn-outline-dark rounded-pill px-4">
-                            Ver ludoteca completa <i className="bi bi-arrow-right ms-2"></i>
+                            Ver ludoteca completa <ArrowRight />
                         </Link>
                     </div>
                 </Container>
             </section>
 
-            {/*Sobre nosotros*/}
             <section id="about" className="about section py-5">
                 <Container>
                     <Row className="justify-content-between align-items-center">
                         <Col lg={7} className="order-2 order-lg-1">
                             <div className="content">
                                 <h2 className="fw-bold mb-4">¿Quiénes somos?</h2>
-                                <p className="lead mb-4 text-justify">
-                                    La Caverna del Dragón es el punto de encuentro del ocio alternativo en la URJC...
+                                <p className="lead-text mb-4" style={{ textAlign: "justify" }}>
+                                    La Caverna del Dragón es el punto de encuentro del ocio alternativo en la URJC: somos una comunidad de
+                                    estudiantes apasionados por el rol, los juegos de mesa y los videojuegos.
+                                    <br></br>
+                                    Organizamos todo tipo de eventos: desde nuestras famosas Jornadas Anuales de Introducción al
+                                    Rol, hasta tardes de juegos de mesa, torneos competitivos y mucho más. ¡Ven a conocernos sin compromiso!
                                 </p>
+
+                                <p className="description-text mb-3" style={{ textAlign: "justify" }}>
+                                    Puedes encontrarnos de lunes a viernes en el campus de Móstoles,
+                                    Laboratorios Polivalentes II, Sótano 008.
+                                </p>
+
+                                <p className="description-text mb-2">Para más información, no dudes en escribirnos por correo o cualquiera de
+                                    nuestras redes sociales:</p>
+
                                 <div className="contact-info mt-4">
-                                    <p><i className="bi bi-envelope me-2"></i> <a href="mailto:lcddoficial@gmail.com">lcddoficial@gmail.com</a></p>
-                                    <p><i className="bi bi-twitter-x me-2"></i> <a href="https://x.com/lcdd_urjc">@lcdd_urjc</a></p>
-                                    <p><i className="bi bi-instagram me-2"></i> <a href="https://www.instagram.com/lcdd_urjc">@lcdd_urjc</a></p>
+                                    <p><Envelope /> <a href="mailto:lcddoficial@gmail.com">lcddoficial@gmail.com</a></p>
+                                    <p><TwitterX /> <a href="https://x.com/lcdd_urjc">@lcdd_urjc</a></p>
+                                    <p><Instagram /> <a href="https://www.instagram.com/lcdd_urjc">@lcdd_urjc</a></p>
                                 </div>
                             </div>
                         </Col>
                         <Col lg={5} className="order-1 order-lg-2 text-center">
-                            <Image src="/public/favicon.ico" alt="La Caverna Del Dragón" className="img-fluid rounded shadow-lg" style={{ maxWidth: "85%" }} />
+                            <Image src="/public/poster.jpg" alt="La Caverna Del Dragón" className="img-fluid rounded shadow-lg" style={{ maxWidth: "85%" }} />
                         </Col>
                     </Row>
                 </Container>

@@ -4,6 +4,7 @@ import { Alert, Image, Button, Modal, ListGroup } from "react-bootstrap";
 import type { Route } from "./+types/events-detail";
 import { getEvent, removeEvent } from "~/services/events-service";
 import { useUserStore } from "~/stores/user-store";
+import { BoxArrowUpRight, CalendarEvent, CardChecklist, EmojiFrown, EnvelopeAt, EyeFill, Newspaper, PencilSquare, People, PersonBadge, PersonDashFill, PersonPlusFill, SlashCircle, TagFill, Trash } from "react-bootstrap-icons";
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     return await getEvent(Number(params.id));
@@ -96,7 +97,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                         />
                                     ) : (
                                         <div className="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
-                                            <i className="bi bi-newspaper fs-1"></i>
+                                            <Newspaper />
                                         </div>
                                     )}
 
@@ -111,7 +112,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 border: "1px solid rgba(255,255,255,0.2)",
                                             }}
                                         >
-                                            <i className="bi bi-tag-fill me-1"></i> {event.eventTag}
+                                            <TagFill className="me-2" /> {event.eventTag}
                                         </span>
                                     </div>
                                 </div>
@@ -125,12 +126,12 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
 
                                     <div className="d-flex flex-wrap gap-4 mb-4 pb-3 border-bottom text-muted" style={{ fontSize: "0.95rem" }}>
                                         <div className="d-flex align-items-center">
-                                            <i className="bi bi-calendar-event text-danger fs-5 me-2"></i>
+                                            <CalendarEvent className="me-2" />
                                             <span className="fw-medium text-dark">{formattedDate}</span>
                                         </div>
 
                                         <div className="d-flex align-items-center">
-                                            <i className="bi bi-people text-danger fs-5 me-2"></i>
+                                            <People className="me-2" />
                                             <span className="fw-medium text-dark">
                                                 Apuntados: <span className="text-danger fw-bold">{participantsCount}</span>
                                                 {event.maxParticipants && (
@@ -165,7 +166,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                         e.currentTarget.style.color = "#a71b12";
                                                     }}
                                                 >
-                                                    <i className="bi bi-eye-fill me-1"></i> Ver lista
+                                                    <EyeFill className="me-2" /> Ver lista
                                                 </Button>
                                             )}
 
@@ -183,26 +184,26 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                             {event.requiresRegistration && (
                                                 <a href={event.link} target="_blank" rel="noopener noreferrer"
                                                     className="btn btn-danger rounded-pill px-4 shadow-sm" style={{ backgroundColor: "#a71b12", border: "none" }}>
-                                                    <i className="bi bi-box-arrow-up-right me-1"></i> Página de registro
+                                                    <BoxArrowUpRight className="me-2" /> Página de registro
                                                 </a>
                                             )}
 
                                             <form method="post" className="m-0">
                                                 {user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && (
                                                     <button type="submit" className="btn btn-outline-dark rounded-pill px-4 shadow-sm">
-                                                        <i className="bi bi-person-dash-fill me-1"></i> Desapuntarme
+                                                        <PersonDashFill className="me-2" /> Desapuntarme
                                                     </button>
                                                 )}
 
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants === participantsCount && (
                                                     <button type="button" className="btn btn-secondary rounded-pill px-4 shadow-sm" disabled>
-                                                        <i className="bi bi-slash-circle me-1"></i> Aforo completo
+                                                        <SlashCircle /> Aforo completo
                                                     </button>
                                                 )}
 
                                                 {user && !user?.userRegisteredEvents.some(e => e.eventId === event.eventId) && event.maxParticipants !== participantsCount && (
                                                     <button type="submit" className="btn btn-dark rounded-pill px-4 shadow-sm">
-                                                        <i className="bi bi-person-plus-fill me-1"></i> Apuntarme
+                                                        <PersonPlusFill className="me-2" /> Apuntarme
                                                     </button>
                                                 )}
                                             </form>
@@ -213,7 +214,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                         className="btn btn-link text-primary text-decoration-none p-0"
                                                         to={`/new/events-edit/${event.eventId}`}
                                                     >
-                                                        <i className="bi bi-pencil-square me-1"></i> Modificar evento
+                                                        <PencilSquare className="me-2" /> Modificar evento
                                                     </Link>
 
                                                     <Button
@@ -223,7 +224,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                         onClick={handleOpenDeleteDialog}
                                                         disabled={isPendingDelete}
                                                     >
-                                                        <i className="bi bi-trash me-1"></i> Eliminar
+                                                        <Trash /> Eliminar
                                                     </Button>
                                                 </div>
                                             )}
@@ -238,7 +239,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
             </main >
             <Modal show={isListDialogOpen} onHide={handleCloseListModal}>
                 <Modal.Header closeButton>
-                    <i className="bi bi-card-checklist text-danger me-2"></i>Lista de Asistentes
+                    <CardChecklist className="me-2" />Lista de Asistentes
                 </Modal.Header>
                 <Modal.Body>
                     <div className="modal-body p-0">
@@ -250,11 +251,11 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                             <Link to={`new/user/${participant.userId}`} className="text-decoration-none"
                                                 style={{ color: '#a71b12', transition: 'color 0.2s ease-in-out' }} onMouseOver={(e) => e.currentTarget.style.color = '#890f00'}
                                                 onMouseOut={(e) => e.currentTarget.style.color = '#a71b12'}>
-                                                <i className="bi bi-person-badge me-1"></i> {participant.userNickname}
+                                                <PersonBadge className="me-2" /> {participant.userNickname}
                                             </Link>
                                         </div>
                                         <div className="text-muted" style={{ fontSize: '0.9rem' }}>
-                                            <i className="bi bi-envelope-at me-1"></i>
+                                            <EnvelopeAt className="me-2" />
                                             <Link to={`mailto:${participant.userEmail}`} className="text-decoration-none text-secondary">
                                                 {participant.userEmail}
                                             </Link>
@@ -264,7 +265,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                             ))}
                             {event.participants?.length === 0 && (
                                 <ListGroup.Item className="p-4 text-center text-muted bg-light">
-                                    <i className="bi bi-emoji-frown fs-1 d-block mb-2 opacity-50"></i>
+                                    <EmojiFrown className="me-2" />
                                     Aún no hay nadie inscrito en este evento.
                                 </ListGroup.Item>
                             )}

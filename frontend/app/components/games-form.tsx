@@ -1,6 +1,11 @@
 import type { FormEvent } from "react";
 import { Button, Form } from "react-bootstrap";
 import type GameDTO from "~/dtos/GameDTO";
+import {
+  ExclamationTriangleFill,
+  ArrowLeft,
+  Check2Circle
+} from 'react-bootstrap-icons';
 
 interface GamesFormProps {
   game?: Partial<GameDTO>;
@@ -57,7 +62,7 @@ export default function GamesForm({
                     style={{ borderLeft: "5px solid #890f00" }}
                   >
                     <strong>
-                      <i className="bi bi-exclamation-triangle-fill me-2"></i> Ups! Hay errores:
+                      <ExclamationTriangleFill /> Ups! Hay errores:
                     </strong>
                     <ul className="mt-2 mb-0">
                       <li>{state.error}</li>
@@ -243,7 +248,7 @@ export default function GamesForm({
                       onClick={onCancel}
                       disabled={isPending}
                     >
-                      <i className="bi bi-arrow-left"></i>
+                      <ArrowLeft />
                       <span className="ms-2">Atrás</span>
                     </Button>
 
@@ -264,7 +269,7 @@ export default function GamesForm({
                             ? "Actualizar Juego"
                             : "Guardar Juego"}
                       </span>
-                      <i className="bi bi-check2-circle"></i>
+                      <Check2Circle />
                     </Button>
                   </div>
                 </Form>

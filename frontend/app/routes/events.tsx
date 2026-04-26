@@ -4,6 +4,7 @@ import type { Route } from "./+types/events";
 import { getEvents } from "~/services/events-service";
 import { Button, Form } from "react-bootstrap";
 import { useUserStore } from "~/stores/user-store";
+import { JournalX, Newspaper, PlusCircle, Search } from "react-bootstrap-icons";
 
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     const url = new URL(request.url);
@@ -85,10 +86,10 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                     </div>
 
                     <div className="card shadow-sm border-0 p-3 bg-light mb-5">
-                        <form method="get" action="/new/events">
+                        <Form method="get" action="/new/events">
                             <div className="row g-2 align-items-center">
                                 <div className="col-lg-6 col-md-5">
-                                    <input
+                                    <Form.Control
                                         name="name"
                                         className="form-control"
                                         type="search"
@@ -115,7 +116,7 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                             backgroundColor: "#a71b12",
                                         }}
                                     >
-                                        <i className="bi bi-search me-2"></i> Buscar
+                                        <Search className="me-2" /> Buscar
                                     </Button>
                                 </div>
 
@@ -126,13 +127,13 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                             className="btn_lcdd_black w-100 text-decoration-none d-flex align-items-center justify-content-center"
                                             style={{ height: "38px" }}
                                         >
-                                            <i className="bi bi-plus-circle me-2"></i> Redactar
+                                            <PlusCircle className="me-2" /> Redactar
                                         </Button>
                                     </div>
                                 )}
 
                             </div>
-                        </form>
+                        </Form>
                     </div>
 
                     <div id="news-container" className="row gy-4">
@@ -151,7 +152,7 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                                                     />
                                                 ) : (
                                                     <div className="bg-secondary w-100 h-100 d-flex align-items-center justify-content-center text-white">
-                                                        <i className="bi bi-newspaper fs-1"></i>
+                                                        <Newspaper />
                                                     </div>
                                                 )}
                                             </div>
@@ -178,7 +179,7 @@ export default function Events({ loaderData }: Route.ComponentProps) {
                             ))
                         ) : (
                             <div className="col-12 text-center py-5">
-                                <i className="bi bi-journal-x fs-1 text-muted"></i>
+                                <JournalX />
                                 <p className="mt-3 text-muted">
                                     No hay eventos que coincidan con tu busqueda.
                                 </p>

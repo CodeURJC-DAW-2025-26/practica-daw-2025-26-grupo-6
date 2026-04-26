@@ -2,6 +2,15 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import type EventDTO from "~/dtos/EventDTO";
+import {
+    ExclamationTriangleFill,
+    CalendarEvent,
+    People,
+    TicketPerforated,
+    Link45deg,
+    ArrowLeft,
+    Check2Circle
+} from 'react-bootstrap-icons';
 
 interface EventsFormProps {
     event?: Partial<EventDTO>;
@@ -59,7 +68,7 @@ export default function EventsForm({
                                         style={{ borderLeft: "5px solid #890f00" }}
                                     >
                                         <strong>
-                                            <i className="bi bi-exclamation-triangle-fill me-2"></i> Ups! Hay errores:
+                                            <ExclamationTriangleFill className="me-2" /> Ups! Hay errores:
                                         </strong>
                                         <ul className="mt-2 mb-0">
                                             <li>{state.error}</li>
@@ -99,7 +108,7 @@ export default function EventsForm({
                                         </div>
                                         <div className="col-12 mt-4">
                                             <div className="registration-box p-4 border rounded-4 bg-light shadow-sm">
-                                                <label className="fw-bold mb-3 d-block text-dark"><i className="bi bi-calendar-event me-2"></i>Fecha y
+                                                <label className="fw-bold mb-3 d-block text-dark"><CalendarEvent className="me-2" />Fecha y
                                                     Aforo</label>
 
                                                 <div className="row g-4 align-items-start">
@@ -113,8 +122,8 @@ export default function EventsForm({
                                                     </div>
 
                                                     <div className="col-md-6">
-                                                        <Form.Label htmlFor="maxParticipants" className="fw-bold mb-2 small text-muted">Aforo Máximo <i className="bi bi-people">
-                                                        </i></Form.Label>
+                                                        <Form.Label htmlFor="maxParticipants" className="fw-bold mb-2 small text-muted">Aforo Máximo <People className="ms-1" />
+                                                        </Form.Label>
                                                         <div className="input-group shadow-sm">
                                                             <Form.Control type="number" className="form-control" name="maxParticipants" id="maxParticipants"
                                                                 defaultValue={event?.maxParticipants ?? ""} placeholder="Ilimitado" min="1" />
@@ -159,7 +168,7 @@ export default function EventsForm({
                                         <div className="col-12">
                                             <div className="registration-box p-4 border rounded-4 bg-white shadow-sm"
                                                 style={{ borderLeft: "5px solid #a71b12" }}>
-                                                <Form.Label className="fw-bold mb-3 d-block"><i className="bi bi-ticket-perforated me-2"></i>Gestión de
+                                                <Form.Label className="fw-bold mb-3 d-block"><TicketPerforated className="me-2" />Gestión de
                                                     Inscripciones</Form.Label>
                                                 <div className="row align-items-center">
                                                     <div className="col-md-5">
@@ -193,7 +202,7 @@ export default function EventsForm({
                                                 <div id="link-container" className={`mt-4 ${requiresRegistration ? "" : "d-none"}`}>
                                                     <Form.Label htmlFor="link" className="required-label fw-bold mb-2">Enlace de registro oficial</Form.Label>
                                                     <div className="input-group has-validation">
-                                                        <span className="input-group-text bg-white"><i className="bi bi-link-45deg"></i></span>
+                                                        <span className="input-group-text bg-white"><Link45deg /></span>
                                                         <Form.Control
                                                             type="url"
                                                             name="link"
@@ -217,7 +226,7 @@ export default function EventsForm({
                                                 onClick={onCancel}
                                                 disabled={isPending}
                                             >
-                                                <i className="bi bi-arrow-left me-2"></i>Atrás
+                                                <ArrowLeft className="me-2" />Atrás
                                             </Button>
 
 
@@ -237,7 +246,7 @@ export default function EventsForm({
                                                             ? "Actualizar Evento"
                                                             : "Guardar Evento"}
                                                 </span>
-                                                <i className="bi bi-check2-circle"></i>
+                                                <Check2Circle size={20} />
                                             </Button>
                                         </div>
                                     </div>
