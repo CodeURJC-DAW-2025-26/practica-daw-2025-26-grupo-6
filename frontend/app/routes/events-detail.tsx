@@ -320,7 +320,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                 <ListGroup.Item className="d-flex justify-content-between align-items-start p-3" key={participant.userId}>
                                     <div className="ms-2 me-auto">
                                         <div className="fw-bold" style={{ fontSize: '1.1rem' }}>
-                                            <Link to={`new/user/${participant.userId}`} className="text-decoration-none"
+                                            <Link to={`/new/users/${participant.userId}`} className="text-decoration-none"
                                                 style={{ color: '#a71b12', transition: 'color 0.2s ease-in-out' }} onMouseOver={(e) => e.currentTarget.style.color = '#890f00'}
                                                 onMouseOut={(e) => e.currentTarget.style.color = '#a71b12'}>
                                                 <PersonBadge className="me-2" /> {participant.userNickname}

@@ -121,7 +121,7 @@ export default function Admin() {
                                 {pending.events.length > 0 ? pending.events.map(event => (
                                     <div key={event.eventId} className="col-lg-4 col-md-6">
                                         <div className="project-card shadow-sm border-0 h-100">
-                                            <a className="d-block text-decoration-none" href={`/new/events/${event.eventId}`}>
+                                            <Link className="d-block text-decoration-none" to={`/new/events/${event.eventId}`}>
                                                 <div className="project-image" style={{ height: "180px", overflow: "hidden" }}>
                                                     <Image
                                                         src={event.eventImage ? `/api/v1/images/${event.eventImage.id}/media` : "/img/placeholder.png"}
@@ -133,7 +133,19 @@ export default function Admin() {
                                                 <div className="project-info p-3">
                                                     <h4 className="project-title text-dark">{event.eventName}</h4>
                                                 </div>
-                                            </a>
+                                            </Link>
+                                            <div className="project-image" style={{ height: "180px", overflow: "hidden" }}>
+                                                <Image
+                                                    src={event.eventImage ? `/api/v1/images/${event.eventImage.id}/media` : "/img/placeholder.png"}
+                                                    alt="Evento"
+                                                    className="img-fluid w-100 h-100"
+                                                    style={{ objectFit: "cover" }}
+                                                />
+                                            </div>
+                                            <div className="project-info p-3">
+                                                <h4 className="project-title text-dark">{event.eventName}</h4>
+                                            </div>
+
                                             <div className="p-3 pt-0 d-flex gap-2">
                                                 <Button
                                                     onClick={() => handleApproveEvent(event.eventId)}
@@ -270,7 +282,7 @@ export default function Admin() {
 
                     </div>
                 </section>
-            </main>
+            </main >
             <Modal show={isRejectModalOpen} onHide={() => !processingAction && setRejectModalOpen(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Rechazar Solicitud</Modal.Title>
