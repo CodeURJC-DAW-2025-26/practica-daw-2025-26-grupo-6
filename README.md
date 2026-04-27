@@ -655,17 +655,17 @@ Diagrama mostrando los componentes React, hooks personalizados, servicios y sus 
 
 ### **Participación de Miembros en la Práctica 3**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - Carlos García Pérez**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+En el cliente SPA, he migrado y adaptado toda la lógica para apuntarse y desapuntarse a eventos, solucionando problemas de parpadeo en la interfaz mediante la aplicación del patrón Stale-While-Revalidate en el estado global (Zustand). También he arreglado el enrutamiento del modal de la lista de asistentes para asegurar la navegación absoluta a los perfiles. Además, he desarrollado un sistema dinámico para capturar y mostrar los errores reales devueltos por la API REST en los formularios (Eventos, Noticias y Juegos), implementando validaciones personalizadas de rangos y fechas sincronizadas entre HTML5 y React, y añadiendo spinners para bloquear envíos dobles y mejorar la UX.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Implementación de la lógica SPA para apuntarse/desapuntarse a eventos y corrección del enrutamiento del modal de asistentes](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/8bc5431ae7a3d216f69b0c9b90021fe1a5407322)  | [events-service.ts](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/8bc5431ae7a3d216f69b0c9b90021fe1a5407322/frontend/app/services/events-service.ts) |
+|2| [Implementación de captura dinámica de errores de validación desde la API REST en creación/edición](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/5a581994989934edb43c223c0317db7fb0912ef4)  | [events-form.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/5a581994989934edb43c223c0317db7fb0912ef4/frontend/app/components/events-form.tsx)   |
+|3| [Integración de Docker Multi-stage build (Node.js + Spring Boot) para servir SPA](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/105efc831d6daf4beab90efa3c48b8b088ff2cc5)  | [Dockerfile](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/105efc831d6daf4beab90efa3c48b8b088ff2cc5/backend/docker/Dockerfile)   |
+|4| [Corrección de UX en Zustand evitando borrado de sesión al recargar datos del usuario (Stale-While-Revalidate)](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/4c753a498d3d8bc03d22278f0ab4e73463382a0d)  | [user-store.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/4c753a498d3d8bc03d22278f0ab4e73463382a0d/frontend/app/stores/user-store.tsx)   |
+|5| [Refactorización de formularios con startTransition e implementación de Spinners para bloquear peticiones asíncronas dobles](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/1548f1c704159c4915818990c396f002f07a7f21)  | [events-detail.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/1548f1c704159c4915818990c396f002f07a7f21/frontend/app/routes/events-detail.tsx)   |
 
 ---
 
