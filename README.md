@@ -677,7 +677,7 @@ En el cliente SPA, he migrado y adaptado toda la lógica para apuntarse y desapu
 
 #### **Alumno 2 - Antonio Martín Carrizosa**
 
-Páginas de login, registro y perfil.
+Añadir configuración incial de react. Páginas de login, registro y perfil. Implementación del user-service, el user-store y el login-service. Arreglo de errores. Instrucciones de ejecución. Conversión de algunos DTOs de java a js.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
