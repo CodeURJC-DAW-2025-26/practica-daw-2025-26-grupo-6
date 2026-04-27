@@ -651,7 +651,7 @@ He creado las funciones para generar errores con JSON y resuelto algunos problem
 
 Diagrama mostrando los componentes React, hooks personalizados, servicios y sus relaciones:
 
-![Diagrama de Componentes React](images/spa-classes-diagram.png)
+![Diagrama de Componentes React](images/claass-diagram-p3.jpg)
 
 ### **Participación de Miembros en la Práctica 3**
 
@@ -683,17 +683,17 @@ Diagrama mostrando los componentes React, hooks personalizados, servicios y sus 
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - Javier Cai Lin**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Adaptar las funcionalidades de la pagina de administrador a react (ver noticias y eventos a validar, ver todos los usuarios registrados y ver las estadisticas de los juegos y eventos)
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Creado un nuevo metodo en AdminRestController para obtener noticias y eventos a validar](backend/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationRestController.java)  | [admin.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/admin.tsx)   |
+|2| [Se crea admin-service.ts en el frontend](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/65f0e0c2e1f316227b85a91675e8b6f2270047f0)  | [admin-service.ts](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/services/admin-service.ts)   |
+|3| [Se crea admin.tsx y adminchart.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/369b731f77641dc97f4f63a9df00cdc0348400f7)  | [AdminCharts.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/components/AdminCharts.tsx)   |
+|4| [Arreglo del metodo que mostraba en la grafica datos de eventos sin validar](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/44550032ac239837cfe9572cb7c48778c0e99aed)  | [AdministrationRestController.java‎](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationRestController.java)   |
+|5| [Cambio en el formato de la alerta en la pagina de admin para que concuerde con el resto de alerts de la aplicacion](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/3f6d64c576e98b37b5d91bb5532df19464f533a1)  | [EventRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/repository/EventRepository.java)   |
 
 ---
 
