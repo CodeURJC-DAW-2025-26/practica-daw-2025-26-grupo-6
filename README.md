@@ -604,7 +604,7 @@ He creado las funciones para generar errores con JSON y resuelto algunos problem
 ## 🛠 **Práctica 3: Implementación de la web con arquitectura SPA**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](URL_del_video)**
+📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=M24LtLZZhWg)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Preparación del Entorno de Desarrollo**
@@ -697,17 +697,17 @@ Adaptar las funcionalidades de la pagina de administrador a react (ver noticias 
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - Jaime Esteban García**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Implementación de listado de juegos, eventos y noticias, así como su carga con AJAX (botón "Cargar más"), los filtros de búsqueda y sus páginas de detalle. Implementación de creación, edición y borrado de jeugos, eventos y noticias. Implementación de control por rol y dueño para juegos, eventos y noticias. Implementación de funcionalidad para dar favorito a juegos. Implementación de página de error que sigue el estilo del resto de la web. Migración del proyecto para que se encuentre disponible tanto en la ruta :8443 como en :8443/new. Aplicación de estilos react-bootstrap a las distintas páginas. Corrección de errores.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Listado, filtrado, cargar más y página de detalle de juegos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/f06c737c58b2b5922b40d27473221771bf368c8c)  | [games.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/f06c737c58b2b5922b40d27473221771bf368c8c/frontend/app/routes/games.tsx)   |
+|2| [Creación, edición y borrado de juegos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b0a792d723304f37867c39533bcb6d8a7dc62437)  | [games-form.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/b0a792d723304f37867c39533bcb6d8a7dc62437/frontend/app/components/games-form.tsx)   |
+|3| [Adición y eliminado de juegos de favoritos del usuario](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/5a897f394367a9b4d43ca6170c2d3a6e9cd15e2e)  | [games-detail.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/5a897f394367a9b4d43ca6170c2d3a6e9cd15e2e/frontend/app/routes/games-detail.tsx)   |
+|4| [Migración del proyecto para acceder desde :8443 y :8443/new](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/99d6967e5e7ce1de97abbd931b52fdbf762c8c74)  | [SpaRoutingConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/99d6967e5e7ce1de97abbd931b52fdbf762c8c74/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/SpaRoutingConfig.java)   |
+|5| [Adición de página error con estilo similar al resto de la web](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/70e89b20e20962e7a27a1ebd0303a9e9acf2efdb)  | [root.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/70e89b20e20962e7a27a1ebd0303a9e9acf2efdb/frontend/app/root.tsx)   |
 
 ---
 
