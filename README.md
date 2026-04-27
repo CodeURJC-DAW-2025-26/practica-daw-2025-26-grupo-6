@@ -628,8 +628,8 @@ He creado las funciones para generar errores con JSON y resuelto algunos problem
 
 2. **Clonar el repositorio** (si no lo has hecho ya)
    ```bash
-   git clone https://github.com/[usuario]/[nombre-repositorio].git
-   cd [nombre-repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6.git
+   cd practica-daw-2025-26-grupo-6/
    ```
 
 3. **Navegar a la carpeta del proyecto React**
@@ -637,7 +637,15 @@ He creado las funciones para generar errores con JSON y resuelto algunos problem
    cd frontend
    ```
 
-4. **AQUÍ LOS SIGUIENTES PASOS**
+4. **Instalar las dependencias**
+   ```bash
+   npm install
+   ```
+   
+5. **Ejecutar el proyecto React en modo desarrollo**
+   ```bash
+   npm run dev
+   ```
 
 ### **Diagrama de Clases y Templates de la SPA**
 
