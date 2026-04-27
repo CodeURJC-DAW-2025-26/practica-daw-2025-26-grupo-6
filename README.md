@@ -713,7 +713,7 @@ Adaptar las funcionalidades de la pagina de administrador a react (ver noticias 
 
 #### **Alumno 5 - Anthony Lattanzi Salas**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Adaptar las funcionalidades del header, footer y página inicial a react.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
