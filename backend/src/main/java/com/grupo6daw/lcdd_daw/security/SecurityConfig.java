@@ -1,7 +1,5 @@
 package com.grupo6daw.lcdd_daw.security;
 
-import java.beans.BeanProperty;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -105,8 +103,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/events/*").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/*").hasRole("REGISTERED_USER")
                         // User
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/*").hasRole("REGISTERED_USER")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/*/image").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/*/image").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/*").hasRole("REGISTERED_USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").hasRole("REGISTERED_USER")

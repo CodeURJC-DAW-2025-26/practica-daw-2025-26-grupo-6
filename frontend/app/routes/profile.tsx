@@ -54,23 +54,14 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
         { userEmail: profile.userEmail, password: "", confirmPassword: "", userName: profile.userName, userSurname: profile.userSurname, userNickname: profile.userNickname, userInterests: profile.userInterests }
     )
 
-    if (!user) {
-        return;
-    }
+    const isOwner = user?.userId === profile.userId;
+    const isAdmin = user?.userRoles.includes("ADMIN")
 
-    if (!profile || (user.userId !== profile.userId && !user.userRoles.includes("ADMIN"))) {
-        return (<>
-            <Container data-aos="fade-up">
-                <div className="form-intro text-center mb-4 mt-2">
-                    <h1 style={{ fontWeight: 700, color: '#212529', textTransform: 'uppercase' }}>Error</h1>
-                    <p className="text-muted">No tienes permiso para acceder a esta página</p>
-                    <hr style={{ width: '50px', margin: '10px auto 20px auto', borderTop: '3px solid #a71b12', opacity: 1 }} />
-                </div>
-            </Container>
-        </>);
-    }
+    console.log("owner")
+    console.log(isOwner)
+    console.log("admin")
 
-    const isOwner = user.userId === profile.userId;
+    console.log(isAdmin)
 
     const toggleEdit = () => {
         setIsEditing(!isEditing);
@@ -237,7 +228,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                 <FormControl as="textarea" className={`${isEditing ? '' : 'form-control-plaintext'} profile-input`} name="userInterests" rows={3} readOnly={!isEditing} style={{ resize: 'none' }} defaultValue={profile.userInterests} />
                                             </div>
                                         </div>
-                                        {profile.userId === user.userId && (
+                                        {(isOwner || isAdmin) && (
                                             <div className="d-grid gap-2 mt-2">
                                                 <Button variant="outline-dark" type="button" id="btn-edit-profile" className={`rounded-pill ${isEditing ? 'd-none' : ''}`} onClick={toggleEdit}>
                                                     <PencilSquare className="me-2" /> Editar Perfil
