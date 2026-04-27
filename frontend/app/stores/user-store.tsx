@@ -21,13 +21,16 @@ export const useUserStore = create<UserState>((set, get) => ({
     updateLastImageChange: () => set({ lastImageChange: Date.now() }),
 
     loadLoggedUser: async () => {
-        set({ user: null, errorMessage: null, lastImageChange: Date.now() });
+        // Keep the previous user data in memory while we fetch the updated one.
+        // This prevents the UI from flashing the "Login" button (Stale-While-Revalidate pattern).
+        set({ errorMessage: null, lastImageChange: Date.now() });
 
         try {
             const user = await reqIsLogged();
             set({ user });
         } catch (error) {
             if (error instanceof HttpError && error.status === 401) {
+                // Only clear the user if the backend explicitly says we are unauthorized.
                 set({ user: null, errorMessage: null });
                 return;
             }
@@ -38,6 +41,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     },
 
     loginUser: async (username: string, password: string) => {
+        // Clear current user state before attempting a new login.
         set({ user: null, errorMessage: null });
 
         try {
@@ -50,6 +54,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     },
 
     logoutUser: async () => {
+        // Optimistic UI update: instantly clear the user from the state for a snappy experience.
         set({ user: null, errorMessage: null });
 
         try {
