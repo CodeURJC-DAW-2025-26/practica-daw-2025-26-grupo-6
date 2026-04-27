@@ -62,7 +62,7 @@ export default function GameEdit({ loaderData }: Route.ComponentProps) {
                 await uploadGameImage(Number(id), imageFile);
             }
 
-            navigate(`/new/games/${id}`);
+            navigate(`/games/${id}`);
             return { success: true, error: null };
         } catch (error: any) {
             console.error("Validation error caught:", error);
@@ -95,7 +95,7 @@ export default function GameEdit({ loaderData }: Route.ComponentProps) {
         <GamesForm
             game={game}
             actionState={[state, formAction, isPending]}
-            onCancel={() => navigate(`/new/games/${game.gameId}`)}
+            onCancel={() => navigate(`/games/${game.gameId}`)}
         />
     );
 }

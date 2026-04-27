@@ -30,7 +30,7 @@ RUN mvn dependency:go-offline
 COPY backend/src /project/src
 
 # Copy compiled frontend to backend static resources
-COPY --from=frontend-builder /app/frontend/dist /project/src/main/resources/static/new
+COPY --from=frontend-builder /app/frontend/build /project/src/main/resources/static/new
 
 # Compile project and package it into a JAR file, no test
 RUN mvn -B package -DskipTests

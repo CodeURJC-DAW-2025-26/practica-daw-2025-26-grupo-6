@@ -20,7 +20,7 @@ export function links() {
     ];
 }
 
-const ERROR_PATH = "/new/error";
+const ERROR_PATH = "/error";
 
 
 function GlobalSpinner() {

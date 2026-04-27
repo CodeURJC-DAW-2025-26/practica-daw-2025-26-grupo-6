@@ -13,6 +13,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 export default function NewsDetail({ loaderData }: Route.ComponentProps) {
     let { user } = useUserStore();
     const post = loaderData;
+    const baseUrl = import.meta.env.BASE_URL;
     const navigate = useNavigate();
 
     const formattedDate = post.creationDate
@@ -32,7 +33,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
         setDeleteError(null);
         try {
             await removeNew(post.newId);
-            navigate("/new/news");
+            navigate("/news");
         } catch (err) {
             console.error(err);
             setDeleteError("Hubo un error al borrar la noticia.");
@@ -163,7 +164,7 @@ export default function NewsDetail({ loaderData }: Route.ComponentProps) {
                                                 <a
                                                     className="btn btn-link text-decoration-none p-0"
                                                     style={{ color: "#890f00" }}
-                                                    href={`/new/news-edit/${post.newId}`}
+                                                    href={`${baseUrl}news-edit/${post.newId}`}
                                                 >
                                                     <PencilSquare className="me-2" /> Modificar noticia
                                                 </a>

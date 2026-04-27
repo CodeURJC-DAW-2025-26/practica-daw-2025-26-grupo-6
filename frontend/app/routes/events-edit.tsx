@@ -57,7 +57,7 @@ export default function EventEdit({ loaderData }: Route.ComponentProps) {
                 await uploadEventImage(event.eventId, imageFile);
             }
 
-            navigate(`/new/events`);
+            navigate(`/events`);
             return { success: true, error: null };
         } catch (error: any) {
             console.error("Validation error caught:", error);
@@ -90,7 +90,7 @@ export default function EventEdit({ loaderData }: Route.ComponentProps) {
         <EventsForm
             event={event}
             actionState={[state, formAction, isPending]}
-            onCancel={() => navigate(`/new/events/${event.eventId}`)}
+            onCancel={() => navigate(`/events/${event.eventId}`)}
         />
     );
 }

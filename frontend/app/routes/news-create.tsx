@@ -37,7 +37,7 @@ export default function NewSave({ }: Route.ComponentProps) {
                 await uploadNewImage(newPost.newId, imageFile);
             }
 
-            navigate(`/new/news`);
+            navigate(`/news`);
             return { success: true, error: null };
         } catch (error: any) {
             console.error("Validation error caught:", error);
@@ -76,7 +76,7 @@ export default function NewSave({ }: Route.ComponentProps) {
     return (
         <NewsForm
             actionState={[state, formAction, isPending]}
-            onCancel={() => navigate("/new/news")}
+            onCancel={() => navigate("/news")}
         />
     );
 }

@@ -57,12 +57,6 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
     const isOwner = user?.userId === profile.userId;
     const isAdmin = user?.userRoles.includes("ADMIN")
 
-    console.log("owner")
-    console.log(isOwner)
-    console.log("admin")
-
-    console.log(isAdmin)
-
     const toggleEdit = () => {
         setIsEditing(!isEditing);
         if (isEditing) {
@@ -251,7 +245,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                     if (confirm('¿Estás seguro de que deseas eliminar tu cuenta permanentemente?')) {
                                                         deleteProfile(profile.userId);
                                                         logoutUser();
-                                                        navigate("/new");
+                                                        navigate("/");
                                                     }
                                                 }}>
                                                     <ExclamationOctagon className="me-1" /> Eliminar Cuenta
@@ -292,7 +286,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                             <Row className="gy-3">
                                                 {profile.userOwnEvents.map(event => (
                                                     <Col md={6} key={event.eventId} data-aos="fade-up">
-                                                        <Link to={`/new/events/${event.eventId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                                                        <Link to={`/events/${event.eventId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
                                                             <Row className="g-0 h-100">
                                                                 <Col xs={4}>
                                                                     {event.eventImage ? (
@@ -333,7 +327,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                         <Col xs={12} className="text-center py-5">
                                                             <CalendarPlus className="fs-1 text-muted opacity-50" />
                                                             <p className="mt-3 text-muted">Aún no has organizado ningún evento.</p>
-                                                            <Link to="/new/events-create" className="btn btn-sm btn-outline-dark rounded-pill">Crear
+                                                            <Link to="/events-create" className="btn btn-sm btn-outline-dark rounded-pill">Crear
                                                                 mi primer
                                                                 evento
                                                             </Link>
@@ -351,7 +345,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                             <Row className="gy-3">
                                                 {profile.userRegisteredEvents.map(event => (
                                                     <Col md={6} key={event.eventId} data-aos="fade-up">
-                                                        <Link to={`/new/events/${event.eventId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                                                        <Link to={`/events/${event.eventId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
                                                             <Row className="g-0 h-100">
                                                                 <Col xs={4}>
                                                                     {event.eventImage ? (
@@ -385,7 +379,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                         <Col xs={12} className="text-center py-5">
                                                             <TicketPerforated className="fs-1 text-muted opacity-50" />
                                                             <p className="mt-3 text-muted">Aún no te has inscrito a ningún evento.</p>
-                                                            <Link to="/new/events" className="btn btn-sm btn-outline-dark rounded-pill">Explorar
+                                                            <Link to="/events" className="btn btn-sm btn-outline-dark rounded-pill">Explorar
                                                                 eventos</Link>
                                                         </Col>
                                                     ) : (
@@ -401,7 +395,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                             <Row className="gy-3">
                                                 {profile.userFavGames.map(game => (
                                                     <Col md={6} key={game.gameId} data-aos="fade-up">
-                                                        <Link to={`/new/games/${game.gameId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                                                        <Link to={`/games/${game.gameId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
                                                             <Row className="g-0 h-100">
                                                                 <Col xs={4}>
                                                                     {game.gameImage ? (
@@ -435,7 +429,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                         <Col xs={12} className="text-center py-5">
                                                             <Controller className="fs-1 text-muted opacity-50" />
                                                             <p className="mt-3 text-muted">No tienes ningún juego marcado como favorito.</p>
-                                                            <Link to="/new/games" className="btn btn-sm btn-outline-dark rounded-pill">Ir a la
+                                                            <Link to="/games" className="btn btn-sm btn-outline-dark rounded-pill">Ir a la
                                                                 Ludoteca</Link>
                                                         </Col>
                                                     ) : (
@@ -452,7 +446,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                             <Row className="gy-3">
                                                 {profile.userNews.map(item => (
                                                     <Col md={6} key={item.newId} data-aos="fade-up">
-                                                        <Link to={`/new/news/${item.newId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
+                                                        <Link to={`/news/${item.newId}`} className="card text-decoration-none text-dark h-100 border hover-shadow transition-all">
                                                             <Row className="g-0 h-100">
                                                                 <Col xs={4}>
                                                                     {item.newImage ? (
@@ -493,7 +487,7 @@ export default function Profile({ loaderData }: Route.ComponentProps) {
                                                         <Col xs={12} className="text-center py-5">
                                                             <JournalText className="fs-1 text-muted opacity-50" />
                                                             <p className="mt-3 text-muted">Aún no has redactado ninguna noticia.</p>
-                                                            <Link to="/new/news-create" className="btn btn-sm btn-outline-dark rounded-pill">Redactar noticia</Link>
+                                                            <Link to="/news-create" className="btn btn-sm btn-outline-dark rounded-pill">Redactar noticia</Link>
                                                         </Col>
                                                     ) : (
                                                         <Col xs={12} className="text-center py-5">

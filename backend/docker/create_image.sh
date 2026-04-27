@@ -10,7 +10,7 @@ fi
 IMAGE_NAME=$1
 
 # Build Docker image using the parameter
-docker build --network host -t "$IMAGE_NAME" -f Dockerfile ..
+docker build --network host -t "$IMAGE_NAME" -f Dockerfile ../..
 
 # Error check
 if [ $? -eq 0 ]; then

@@ -71,7 +71,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                     </div>
 
                     <div className="card shadow-sm border-0 p-3 bg-light mb-5">
-                        <Form method="get" action="/new/games">
+                        <Form method="get" action="/games">
                             <div className="row g-2 align-items-center">
                                 <div className="col-lg-3 col-md-4">
                                     <Form.Control
@@ -123,7 +123,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                                 {user?.userRoles?.includes("ADMIN") && (
                                     <div className="col-lg-2 col-md-6">
                                         <Button
-                                            onClick={() => navigate("/new/games-create")}
+                                            onClick={() => navigate("/games-create")}
                                             className="btn_lcdd_black w-100 text-decoration-none d-flex align-items-center justify-content-center"
                                             style={{ height: "38px" }}
                                         >
@@ -141,7 +141,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                             games.map((item) => (
                                 <div key={item.gameId} className="col-lg-4 col-md-6 games-item">
                                     <div className="project-card h-100 shadow-sm border-0">
-                                        <Link to={`/new/games/${item.gameId}`} className="text-decoration-none">
+                                        <Link to={`/games/${item.gameId}`} className="text-decoration-none">
                                             <div className="project-image" style={{ height: "220px", overflow: "hidden" }}>
                                                 {item.gameImage ? (
                                                     <Image
@@ -183,7 +183,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                                 <p className="mt-3 text-muted">
                                     No hay juegos que coincidan con tu busqueda.
                                 </p>
-                                <Link to="/new/games" className="btn btn-link text-danger">
+                                <Link to="/games" className="btn btn-link text-danger">
                                     Ver todos los juegos
                                 </Link>
                             </div>

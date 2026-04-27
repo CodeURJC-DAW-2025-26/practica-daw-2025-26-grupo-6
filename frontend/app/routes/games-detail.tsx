@@ -29,7 +29,7 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
     setDeleteError(null);
     try {
       await removeGame(game.gameId);
-      navigate("/new/games");
+      navigate("/games");
     } catch (err) {
       console.error(err);
       setDeleteError("Hubo un error al borrar el juego.");
@@ -169,7 +169,7 @@ export default function GamesDetail({ loaderData }: Route.ComponentProps) {
                         <Link
                           className="btn btn-link text-decoration-none p-0"
                           style={{ color: "#890f00" }}
-                          to={`/new/games-edit/${game.gameId}`}
+                          to={`/games-edit/${game.gameId}`}
                         >
                           <PencilSquare className="me-2" /> Modificar juego
                         </Link>

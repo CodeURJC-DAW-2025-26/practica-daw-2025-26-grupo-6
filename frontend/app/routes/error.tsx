@@ -39,7 +39,7 @@ export default function ErrorPage() {
                                     {errorText}
                                 </p>
                                 <Link
-                                    to="/new"
+                                    to="/"
                                     className="btn px-4 py-2"
                                     style={{
                                         backgroundColor: "#a71b12",

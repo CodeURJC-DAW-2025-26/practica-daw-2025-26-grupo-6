@@ -28,7 +28,7 @@ export default function Login() {
                 if (error) {
                     setErrorMessage(error)
                 } else {
-                    navigate(`/new`);
+                    navigate(`/`);
                 }
             } catch (error) {
                 setErrorMessage("Error al iniciar sesión.");
@@ -96,7 +96,7 @@ export default function Login() {
                                         </div>
                                     </div>
                                     <div className="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
-                                        <Link to="/new" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
+                                        <Link to="/" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
                                             <ArrowLeft />
                                             <span className="ms-2">Volver</span>
                                         </Link>
@@ -123,7 +123,7 @@ export default function Login() {
                                     </div>
                                     <div className="text-center pt-4 border-top">
                                         <p className="mb-2 text-muted">¿No tienes cuenta en La Caverna del Dragón?</p>
-                                        <Link to="/new/register" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
+                                        <Link to="/register" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
                                             <PersonPlus className="me-2" /> Click aquí para crear una
                                         </Link>
                                     </div>

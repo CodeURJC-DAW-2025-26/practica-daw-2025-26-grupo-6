@@ -49,7 +49,7 @@ export default function NewEdit({ loaderData }: Route.ComponentProps) {
                 await uploadNewImage(post.newId, imageFile);
             }
 
-            navigate(`/new/news`);
+            navigate(`/news`);
             return { success: true, error: null };
         } catch (error: any) {
             console.error("Validation error caught:", error);
@@ -82,7 +82,7 @@ export default function NewEdit({ loaderData }: Route.ComponentProps) {
         <NewsForm
             post={post}
             actionState={[state, formAction, isPending]}
-            onCancel={() => navigate(`/new/news/${post.newId}`)}
+            onCancel={() => navigate(`/news/${post.newId}`)}
         />
     );
 }

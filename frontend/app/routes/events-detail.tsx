@@ -15,6 +15,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 export default function EventsDetail({ loaderData }: Route.ComponentProps) {
     let { user, loadLoggedUser } = useUserStore();
     const event = loaderData;
+    const baseUrl = import.meta.env.BASE_URL;
     const navigate = useNavigate();
     const revalidator = useRevalidator();
 
@@ -68,7 +69,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
         setDeleteError(null);
         try {
             await removeEvent(event.eventId);
-            navigate("/new/events");
+            navigate("/events");
         } catch (err) {
             console.error(err);
             setDeleteError("Hubo un error al borrar el evento.");
@@ -284,7 +285,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                                 <div className="d-flex flex-wrap align-items-center gap-3">
                                                     <a
                                                         className="btn btn-link text-primary text-decoration-none p-0"
-                                                        href={`/new/events-edit/${event.eventId}`}
+                                                        href={`${baseUrl}events-edit/${event.eventId}`}
                                                     >
                                                         <PencilSquare className="me-2" /> Modificar evento
                                                     </a>
@@ -320,7 +321,7 @@ export default function EventsDetail({ loaderData }: Route.ComponentProps) {
                                 <ListGroup.Item className="d-flex justify-content-between align-items-start p-3" key={participant.userId}>
                                     <div className="ms-2 me-auto">
                                         <div className="fw-bold" style={{ fontSize: '1.1rem' }}>
-                                            <Link to={`/new/users/${participant.userId}`} className="text-decoration-none"
+                                            <Link to={`/users/${participant.userId}`} className="text-decoration-none"
                                                 style={{ color: '#a71b12', transition: 'color 0.2s ease-in-out' }} onMouseOver={(e) => e.currentTarget.style.color = '#890f00'}
                                                 onMouseOut={(e) => e.currentTarget.style.color = '#a71b12'}>
                                                 <PersonBadge className="me-2" /> {participant.userNickname}

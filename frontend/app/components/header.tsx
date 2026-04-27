@@ -40,27 +40,27 @@ export default function Header() {
     const handleLogout = () => {
         logoutUser();      // Calls the logout function from the user store
         closeMobileNav();  // Closes the mobile navigation if it's open
-        navigate("/new/"); // Redirects the user to the home page after logging out
+        navigate("/"); // Redirects the user to the home page after logging out
     };
 
     return <>
         <header id="header" className="header d-flex align-items-center sticky-top">
             <div className="container-fluid container-xl position-relative d-flex align-items-center">
-                <Link to="/new" className="logo d-flex align-items-center me-auto">
+                <Link to="/" className="logo d-flex align-items-center me-auto">
 
                     <Image src="/logo.jpg" width="64" height="64" />
                     <h1 className="sitename">La Caverna Del Dragón</h1>
                 </Link>
                 <nav id="navmenu" className="navmenu">
                     <ul>
-                        <ListGroupItem as="li"><Link to="/new/games" onClick={closeMobileNav}>Juegos</Link></ListGroupItem>
-                        <ListGroupItem as="li"><Link to="/new/events" onClick={closeMobileNav}>Eventos</Link></ListGroupItem>
-                        <ListGroupItem as="li"><Link to="/new/news" onClick={closeMobileNav}>Noticias</Link></ListGroupItem>
+                        <ListGroupItem as="li"><Link to="/games" onClick={closeMobileNav}>Juegos</Link></ListGroupItem>
+                        <ListGroupItem as="li"><Link to="/events" onClick={closeMobileNav}>Eventos</Link></ListGroupItem>
+                        <ListGroupItem as="li"><Link to="/news" onClick={closeMobileNav}>Noticias</Link></ListGroupItem>
                         {user && (
                             <>
-                                <ListGroupItem as="li"><Link className="d-xl-none" to={`/new/users/${user.userId}`} onClick={closeMobileNav}>Mi perfil</Link></ListGroupItem>
+                                <ListGroupItem as="li"><Link className="d-xl-none" to={`/users/${user.userId}`} onClick={closeMobileNav}>Mi perfil</Link></ListGroupItem>
                                 {user.userRoles?.includes("ADMIN") && (
-                                    <ListGroupItem as="li"><Link className="d-xl-none" to="/new/admin" onClick={closeMobileNav}>Administración</Link></ListGroupItem>
+                                    <ListGroupItem as="li"><Link className="d-xl-none" to="/admin" onClick={closeMobileNav}>Administración</Link></ListGroupItem>
                                 )}
                                 <ListGroupItem as="li">
                                     <Button
@@ -85,7 +85,7 @@ export default function Header() {
                     </button>
                 </nav>
                 {!user && (
-                    <Link className="btn-getstarted d-none d-sm-block" to="/new/login">
+                    <Link className="btn-getstarted d-none d-sm-block" to="/login">
                         Registro / Iniciar Sesión
                         <Person />
                     </Link>
@@ -105,12 +105,12 @@ export default function Header() {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                <Dropdown.Item as={Link} to={`/new/users/${user.userId}`}>
+                                <Dropdown.Item as={Link} to={`/users/${user.userId}`}>
                                     <Person className="me-2" /> Mi perfil
                                 </Dropdown.Item>
 
                                 {user.userRoles?.includes("ADMIN") && (
-                                    <Dropdown.Item as={Link} to="/new/admin">
+                                    <Dropdown.Item as={Link} to="/admin">
                                         <ShieldLock className="me-2" /> Administración
                                     </Dropdown.Item>
                                 )}

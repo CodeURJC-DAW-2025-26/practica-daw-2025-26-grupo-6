@@ -44,9 +44,9 @@ export default function Register() {
                     try {
                         await userStore.loginUser(userEmail, password)
                     } catch (error) {
-                        navigate("/new/login")
+                        navigate("/login")
                     }
-                    navigate("/new/")
+                    navigate("/")
                 }
 
             } catch (error) {
@@ -147,7 +147,7 @@ export default function Register() {
                                         </div>
                                     </div>
                                     <div className="d-flex flex-column flex-md-row justify-content-evenly mt-5 mb-4">
-                                        <Link to="/new" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
+                                        <Link to="/" className="submit-btn" style={{ background: '#6c757d', marginTop: 0, justifyContent: 'center', display: 'flex', textDecoration: 'none' }}>
                                             <ArrowLeft />
                                             <span className="ms-2">Volver al inicio</span>
                                         </Link>
@@ -174,7 +174,7 @@ export default function Register() {
                                     </div>
                                     <div className="text-center pt-4 border-top">
                                         <p className="mb-2 text-muted">¿Ya tienes cuenta en La Caverna del Dragón?</p>
-                                        <Link to="/new/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
+                                        <Link to="/login" className="text-primary fw-bold text-decoration-none" style={{ fontSize: '1.1rem' }}>
                                             <BoxArrowInRight className="me-2" /> Iniciar sesión
                                         </Link>
                                     </div>

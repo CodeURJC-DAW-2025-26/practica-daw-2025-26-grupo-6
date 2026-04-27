@@ -52,13 +52,13 @@ public class DatabaseInitializer {
         // Sample News
         New new1 = new New("Vuelven las jornadas de rol a la URJC",
                 "El campus de Móstoles acogerá la cuarta edición de 'Dangers & Dragons | Jornadas de Rol', un evento pensado tanto para aquellos que desean descubrir el emocionante mundo del rol como para los jugadores experimentados.",
-                "Rol", false);
+                "Rol", true);
         setNewImage(new1, "/sample_images/news/newsImg.jpg");
         newRepository.save(new1);
 
         New new2 = new New("Gran Torneo de Magic: The Gathering",
                 "La Caverna organiza su torneo trimestral de MTG en formato Commander. ¡Ven a demostrar quién manda en la mesa!",
-                "Evento", false);
+                "Evento", true);
         setNewImage(new2, "/sample_images/news/magicTournament.jpg");
         newRepository.save(new2);
 
@@ -216,7 +216,7 @@ public class DatabaseInitializer {
         if (eventRepository.findByEventName("Evento de juegos de mesa Octubre 2026").isEmpty()) {
             Event event1 = new Event("Evento de juegos de mesa Octubre 2026",
                     "🎲🧩♟ ¿Estáis preparados una vez más para el evento de juegos de mesa de la LCDD? 🎲🧩♟\nLa asociación “La Caverna del Dragón” en colaboración con la URJC organiza otra edición del evento de juegos de mesa para que venga a jugar y divertirse todo el mundo.",
-                    "Cartas", false, LocalDate.now().plusDays(5), 50);
+                    "Cartas", true, LocalDate.now().plusDays(5), 50);
             setEventImage(event1, "/sample_images/events/event.jpg");
             eventRepository.save(event1);
         }
@@ -224,7 +224,7 @@ public class DatabaseInitializer {
         if (eventRepository.findByEventName("Maratón 12h: Juegos de Mesa").isEmpty()) {
             Event event2 = new Event("Maratón 12h: Juegos de Mesa",
                     "📦🏰 ¿Aguantarás 12 horas seguidas jugando? Desde los clásicos Catan y Carcassonne hasta los pesados como Terraforming Mars. ¡Ven cuando quieras!",
-                    "Juegos de mesa", false, LocalDate.now().plusDays(10), 30);
+                    "Juegos de mesa", true, LocalDate.now().plusDays(10), 30);
             setEventImage(event2, "/sample_images/events/maraton.jpg");
             eventRepository.save(event2);
         }

@@ -63,7 +63,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                                     {event.eventDescription}
                                                 </div>
 
-                                                <Link to={`/new/events/${event.eventId}`} className="btn btn-outline-dark rounded-pill shadow-sm">
+                                                <Link to={`/events/${event.eventId}`} className="btn btn-outline-dark rounded-pill shadow-sm">
                                                     <InfoCircle className="me-2" /> Ver detalles
                                                 </Link>
                                             </div>
@@ -103,7 +103,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                             <p className="text-muted small" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                                                 {news.newDescription}
                                             </p>
-                                            <Link to={`/new/news/${news.newId}`} className="btn btn-outline-danger rounded-pill btn-sm mt-2">
+                                            <Link to={`/${news.newId}`} className="btn btn-outline-danger rounded-pill btn-sm mt-2">
                                                 Leer más <ArrowRight />
                                             </Link>
                                         </div>
@@ -122,7 +122,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                     </Row>
 
                     <div className="text-center mt-5">
-                        <Link to="/new/news" className="btn btn-outline-dark rounded-pill px-4">
+                        <Link to="/" className="btn btn-outline-dark rounded-pill px-4">
                             Todas las noticias <ArrowRight />
                         </Link>
                     </div>
@@ -153,7 +153,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                                         <p className="text-muted small" style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                                             {game.gameDescription}
                                         </p>
-                                        <Link to={`/new/games/${game.gameId}`} className="btn btn-outline-danger rounded-pill btn-sm mt-2">
+                                        <Link to={`/games/${game.gameId}`} className="btn btn-outline-danger rounded-pill btn-sm mt-2">
                                             Ver Detalles <ArrowRight />
                                         </Link>
                                     </div>
@@ -163,7 +163,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                     </Row>
 
                     <div className="text-center mt-5">
-                        <Link to="/new/games" className="btn btn-outline-dark rounded-pill px-4">
+                        <Link to="/games" className="btn btn-outline-dark rounded-pill px-4">
                             Ver ludoteca completa <ArrowRight />
                         </Link>
                     </div>
@@ -200,7 +200,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
                             </div>
                         </Col>
                         <Col lg={5} className="order-1 order-lg-2 text-center">
-                            <Image src="/poster.jpg" alt="La Caverna Del Dragón" className="img-fluid rounded shadow-lg" style={{ maxWidth: "85%" }} />
+                            <Image src="new/poster.jpg" alt="La Caverna Del Dragón" className="img-fluid rounded shadow-lg" style={{ maxWidth: "85%" }} />
                         </Col>
                     </Row>
                 </Container>

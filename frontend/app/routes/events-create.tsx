@@ -44,7 +44,7 @@ export default function EventSave({ }: Route.ComponentProps) {
                 await uploadEventImage(event.eventId, imageFile);
             }
 
-            navigate(`/new/events`);
+            navigate(`/events`);
             return { success: true, error: null };
         } catch (error: any) {
             console.error("Error de validación capturado:", error);
@@ -78,7 +78,7 @@ export default function EventSave({ }: Route.ComponentProps) {
     return (
         <EventsForm
             actionState={[state, formAction, isPending]}
-            onCancel={() => navigate("/new/events")}
+            onCancel={() => navigate("/events")}
         />
     );
 }

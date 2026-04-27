@@ -104,7 +104,7 @@ export default function Admin() {
                             <h1 style={{ fontWeight: 700, color: "#212529" }}>Panel de Administración</h1>
                             <nav aria-label="breadcrumb">
                                 <Breadcrumb className="breadcrumb justify-content-center">
-                                    <BreadcrumbItem className="breadcrumb-item"><Link to="/new" className="text-decoration-none text-muted">Inicio</Link></BreadcrumbItem>
+                                    <BreadcrumbItem className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Inicio</Link></BreadcrumbItem>
                                     <BreadcrumbItem className="breadcrumb-item active" style={{ color: "#a71b12", fontWeight: 600 }}>Administración</BreadcrumbItem>
                                 </Breadcrumb>
                             </nav>
@@ -121,7 +121,7 @@ export default function Admin() {
                                 {pending.events.length > 0 ? pending.events.map(event => (
                                     <div key={event.eventId} className="col-lg-4 col-md-6">
                                         <div className="project-card shadow-sm border-0 h-100">
-                                            <Link className="d-block text-decoration-none" to={`/new/events/${event.eventId}`}>
+                                            <Link className="d-block text-decoration-none" to={`/events/${event.eventId}`}>
                                                 <div className="project-image" style={{ height: "180px", overflow: "hidden" }}>
                                                     <Image
                                                         src={event.eventImage ? `/api/v1/images/${event.eventImage.id}/media` : "/img/placeholder.png"}
@@ -173,7 +173,7 @@ export default function Admin() {
                                 {pending.news.length > 0 ? pending.news.map(n => (
                                     <div key={n.newId} className="col-lg-4 col-md-6">
                                         <div className="project-card shadow-sm border-0 h-100">
-                                            <Link className="d-block text-decoration-none" to={`/new/news/${n.newId}`}>
+                                            <Link className="d-block text-decoration-none" to={`/news/${n.newId}`}>
                                                 <div className="project-image" style={{ height: "180px", overflow: "hidden" }}>
                                                     {n.newImage ? (
                                                         <img
@@ -225,7 +225,7 @@ export default function Admin() {
                             <div className="row gy-3">
                                 {users.length > 0 ? users.map(user => (
                                     <div key={user.userId} className="col-xl-3 col-lg-4 col-md-6">
-                                        <Link to={`/new/users/${user.userId}`} className="d-flex align-items-center p-2 shadow-sm border rounded text-decoration-none bg-white h-100">
+                                        <Link to={`/users/${user.userId}`} className="d-flex align-items-center p-2 shadow-sm border rounded text-decoration-none bg-white h-100">
                                             <div className="flex-shrink-0" style={{ width: "50px", height: "50px" }}>
                                                 <Image
                                                     src={user.userImage ? `/api/v1/users/${user.userId}/image` : "/img/person/Portrait_Placeholder.png"}

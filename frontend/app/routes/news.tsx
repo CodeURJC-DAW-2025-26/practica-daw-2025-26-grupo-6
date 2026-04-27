@@ -86,7 +86,7 @@ export default function News({ loaderData }: Route.ComponentProps) {
                     </div>
 
                     <div className="card shadow-sm border-0 p-3 bg-light mb-5">
-                        <Form method="get" action="/new/news">
+                        <Form method="get" action="/news">
                             <div className="row g-2 align-items-center">
                                 <div className="col-lg-6 col-md-5">
                                     <Form.Control
@@ -123,7 +123,7 @@ export default function News({ loaderData }: Route.ComponentProps) {
                                 {user && (
                                     <div className="col-lg-2 col-md-2">
                                         <Button
-                                            onClick={() => navigate("/new/news-create")}
+                                            onClick={() => navigate("/news-create")}
                                             className="btn_lcdd_black w-100 text-decoration-none d-flex align-items-center justify-content-center"
                                             style={{ height: "38px" }}
                                         >
@@ -141,7 +141,7 @@ export default function News({ loaderData }: Route.ComponentProps) {
                             news.map((item) => (
                                 <div key={item.newId} className="col-lg-4 col-md-6 news-item">
                                     <div className="project-card h-100 shadow-sm border-0">
-                                        <Link to={`/new/news/${item.newId}`} className="text-decoration-none">
+                                        <Link to={`/news/${item.newId}`} className="text-decoration-none">
                                             <div className="project-image" style={{ height: "220px", overflow: "hidden" }}>
                                                 {item.newImage ? (
                                                     <img
@@ -183,7 +183,7 @@ export default function News({ loaderData }: Route.ComponentProps) {
                                 <p className="mt-3 text-muted">
                                     No hay noticias que coincidan con tu busqueda.
                                 </p>
-                                <Link to="/new/news" className="btn btn-link text-danger">
+                                <Link to="/news" className="btn btn-link text-danger">
                                     Ver todas las noticias
                                 </Link>
                             </div>

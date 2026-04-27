@@ -52,7 +52,7 @@ export default function GameSave({ }: Route.ComponentProps) {
                 await uploadGameImage(Game.gameId, imageFile);
             }
 
-            navigate(`/new/games`);
+            navigate(`/games`);
             return { success: true, error: null };
         } catch (error: any) {
             console.error("Validation error caught:", error);
@@ -91,7 +91,7 @@ export default function GameSave({ }: Route.ComponentProps) {
     return (
         <GamesForm
             actionState={[state, formAction, isPending]}
-            onCancel={() => navigate("/new/games")}
+            onCancel={() => navigate("/games")}
         />
     );
 }
