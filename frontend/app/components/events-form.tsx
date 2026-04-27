@@ -30,6 +30,8 @@ export default function EventsForm({
     const isEditing = event?.eventId;
     const [requiresRegistration, setRequiresRegistration] = useState(event?.requiresRegistration ?? false);
 
+    const today = new Date().toISOString().split("T")[0];
+
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = event.currentTarget;
@@ -116,7 +118,7 @@ export default function EventsForm({
                                                     <div className="col-md-6">
                                                         <Form.Label htmlFor="eventDate" className="required-label fw-bold mb-2 small text-muted">Día del
                                                             evento</Form.Label>
-                                                        <Form.Control type="date" className="form-control shadow-sm" name="eventDate" id="eventDate" defaultValue={event?.eventDate ?? ""}
+                                                        <Form.Control type="date" className="form-control shadow-sm" name="eventDate" id="eventDate" defaultValue={event?.eventDate ?? ""} min={today} disabled={isPending}
                                                             required />
                                                         <div className="invalid-feedback">Selecciona una fecha válida.</div>
                                                     </div>

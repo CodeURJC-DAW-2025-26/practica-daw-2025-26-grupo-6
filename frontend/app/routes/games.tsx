@@ -127,7 +127,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                                             className="btn_lcdd_black w-100 text-decoration-none d-flex align-items-center justify-content-center"
                                             style={{ height: "38px" }}
                                         >
-                                            <PlusCircle className="me-2" /> Redactar
+                                            <PlusCircle className="me-2" /> Añadir juego
                                         </Button>
                                     </div>
                                 )}

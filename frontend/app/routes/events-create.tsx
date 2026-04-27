@@ -22,7 +22,7 @@ export default function EventSave({ }: Route.ComponentProps) {
     ) {
         const name = formData.get("eventName") as string;
         const description = formData.get("eventDescription") as string;
-        const tag = formData.get("eventTag") as string;
+        let tag = formData.get("eventTag") as string;
         const requiresRegistration = formData.get("requiresRegistration") === "true";
         const registerLink = formData.get("link") as string;
         const eventDate = formData.get("eventDate") as string;
@@ -30,20 +30,45 @@ export default function EventSave({ }: Route.ComponentProps) {
         const maxParticipants = maxParticipantsRaw === "" ? null : Number(maxParticipantsRaw);
         const imageFile = formData.get("imageField") as File | null;
 
+
+        // if the tag is empty or only whitespace, set it to a default value
+        if (tag.trim() === "") {
+            tag = "General";
+        }
+
         try {
             const event = await createEvent(name, description, tag, requiresRegistration, registerLink, eventDate, maxParticipants);
 
-            if (imageFile) {
+
+            if (imageFile && imageFile.size > 0) {
                 await uploadEventImage(event.eventId, imageFile);
             }
 
             navigate(`/new/events`);
             return { success: true, error: null };
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            console.error("Error de validación capturado:", error);
+
+
+            let errorMessage = "No se ha podido guardar el evento. Revisa los datos introducidos.";
+
+            if (Array.isArray(error)) {
+
+                errorMessage = error.join(" | ");
+            } else if (error?.response?.data?.errors) {
+
+                errorMessage = error.response.data.errors.join(" | ");
+            } else if (error?.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === "string") {
+                errorMessage = error;
+            }
+
             return {
                 success: false,
-                error: "No se ha podido guardar el evento",
+                error: errorMessage,
             };
         }
     }

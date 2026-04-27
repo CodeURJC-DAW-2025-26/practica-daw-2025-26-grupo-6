@@ -1,5 +1,5 @@
-import type { FormEvent } from "react";
-import { Button, Form, Spinner } from "react-bootstrap"; // <-- Añadido Spinner
+import { startTransition, useState, type FormEvent } from "react";
+import { Button, Form, Spinner } from "react-bootstrap"; // <-- Added Spinner
 import type GameDTO from "~/dtos/GameDTO";
 import {
     ExclamationTriangleFill,
@@ -24,16 +24,53 @@ export default function GamesForm({
 }: GamesFormProps) {
     const isEditing = game?.gameId;
 
+    // State variables to handle dynamic custom error messages
+    const [playerErrorMsg, setPlayerErrorMsg] = useState("");
+    const [durationErrorMsg, setDurationErrorMsg] = useState("");
+
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = event.currentTarget;
 
-        if (!form.checkValidity()) {
+        // Flag to track if any custom validation fails
+        let hasCustomError = false;
+
+        // Get references to the specific inputs for custom validation
+        const minPlayersInput = form.elements.namedItem("minPlayers") as HTMLInputElement;
+        const maxPlayersInput = form.elements.namedItem("maxPlayers") as HTMLInputElement;
+        const minDurationInput = form.elements.namedItem("minDuration") as HTMLInputElement;
+        const maxDurationInput = form.elements.namedItem("maxDuration") as HTMLInputElement;
+
+        // Validate logic: min players should not exceed max players
+        if (Number(minPlayersInput.value) > Number(maxPlayersInput.value)) {
+            setPlayerErrorMsg("El mínimo no puede ser superior al máximo.");
+            minPlayersInput.setCustomValidity("Invalid range"); // Forces native HTML5 invalid state
+            hasCustomError = true;
+        } else {
+            setPlayerErrorMsg("");
+            minPlayersInput.setCustomValidity(""); // Clears custom error
+        }
+
+        // Validate logic: min duration should not exceed max duration
+        if (Number(minDurationInput.value) > Number(maxDurationInput.value)) {
+            setDurationErrorMsg("El mínimo no puede ser superior al máximo.");
+            minDurationInput.setCustomValidity("Invalid range");
+            hasCustomError = true;
+        } else {
+            setDurationErrorMsg("");
+            minDurationInput.setCustomValidity("");
+        }
+
+        // Now checkValidity() will correctly read our custom validation states
+        if (!form.checkValidity() || hasCustomError) {
             event.stopPropagation();
             form.classList.add("was-validated");
         } else {
             form.classList.add("was-validated");
-            formAction(new FormData(form));
+            // Wrap in startTransition for React 19 compatibility
+            startTransition(() => {
+                formAction(new FormData(form));
+            });
         }
     }
 
@@ -155,7 +192,8 @@ export default function GamesForm({
                                                     required
                                                 />
                                                 <div className="invalid-feedback">
-                                                    El número mínimo de jugadores debe ser mayor o igual a 1.
+                                                    {/* Dynamic error message for minimum players */}
+                                                    {playerErrorMsg || "El número mínimo de jugadores debe ser mayor o igual a 1."}
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-field">
@@ -192,7 +230,8 @@ export default function GamesForm({
                                                     required
                                                 />
                                                 <div className="invalid-feedback">
-                                                    La duración mínima debe ser mayor o igual a 1 minuto.
+                                                    {/* Dynamic error message for minimum duration */}
+                                                    {durationErrorMsg || "La duración mínima debe ser mayor o igual a 1 minuto."}
                                                 </div>
                                             </div>
                                             <div className="col-md-6 form-field">

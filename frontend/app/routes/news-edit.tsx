@@ -3,7 +3,6 @@ import { useActionState } from "react";
 import type { Route } from "./+types/news-edit";
 import NewsForm from "../components/news-form";
 import {
-    deleteNewImage,
     getNew,
     replaceNewImage,
     updateNew,
@@ -32,13 +31,18 @@ export default function NewEdit({ loaderData }: Route.ComponentProps) {
         formData: FormData,
     ) {
         const name = formData.get("newName") as string;
-        const tag = formData.get("newTag") as string;
+
+        // Extract tag and assign a default value if left blank to bypass strict backend validation
+        const rawTag = formData.get("newTag") as string;
+        const tag = rawTag.trim() === "" ? "General" : rawTag.trim();
+
         const description = formData.get("newDescription") as string;
         const imageFile = formData.get("imageField") as File | null;
 
         try {
             await updateNew(post.newId, name, tag, description);
 
+            // Handle image updates preventing empty file uploads
             if (imageFile && imageFile.size > 0 && post.newImage) {
                 await replaceNewImage(post.newImage.id, imageFile);
             } else if (imageFile && imageFile.size > 0 && !post.newImage) {
@@ -47,11 +51,27 @@ export default function NewEdit({ loaderData }: Route.ComponentProps) {
 
             navigate(`/new/news`);
             return { success: true, error: null };
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            console.error("Validation error caught:", error);
+
+            // Logic to extract the real error message from the backend
+            let errorMessage = "Hubo un error al editar la noticia. Revisa los datos introducidos.";
+
+            if (Array.isArray(error)) {
+                errorMessage = error.join(" | ");
+            } else if (error?.response?.data?.errors) {
+                errorMessage = error.response.data.errors.join(" | ");
+            } else if (error?.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === "string") {
+                errorMessage = error;
+            }
+
             return {
                 success: false,
-                error: "Hubo un error al editar la noticia",
+                error: errorMessage,
             };
         }
     }

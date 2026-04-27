@@ -49,7 +49,7 @@ export async function createEvent(name: string, description: string, tag: string
     });
 
     if (!response.ok) {
-        throw new Error("Error adding event");
+        throw new Error("Error al crear el evento");
     }
 
     return await response.json();

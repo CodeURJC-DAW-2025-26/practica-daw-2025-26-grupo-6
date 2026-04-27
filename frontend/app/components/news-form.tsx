@@ -1,5 +1,5 @@
-import type { FormEvent } from "react";
-import { Button, Form, Spinner } from "react-bootstrap"; // <-- Añadido Spinner
+import { startTransition, type FormEvent } from "react";
+import { Button, Form, Spinner } from "react-bootstrap";
 import type NewDTO from "~/dtos/NewDTO";
 import {
     ExclamationTriangleFill,
@@ -28,12 +28,16 @@ export default function NewsForm({
         event.preventDefault();
         const form = event.currentTarget;
 
+        // Check native HTML5 form validity
         if (!form.checkValidity()) {
             event.stopPropagation();
             form.classList.add("was-validated");
         } else {
             form.classList.add("was-validated");
-            formAction(new FormData(form));
+            // Wrap in startTransition for React 19 compatibility
+            startTransition(() => {
+                formAction(new FormData(form));
+            });
         }
     }
 
@@ -62,7 +66,7 @@ export default function NewsForm({
                                         style={{ borderLeft: "5px solid #890f00" }}
                                     >
                                         <strong>
-                                            <ExclamationTriangleFill /> Ups! Hay errores:
+                                            <ExclamationTriangleFill className="me-2" /> Ups! Hay errores:
                                         </strong>
                                         <ul className="mt-2 mb-0">
                                             <li>{state.error}</li>
