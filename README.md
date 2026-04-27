@@ -647,6 +647,12 @@ He creado las funciones para generar errores con JSON y resuelto algunos problem
    npm run dev
    ```
 
+6. **Ejecutar el backend**
+   ```bash
+   cd ../backend
+   mvn spring-boot:run
+   ```
+
 ### **Diagrama de Clases y Templates de la SPA**
 
 Diagrama mostrando los componentes React, hooks personalizados, servicios y sus relaciones:
