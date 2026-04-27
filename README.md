@@ -669,17 +669,17 @@ En el cliente SPA, he migrado y adaptado toda la lógica para apuntarse y desapu
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - Antonio Martín Carrizosa**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Páginas de login, registro y perfil.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Añadir página de login, user-store y user-service](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/ac54cd510005306e9ec33524a6dca36dc7c1461f)  | [login.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/login.tsx)   |
+|2| [Añadir user-service](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/3c78817800f2bf6ac35d04508727993a741b7bde)  | [register.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/register.tsx)   |
+|3| [Añadir página de registro](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/772c14b0eab69057c9ac3feba430b389b30fce0d)  | [profile.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/profile.tsx)   |
+|4| [Añadir página de perfil](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/305a72140caa57bafc4e9f51b0d41d199c74fbb5)  | [user-store.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/stores/user-store.tsx)   |
+|5| [Modificar perfil para que utilice react-bootstrap](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/3eb6d077922a2b8403ebf96cc67fac8d611546cc)  | [user-service.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/services/user-service.tsx)   |
 
 ---
 
