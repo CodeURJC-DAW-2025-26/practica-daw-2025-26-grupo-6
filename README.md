@@ -709,3 +709,17 @@ Adaptar las funcionalidades de la pagina de administrador a react (ver noticias 
 |4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
 |5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
 
+---
+
+#### **Alumno 5 - Anthony Lattanzi Salas**
+
+[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+
+| Nº    | Commits      | Files      |
+|:------------: |:------------:| :------------:|
+|1| [Adaptado el header y el footer para React Router](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/537d677adaf29b72c5061eb55c3ea47f3161c525)  | [footer.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/components/footer.tsx)   |
+|2| [Desarrollo de index.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b8d470366bcba4e6c08769b525356d659a900b6d)  | [index.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/index.tsx)   |
+|3| [Añadido el menú hamburguesa del estilo movil, el menú dropdown del perfil y botón de iniciar sesión/registrarse](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/091dd89ce0d25220ecef7ef6f19ba0c3e46ab1dd)  | [header.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/components/header.tsx)   |
+|4| [Añadido un spinner global](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/e6325ede06dd81ab2c218e2af9160a9f6c0bfb36)  | [root.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/root.tsx)   |
+|5| [-](URL_commit_5)  | [-](URL_archivo_5)   |
+
