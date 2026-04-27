@@ -6,6 +6,7 @@ import {
     Outlet,
     Scripts,
     ScrollRestoration,
+    useNavigation,
 } from "react-router";
 import { useEffect } from "react";
 
@@ -20,6 +21,31 @@ export function links() {
 }
 
 const ERROR_PATH = "/new/error";
+
+
+function GlobalSpinner() {
+    const navigation = useNavigation();
+
+    const isLoading = navigation.state !== "idle";
+
+    if (!isLoading) return null;
+
+    return (
+        <div
+            className="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+            style={{
+                zIndex: 9999,
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                backdropFilter: "blur(2px)"
+            }}
+        >
+            <div className="spinner-border" style={{ color: "#a71b12" }} role="status">
+                <span className="visually-hidden">Cargando...</span>
+            </div>
+            <p className="mt-3 text-muted fw-bold">Cargando contenido...</p>
+        </div>
+    );
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -66,7 +92,9 @@ export default function App() {
         };
     }, []);
 
-    return <Outlet />;
+    return (<><GlobalSpinner />
+        <Outlet /></>
+    );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

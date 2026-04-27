@@ -94,13 +94,6 @@ export default function Admin() {
         setRejectModalOpen(false);
     };
 
-    if (loading) return (
-        <div className="container py-5 text-center my-5">
-            <Spinner animation="border" style={{ color: "#a71b12" }} />
-            <p className="mt-3 text-muted fw-bold">Cargando panel de administración...</p>
-        </div>
-    );
-
     return (
         <>
             <main className="main">
