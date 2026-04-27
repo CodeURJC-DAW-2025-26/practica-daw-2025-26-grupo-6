@@ -48,7 +48,7 @@ export default function Header() {
             <div className="container-fluid container-xl position-relative d-flex align-items-center">
                 <Link to="/" className="logo d-flex align-items-center me-auto">
 
-                    <Image src="/logo.jpg" width="64" height="64" />
+                    <Image src="/new/logo.jpg" width="64" height="64" />
                     <h1 className="sitename">La Caverna Del Dragón</h1>
                 </Link>
                 <nav id="navmenu" className="navmenu">

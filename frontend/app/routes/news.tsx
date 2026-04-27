@@ -86,7 +86,7 @@ export default function News({ loaderData }: Route.ComponentProps) {
                     </div>
 
                     <div className="card shadow-sm border-0 p-3 bg-light mb-5">
-                        <Form method="get" action="/news">
+                        <form method="get" action="news">
                             <div className="row g-2 align-items-center">
                                 <div className="col-lg-6 col-md-5">
                                     <Form.Control
@@ -133,7 +133,7 @@ export default function News({ loaderData }: Route.ComponentProps) {
                                 )}
 
                             </div>
-                        </Form>
+                        </form>
                     </div>
 
                     <div id="news-container" className="row gy-4">

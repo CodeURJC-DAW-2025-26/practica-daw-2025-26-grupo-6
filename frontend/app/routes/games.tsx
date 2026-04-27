@@ -71,7 +71,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                     </div>
 
                     <div className="card shadow-sm border-0 p-3 bg-light mb-5">
-                        <Form method="get" action="/games">
+                        <form method="get" action="games">
                             <div className="row g-2 align-items-center">
                                 <div className="col-lg-3 col-md-4">
                                     <Form.Control
@@ -133,7 +133,7 @@ export default function Games({ loaderData }: Route.ComponentProps) {
                                 )}
 
                             </div>
-                        </Form>
+                        </form>
                     </div>
 
                     <div id="news-container" className="row gy-4">
