@@ -604,7 +604,7 @@ He creado las funciones para generar errores con JSON y resuelto algunos problem
 ## 🛠 **Práctica 3: Implementación de la web con arquitectura SPA**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](URL_del_video)**
+📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=M24LtLZZhWg)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Preparación del Entorno de Desarrollo**
@@ -647,65 +647,85 @@ He creado las funciones para generar errores con JSON y resuelto algunos problem
    npm run dev
    ```
 
+6. **Ejecutar el backend**
+   ```bash
+   cd ../backend
+   mvn spring-boot:run
+   ```
+
 ### **Diagrama de Clases y Templates de la SPA**
 
 Diagrama mostrando los componentes React, hooks personalizados, servicios y sus relaciones:
 
-![Diagrama de Componentes React](images/spa-classes-diagram.png)
+![Diagrama de Componentes React](images/claass-diagram-p3.jpg)
 
 ### **Participación de Miembros en la Práctica 3**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - Carlos García Pérez**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+En el cliente SPA, he migrado y adaptado toda la lógica para apuntarse y desapuntarse a eventos, solucionando problemas de parpadeo en la interfaz mediante la aplicación del patrón Stale-While-Revalidate en el estado global (Zustand). También he arreglado el enrutamiento del modal de la lista de asistentes para asegurar la navegación absoluta a los perfiles. Además, he desarrollado un sistema dinámico para capturar y mostrar los errores reales devueltos por la API REST en los formularios (Eventos, Noticias y Juegos), implementando validaciones personalizadas de rangos y fechas sincronizadas entre HTML5 y React, y añadiendo spinners para bloquear envíos dobles y mejorar la UX.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Implementación de la lógica SPA para apuntarse/desapuntarse a eventos y corrección del enrutamiento del modal de asistentes](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/8bc5431ae7a3d216f69b0c9b90021fe1a5407322)  | [events-service.ts](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/8bc5431ae7a3d216f69b0c9b90021fe1a5407322/frontend/app/services/events-service.ts) |
+|2| [Implementación de captura dinámica de errores de validación desde la API REST en creación/edición](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/5a581994989934edb43c223c0317db7fb0912ef4)  | [events-form.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/5a581994989934edb43c223c0317db7fb0912ef4/frontend/app/components/events-form.tsx)   |
+|3| [Integración de Docker Multi-stage build (Node.js + Spring Boot) para servir SPA](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/105efc831d6daf4beab90efa3c48b8b088ff2cc5)  | [Dockerfile](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/105efc831d6daf4beab90efa3c48b8b088ff2cc5/backend/docker/Dockerfile)   |
+|4| [Corrección de UX en Zustand evitando borrado de sesión al recargar datos del usuario (Stale-While-Revalidate)](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/4c753a498d3d8bc03d22278f0ab4e73463382a0d)  | [user-store.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/4c753a498d3d8bc03d22278f0ab4e73463382a0d/frontend/app/stores/user-store.tsx)   |
+|5| [Refactorización de formularios con startTransition e implementación de Spinners para bloquear peticiones asíncronas dobles](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/1548f1c704159c4915818990c396f002f07a7f21)  | [events-detail.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blame/1548f1c704159c4915818990c396f002f07a7f21/frontend/app/routes/events-detail.tsx)   |
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - Antonio Martín Carrizosa**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Añadir configuración incial de react. Páginas de login, registro y perfil. Implementación del user-service, el user-store y el login-service. Arreglo de errores. Instrucciones de ejecución. Conversión de algunos DTOs de java a js.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Añadir página de login, user-store y user-service](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/ac54cd510005306e9ec33524a6dca36dc7c1461f)  | [login.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/login.tsx)   |
+|2| [Añadir user-service](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/3c78817800f2bf6ac35d04508727993a741b7bde)  | [register.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/register.tsx)   |
+|3| [Añadir página de registro](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/772c14b0eab69057c9ac3feba430b389b30fce0d)  | [profile.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/profile.tsx)   |
+|4| [Añadir página de perfil](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/305a72140caa57bafc4e9f51b0d41d199c74fbb5)  | [user-store.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/stores/user-store.tsx)   |
+|5| [Modificar perfil para que utilice react-bootstrap](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/3eb6d077922a2b8403ebf96cc67fac8d611546cc)  | [user-service.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/services/user-service.tsx)   |
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - Javier Cai Lin**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Adaptar las funcionalidades de la pagina de administrador a react (ver noticias y eventos a validar, ver todos los usuarios registrados y ver las estadisticas de los juegos y eventos)
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Creado un nuevo metodo en AdminRestController para obtener noticias y eventos a validar](backend/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationRestController.java)  | [admin.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/admin.tsx)   |
+|2| [Se crea admin-service.ts en el frontend](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/65f0e0c2e1f316227b85a91675e8b6f2270047f0)  | [admin-service.ts](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/services/admin-service.ts)   |
+|3| [Se crea admin.tsx y adminchart.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/369b731f77641dc97f4f63a9df00cdc0348400f7)  | [AdminCharts.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/components/AdminCharts.tsx)   |
+|4| [Arreglo del metodo que mostraba en la grafica datos de eventos sin validar](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/44550032ac239837cfe9572cb7c48778c0e99aed)  | [AdministrationRestController.java‎](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/AdministrationRestController.java)   |
+|5| [Cambio en el formato de la alerta en la pagina de admin para que concuerde con el resto de alerts de la aplicacion](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/3f6d64c576e98b37b5d91bb5532df19464f533a1)  | [EventRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/repository/EventRepository.java)   |
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - Jaime Esteban García**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Implementación de listado de juegos, eventos y noticias, así como su carga con AJAX (botón "Cargar más"), los filtros de búsqueda y sus páginas de detalle. Implementación de creación, edición y borrado de jeugos, eventos y noticias. Implementación de control por rol y dueño para juegos, eventos y noticias. Implementación de funcionalidad para dar favorito a juegos. Implementación de página de error que sigue el estilo del resto de la web. Migración del proyecto para que se encuentre disponible tanto en la ruta :8443 como en :8443/new. Aplicación de estilos react-bootstrap a las distintas páginas. Corrección de errores.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Listado, filtrado, cargar más y página de detalle de juegos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/f06c737c58b2b5922b40d27473221771bf368c8c)  | [games.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/f06c737c58b2b5922b40d27473221771bf368c8c/frontend/app/routes/games.tsx)   |
+|2| [Creación, edición y borrado de juegos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b0a792d723304f37867c39533bcb6d8a7dc62437)  | [games-form.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/b0a792d723304f37867c39533bcb6d8a7dc62437/frontend/app/components/games-form.tsx)   |
+|3| [Adición y eliminado de juegos de favoritos del usuario](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/5a897f394367a9b4d43ca6170c2d3a6e9cd15e2e)  | [games-detail.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/5a897f394367a9b4d43ca6170c2d3a6e9cd15e2e/frontend/app/routes/games-detail.tsx)   |
+|4| [Migración del proyecto para acceder desde :8443 y :8443/new](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/99d6967e5e7ce1de97abbd931b52fdbf762c8c74)  | [SpaRoutingConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/99d6967e5e7ce1de97abbd931b52fdbf762c8c74/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/SpaRoutingConfig.java)   |
+|5| [Adición de página error con estilo similar al resto de la web](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/70e89b20e20962e7a27a1ebd0303a9e9acf2efdb)  | [root.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/70e89b20e20962e7a27a1ebd0303a9e9acf2efdb/frontend/app/root.tsx)   |
+
+---
+
+#### **Alumno 5 - Anthony Lattanzi Salas**
+
+Adaptar las funcionalidades del header, footer y página inicial a react.
+
+| Nº    | Commits      | Files      |
+|:------------: |:------------:| :------------:|
+|1| [Adaptado el header y el footer para React Router](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/537d677adaf29b72c5061eb55c3ea47f3161c525)  | [footer.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/components/footer.tsx)   |
+|2| [Desarrollo de index.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/b8d470366bcba4e6c08769b525356d659a900b6d)  | [index.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/routes/index.tsx)   |
+|3| [Añadido el menú hamburguesa del estilo movil, el menú dropdown del perfil y botón de iniciar sesión/registrarse](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/091dd89ce0d25220ecef7ef6f19ba0c3e46ab1dd)  | [header.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/components/header.tsx)   |
+|4| [Añadido un spinner global](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/e6325ede06dd81ab2c218e2af9160a9f6c0bfb36)  | [root.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/frontend/app/root.tsx)   |
+|5| [-](URL_commit_5)  | [-](URL_archivo_5)   |
 
