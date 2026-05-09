@@ -424,8 +424,8 @@ Principalmente añadir la estructuración de mustache para los html al igual que
 ## 🛠 **Práctica 2: Incorporación de una API REST a la aplicación web, despliegue con Docker y despliegue remoto**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube]()**
-> Vídeo (falta) mostrando las principales funcionalidades de la aplicación web.
+📹 **[Enlace al vídeo en YouTube](https://youtu.be/nrjgaE0DLKM)**
+> Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Documentación de la API REST**
 
@@ -518,12 +518,12 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 2. **Ejecutar a través de docker compose**:
    La primera vez la variable de entorno DB_MODE debe ser create, el resto none (valor por defecto)
    ```bash
-   EMAIL_PASSWORD=[gmail app token] EMAIL_USERNAME=[gmail@gmail.com] DB_MODE=[create|none] docker-compose -f oci://amartinca2023/lcdd_daw-compose up
+   EMAIL_PASSWORD=[gmail app token] EMAIL_USERNAME=[gmail@gmail.com] DB_MODE=[create|none] docker-compose -f oci://jaimeeg5/lcdd_daw-compose up
    ```
 
 ### **URL de la Aplicación Desplegada**
 
-🌐 **URL de acceso**: `https://[nombre-app].etsii.urjc.es:8443`
+🌐 **URL de acceso**: `https://appweb06.dawgis.etsii.urjc.es:8443`
 
 #### **Credenciales de Usuarios de Ejemplo**
 
@@ -578,15 +578,15 @@ Mover la logica de los controller a service de Games, Events y News y de impleme
 
 #### **Alumno 4 - Jaime Esteban García**
 
-He implementado la creación, modificación, borrado y consulta de las entidades Games, Events y News, así como sus controles por rol y por dueño. He añadido los filtros de búsqueda de las mismas entidades, así como la función de dar favorito a juegos. Adición de JSON para mostrar errores. He generado la mayor parte de la colección de peticiones de Postman y generado la documentación de la API.
+He implementado la creación, modificación, borrado y consulta de las entidades Games, Events y News, así como sus controles por rol y por dueño. He añadido los filtros de búsqueda de las mismas entidades, así como la función de dar favorito a juegos. Adición de JSON para mostrar errores. He generado la mayor parte de la colección de peticiones de Postman y generado la documentación de la API. He realizado las correcciones necesarias para cumplir con la rúbrica.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
 |1| [Adición, borrado, modificación y consulta de juegos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/5d93c87f9f96aee16710e7e801a76146bbcc4469)  | [GameRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/5d93c87f9f96aee16710e7e801a76146bbcc4469/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/GamesRestController.java)   |
 |2| [Adición, borrado, modificación y consulta de eventos](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/02e6315bb83963af3632b381d286babe991d13b8)  | [EventsRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/02e6315bb83963af3632b381d286babe991d13b8/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/EventsRestController.java)   |
-|3| [Adición, borrado, modificación y consulta de noticias](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/6ab879848f22d77feee95869429a0b6404990d50)  | [NewsRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/main/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/NewsRestController.java)   |
+|3| [Mover lógica de GamesController y GamesRestController a GameService (También aplica a Eventos y Noticias en commits similares)](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/ee3fc615cb04df19281c93f6d0db5405e87f7f34)  | [GamesService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/ee3fc615cb04df19281c93f6d0db5405e87f7f34/backend/src/main/java/com/grupo6daw/lcdd_daw/service/GameService.java)   |
 |4| [Generación de errores con JSON](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/60d214f03eda47394d63d05342765be395db71ae)  | [CustomErrorRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/60d214f03eda47394d63d05342765be395db71ae/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/CustomErrorRestController.java)   |
-|5| [Limitación de edición y borrado de eventos y noticias a los dueños y administradores](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9)  | [NewsRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9/backend/src/main/java/com/grupo6daw/lcdd_daw/controller/NewsRestController.java)   |
+|5| [Limitación de edición y borrado de eventos y noticias a los dueños y administradores](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/commit/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9)  | [NewsService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-6/blob/4d4abfc8850ad6adba11b7b0174ad6df1bef01c9/backend/src/main/java/com/grupo6daw/lcdd_daw/service/NewService.java)   |
 
 #### **Alumno 5 - [Anthony Lattanzi Salas]**
 
